@@ -1,0 +1,12 @@
+{
+    "variants": {
+	"facing=north,part=head": { "model": "hungryanimals:blocktrough"},
+	"facing=south,part=head": { "model": "hungryanimals:blocktrough"},
+	"facing=east,part=head": { "model": "hungryanimals:blocktrough"},
+	"facing=west,part=head": { "model": "hungryanimals:blocktrough"},
+	"facing=north,part=foot": { "model": "hungryanimals:blocktrough"},
+	"facing=south,part=foot": { "model": "hungryanimals:blocktrough"},
+	"facing=east,part=foot": { "model": "hungryanimals:blocktrough"},
+	"facing=west,part=foot": { "model": "hungryanimals:blocktrough"}
+    }
+}

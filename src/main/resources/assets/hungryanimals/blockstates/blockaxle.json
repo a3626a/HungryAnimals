@@ -1,0 +1,17 @@
+{
+    "variants": {
+	"facing=north,variant=axle": { "model": "hungryanimals:blockaxle"},
+	"facing=south,variant=axle": { "model": "hungryanimals:blockaxle"},
+	"facing=east,variant=axle": { "model": "hungryanimals:blockaxle"},
+	"facing=west,variant=axle": { "model": "hungryanimals:blockaxle"},
+	"facing=north,variant=wheel": { "model": "hungryanimals:blockaxle"},
+	"facing=south,variant=wheel": { "model": "hungryanimals:blockaxle"},
+	"facing=east,variant=wheel": { "model": "hungryanimals:blockaxle"},
+	"facing=west,variant=wheel": { "model": "hungryanimals:blockaxle"},
+	"facing=north,variant=belt": { "model": "hungryanimals:blockaxle"},
+	"facing=south,variant=belt": { "model": "hungryanimals:blockaxle"},
+	"facing=east,variant=belt": { "model": "hungryanimals:blockaxle"},
+	"facing=west,variant=belt": { "model": "hungryanimals:blockaxle"}
+
+    }
+}

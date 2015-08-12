@@ -1,0 +1,12 @@
+{
+    "variants": {
+	"age=0": { "model": "hungryanimals:blockniterbed_0"},
+	"age=1": { "model": "hungryanimals:blockniterbed_0"},
+	"age=2": { "model": "hungryanimals:blockniterbed_0"},
+	"age=3": { "model": "hungryanimals:blockniterbed_1"},
+	"age=4": { "model": "hungryanimals:blockniterbed_1"},
+	"age=5": { "model": "hungryanimals:blockniterbed_2"},
+	"age=6": { "model": "hungryanimals:blockniterbed_2"},
+	"age=7": { "model": "hungryanimals:blockniterbed_3"}
+    }
+}

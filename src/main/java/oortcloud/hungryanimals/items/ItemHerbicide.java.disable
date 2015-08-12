@@ -1,0 +1,140 @@
+package oortcloud.hungryanimals.items;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.core.network.PacketGeneralServer;
+
+import org.lwjgl.input.Keyboard;
+
+public class ItemHerbicide extends Item {
+
+	public ItemHerbicide() {
+		super();
+		this.maxStackSize = 1;
+		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
+		this.setUnlocalizedName(References.RESOURCESPREFIX
+				+ Strings.itemHerbicideName);
+		this.setMaxDamage(20 * 60);
+		ModItems.register(this);
+	}
+
+	/*
+	 * @SideOnly(Side.CLIENT)
+	 * 
+	 * @Override public void registerIcons(IIconRegister iconRegister) {
+	 * this.itemIcon = iconRegister.registerIcon(ModItems
+	 * .getUnwrappedUnlocalizedName(super.getUnlocalizedName())); }
+	 */
+
+	@Override
+	public void onPlayerStoppedUsing(ItemStack itemStack, World world,
+			EntityPlayer player, int count) {
+		int tick = itemStack.getMaxItemUseDuration() - count;
+		itemStack.damageItem(tick, player);
+	}
+
+	public void sendBlockChange(World world, int x, int y, int z) {
+		PacketGeneralServer msg = new PacketGeneralServer(0);
+		msg.setInt(world.provider.getDimensionId());
+		msg.setInt(x);
+		msg.setInt(y);
+		msg.setInt(z);
+		HungryAnimals.simpleChannel.sendToServer(msg);
+	}
+
+	@Override
+	public void onUsingTick(ItemStack itemStack, EntityPlayer player, int count) {
+		World world = player.worldObj;
+
+		int tick = itemStack.getMaxItemUseDuration() - count;
+		if (tick + itemStack.getItemDamage() > itemStack.getMaxDamage())
+			player.stopUsingItem();
+
+		if (world.isRemote) {
+			BlockPos pos = new BlockPos(Minecraft.getMinecraft().objectMouseOver.hitVec);
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)
+					|| Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				if (tick == 0) {
+					Block block = world.getBlockState(pos).getBlock();
+					int meta = world.getBlockMetadata(x, y, z);
+					Block grass = world.getBlock(x, y + 1, z);
+
+					if (!((block == Blocks.grass && meta == 0) || grass == Blocks.tallgrass))
+						player.stopUsingItem();
+				} else {
+
+					this.sendBlockChange(world, x, y, z);
+					world.spawnParticle("happyVillager", x, y + 1.2, z, 0, 0, 0);
+					player.stopUsingItem();
+				}
+			} else {
+				int tx = 0, ty = 0, tz = 0;
+				if (tick == 0) {
+					tx = x;
+					ty = y;
+					tz = z;
+				} else {
+					int radius = (((int) Math.sqrt(tick) + 1) / 2);
+					int prevNum = (2 * radius - 1) * (2 * radius - 1);
+					int num = tick - prevNum;
+					switch (num / (2 * radius)) {
+					case 0:
+						tx = x + radius - (num % (2 * radius));
+						ty = y;
+						tz = z + radius;
+						break;
+					case 1:
+						tx = x - radius;
+						ty = y;
+						tz = z + radius - (num % (2 * radius));
+						break;
+					case 2:
+						tx = x - radius + (num % (2 * radius));
+						ty = y;
+						tz = z - radius;
+						break;
+					case 3:
+						tx = x + radius;
+						ty = y;
+						tz = z - radius + (num % (2 * radius));
+						break;
+					}
+				}
+				this.sendBlockChange(world, tx, ty, tz);
+				world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, tx, ty + 1.2, tz, 0, 0, 0);
+			}
+		}
+
+	}
+
+	/**
+	 * How long it takes to use or consume an item
+	 */
+	public int getMaxItemUseDuration(ItemStack p_77626_1_) {
+		return 72000;
+	}
+
+	/**
+	 * Called whenever this item is equipped and the right mouse button is
+	 * pressed. Args: itemStack, world, entityPlayer
+	 */
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_,
+			EntityPlayer p_77659_3_) {
+		p_77659_3_.setItemInUse(p_77659_1_,
+				this.getMaxItemUseDuration(p_77659_1_));
+
+		return p_77659_1_;
+	}
+
+}

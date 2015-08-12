@@ -1,0 +1,5 @@
+{
+	"parent": "hungryanimals:block/blocktrapcover_parent",
+	"textures": {
+		"blocktrapcover": "hungryanimals:blocks/blocktrapcover"	}
+}

@@ -1,0 +1,21 @@
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "hungryanimals",
+    "name": "Hungry Animals",
+    "description": "More Realistic Animals.This mod changes vanila animals' AI and feeding activity. Now they would die when hungry, eat fallen foods!",
+    "version": "2.0",
+    "mcversion": "1.8",
+    "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2228763-hungry-animals-more-realistic-animals",
+    "updateUrl": "",
+    "authorList": [ "Oort Cloud" ],
+    "credits": "Authored by oortcloud",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": [ "Forge" ],
+    "dependencies": [],
+    "dependants": [],
+    "useDependencyInformation": true
+  }]
+}

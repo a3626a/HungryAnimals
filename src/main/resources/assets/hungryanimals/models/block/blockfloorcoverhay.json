@@ -1,0 +1,8 @@
+{
+    "parent": "hungryanimals:block/blockfloorcover",
+    "textures": {
+        "support": "blocks/planks_oak",
+        "cover_up": "blocks/hay_block_top",
+        "cover_side": "blocks/hay_block_side"
+    }
+}

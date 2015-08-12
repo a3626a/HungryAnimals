@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+  "textures": {
+       "down": "hungryanimals:blocks/blockniterbed_top_0",
+         "up": "hungryanimals:blocks/blockniterbed_top_0",
+      "north": "hungryanimals:blocks/blockniterbed_side_0",
+      "south": "hungryanimals:blocks/blockniterbed_side_0",
+       "west": "hungryanimals:blocks/blockniterbed_side_0",
+       "east": "hungryanimals:blocks/blockniterbed_side_0",
+   "particle": "hungryanimals:blocks/blockniterbed_top_0"
+  }
+}

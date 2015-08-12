@@ -1,0 +1,7 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "hungryanimals:blocks/blockpoppy_0"
+    }
+}
+
