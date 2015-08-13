@@ -70,14 +70,11 @@ public class ConfigurationHandlerAnimal {
 		ExtendedPropertiesHungrySheep.default_hunger_max = config.get(CATEGORY_Sheep, KEY_hunger_max, 400).getDouble();
 		ExtendedPropertiesHungryRabbit.default_hunger_max = config.get(CATEGORY_Rabbit, KEY_hunger_max, 250).getDouble();
 
-		ExtendedPropertiesHungryChicken.default_courtship_hunger = config.get(CATEGORY_Chicken, KEY_courtship_hunger, ExtendedPropertiesHungryChicken.default_hunger_max / 20.0)
-				.getDouble();
+		ExtendedPropertiesHungryChicken.default_courtship_hunger = config.get(CATEGORY_Chicken, KEY_courtship_hunger, ExtendedPropertiesHungryChicken.default_hunger_max / 20.0).getDouble();
 		ExtendedPropertiesHungryCow.default_courtship_hunger = config.get(CATEGORY_Cow, KEY_courtship_hunger, ExtendedPropertiesHungryCow.default_hunger_max / 20.0).getDouble();
 		ExtendedPropertiesHungryPig.default_courtship_hunger = config.get(CATEGORY_Pig, KEY_courtship_hunger, ExtendedPropertiesHungryPig.default_hunger_max / 20.0).getDouble();
-		ExtendedPropertiesHungrySheep.default_courtship_hunger = config.get(CATEGORY_Sheep, KEY_courtship_hunger, ExtendedPropertiesHungrySheep.default_hunger_max / 20.0)
-				.getDouble();
-		ExtendedPropertiesHungryRabbit.default_courtship_hunger = config.get(CATEGORY_Rabbit, KEY_courtship_hunger, ExtendedPropertiesHungryRabbit.default_hunger_max / 20.0)
-				.getDouble();
+		ExtendedPropertiesHungrySheep.default_courtship_hunger = config.get(CATEGORY_Sheep, KEY_courtship_hunger, ExtendedPropertiesHungrySheep.default_hunger_max / 20.0).getDouble();
+		ExtendedPropertiesHungryRabbit.default_courtship_hunger = config.get(CATEGORY_Rabbit, KEY_courtship_hunger, ExtendedPropertiesHungryRabbit.default_hunger_max / 20.0).getDouble();
 
 		ExtendedPropertiesHungryChicken.default_courtship_probability = config.get(CATEGORY_Chicken, KEY_courtship_probability, 0.0025).getDouble();
 		ExtendedPropertiesHungryCow.default_courtship_probability = config.get(CATEGORY_Cow, KEY_courtship_probability, 0.0025).getDouble();
@@ -116,9 +113,7 @@ public class ConfigurationHandlerAnimal {
 		readDropMeat(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.mutton) + "),3,6)" }, CATEGORY_Sheep, ExtendedPropertiesHungrySheep.class);
 
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.feather) + "),3,6)" }, CATEGORY_Chicken, ExtendedPropertiesHungryChicken.class);
-		readDropRandom(
-				new String[] { "((" + Item.itemRegistry.getNameForObject(Items.leather) + "),5,10)", "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),2,3)" },
-				CATEGORY_Cow, ExtendedPropertiesHungryCow.class);
+		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.leather) + "),5,10)", "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),2,3)" }, CATEGORY_Cow, ExtendedPropertiesHungryCow.class);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),1,2)" }, CATEGORY_Pig, ExtendedPropertiesHungryPig.class);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.rabbit_hide) + "),1,2)" }, CATEGORY_Rabbit, ExtendedPropertiesHungryRabbit.class);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),1,2)" }, CATEGORY_Sheep, ExtendedPropertiesHungrySheep.class);
@@ -129,41 +124,40 @@ public class ConfigurationHandlerAnimal {
 		readDropRare(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.rabbit_foot) + "),0.025)" }, CATEGORY_Rabbit, ExtendedPropertiesHungryRabbit.class);
 		readDropRare(new String[] {}, CATEGORY_Sheep, ExtendedPropertiesHungrySheep.class);
 
-		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat_seeds) + ")=(20.0)",
-				"(" + Item.itemRegistry.getNameForObject(Items.pumpkin_seeds) + ")=(25.0)", "(" + Item.itemRegistry.getNameForObject(Items.melon_seeds) + ")=(25.0)",
-				"(" + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + ")=(20.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" },
-				CATEGORY_Chicken, ExtendedPropertiesHungryChicken.class);
-		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)" }, CATEGORY_Chicken, ExtendedPropertiesHungryChicken.class);
+		ByFoodRate(
+				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat_seeds) + ")=(20.0)", "(" + Item.itemRegistry.getNameForObject(Items.pumpkin_seeds) + ")=(25.0)",
+						"(" + Item.itemRegistry.getNameForObject(Items.melon_seeds) + ")=(25.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + ")=(20.0)",
+						"(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Chicken, ExtendedPropertiesHungryChicken.class);
+		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,0)))=(50.0)" }, CATEGORY_Chicken,
+				ExtendedPropertiesHungryChicken.class);
 
 		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat) + ")=(50.0)", "(" + Item.itemRegistry.getNameForObject(Items.reeds) + ")=(20.0)",
-				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Cow,
+				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Cow, ExtendedPropertiesHungryCow.class);
+		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,7)))=(50.0)" }, CATEGORY_Cow,
 				ExtendedPropertiesHungryCow.class);
-		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)" }, CATEGORY_Cow, ExtendedPropertiesHungryCow.class);
 
 		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.carrot) + ")=(40.0)", "(" + Item.itemRegistry.getNameForObject(Items.rotten_flesh) + ")=(15.0)",
 				"(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Pig, ExtendedPropertiesHungryPig.class);
-		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)" }, CATEGORY_Pig, ExtendedPropertiesHungryPig.class);
+		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.carrots) + ",((age,7)))=(40.0)" }, CATEGORY_Pig,
+				ExtendedPropertiesHungryPig.class);
 
 		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat) + ")=(50.0)", "(" + Item.itemRegistry.getNameForObject(Items.reeds) + ")=(20.0)",
-				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Sheep,
+				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Sheep, ExtendedPropertiesHungrySheep.class);
+		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,7)))=(50.0)" }, CATEGORY_Sheep,
 				ExtendedPropertiesHungrySheep.class);
-		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)" }, CATEGORY_Sheep, ExtendedPropertiesHungrySheep.class);
 
 		ByFoodRate(
-				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.carrot) + ")=(40.0)",
-						"(" + Item.itemRegistry.getNameForObject(ItemBlock.getItemFromBlock(Blocks.yellow_flower)) + ")=(20.0)",
-						"(" + Item.itemRegistry.getNameForObject(Items.golden_carrot) + ")=(150.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" },
-				CATEGORY_Rabbit, ExtendedPropertiesHungryRabbit.class);
-		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)",
-				"(" + Block.blockRegistry.getNameForObject(Blocks.yellow_flower) + ")=(20.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.carrots) + ",((age,7)))=(40.0)" },
-				CATEGORY_Rabbit, ExtendedPropertiesHungryRabbit.class);
+				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.carrot) + ")=(40.0)", "(" + Item.itemRegistry.getNameForObject(ItemBlock.getItemFromBlock(Blocks.yellow_flower)) + ")=(20.0)",
+						"(" + Item.itemRegistry.getNameForObject(Items.golden_carrot) + ")=(150.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, CATEGORY_Rabbit, ExtendedPropertiesHungryRabbit.class);
+		ByBlockRate(
+				new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.yellow_flower) + ")=(20.0)",
+						"(" + Block.blockRegistry.getNameForObject(Blocks.carrots) + ",((age,7)))=(40.0)" }, CATEGORY_Rabbit, ExtendedPropertiesHungryRabbit.class);
 
 		config.save();
 
 	}
 
-	private static void readDropMeat(String[] defaultfood, String category, Class<? extends ExtendedPropertiesHungryAnimal> target) throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void readDropMeat(String[] defaultfood, String category, Class<? extends ExtendedPropertiesHungryAnimal> target) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		String[] drops;
 		drops = config.get(category, KEY_drop_meat, defaultfood).getStringList();
 		for (String i : drops) {
@@ -177,8 +171,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void readDropRandom(String[] defaultfood, String category, Class<? extends ExtendedPropertiesHungryAnimal> target) throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void readDropRandom(String[] defaultfood, String category, Class<? extends ExtendedPropertiesHungryAnimal> target) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		String[] drops;
 		drops = config.get(category, KEY_drop_random, defaultfood).getStringList();
 		for (String i : drops) {
@@ -192,8 +185,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void readDropRare(String[] defaultfood, String category, Class<? extends ExtendedPropertiesHungryAnimal> target) throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void readDropRare(String[] defaultfood, String category, Class<? extends ExtendedPropertiesHungryAnimal> target) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		String[] drops;
 		drops = config.get(category, KEY_drop_rare, defaultfood).getStringList();
 		for (String i : drops) {

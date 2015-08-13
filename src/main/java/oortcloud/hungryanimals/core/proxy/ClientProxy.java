@@ -59,31 +59,19 @@ public class ClientProxy extends CommonProxy {
 	public void registerItemRendering() {
 		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockExcretaName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockExcretaName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockNiterBedName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockNiterBedName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockTrapCoverName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTrapCoverName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockAxleName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockAxleName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockCrankPlayerName), 0, new ModelResourceLocation(References.RESOURCESPREFIX
-				+ Strings.blockCrankPlayerName, "inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockBeltName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockBeltName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockMillstoneName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockMillstoneName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockThresherName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockThresherName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockBlenderName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockBlenderName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverLeafName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverLeafName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverWoolName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverWoolName,
-				"inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverHayName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverHayName,
-				"inventory"));
-		
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockExcretaName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockExcretaName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockNiterBedName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockNiterBedName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockTrapCoverName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTrapCoverName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockAxleName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockAxleName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockCrankPlayerName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockCrankPlayerName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockBeltName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockBeltName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockMillstoneName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockMillstoneName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockThresherName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockThresherName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockBlenderName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockBlenderName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverLeafName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverLeafName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverWoolName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverWoolName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverHayName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverHayName, "inventory"));
+
 		mesher.register(ModItems.bola, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBolaName, "inventory"));
 		mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation);
 		mesher.register(ModItems.debugGlass, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemDebugGlassName, "inventory"));
@@ -118,8 +106,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerItemModel() {
 		ModelBakery.addVariantName(ModItems.bola, References.RESOURCESPREFIX + Strings.itemBolaName, References.RESOURCESPREFIX + Strings.itemBolaName + "_spin");
-		ModelBakery
-				.addVariantName(ModItems.slingshot, References.RESOURCESPREFIX + Strings.itemSlingShotName, References.RESOURCESPREFIX + Strings.itemSlingShotName + "_shooting");
+		ModelBakery.addVariantName(ModItems.slingshot, References.RESOURCESPREFIX + Strings.itemSlingShotName, References.RESOURCESPREFIX + Strings.itemSlingShotName + "_shooting");
 	}
 
 	@Override
@@ -144,7 +131,7 @@ public class ClientProxy extends CommonProxy {
 	public void registerSprite(TextureStitchEvent event) {
 		event.map.registerSprite(SmartModelItemSlingshot.textureresourcelocation);
 	}
-	
+
 	@Override
 	public void registerEventHandler() {
 		super.registerEventHandler();
@@ -152,15 +139,15 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ClientRenderEventHandler());
 		DebugOverlayHandler debugOverlay = new DebugOverlayHandler(Minecraft.getMinecraft());
 		MinecraftForge.EVENT_BUS.register(debugOverlay);
-    	FMLCommonHandler.instance().bus().register(debugOverlay);
-    	HungryAnimals.entityOverlay = new EntityOverlayHandler(Minecraft.getMinecraft());
-    	MinecraftForge.EVENT_BUS.register(HungryAnimals.entityOverlay);
-    	FMLCommonHandler.instance().bus().register(HungryAnimals.entityOverlay);
+		FMLCommonHandler.instance().bus().register(debugOverlay);
+		HungryAnimals.entityOverlay = new EntityOverlayHandler(Minecraft.getMinecraft());
+		MinecraftForge.EVENT_BUS.register(HungryAnimals.entityOverlay);
+		FMLCommonHandler.instance().bus().register(HungryAnimals.entityOverlay);
 	}
 
 	@Override
 	public void registerKeyBindings() {
 		ModKeyBindings.init();
 	}
-	
+
 }

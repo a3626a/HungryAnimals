@@ -19,7 +19,7 @@ apply plugin: 'forge'
 
 version = "2.0"
 group= "com.oortcloud.hungryanimals"
-archivesBaseName = "modid"
+archivesBaseName = "hungryanimals"
 
 minecraft {
     version = "1.8-11.14.3.1502"

@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
@@ -16,6 +17,7 @@ import oortcloud.hungryanimals.configuration.util.DropRandom;
 import oortcloud.hungryanimals.configuration.util.DropRare;
 import oortcloud.hungryanimals.configuration.util.HashBlock;
 import oortcloud.hungryanimals.configuration.util.HashItem;
+import oortcloud.hungryanimals.entities.ai.EntityAITemptEatableItem;
 import oortcloud.hungryanimals.items.ModItems;
 
 public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal {
@@ -66,6 +68,12 @@ public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal 
 		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
 		this.entity.heal(this.entity.getMaxHealth());
 		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
+	}
+	
+	@Override
+	public void postInit() {
+		super.postInit();
+		this.entity.tasks.addTask(4, new EntityAITempt(this.entity,1.5D, Items.carrot_on_a_stick,false));
 	}
 
 	@Override

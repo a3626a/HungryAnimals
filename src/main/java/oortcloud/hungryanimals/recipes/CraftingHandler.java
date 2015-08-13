@@ -17,7 +17,6 @@ public class CraftingHandler {
 	}
 
 	private static void registerRecipe() {
-		
 		OreDictionary.registerOre("dustSaltpeter", ModItems.saltpeter);
 		OreDictionary.registerOre("dustWoodAsh", ModItems.woodash);
 		
@@ -33,7 +32,7 @@ public class CraftingHandler {
 		GameRegistry.addRecipe(new ShapedDistinctOreRecipe(new ItemStack(ModItems.compositeWood), "abc", "abc", "abc", 'a', "logWood", 'b', new ItemStack(ModItems.animalGlue), 'c', "logWood"));
 		CraftingManager.getInstance().addRecipe(new ItemStack(Items.lead), "aa ","aa ","  a", 'a',new ItemStack(ModItems.tendon));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.crankPlayer), "aaa","  a", "  a",'a', new ItemStack(ModItems.compositeWood));
-		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.crankAnimal), "aaa"," a ", " a ",'a', new ItemStack(ModBlocks.axle));
+		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.crankAnimal), " a ","aaa", " a ",'a', new ItemStack(ModBlocks.axle));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.axle), "a","a","a", 'a', new ItemStack(ModItems.compositeWood));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModItems.wheel), "a", 'a', new ItemStack(ModItems.compositeWood));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModItems.compositeWoodCasing), "aaa", "a a", "aaa", 'a', new ItemStack(ModItems.compositeWood));
