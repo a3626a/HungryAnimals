@@ -53,7 +53,7 @@ public class ConfigurationHandlerPost {
 		}
 
 		HungryAnimals.logger.info("Configuration: Create and Register GeneralProperty of Mod animals");
-		ConfigurationHandlerAnimal.setPropertiesGeneral();
+		ConfigurationHandlerAnimal.setPropertiesGeneral(config);
 		
 		config.save();
 	}

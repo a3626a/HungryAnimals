@@ -178,7 +178,7 @@ public class ConfigurationHandlerAnimal {
 		config.save();
 	}
 
-	public static void setPropertiesGeneral() {
+	public static void setPropertiesGeneral(Configuration config) {
 		for (Class<? extends EntityAnimal> i : GeneralEntityManager.getInstance().entities) {
 			if (ArrayUtils.contains(defualt_class, i)) continue;
 			GeneralProperty iProperty = new GeneralProperty();
