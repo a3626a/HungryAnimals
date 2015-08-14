@@ -25,7 +25,7 @@ import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGener
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryPig;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryRabbit;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungrySheep;
-import oortcloud.hungryanimals.entities.properties.handler.GenericEntityManager;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralEntityManager;
 
 public class EntityEventHandler {
 
@@ -33,7 +33,7 @@ public class EntityEventHandler {
 	public void onEntityDrops(LivingDropsEvent event) {
 		EntityLivingBase entity = event.entityLiving;
 
-		if (entity instanceof EntityAnimal && GenericEntityManager.getInstance().entities.contains(entity.getClass())) {
+		if (entity instanceof EntityAnimal && GeneralEntityManager.getInstance().entities.contains(entity.getClass())) {
 			((ExtendedPropertiesHungryAnimal) entity.getExtendedProperties(Strings.extendedPropertiesKey)).dropFewItems(event.recentlyHit, event.lootingLevel, event.drops);
 		}
 	}
@@ -64,7 +64,7 @@ public class EntityEventHandler {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryRabbit());
 			return;
 		}
-		if (GenericEntityManager.getInstance().entities.contains(event.entity.getClass())) {
+		if (GeneralEntityManager.getInstance().entities.contains(event.entity.getClass())) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryGeneral(event.entity.getClass()));
 		}
 	}

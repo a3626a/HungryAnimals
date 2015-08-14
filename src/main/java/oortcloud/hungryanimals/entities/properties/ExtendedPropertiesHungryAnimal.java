@@ -45,7 +45,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatNaturalItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEatableItem;
-import oortcloud.hungryanimals.entities.properties.handler.GenericProperty;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {
@@ -75,7 +75,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public EntityAIMoveToTrough ai_moveToFoodbox;
 	public EntityAICrank ai_crank;
 
-	public void acceptProperty(GenericProperty genericProperty) {
+	public void acceptProperty(GeneralProperty genericProperty) {
 		hunger_max = genericProperty.default_hunger_max;
 		hunger_bmr = genericProperty.default_hunger_bmr;
 		hunger_food = genericProperty.default_hunger_food;

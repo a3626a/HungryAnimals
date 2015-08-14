@@ -7,8 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.handler.GenericPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GenericProperty;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
 
 public class ExtendedPropertiesHungryGeneral extends ExtendedPropertiesHungryAnimal {
 
@@ -24,7 +24,7 @@ public class ExtendedPropertiesHungryGeneral extends ExtendedPropertiesHungryAni
 		super.init(entity, world);
 		this.entity = (EntityAnimal) entity;
 
-		acceptProperty(((GenericProperty) GenericPropertiesHandler.getInstance().propertyMap.get(entityClass)));
+		acceptProperty(((GeneralProperty) GeneralPropertiesHandler.getInstance().propertyMap.get(entityClass)));
 
 		taming_factor = 0.998;
 		this.hunger = this.hunger_max / 2.0;

@@ -10,6 +10,7 @@ public class ConfigurationHandler {
 		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/HungryAnimals/Animal.cfg"));
 		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/HungryAnimals/World.cfg"));
 		ConfigurationHandlerRecipe.init(new File(event.getModConfigurationDirectory() + "/HungryAnimals/Recipe.cfg"));
+		ConfigurationHandlerPost.init(new File(event.getModConfigurationDirectory() + "/HungryAnimals/ModAnimal.cfg"));
 	}
 	
 	public static void sync() {

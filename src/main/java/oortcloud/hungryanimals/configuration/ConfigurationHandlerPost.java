@@ -3,7 +3,9 @@ package oortcloud.hungryanimals.configuration;
 import java.io.File;
 
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.entities.properties.handler.GenericEntityManager;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralEntityManager;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -24,24 +26,34 @@ public class ConfigurationHandlerPost {
 	}
 	
 	public static void sync() {
-		GenericEntityManager.getInstance().init();
-
-		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
-			HungryAnimals.logger.info("Configuration: finding entity " + i + " in Entity List...");
-			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
-			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass)) {
-				HungryAnimals.logger.info("Configuration: have detected mod entity: " + i);
-				GenericEntityManager.getInstance().entities.add(entityClass);
-			}
-		}
-
+		HungryAnimals.logger.info("Configuration: Post start");
+		
+		HungryAnimals.logger.info("Configuration: Check compatibility of registered Entity Classes");
+		HungryAnimals.logger.info("Configuration: Compatible entities' name :");
 		for (Object i : EntityList.classToStringMapping.keySet()) {
 			if (EntityAnimal.class.isAssignableFrom((Class)i)) {
-				HungryAnimals.logger.info("Configuration: Registered Entity Class " + (String)EntityList.classToStringMapping.get(i) + " is compatible.");
-			} else {
-				HungryAnimals.logger.info("Configuration: Registered Entity Class " + (String)EntityList.classToStringMapping.get(i) + " is not compatible.");
+				HungryAnimals.logger.info("Configuration: " + (String)EntityList.classToStringMapping.get(i));
 			}
 		}
+		HungryAnimals.logger.info("Configuration: Uncompatible entities' name :");
+		for (Object i : EntityList.classToStringMapping.keySet()) {
+			if (!EntityAnimal.class.isAssignableFrom((Class)i)) {
+				HungryAnimals.logger.info("Configuration: " + (String)EntityList.classToStringMapping.get(i));
+			}
+		}
+		
+		HungryAnimals.logger.info("Configuration: Read and Register mod entities' from Animal.cfg to GeneralEntityManager");
+		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
+			HungryAnimals.logger.info("Configuration: Read entity name " + i + " from Animal.cfg");
+			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
+			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass)) {
+				HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
+				GeneralEntityManager.getInstance().entities.add(entityClass);
+			}
+		}
+
+		HungryAnimals.logger.info("Configuration: Create and Register GeneralProperty of Mod animals");
+		ConfigurationHandlerAnimal.setPropertiesGeneral();
 		
 		config.save();
 	}

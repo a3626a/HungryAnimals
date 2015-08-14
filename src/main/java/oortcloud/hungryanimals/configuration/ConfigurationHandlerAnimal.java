@@ -21,14 +21,11 @@ import oortcloud.hungryanimals.configuration.util.DropRandom;
 import oortcloud.hungryanimals.configuration.util.DropRare;
 import oortcloud.hungryanimals.configuration.util.HashBlock;
 import oortcloud.hungryanimals.configuration.util.HashItem;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryChicken;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryCow;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryPig;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryRabbit;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungrySheep;
-import oortcloud.hungryanimals.entities.properties.handler.GenericEntityManager;
-import oortcloud.hungryanimals.entities.properties.handler.GenericPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GenericProperty;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralEntityManager;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
 import oortcloud.hungryanimals.items.ModItems;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -38,7 +35,6 @@ public class ConfigurationHandlerAnimal {
 	public static Configuration config;
 
 	public static final Class[] defualt_class = { EntityChicken.class, EntityCow.class, EntityPig.class, EntityRabbit.class, EntitySheep.class };
-
 	public static final String KEY_hunger_bmr = "HungerUsage: basic rate";
 	public static final String KEY_hunger_max = "Abiltiy: max hunger";
 	public static final String KEY_hunger_food = "HungerAcquisition: byFood Rate";
@@ -61,41 +57,22 @@ public class ConfigurationHandlerAnimal {
 		config.load();
 	}
 
-	public static String categoryGenerator(Class<? extends EntityAnimal> entityClass) {
-		return (String) EntityList.classToStringMapping.get(entityClass);
-	}
-
 	public static void sync() {
-
 		HungryAnimals.logger.info("Configuration: Animal start");
 		
-		GenericPropertiesHandler.getInstance().init();
+		HungryAnimals.logger.info("Configuration: Initialization GeneralPropertiesHandler");
+		HungryAnimals.logger.info("Configuration: Initialization GeneralEntityManager");
+		GeneralPropertiesHandler.getInstance().init();
+		GeneralEntityManager.getInstance().init();
 		
-		for (Class<? extends EntityAnimal> i : GenericEntityManager.getInstance().entities) {
-			GenericProperty iProperty = new GenericProperty();
-			String category = categoryGenerator(i);
-			iProperty.default_hunger_bmr = config.get(category, KEY_hunger_bmr, 0.001).getDouble();
-			iProperty.default_hunger_max = config.get(category, KEY_hunger_max, 100).getDouble();
-			iProperty.default_courtship_hunger = config.get(category, KEY_courtship_hunger, iProperty.default_hunger_max / 20.0).getDouble();
-			iProperty.default_courtship_probability = config.get(category, KEY_courtship_probability, 0.0025).getDouble();
-			iProperty.default_courtship_hungerCondition = config.get(category, KEY_courtship_hungerCondition, 0.8).getDouble();
-			iProperty.default_excretion_factor = 1 / config.get(category, KEY_excretion_factor, 50).getDouble();
-			iProperty.default_child_hunger = config.get(category, KEY_child_hunger, iProperty.default_hunger_max / 4.0).getDouble();
-
-			readDropMeat(new String[] {}, category, iProperty);
-			readDropRandom(new String[] {}, category, iProperty);
-			readDropRare(new String[] {}, category, iProperty);
-			ByFoodRate(new String[] {}, category, iProperty);
-			ByBlockRate(new String[] {}, category, iProperty);
-
-			GenericPropertiesHandler.getInstance().propertyMap.put(i, iProperty);
-		}
-
+		HungryAnimals.logger.info("Configuration: Register vanilla EntityAnimal classes to GeneralEntityManager");
 		for (Class i : defualt_class) {
-			GenericEntityManager.getInstance().entities.add(i);
+			HungryAnimals.logger.info("Configuration: " + i);
+			GeneralEntityManager.getInstance().entities.add(i);
 		}
 
-		GenericProperty chicken = new GenericProperty();
+		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityChicken");
+		GeneralProperty chicken = new GeneralProperty();
 		String categoryChicken = categoryGenerator(EntityChicken.class);
 		chicken.default_hunger_bmr = config.get(categoryChicken, KEY_hunger_bmr, 0.002).getDouble();
 		chicken.default_hunger_max = config.get(categoryChicken, KEY_hunger_max, 150).getDouble();
@@ -112,9 +89,11 @@ public class ConfigurationHandlerAnimal {
 						"(" + Item.itemRegistry.getNameForObject(Items.melon_seeds) + ")=(25.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + ")=(20.0)",
 						"(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, categoryChicken, chicken);
 		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,0)))=(50.0)" }, categoryChicken, chicken);
-		GenericPropertiesHandler.getInstance().propertyMap.put(EntityChicken.class, chicken);
+		HungryAnimals.logger.info("Configuration: Register GeneralProperty of EntityChicken to GeneralPropertiesHandler");
+		GeneralPropertiesHandler.getInstance().propertyMap.put(EntityChicken.class, chicken);
 
-		GenericProperty cow = new GenericProperty();
+		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityCow");
+		GeneralProperty cow = new GeneralProperty();
 		String categoryCow = categoryGenerator(EntityCow.class);
 		cow.default_hunger_bmr = config.get(categoryCow, KEY_hunger_bmr, 0.005).getDouble();
 		cow.default_hunger_max = config.get(categoryCow, KEY_hunger_max, 500).getDouble();
@@ -131,9 +110,11 @@ public class ConfigurationHandlerAnimal {
 		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat) + ")=(50.0)", "(" + Item.itemRegistry.getNameForObject(Items.reeds) + ")=(20.0)",
 				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, categoryCow, cow);
 		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,7)))=(50.0)" }, categoryCow, cow);
-		GenericPropertiesHandler.getInstance().propertyMap.put(EntityCow.class, cow);
+		HungryAnimals.logger.info("Configuration: Register GeneralProperty of EntityCow to GeneralPropertiesHandler");
+		GeneralPropertiesHandler.getInstance().propertyMap.put(EntityCow.class, cow);
 
-		GenericProperty pig = new GenericProperty();
+		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityPig");
+		GeneralProperty pig = new GeneralProperty();
 		String categoryPig = categoryGenerator(EntityPig.class);
 		pig.default_hunger_bmr = config.get(categoryPig, KEY_hunger_bmr, 0.004).getDouble();
 		pig.default_hunger_max = config.get(categoryPig, KEY_hunger_max, 400).getDouble();
@@ -148,9 +129,11 @@ public class ConfigurationHandlerAnimal {
 		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.carrot) + ")=(40.0)", "(" + Item.itemRegistry.getNameForObject(Items.rotten_flesh) + ")=(15.0)",
 				"(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, categoryPig, pig);
 		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.carrots) + ",((age,7)))=(40.0)" }, categoryPig, pig);
-		GenericPropertiesHandler.getInstance().propertyMap.put(EntityPig.class, pig);
+		HungryAnimals.logger.info("Configuration: Register GeneralProperty of EntityPig to GeneralPropertiesHandler");
+		GeneralPropertiesHandler.getInstance().propertyMap.put(EntityPig.class, pig);
 
-		GenericProperty rabbit = new GenericProperty();
+		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityRabbit");
+		GeneralProperty rabbit = new GeneralProperty();
 		String categoryRabbit = categoryGenerator(EntityRabbit.class);
 		rabbit.default_hunger_bmr = config.get(categoryRabbit, KEY_hunger_bmr, 0.003).getDouble();
 		rabbit.default_hunger_max = config.get(categoryRabbit, KEY_hunger_max, 250).getDouble();
@@ -168,9 +151,11 @@ public class ConfigurationHandlerAnimal {
 		ByBlockRate(
 				new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.yellow_flower) + ")=(20.0)",
 						"(" + Block.blockRegistry.getNameForObject(Blocks.carrots) + ",((age,7)))=(40.0)" }, categoryRabbit, rabbit);
-		GenericPropertiesHandler.getInstance().propertyMap.put(EntityRabbit.class, rabbit);
+		HungryAnimals.logger.info("Configuration: Register GeneralProperty of EntityRabbit to GeneralPropertiesHandler");
+		GeneralPropertiesHandler.getInstance().propertyMap.put(EntityRabbit.class, rabbit);
 
-		GenericProperty sheep = new GenericProperty();
+		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntitySheep");
+		GeneralProperty sheep = new GeneralProperty();
 		String categorySheep = categoryGenerator(EntitySheep.class);
 		sheep.default_hunger_bmr = config.get(categorySheep, KEY_hunger_bmr, 0.004).getDouble();
 		sheep.default_hunger_max = config.get(categorySheep, KEY_hunger_max, 400).getDouble();
@@ -187,12 +172,40 @@ public class ConfigurationHandlerAnimal {
 		ByFoodRate(new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat) + ")=(50.0)", "(" + Item.itemRegistry.getNameForObject(Items.reeds) + ")=(20.0)",
 				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, categorySheep, sheep);
 		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,7)))=(50.0)" }, categorySheep, sheep);
-		GenericPropertiesHandler.getInstance().propertyMap.put(EntitySheep.class, sheep);
+		HungryAnimals.logger.info("Configuration: Register GeneralProperty of EntitySheep to GeneralPropertiesHandler");
+		GeneralPropertiesHandler.getInstance().propertyMap.put(EntitySheep.class, sheep);
 
 		config.save();
 	}
 
-	private static void readDropMeat(String[] defaultfood, String category, GenericProperty target) {
+	public static void setPropertiesGeneral() {
+		for (Class<? extends EntityAnimal> i : GeneralEntityManager.getInstance().entities) {
+			if (ArrayUtils.contains(defualt_class, i)) continue;
+			GeneralProperty iProperty = new GeneralProperty();
+			String category = categoryGenerator(i);
+			iProperty.default_hunger_bmr = config.get(category, KEY_hunger_bmr, 0.001).getDouble();
+			iProperty.default_hunger_max = config.get(category, KEY_hunger_max, 100).getDouble();
+			iProperty.default_courtship_hunger = config.get(category, KEY_courtship_hunger, iProperty.default_hunger_max / 20.0).getDouble();
+			iProperty.default_courtship_probability = config.get(category, KEY_courtship_probability, 0.0025).getDouble();
+			iProperty.default_courtship_hungerCondition = config.get(category, KEY_courtship_hungerCondition, 0.8).getDouble();
+			iProperty.default_excretion_factor = 1 / config.get(category, KEY_excretion_factor, 50).getDouble();
+			iProperty.default_child_hunger = config.get(category, KEY_child_hunger, iProperty.default_hunger_max / 4.0).getDouble();
+
+			readDropMeat(new String[] {}, category, iProperty);
+			readDropRandom(new String[] {}, category, iProperty);
+			readDropRare(new String[] {}, category, iProperty);
+			ByFoodRate(new String[] {}, category, iProperty);
+			ByBlockRate(new String[] {}, category, iProperty);
+
+			GeneralPropertiesHandler.getInstance().propertyMap.put(i, iProperty);
+		}
+	}
+	
+	private static String categoryGenerator(Class<? extends EntityAnimal> entityClass) {
+		return (String) EntityList.classToStringMapping.get(entityClass);
+	}
+	
+	private static void readDropMeat(String[] defaultfood, String category, GeneralProperty target) {
 		String[] drops;
 		drops = config.get(category, KEY_drop_meat, defaultfood).getStringList();
 		for (String i : drops) {
@@ -206,7 +219,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void readDropRandom(String[] defaultfood, String category, GenericProperty target) {
+	private static void readDropRandom(String[] defaultfood, String category, GeneralProperty target) {
 		String[] drops;
 		drops = config.get(category, KEY_drop_random, defaultfood).getStringList();
 		for (String i : drops) {
@@ -220,7 +233,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void readDropRare(String[] defaultfood, String category, GenericProperty target) {
+	private static void readDropRare(String[] defaultfood, String category, GeneralProperty target) {
 		String[] drops;
 		drops = config.get(category, KEY_drop_rare, defaultfood).getStringList();
 		for (String i : drops) {
@@ -241,7 +254,7 @@ public class ConfigurationHandlerAnimal {
 	 * @param category
 	 * @param target
 	 */
-	private static void ByFoodRate(String[] defaultfood, String category, GenericProperty target) {
+	private static void ByFoodRate(String[] defaultfood, String category, GeneralProperty target) {
 		String[] food;
 		food = config.get(category, KEY_hunger_food, defaultfood).getStringList();
 		for (String i : food) {
@@ -259,7 +272,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void ByBlockRate(String[] defaultBlock, String category, GenericProperty target) {
+	private static void ByBlockRate(String[] defaultBlock, String category, GeneralProperty target) {
 		String[] block;
 		block = config.get(category, KEY_hunger_block, defaultBlock).getStringList();
 		for (String i : block) {

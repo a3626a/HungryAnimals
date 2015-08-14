@@ -9,7 +9,7 @@ import oortcloud.hungryanimals.configuration.util.DropRare;
 import oortcloud.hungryanimals.configuration.util.HashBlock;
 import oortcloud.hungryanimals.configuration.util.HashItem;
 
-public class GenericProperty {
+public class GeneralProperty {
 
 	public double default_hunger_max;
 	public double default_hunger_bmr;

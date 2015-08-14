@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.recipes.RecipeBlender;
@@ -33,7 +34,9 @@ public class ConfigurationHandlerRecipe {
 	}
 
 	public static void sync() {
-
+		HungryAnimals.logger.info("Configuration: Recipe start");
+		
+		HungryAnimals.logger.info("Configuration: Read and Register Thresher Recipe");
 		String[] recipeString;
 		recipeString = config.get(
 				CATEGORY_Thresher,
@@ -48,6 +51,7 @@ public class ConfigurationHandlerRecipe {
 			RecipeThresher.readConfiguration(i);
 		}
 
+		HungryAnimals.logger.info("Configuration: Read and Register Millstone Recipe");
 		recipeString = config.get(
 				CATEGORY_Millstone,
 				KEY_millstoneRecipeList,
@@ -59,6 +63,7 @@ public class ConfigurationHandlerRecipe {
 			RecipeMillstone.readConfiguration(i);
 		}
 
+		HungryAnimals.logger.info("Configuration: Read and Register Blender Recipe");
 		recipeString = config.get(	
 				CATEGORY_Blender,
 				KEY_blenderRecipeList,
@@ -72,6 +77,7 @@ public class ConfigurationHandlerRecipe {
 			RecipeBlender.readConfiguration(i);
 		}
 		
+		HungryAnimals.logger.info("Configuration: Read and Register Animals Glue Recipe");
 		recipeString = config.get(
 				CATEGORY_AnimalGlue,
 				KEY_AnimalGlueRecipeList,

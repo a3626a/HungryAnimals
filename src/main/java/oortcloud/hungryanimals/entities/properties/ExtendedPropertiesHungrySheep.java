@@ -13,8 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.handler.GenericPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GenericProperty;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
+import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
 
 public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnimal {
 
@@ -32,7 +32,7 @@ public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnima
 		super.init(entity, world);
 		this.entity = (EntitySheep) entity;
 
-		acceptProperty(((GenericProperty)GenericPropertiesHandler.getInstance().propertyMap.get(entity.getClass())));
+		acceptProperty(((GeneralProperty)GeneralPropertiesHandler.getInstance().propertyMap.get(entity.getClass())));
 		
 		taming_factor = 0.998;
 		wool_delay = default_wool_delay;

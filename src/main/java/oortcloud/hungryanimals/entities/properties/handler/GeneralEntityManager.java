@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.passive.EntityAnimal;
 
-public class GenericEntityManager {
+public class GeneralEntityManager {
 
-	private static GenericEntityManager instance;
+	private static GeneralEntityManager instance;
 	
 	public ArrayList<Class<? extends EntityAnimal>> entities;
 	
-	private GenericEntityManager() {
+	private GeneralEntityManager() {
 		entities = new ArrayList<Class<? extends EntityAnimal>>();
 	};
 	
@@ -18,9 +18,9 @@ public class GenericEntityManager {
 		entities.clear();
 	}
 	
-	public static GenericEntityManager getInstance() {
+	public static GeneralEntityManager getInstance() {
 		if (instance == null) {
-			instance = new GenericEntityManager();
+			instance = new GeneralEntityManager();
 		}
 		return instance;
 	}

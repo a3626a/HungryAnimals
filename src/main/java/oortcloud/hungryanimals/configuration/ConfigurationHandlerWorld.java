@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
 
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.handler.FMLEventHandler;
@@ -26,13 +27,19 @@ public class ConfigurationHandlerWorld {
 	}
 
 	public static void sync() {
-
+		HungryAnimals.logger.info("Configuration: World start");
+		
+		HungryAnimals.logger.info("Configuration: Read and Register properties of BlockExcreta");
 		BlockExcreta.fermetationProbability = config.get(CATEGORY_Block, KEY_fermetationProbability, BlockExcreta.defualt_fermetationProbability).getDouble();
 		BlockExcreta.erosionProbability = config.get(CATEGORY_Block, KEY_erosionProbability, BlockExcreta.defualt_erosionProbability).getDouble();
 		BlockExcreta.erosionOnHayProbability = config.get(CATEGORY_Block, KEY_erosionOnHayProbability, BlockExcreta.defualt_erosionOnHayProbability).getDouble();
 		BlockExcreta.fertilizationProbability = config.get(CATEGORY_Block, KEY_fertilizationProbability, BlockExcreta.defualt_fertilizationProbability).getDouble();
 		BlockExcreta.diseaseProbability = config.get(CATEGORY_Block, KEY_diseaseProbability, BlockExcreta.defualt_diseaseProbability).getDouble();
+		
+		HungryAnimals.logger.info("Configuration: Read and Register properties of NiterBed");
 		BlockNiterBed.ripeningProbability = config.get(CATEGORY_Block, KEY_ripeningProbability, BlockNiterBed.default_ripeningProbability).getDouble();
+		
+		HungryAnimals.logger.info("Configuration: Read and Register properties of Grass Growth");
 		FMLEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, FMLEventHandler.default_grassProbability).getDouble();
 
 		config.save();
