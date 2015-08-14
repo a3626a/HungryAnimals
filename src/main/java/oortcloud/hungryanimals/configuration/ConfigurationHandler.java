@@ -13,11 +13,13 @@ public class ConfigurationHandler {
 	}
 	
 	public static void sync() {
-
 		ConfigurationHandlerAnimal.sync();
 		ConfigurationHandlerWorld.sync();
 		ConfigurationHandlerRecipe.sync();
-		
+	}
+	
+	public static void postSync() {
+		ConfigurationHandlerPost.sync();
 	}
 	
 }

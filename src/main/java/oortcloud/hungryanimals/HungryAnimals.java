@@ -83,6 +83,7 @@ public class HungryAnimals {
 		proxy.registerTileEntityRendering();
 		proxy.registerTileEntities();
 		proxy.registerKeyBindings();
+		ConfigurationHandler.sync();
 	}
 
 	@Mod.EventHandler
@@ -103,7 +104,7 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
-		ConfigurationHandler.sync();
+		ConfigurationHandler.postSync();
 	}
 
 	@EventHandler

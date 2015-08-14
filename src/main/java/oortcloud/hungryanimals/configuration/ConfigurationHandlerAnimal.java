@@ -39,9 +39,6 @@ public class ConfigurationHandlerAnimal {
 
 	public static final Class[] defualt_class = { EntityChicken.class, EntityCow.class, EntityPig.class, EntityRabbit.class, EntitySheep.class };
 
-	public static final String CATEGORY_Generic = "Generic";
-	public static final String KEY_entities = "Added Mod Entities";
-
 	public static final String KEY_hunger_bmr = "HungerUsage: basic rate";
 	public static final String KEY_hunger_max = "Abiltiy: max hunger";
 	public static final String KEY_hunger_food = "HungerAcquisition: byFood Rate";
@@ -73,24 +70,6 @@ public class ConfigurationHandlerAnimal {
 		HungryAnimals.logger.info("Configuration: Animal start");
 		
 		GenericPropertiesHandler.getInstance().init();
-		GenericEntityManager.getInstance().init();
-
-		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
-			HungryAnimals.logger.info("Configuration: finding entity " + i + " in Entity List...");
-			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
-			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass)) {
-				HungryAnimals.logger.info("Configuration: have detected mod entity: " + i);
-				GenericEntityManager.getInstance().entities.add(entityClass);
-			}
-		}
-
-		for (Object i : EntityList.classToStringMapping.keySet()) {
-			if (EntityAnimal.class.isAssignableFrom((Class)i)) {
-				HungryAnimals.logger.info("Configuration: Registered Entity Class " + (String)EntityList.classToStringMapping.get(i) + " is compatible.");
-			} else {
-				HungryAnimals.logger.info("Configuration: Registered Entity Class " + (String)EntityList.classToStringMapping.get(i) + " is not compatible.");
-			}
-		}
 		
 		for (Class<? extends EntityAnimal> i : GenericEntityManager.getInstance().entities) {
 			GenericProperty iProperty = new GenericProperty();
@@ -211,7 +190,6 @@ public class ConfigurationHandlerAnimal {
 		GenericPropertiesHandler.getInstance().propertyMap.put(EntitySheep.class, sheep);
 
 		config.save();
-
 	}
 
 	private static void readDropMeat(String[] defaultfood, String category, GenericProperty target) {
