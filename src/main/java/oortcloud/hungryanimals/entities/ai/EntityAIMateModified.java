@@ -133,16 +133,16 @@ public class EntityAIMateModified extends EntityAIBase
 		} catch (SecurityException e) {
 		}
     	
-    	if (!createChildDeclared && property instanceof ExtendedPropertiesHungryGeneral) {
+    	if ((!createChildDeclared||entityageable==null) && property instanceof ExtendedPropertiesHungryGeneral) {
         	ExtendedPropertiesHungryGeneral generalProperty = (ExtendedPropertiesHungryGeneral)property;
         	entityageable = generalProperty.createChild(theWorld);
         }
     	
-    	ExtendedPropertiesHungryAnimal childProperty = (ExtendedPropertiesHungryAnimal) entityageable.getExtendedProperties(Strings.extendedPropertiesKey);
-        childProperty.taming = ( this.property.taming + targetMateProperty.taming ) / 2.0;
-        
         if (entityageable != null)
         {
+        	ExtendedPropertiesHungryAnimal childProperty = (ExtendedPropertiesHungryAnimal) entityageable.getExtendedProperties(Strings.extendedPropertiesKey);
+            childProperty.taming = ( this.property.taming + targetMateProperty.taming ) / 2.0;
+        	
             EntityPlayer entityplayer = this.theAnimal.func_146083_cb();
 
             if (entityplayer == null && this.targetMate.func_146083_cb() != null)
@@ -180,6 +180,9 @@ public class EntityAIMateModified extends EntityAIBase
             {
                 this.theWorld.spawnEntityInWorld(new EntityXPOrb(this.theWorld, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(7) + 1));
             }
+        } else {
+        	this.theAnimal.resetInLove();
+            this.targetMate.resetInLove();
         }
     }
 }
