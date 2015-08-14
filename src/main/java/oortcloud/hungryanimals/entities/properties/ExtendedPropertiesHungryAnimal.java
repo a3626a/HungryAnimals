@@ -21,7 +21,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,6 +45,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatNaturalItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEatableItem;
+import oortcloud.hungryanimals.entities.properties.handler.GenericProperty;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {
@@ -75,6 +75,21 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public EntityAIMoveToTrough ai_moveToFoodbox;
 	public EntityAICrank ai_crank;
 
+	public void acceptProperty(GenericProperty genericProperty) {
+		hunger_max = genericProperty.default_hunger_max;
+		hunger_bmr = genericProperty.default_hunger_bmr;
+		hunger_food = genericProperty.default_hunger_food;
+		hunger_block = genericProperty.default_hunger_block;
+		drop_meat = genericProperty.default_drop_meat;
+		drop_random = genericProperty.default_drop_random;
+		drop_rare = genericProperty.default_drop_rare;
+		courtship_hunger = genericProperty.default_courtship_hunger;
+		courtship_probability = genericProperty.default_courtship_probability;
+		courtship_hungerCondition = genericProperty.default_courtship_hungerCondition;
+		excretion_factor = genericProperty.default_excretion_factor;
+		child_hunger = genericProperty.default_child_hunger;
+	}
+	
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		NBTTagCompound tag = new NBTTagCompound();

@@ -3,6 +3,9 @@ package oortcloud.hungryanimals.items.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -103,6 +106,16 @@ public class DebugOverlayHandler extends Gui {
 
 		ScaledResolution res = event.resolution;
 		this.drawGradientRect(0, 0, WIDTH, res.getScaledHeight(), -1072689136, -804253680);
+		
+		Entity entity = mc.theWorld.getEntityByID(targetEntityID.intData);
+		if (entity != null) {
+			String text = (String)EntityList.classToStringMapping.get(entity.getClass());
+			if (text != null) {
+				if (entity instanceof EntityAnimal) text+=" (Compatible)";
+				this.drawString(mc.fontRendererObj, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);
+			}
+		}
+		
 		for (int i = 0; i < labels.length; i++) {
 			if (i == index) {
 				this.drawGradientRect(0, START_Y + FONTHEIGHT * i, WIDTH, START_Y + FONTHEIGHT * (i+1), 0x80A0A0A0, 0x80FFFFFF);
