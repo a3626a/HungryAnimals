@@ -17,6 +17,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
 
 public class EntityAIMateModified extends EntityAIBase
 {
@@ -122,7 +123,12 @@ public class EntityAIMateModified extends EntityAIBase
     	targetMateProperty.subHunger(property.child_hunger);
         
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
-        ExtendedPropertiesHungryAnimal childProperty = (ExtendedPropertiesHungryAnimal) entityageable.getExtendedProperties(Strings.extendedPropertiesKey);
+    	if (entityageable == null && property instanceof ExtendedPropertiesHungryGeneral) {
+        	ExtendedPropertiesHungryGeneral generalProperty = (ExtendedPropertiesHungryGeneral)property;
+        	entityageable = generalProperty.createChild(theWorld);
+        }
+    	
+    	ExtendedPropertiesHungryAnimal childProperty = (ExtendedPropertiesHungryAnimal) entityageable.getExtendedProperties(Strings.extendedPropertiesKey);
         childProperty.taming = ( this.property.taming + targetMateProperty.taming ) / 2.0;
         
         if (entityageable != null)
