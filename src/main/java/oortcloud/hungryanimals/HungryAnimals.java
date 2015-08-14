@@ -42,7 +42,6 @@ import oortcloud.hungryanimals.recipes.RecipeThresher;
 
 import org.apache.logging.log4j.Logger;
 
-//@Mod(modid = References.MODID, name = References.MODNAME, version = References.VERSION, guiFactory = References.FACTORY)
 @Mod(modid = References.MODID, name = References.MODNAME, version = References.VERSION)
 public class HungryAnimals {
 	@Mod.Instance

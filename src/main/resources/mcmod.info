@@ -14,7 +14,7 @@
     "screenshots": [],
     "parent": "",
     "requiredMods": [ "Forge" ],
-    "dependencies": [MoCreatures,animalsplus],
+    "dependencies": [MoCreatures,animalsplus,lotsomobs],
     "dependants": [],
     "useDependencyInformation": true
   }]

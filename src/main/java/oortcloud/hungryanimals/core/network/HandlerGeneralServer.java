@@ -75,16 +75,12 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 								Field f = properties.getClass().getField(message.getString());
 								f.setInt(properties, message.getInt());
 							} catch (NoSuchFieldException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} catch (SecurityException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} catch (IllegalArgumentException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} catch (IllegalAccessException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 
@@ -109,16 +105,12 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 								Field f = properties.getClass().getField(message.getString());
 								f.setDouble(properties, message.getDouble());
 							} catch (NoSuchFieldException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} catch (SecurityException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} catch (IllegalArgumentException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} catch (IllegalAccessException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 

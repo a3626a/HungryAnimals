@@ -11,16 +11,13 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 import oortcloud.hungryanimals.tileentities.TileEntityMillstone;
 import oortcloud.hungryanimals.tileentities.TileEntityThresher;
 
-public class HandlerTileEntityClient implements
-		IMessageHandler<PacketTileEntityClient, PacketTileEntityServer> {
+public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntityClient, PacketTileEntityServer> {
 
 	@Override
-	public PacketTileEntityServer onMessage(PacketTileEntityClient message,
-			MessageContext ctx) {
+	public PacketTileEntityServer onMessage(PacketTileEntityClient message, MessageContext ctx) {
 
 		if (Minecraft.getMinecraft().theWorld.provider.getDimensionId() == message.dim) {
-			TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(
-					message.pos);
+			TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(message.pos);
 
 			if (te != null) {
 				switch (message.index) {
@@ -28,11 +25,11 @@ public class HandlerTileEntityClient implements
 					((TileEntityTrough) te).stack = message.getItemStack();
 					break;
 				case 1:
-					((TileEntityEnergyTransporter)te).getNetwork().setAngle(message.getFloat());
+					((TileEntityEnergyTransporter) te).getNetwork().setAngle(message.getFloat());
 					break;
 				case 2:
-					ItemStack[] items1 = message.getItemStackArray(); 
-					for (int i = 0 ; i < items1.length; i++) {
+					ItemStack[] items1 = message.getItemStackArray();
+					for (int i = 0; i < items1.length; i++) {
 						((TileEntityThresher) te).setInventorySlotContents(i, items1[i]);
 					}
 					break;
@@ -40,19 +37,19 @@ public class HandlerTileEntityClient implements
 					((TileEntityMillstone) te).liquidAmount = message.getDouble();
 					break;
 				case 4:
-					ItemStack[] items2 = message.getItemStackArray(); 
-					for (int i = 0 ; i < items2.length; i++) {
+					ItemStack[] items2 = message.getItemStackArray();
+					for (int i = 0; i < items2.length; i++) {
 						((TileEntityMillstone) te).setInventorySlotContents(i, items2[i]);
 					}
 					break;
 				case 5:
-					ItemStack[] items3 = message.getItemStackArray(); 
-					for (int i = 0 ; i < items3.length; i++) {
+					ItemStack[] items3 = message.getItemStackArray();
+					for (int i = 0; i < items3.length; i++) {
 						((TileEntityBlender) te).setInventorySlotContents(i, items3[i]);
 					}
 					break;
-				case 6 :
-					((TileEntityEnergyTransporter)te).getNetwork().setAngularVelocity(message.getFloat());
+				case 6:
+					((TileEntityEnergyTransporter) te).getNetwork().setAngularVelocity(message.getFloat());
 					break;
 				}
 			}
