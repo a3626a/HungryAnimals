@@ -67,7 +67,7 @@ public class HungryAnimals {
 	public static Logger logger;
 
 	@Mod.EventHandler
-	public static void preInit(FMLPreInitializationEvent event) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
 		RecipeThresher.init();
 		RecipeMillstone.init();
@@ -104,6 +104,7 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
+		ConfigurationHandler.sync();
 	}
 
 	@EventHandler

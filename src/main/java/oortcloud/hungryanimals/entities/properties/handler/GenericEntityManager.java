@@ -14,6 +14,10 @@ public class GenericEntityManager {
 		entities = new ArrayList<Class<? extends EntityAnimal>>();
 	};
 	
+	public void init() {
+		entities.clear();
+	}
+	
 	public static GenericEntityManager getInstance() {
 		if (instance == null) {
 			instance = new GenericEntityManager();

@@ -12,7 +12,7 @@ public class ConfigurationHandler {
 		ConfigurationHandlerRecipe.init(new File(event.getModConfigurationDirectory() + "/HungryAnimals/Recipe.cfg"));
 	}
 	
-	public static void sync() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void sync() {
 
 		ConfigurationHandlerAnimal.sync();
 		ConfigurationHandlerWorld.sync();

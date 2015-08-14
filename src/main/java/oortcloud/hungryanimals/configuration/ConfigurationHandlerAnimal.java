@@ -67,11 +67,14 @@ public class ConfigurationHandlerAnimal {
 		return (String) EntityList.classToStringMapping.get(entityClass);
 	}
 
-	public static void sync() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static void sync() {
+
+		GenericPropertiesHandler.getInstance().init();
+		GenericEntityManager.getInstance().init();
 
 		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
 			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
-			if (entityClass != null && entityClass.isAssignableFrom(EntityAnimal.class))
+			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass))
 				GenericEntityManager.getInstance().entities.add(entityClass);
 		}
 
@@ -91,6 +94,8 @@ public class ConfigurationHandlerAnimal {
 			readDropRare(new String[] {}, category, iProperty);
 			ByFoodRate(new String[] {}, category, iProperty);
 			ByBlockRate(new String[] {}, category, iProperty);
+
+			GenericPropertiesHandler.getInstance().propertyMap.put(i, iProperty);
 		}
 
 		for (Class i : defualt_class) {
@@ -190,12 +195,12 @@ public class ConfigurationHandlerAnimal {
 				"(" + Item.itemRegistry.getNameForObject(ModItems.straw) + ")=(10.0)", "(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")=(80.0)" }, categorySheep, sheep);
 		ByBlockRate(new String[] { "(" + Block.blockRegistry.getNameForObject(Blocks.tallgrass) + ")=(15.0)", "(" + Block.blockRegistry.getNameForObject(Blocks.wheat) + ",((age,7)))=(50.0)" }, categorySheep, sheep);
 		GenericPropertiesHandler.getInstance().propertyMap.put(EntitySheep.class, sheep);
-		
+
 		config.save();
 
 	}
 
-	private static void readDropMeat(String[] defaultfood, String category, GenericProperty target) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void readDropMeat(String[] defaultfood, String category, GenericProperty target) {
 		String[] drops;
 		drops = config.get(category, KEY_drop_meat, defaultfood).getStringList();
 		for (String i : drops) {
@@ -209,7 +214,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void readDropRandom(String[] defaultfood, String category, GenericProperty target) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void readDropRandom(String[] defaultfood, String category, GenericProperty target) {
 		String[] drops;
 		drops = config.get(category, KEY_drop_random, defaultfood).getStringList();
 		for (String i : drops) {
@@ -223,7 +228,7 @@ public class ConfigurationHandlerAnimal {
 		}
 	}
 
-	private static void readDropRare(String[] defaultfood, String category, GenericProperty target) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	private static void readDropRare(String[] defaultfood, String category, GenericProperty target) {
 		String[] drops;
 		drops = config.get(category, KEY_drop_rare, defaultfood).getStringList();
 		for (String i : drops) {
@@ -253,13 +258,7 @@ public class ConfigurationHandlerAnimal {
 			if (split.length == 2) {
 				HashItem item = ConfigurationHelper.instance.getHashItem(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				try {
-					target.default_hunger_food.put(item, hunger);
-				} catch (Exception e) {
-					System.out.println("\"" + i + "\" is not added. Format error");
-					e.printStackTrace();
-					continue;
-				}
+				target.default_hunger_food.put(item, hunger);
 
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");
@@ -277,13 +276,7 @@ public class ConfigurationHandlerAnimal {
 			if (split.length == 2) {
 				HashBlock hashblock = ConfigurationHelper.instance.getHashBlock(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				try {
-					target.default_hunger_block.put(hashblock, hunger);
-				} catch (Exception e) {
-					System.out.println("\"" + i + "\" is not added. Format error");
-					e.printStackTrace();
-					continue;
-				}
+				target.default_hunger_block.put(hashblock, hunger);
 
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");

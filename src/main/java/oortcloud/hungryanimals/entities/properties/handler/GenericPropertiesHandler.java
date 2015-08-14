@@ -18,4 +18,8 @@ public class GenericPropertiesHandler {
 	private GenericPropertiesHandler() {
 		propertyMap = new HashMap<Class, GenericProperty>();
 	}
+	
+	public void init() {
+		propertyMap.clear();
+	}
 }
