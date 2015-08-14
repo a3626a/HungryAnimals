@@ -15,6 +15,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.config.Configuration;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.util.DropMeat;
 import oortcloud.hungryanimals.configuration.util.DropRandom;
 import oortcloud.hungryanimals.configuration.util.DropRare;
@@ -69,15 +70,28 @@ public class ConfigurationHandlerAnimal {
 
 	public static void sync() {
 
+		HungryAnimals.logger.info("Configuration: Animal start");
+		
 		GenericPropertiesHandler.getInstance().init();
 		GenericEntityManager.getInstance().init();
 
 		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
+			HungryAnimals.logger.info("Configuration: finding entity " + i + " in Entity List...");
 			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
-			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass))
+			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass)) {
+				HungryAnimals.logger.info("Configuration: have detected mod entity: " + i);
 				GenericEntityManager.getInstance().entities.add(entityClass);
+			}
 		}
 
+		for (Object i : EntityList.classToStringMapping.keySet()) {
+			if (EntityAnimal.class.isAssignableFrom((Class)i)) {
+				HungryAnimals.logger.info("Configuration: Registered Entity Class " + (String)EntityList.classToStringMapping.get(i) + " is compatible.");
+			} else {
+				HungryAnimals.logger.info("Configuration: Registered Entity Class " + (String)EntityList.classToStringMapping.get(i) + " is not compatible.");
+			}
+		}
+		
 		for (Class<? extends EntityAnimal> i : GenericEntityManager.getInstance().entities) {
 			GenericProperty iProperty = new GenericProperty();
 			String category = categoryGenerator(i);

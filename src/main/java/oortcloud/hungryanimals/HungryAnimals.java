@@ -83,7 +83,6 @@ public class HungryAnimals {
 		proxy.registerTileEntityRendering();
 		proxy.registerTileEntities();
 		proxy.registerKeyBindings();
-		ConfigurationHandler.sync();
 	}
 
 	@Mod.EventHandler

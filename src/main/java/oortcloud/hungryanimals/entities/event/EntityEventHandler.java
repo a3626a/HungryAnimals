@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
@@ -39,27 +40,31 @@ public class EntityEventHandler {
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityChicken) {
+		if (event.entity.getClass() == EntityChicken.class) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryChicken());
 			return;
 		}
-		if (event.entity instanceof EntityCow) {
+		if (event.entity.getClass() == EntityCow.class) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryCow());
 			return;
 		}
-		if (event.entity instanceof EntityPig) {
+		if (event.entity.getClass() == EntityMooshroom.class) {
+			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryCow());
+			return;
+		}
+		if (event.entity.getClass() == EntityPig.class) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryPig());
 			return;
 		}
-		if (event.entity instanceof EntitySheep) {
+		if (event.entity.getClass() == EntitySheep.class) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungrySheep());
 			return;
 		}
-		if (event.entity instanceof EntityRabbit) {
+		if (event.entity.getClass() == EntityRabbit.class) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryRabbit());
 			return;
 		}
-		if (event.entity instanceof EntityAnimal && GenericEntityManager.getInstance().entities.contains(event.entity.getClass())) {
+		if (GenericEntityManager.getInstance().entities.contains(event.entity.getClass())) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryGeneral(event.entity.getClass()));
 		}
 	}

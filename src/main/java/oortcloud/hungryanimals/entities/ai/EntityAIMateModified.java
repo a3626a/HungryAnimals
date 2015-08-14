@@ -76,7 +76,7 @@ public class EntityAIMateModified extends EntityAIBase
      * Updates the task
      */
     public void updateTask()
-    {
+    {	
         this.theAnimal.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float)this.theAnimal.getVerticalFaceSpeed());
         this.theAnimal.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
         ++this.spawnBabyDelay;
@@ -150,7 +150,6 @@ public class EntityAIMateModified extends EntityAIBase
                     entityplayer.triggerAchievement(AchievementList.breedCow);
                 }
             }
-
             this.theAnimal.setGrowingAge(48000);
             this.targetMate.setGrowingAge(48000);
             this.theAnimal.resetInLove();
