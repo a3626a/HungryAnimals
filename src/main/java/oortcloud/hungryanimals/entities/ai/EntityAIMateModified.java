@@ -123,6 +123,7 @@ public class EntityAIMateModified extends EntityAIBase
     	targetMateProperty.subHunger(property.child_hunger);
         
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
+    	
     	if (entityageable == null && property instanceof ExtendedPropertiesHungryGeneral) {
         	ExtendedPropertiesHungryGeneral generalProperty = (ExtendedPropertiesHungryGeneral)property;
         	entityageable = generalProperty.createChild(theWorld);
