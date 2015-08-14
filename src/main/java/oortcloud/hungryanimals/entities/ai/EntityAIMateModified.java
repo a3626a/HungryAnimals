@@ -1,6 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -124,7 +125,15 @@ public class EntityAIMateModified extends EntityAIBase
         
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
     	
-    	if (entityageable == null && property instanceof ExtendedPropertiesHungryGeneral) {
+    	boolean createChildDeclared = false;
+    	try {
+			Method createChild = theAnimal.getClass().getDeclaredMethod("createChild", EntityAgeable.class);
+			if (createChild != null) createChildDeclared = true;
+		} catch (NoSuchMethodException e) {
+		} catch (SecurityException e) {
+		}
+    	
+    	if (!createChildDeclared && property instanceof ExtendedPropertiesHungryGeneral) {
         	ExtendedPropertiesHungryGeneral generalProperty = (ExtendedPropertiesHungryGeneral)property;
         	entityageable = generalProperty.createChild(theWorld);
         }
