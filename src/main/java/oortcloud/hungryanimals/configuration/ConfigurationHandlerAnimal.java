@@ -47,6 +47,8 @@ public class ConfigurationHandlerAnimal {
 	public static final String KEY_courtship_hungerCondition = "Behavior: needed ratio(hunger/maxhunger) to do the courting";
 	public static final String KEY_excretion_factor = "Abiltiy: needed amount of hunger consumption to produce a pile of excreta";
 	public static final String KEY_child_hunger = "HungerUsage: to make a child";
+	public static final String KEY_maxhealth = "Abiltiy: Max health of the animal";
+	public static final String KEY_movespeed = "Abiltiy: Movement speed of the animal";
 	public static final String KEY_milk_hunger = "HungerUsage: to produce a bucket of milk";
 	public static final String KEY_milk_delay = "Behavior: ticks needed to produce a bucket of milk";
 	public static final String KEY_wool_hunger = "HungerUsage: Wool";
@@ -74,13 +76,15 @@ public class ConfigurationHandlerAnimal {
 		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityChicken");
 		GeneralProperty chicken = new GeneralProperty();
 		String categoryChicken = categoryGenerator(EntityChicken.class);
-		chicken.default_hunger_bmr = config.get(categoryChicken, KEY_hunger_bmr, 0.002).getDouble();
-		chicken.default_hunger_max = config.get(categoryChicken, KEY_hunger_max, 150).getDouble();
-		chicken.default_courtship_hunger = config.get(categoryChicken, KEY_courtship_hunger, chicken.default_hunger_max / 20.0).getDouble();
-		chicken.default_courtship_probability = config.get(categoryChicken, KEY_courtship_probability, 0.0025).getDouble();
-		chicken.default_courtship_hungerCondition = config.get(categoryChicken, KEY_courtship_hungerCondition, 0.8).getDouble();
-		chicken.default_excretion_factor = 1 / config.get(categoryChicken, KEY_excretion_factor, 50).getDouble();
-		chicken.default_child_hunger = config.get(categoryChicken, KEY_child_hunger, chicken.default_hunger_max / 4.0).getDouble();
+		chicken.hunger_bmr = config.get(categoryChicken, KEY_hunger_bmr, 0.002).getDouble();
+		chicken.hunger_max = config.get(categoryChicken, KEY_hunger_max, 150).getDouble();
+		chicken.courtship_hunger = config.get(categoryChicken, KEY_courtship_hunger, chicken.hunger_max / 20.0).getDouble();
+		chicken.courtship_probability = config.get(categoryChicken, KEY_courtship_probability, 0.0025).getDouble();
+		chicken.courtship_hungerCondition = config.get(categoryChicken, KEY_courtship_hungerCondition, 0.8).getDouble();
+		chicken.excretion_factor = 1 / config.get(categoryChicken, KEY_excretion_factor, 50).getDouble();
+		chicken.child_hunger = config.get(categoryChicken, KEY_child_hunger, chicken.hunger_max / 4.0).getDouble();
+		chicken.attribute_maxhealth = config.get(categoryChicken, KEY_maxhealth, 8.0).getDouble();
+		chicken.attribute_movespeed = config.get(categoryChicken, KEY_movespeed, 0.15).getDouble();
 		readDropMeat(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.chicken) + "),2,4)" }, categoryChicken, chicken);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.feather) + "),3,6)" }, categoryChicken, chicken);
 		readDropRare(new String[] {}, categoryChicken, chicken);
@@ -95,15 +99,17 @@ public class ConfigurationHandlerAnimal {
 		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityCow");
 		GeneralProperty cow = new GeneralProperty();
 		String categoryCow = categoryGenerator(EntityCow.class);
-		cow.default_hunger_bmr = config.get(categoryCow, KEY_hunger_bmr, 0.005).getDouble();
-		cow.default_hunger_max = config.get(categoryCow, KEY_hunger_max, 500).getDouble();
-		cow.default_courtship_hunger = config.get(categoryCow, KEY_courtship_hunger, cow.default_hunger_max / 20.0).getDouble();
-		cow.default_courtship_probability = config.get(categoryCow, KEY_courtship_probability, 0.0025).getDouble();
-		cow.default_courtship_hungerCondition = config.get(categoryCow, KEY_courtship_hungerCondition, 0.8).getDouble();
-		cow.default_excretion_factor = 1 / config.get(categoryCow, KEY_excretion_factor, 50).getDouble();
-		cow.default_child_hunger = config.get(categoryCow, KEY_child_hunger, cow.default_hunger_max / 4.0).getDouble();
+		cow.hunger_bmr = config.get(categoryCow, KEY_hunger_bmr, 0.005).getDouble();
+		cow.hunger_max = config.get(categoryCow, KEY_hunger_max, 500).getDouble();
+		cow.courtship_hunger = config.get(categoryCow, KEY_courtship_hunger, cow.hunger_max / 20.0).getDouble();
+		cow.courtship_probability = config.get(categoryCow, KEY_courtship_probability, 0.0025).getDouble();
+		cow.courtship_hungerCondition = config.get(categoryCow, KEY_courtship_hungerCondition, 0.8).getDouble();
+		cow.excretion_factor = 1 / config.get(categoryCow, KEY_excretion_factor, 50).getDouble();
+		cow.child_hunger = config.get(categoryCow, KEY_child_hunger, cow.hunger_max / 4.0).getDouble();
+		cow.attribute_maxhealth = config.get(categoryCow, KEY_maxhealth, 30.0).getDouble();
+		cow.attribute_movespeed = config.get(categoryCow, KEY_movespeed, 0.20).getDouble();
 		ExtendedPropertiesHungryCow.default_milk_delay = config.get(categoryCow, KEY_milk_delay, 5 * 60 * 20).getInt();
-		ExtendedPropertiesHungryCow.default_milk_hunger = config.get(categoryCow, KEY_milk_hunger, cow.default_hunger_max / 20.0).getDouble();
+		ExtendedPropertiesHungryCow.default_milk_hunger = config.get(categoryCow, KEY_milk_hunger, cow.hunger_max / 20.0).getDouble();
 		readDropMeat(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.beef) + "),5,10)" }, categoryCow, cow);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.leather) + "),5,10)", "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),2,3)" }, categoryCow, cow);
 		readDropRare(new String[] {}, categoryCow, cow);
@@ -116,13 +122,15 @@ public class ConfigurationHandlerAnimal {
 		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityPig");
 		GeneralProperty pig = new GeneralProperty();
 		String categoryPig = categoryGenerator(EntityPig.class);
-		pig.default_hunger_bmr = config.get(categoryPig, KEY_hunger_bmr, 0.004).getDouble();
-		pig.default_hunger_max = config.get(categoryPig, KEY_hunger_max, 400).getDouble();
-		pig.default_courtship_hunger = config.get(categoryPig, KEY_courtship_hunger, pig.default_hunger_max / 20.0).getDouble();
-		pig.default_courtship_probability = config.get(categoryPig, KEY_courtship_probability, 0.0025).getDouble();
-		pig.default_courtship_hungerCondition = config.get(categoryPig, KEY_courtship_hungerCondition, 0.8).getDouble();
-		pig.default_excretion_factor = 1 / config.get(categoryPig, KEY_excretion_factor, 50).getDouble();
-		pig.default_child_hunger = config.get(categoryPig, KEY_child_hunger, pig.default_hunger_max / 4.0).getDouble();
+		pig.hunger_bmr = config.get(categoryPig, KEY_hunger_bmr, 0.004).getDouble();
+		pig.hunger_max = config.get(categoryPig, KEY_hunger_max, 400).getDouble();
+		pig.courtship_hunger = config.get(categoryPig, KEY_courtship_hunger, pig.hunger_max / 20.0).getDouble();
+		pig.courtship_probability = config.get(categoryPig, KEY_courtship_probability, 0.0025).getDouble();
+		pig.courtship_hungerCondition = config.get(categoryPig, KEY_courtship_hungerCondition, 0.8).getDouble();
+		pig.excretion_factor = 1 / config.get(categoryPig, KEY_excretion_factor, 50).getDouble();
+		pig.child_hunger = config.get(categoryPig, KEY_child_hunger, pig.hunger_max / 4.0).getDouble();
+		pig.attribute_maxhealth = config.get(categoryPig, KEY_maxhealth, 20.0).getDouble();
+		pig.attribute_movespeed = config.get(categoryPig, KEY_movespeed, 0.25).getDouble();
 		readDropMeat(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.porkchop) + "),4,8)" }, categoryPig, pig);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),1,2)" }, categoryPig, pig);
 		readDropRare(new String[] {}, categoryPig, pig);
@@ -135,13 +143,15 @@ public class ConfigurationHandlerAnimal {
 		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntityRabbit");
 		GeneralProperty rabbit = new GeneralProperty();
 		String categoryRabbit = categoryGenerator(EntityRabbit.class);
-		rabbit.default_hunger_bmr = config.get(categoryRabbit, KEY_hunger_bmr, 0.003).getDouble();
-		rabbit.default_hunger_max = config.get(categoryRabbit, KEY_hunger_max, 250).getDouble();
-		rabbit.default_courtship_hunger = config.get(categoryRabbit, KEY_courtship_hunger, rabbit.default_hunger_max / 20.0).getDouble();
-		rabbit.default_courtship_probability = config.get(categoryRabbit, KEY_courtship_probability, 0.0025).getDouble();
-		rabbit.default_courtship_hungerCondition = config.get(categoryRabbit, KEY_courtship_hungerCondition, 0.8).getDouble();
-		rabbit.default_excretion_factor = 1 / config.get(categoryRabbit, KEY_excretion_factor, 50).getDouble();
-		rabbit.default_child_hunger = config.get(categoryRabbit, KEY_child_hunger, rabbit.default_hunger_max / 4.0).getDouble();
+		rabbit.hunger_bmr = config.get(categoryRabbit, KEY_hunger_bmr, 0.003).getDouble();
+		rabbit.hunger_max = config.get(categoryRabbit, KEY_hunger_max, 250).getDouble();
+		rabbit.courtship_hunger = config.get(categoryRabbit, KEY_courtship_hunger, rabbit.hunger_max / 20.0).getDouble();
+		rabbit.courtship_probability = config.get(categoryRabbit, KEY_courtship_probability, 0.0025).getDouble();
+		rabbit.courtship_hungerCondition = config.get(categoryRabbit, KEY_courtship_hungerCondition, 0.8).getDouble();
+		rabbit.excretion_factor = 1 / config.get(categoryRabbit, KEY_excretion_factor, 50).getDouble();
+		rabbit.child_hunger = config.get(categoryRabbit, KEY_child_hunger, rabbit.hunger_max / 4.0).getDouble();
+		rabbit.attribute_maxhealth = config.get(categoryRabbit, KEY_maxhealth, 10.0).getDouble();
+		rabbit.attribute_movespeed = config.get(categoryRabbit, KEY_movespeed, 0.25).getDouble();
 		readDropMeat(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.rabbit) + "),1,2)" }, categoryRabbit, rabbit);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.rabbit_hide) + "),1,2)" }, categoryRabbit, rabbit);
 		readDropRare(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.rabbit_foot) + "),0.025)" }, categoryRabbit, rabbit);
@@ -157,15 +167,17 @@ public class ConfigurationHandlerAnimal {
 		HungryAnimals.logger.info("Configuration: Create GeneralProperty of EntitySheep");
 		GeneralProperty sheep = new GeneralProperty();
 		String categorySheep = categoryGenerator(EntitySheep.class);
-		sheep.default_hunger_bmr = config.get(categorySheep, KEY_hunger_bmr, 0.004).getDouble();
-		sheep.default_hunger_max = config.get(categorySheep, KEY_hunger_max, 400).getDouble();
-		sheep.default_courtship_hunger = config.get(categorySheep, KEY_courtship_hunger, sheep.default_hunger_max / 20.0).getDouble();
-		sheep.default_courtship_probability = config.get(categorySheep, KEY_courtship_probability, 0.0025).getDouble();
-		sheep.default_courtship_hungerCondition = config.get(categorySheep, KEY_courtship_hungerCondition, 0.8).getDouble();
-		sheep.default_excretion_factor = 1 / config.get(categorySheep, KEY_excretion_factor, 50).getDouble();
-		sheep.default_child_hunger = config.get(categorySheep, KEY_child_hunger, sheep.default_hunger_max / 4.0).getDouble();
+		sheep.hunger_bmr = config.get(categorySheep, KEY_hunger_bmr, 0.004).getDouble();
+		sheep.hunger_max = config.get(categorySheep, KEY_hunger_max, 400).getDouble();
+		sheep.courtship_hunger = config.get(categorySheep, KEY_courtship_hunger, sheep.hunger_max / 20.0).getDouble();
+		sheep.courtship_probability = config.get(categorySheep, KEY_courtship_probability, 0.0025).getDouble();
+		sheep.courtship_hungerCondition = config.get(categorySheep, KEY_courtship_hungerCondition, 0.8).getDouble();
+		sheep.excretion_factor = 1 / config.get(categorySheep, KEY_excretion_factor, 50).getDouble();
+		sheep.child_hunger = config.get(categorySheep, KEY_child_hunger, sheep.hunger_max / 4.0).getDouble();
+		sheep.attribute_maxhealth = config.get(categorySheep, KEY_maxhealth, 20.0).getDouble();
+		sheep.attribute_movespeed = config.get(categorySheep, KEY_movespeed, 0.20).getDouble();
 		ExtendedPropertiesHungrySheep.default_wool_delay = config.get(categorySheep, KEY_wool_delay, 5 * 60 * 20).getInt();
-		ExtendedPropertiesHungrySheep.default_wool_hunger = config.get(categorySheep, KEY_wool_hunger, sheep.default_hunger_max / 20.0).getDouble();
+		ExtendedPropertiesHungrySheep.default_wool_hunger = config.get(categorySheep, KEY_wool_hunger, sheep.hunger_max / 20.0).getDouble();
 		readDropMeat(new String[] { "((" + Item.itemRegistry.getNameForObject(Items.mutton) + "),3,6)" }, categorySheep, sheep);
 		readDropRandom(new String[] { "((" + Item.itemRegistry.getNameForObject(ModItems.tendon) + "),1,2)" }, categorySheep, sheep);
 		readDropRare(new String[] {}, categorySheep, sheep);
@@ -183,14 +195,15 @@ public class ConfigurationHandlerAnimal {
 			if (ArrayUtils.contains(defualt_class, i)) continue;
 			GeneralProperty iProperty = new GeneralProperty();
 			String category = categoryGenerator(i);
-			iProperty.default_hunger_bmr = config.get(category, KEY_hunger_bmr, 0.001).getDouble();
-			iProperty.default_hunger_max = config.get(category, KEY_hunger_max, 100).getDouble();
-			iProperty.default_courtship_hunger = config.get(category, KEY_courtship_hunger, iProperty.default_hunger_max / 20.0).getDouble();
-			iProperty.default_courtship_probability = config.get(category, KEY_courtship_probability, 0.0025).getDouble();
-			iProperty.default_courtship_hungerCondition = config.get(category, KEY_courtship_hungerCondition, 0.8).getDouble();
-			iProperty.default_excretion_factor = 1 / config.get(category, KEY_excretion_factor, 50).getDouble();
-			iProperty.default_child_hunger = config.get(category, KEY_child_hunger, iProperty.default_hunger_max / 4.0).getDouble();
-
+			iProperty.hunger_bmr = config.get(category, KEY_hunger_bmr, 0.001).getDouble();
+			iProperty.hunger_max = config.get(category, KEY_hunger_max, 100).getDouble();
+			iProperty.courtship_hunger = config.get(category, KEY_courtship_hunger, iProperty.hunger_max / 20.0).getDouble();
+			iProperty.courtship_probability = config.get(category, KEY_courtship_probability, 0.0025).getDouble();
+			iProperty.courtship_hungerCondition = config.get(category, KEY_courtship_hungerCondition, 0.8).getDouble();
+			iProperty.excretion_factor = 1 / config.get(category, KEY_excretion_factor, 50).getDouble();
+			iProperty.child_hunger = config.get(category, KEY_child_hunger, iProperty.hunger_max / 4.0).getDouble();
+			iProperty.attribute_maxhealth = config.get(category, KEY_maxhealth, 20.0).getDouble();
+			iProperty.attribute_movespeed = config.get(category, KEY_movespeed, 0.20).getDouble();
 			readDropMeat(new String[] {}, category, iProperty);
 			readDropRandom(new String[] {}, category, iProperty);
 			readDropRare(new String[] {}, category, iProperty);
@@ -211,7 +224,7 @@ public class ConfigurationHandlerAnimal {
 		for (String i : drops) {
 			DropMeat j = ConfigurationHelper.instance.getDropMeat(i);
 			if (j != null) {
-				target.default_drop_meat.add(j);
+				target.drop_meat.add(j);
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");
 				continue;
@@ -225,7 +238,7 @@ public class ConfigurationHandlerAnimal {
 		for (String i : drops) {
 			DropRandom j = ConfigurationHelper.instance.getDropRandom(i);
 			if (j != null) {
-				target.default_drop_random.add(j);
+				target.drop_random.add(j);
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");
 				continue;
@@ -239,7 +252,7 @@ public class ConfigurationHandlerAnimal {
 		for (String i : drops) {
 			DropRare j = ConfigurationHelper.instance.getDropRare(i);
 			if (j != null) {
-				target.default_drop_rare.add(j);
+				target.drop_rare.add(j);
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");
 				continue;
@@ -263,7 +276,7 @@ public class ConfigurationHandlerAnimal {
 			if (split.length == 2) {
 				HashItem item = ConfigurationHelper.instance.getHashItem(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				target.default_hunger_food.put(item, hunger);
+				target.hunger_food.put(item, hunger);
 
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");
@@ -281,7 +294,7 @@ public class ConfigurationHandlerAnimal {
 			if (split.length == 2) {
 				HashBlock hashblock = ConfigurationHelper.instance.getHashBlock(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				target.default_hunger_block.put(hashblock, hunger);
+				target.hunger_block.put(hashblock, hunger);
 
 			} else {
 				System.out.println("\"" + i + "\" is not added. Format error");

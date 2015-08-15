@@ -51,13 +51,6 @@ public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAni
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(8.0D);
-		this.entity.heal(this.entity.getMaxHealth());
-		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.15D);
-	}
-
-	@Override
 	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
 		super.dropFewItems(isHitByPlayer, looting, drops);
 		if (entity.isBurning()) {

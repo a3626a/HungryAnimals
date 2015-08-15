@@ -32,14 +32,6 @@ public class ExtendedPropertiesHungryRabbit extends ExtendedPropertiesHungryAnim
 	public void postInit() {
 		super.postInit();
 		this.removeAI(EntityRabbit.class.getDeclaredClasses());
-		//this.removeAI(new Class[] {Class.forName("net.minecraft.entity.passive.EntityRabbit.AIPanic"), Class.forName("net.minecraft.entity.passive.EntityRabbit.AIRaidFarm"), Class.forName("net.minecraft.entity.passive.EntityRabbit.AIAvoidEntity") });
-	}
-
-	@Override
-	protected void applyEntityAttributes() {
-		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
-		this.entity.heal(this.entity.getMaxHealth());
-		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
 	}
 
 	@Override

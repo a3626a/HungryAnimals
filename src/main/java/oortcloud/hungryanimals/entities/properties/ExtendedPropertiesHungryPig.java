@@ -31,13 +31,6 @@ public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal 
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
-		this.entity.heal(this.entity.getMaxHealth());
-		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
-	}
-	
-	@Override
 	public void postInit() {
 		super.postInit();
 		this.entity.tasks.addTask(4, new EntityAITempt(this.entity,1.5D, Items.carrot_on_a_stick,false));

@@ -64,6 +64,9 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public double courtship_hungerCondition;
 	public double excretion_factor;
 	public double child_hunger;
+	public double attribute_maxhealth;
+	public double attribute_movespeed;
+	
 	public double taming_factor = 0.998;
 
 	public EntityAnimal entity;
@@ -76,18 +79,20 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public EntityAICrank ai_crank;
 
 	public void acceptProperty(GeneralProperty genericProperty) {
-		hunger_max = genericProperty.default_hunger_max;
-		hunger_bmr = genericProperty.default_hunger_bmr;
-		hunger_food = genericProperty.default_hunger_food;
-		hunger_block = genericProperty.default_hunger_block;
-		drop_meat = genericProperty.default_drop_meat;
-		drop_random = genericProperty.default_drop_random;
-		drop_rare = genericProperty.default_drop_rare;
-		courtship_hunger = genericProperty.default_courtship_hunger;
-		courtship_probability = genericProperty.default_courtship_probability;
-		courtship_hungerCondition = genericProperty.default_courtship_hungerCondition;
-		excretion_factor = genericProperty.default_excretion_factor;
-		child_hunger = genericProperty.default_child_hunger;
+		hunger_max = genericProperty.hunger_max;
+		hunger_bmr = genericProperty.hunger_bmr;
+		hunger_food = genericProperty.hunger_food;
+		hunger_block = genericProperty.hunger_block;
+		drop_meat = genericProperty.drop_meat;
+		drop_random = genericProperty.drop_random;
+		drop_rare = genericProperty.drop_rare;
+		courtship_hunger = genericProperty.courtship_hunger;
+		courtship_probability = genericProperty.courtship_probability;
+		courtship_hungerCondition = genericProperty.courtship_hungerCondition;
+		excretion_factor = genericProperty.excretion_factor;
+		child_hunger = genericProperty.child_hunger;
+		attribute_maxhealth = genericProperty.attribute_maxhealth;
+		attribute_movespeed = genericProperty.attribute_movespeed;
 	}
 	
 	@Override
@@ -137,6 +142,9 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	}
 
 	protected void applyEntityAttributes() {
+		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(attribute_maxhealth);
+		this.entity.heal(this.entity.getMaxHealth());
+		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(attribute_movespeed);
 	}
 
 	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {

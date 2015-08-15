@@ -11,17 +11,19 @@ import oortcloud.hungryanimals.configuration.util.HashItem;
 
 public class GeneralProperty {
 
-	public double default_hunger_max;
-	public double default_hunger_bmr;
-	public HashMap<HashItem, Double> default_hunger_food = new HashMap<HashItem, Double>();
-	public HashMap<HashBlock, Double> default_hunger_block = new HashMap<HashBlock, Double>();
-	public ArrayList<DropMeat> default_drop_meat = new ArrayList<DropMeat>();
-	public ArrayList<DropRandom> default_drop_random = new ArrayList<DropRandom>();
-	public ArrayList<DropRare> default_drop_rare = new ArrayList<DropRare>();
-	public double default_courtship_hunger;
-	public double default_courtship_probability;
-	public double default_courtship_hungerCondition;
-	public double default_excretion_factor;
-	public double default_child_hunger;
-	
+	public double hunger_max;
+	public double hunger_bmr;
+	public HashMap<HashItem, Double> hunger_food = new HashMap<HashItem, Double>();
+	public HashMap<HashBlock, Double> hunger_block = new HashMap<HashBlock, Double>();
+	public ArrayList<DropMeat> drop_meat = new ArrayList<DropMeat>();
+	public ArrayList<DropRandom> drop_random = new ArrayList<DropRandom>();
+	public ArrayList<DropRare> drop_rare = new ArrayList<DropRare>();
+	public double courtship_hunger;
+	public double courtship_probability;
+	public double courtship_hungerCondition;
+	public double excretion_factor;
+	public double child_hunger;
+	public double attribute_maxhealth;
+	public double attribute_movespeed;
+
 }

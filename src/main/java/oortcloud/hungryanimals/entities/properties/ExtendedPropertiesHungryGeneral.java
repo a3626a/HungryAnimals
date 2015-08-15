@@ -32,13 +32,6 @@ public class ExtendedPropertiesHungryGeneral extends ExtendedPropertiesHungryAni
 		this.taming = -2;
 	}
 
-	@Override
-	protected void applyEntityAttributes() {
-		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(8.0D);
-		this.entity.heal(this.entity.getMaxHealth());
-		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.15D);
-	}
-
 	public EntityAnimal createChild(World obj) {
 		Constructor constructor;
 		try {
