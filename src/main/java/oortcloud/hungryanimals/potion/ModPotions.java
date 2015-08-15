@@ -57,7 +57,7 @@ public class ModPotions {
 	
 	
 	public static int getEmptyID() {
-		for (int i = 0 ; i < Potion.potionTypes.length; i++) {
+		for (int i = 1 ; i < Potion.potionTypes.length; i++) {
 			if (Potion.potionTypes[i] == null) return i;
 		}
 		return -1;

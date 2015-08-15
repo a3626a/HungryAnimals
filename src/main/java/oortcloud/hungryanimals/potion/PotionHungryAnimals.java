@@ -19,11 +19,8 @@ public class PotionHungryAnimals extends Potion {
 
 	@Override
 	public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
-		ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
-		int Width = sr.getScaledWidth();
-		int Height = sr.getScaledHeight();
-		mc.renderEngine.bindTexture(texture);
-		mc.currentScreen.drawTexturedModalRect(x, y, 0, 0, 16, 16);
+		mc.getTextureManager().bindTexture(texture);
+		EntityOverlayHandler.drawTexturedRect(x+6, y+7, 16, 16);
 	}
 	
 	public void renderGuiEffect(int x, int y, PotionEffect effect, Minecraft mc, Gui gui) {

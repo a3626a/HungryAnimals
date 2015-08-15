@@ -13,7 +13,7 @@ import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnima
 
 public class PotionDisease extends PotionHungryAnimals {
 
-	public static ResourceLocation textureLocation = new ResourceLocation(References.MODID,"textures/potions/potiondisease.png");
+	public static ResourceLocation textureLocation = new ResourceLocation(References.MODID, "textures/potions/potiondisease.png");
 
 	protected PotionDisease(int id, boolean effect, int color) {
 		super(id, textureLocation, effect, color);
@@ -23,10 +23,9 @@ public class PotionDisease extends PotionHungryAnimals {
 
 	@Override
 	public void performEffect(EntityLivingBase entity, int level) {
-
 		ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) entity.getExtendedProperties(Strings.extendedPropertiesKey);
-		property.subHunger(property.hunger_bmr * 4);
-
+		if (property != null)
+			property.subHunger(property.hunger_bmr * 4);
 	}
 
 	@Override
