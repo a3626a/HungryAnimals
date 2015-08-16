@@ -97,6 +97,20 @@ public class BlockThresher extends BlockEnergyTransporter {
 			tileEntity.setInventorySlotContents(0, itemStackPlayer);
 			return true;
 		}
+		if (itemStackThresher != null && itemStackPlayer != null) {
+			if (itemStackThresher.isItemEqual(itemStackPlayer)) {
+				int space = itemStackThresher.getMaxStackSize()-itemStackThresher.stackSize;
+				if (space >= itemStackPlayer.stackSize) {
+					itemStackThresher.stackSize+=itemStackPlayer.stackSize;
+					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+				} else {
+					itemStackThresher.stackSize=itemStackThresher.getMaxStackSize();
+					itemStackPlayer.stackSize-=space;
+				}
+				return true;
+			}
+			return false;
+		}
 		return false;
 	}
 

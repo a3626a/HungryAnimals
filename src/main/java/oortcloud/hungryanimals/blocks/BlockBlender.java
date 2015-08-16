@@ -61,7 +61,6 @@ public class BlockBlender extends BlockEnergyTransporter {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-
 		if (side == EnumFacing.UP) {
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			if (tileEntity != null) {
@@ -100,12 +99,28 @@ public class BlockBlender extends BlockEnergyTransporter {
 				if (itemStackBlender != null && itemStackPlayer == null) {
 					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, itemStackBlender);
 					blender.setInventorySlotContents(index, null);
+					return true;
 				}
 				if (itemStackBlender == null && itemStackPlayer != null) {
 					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
 					blender.setInventorySlotContents(index, itemStackPlayer);
+					return true;
 				}
-				return true;
+				if (itemStackBlender != null && itemStackPlayer != null) {
+					if (itemStackBlender.isItemEqual(itemStackPlayer)) {
+						int space = itemStackBlender.getMaxStackSize()-itemStackBlender.stackSize;
+						if (space >= itemStackPlayer.stackSize) {
+							itemStackBlender.stackSize+=itemStackPlayer.stackSize;
+							playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+						} else {
+							itemStackBlender.stackSize=itemStackBlender.getMaxStackSize();
+							itemStackPlayer.stackSize-=space;
+						}
+						return true;
+					}
+					return false;
+				}
+				return false;
 			}
 		}
 		return true;

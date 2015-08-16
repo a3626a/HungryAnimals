@@ -99,6 +99,20 @@ public class BlockMillstone extends BlockEnergyTransporter {
 			tileEntity.setInventorySlotContents(0, itemStackPlayer);
 			return true;
 		}
+		if (itemStackMillstone != null && itemStackPlayer != null) {
+			if (itemStackMillstone.isItemEqual(itemStackPlayer)) {
+				int space = itemStackMillstone.getMaxStackSize()-itemStackMillstone.stackSize;
+				if (space >= itemStackPlayer.stackSize) {
+					itemStackMillstone.stackSize+=itemStackPlayer.stackSize;
+					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+				} else {
+					itemStackMillstone.stackSize=itemStackMillstone.getMaxStackSize();
+					itemStackPlayer.stackSize-=space;
+				}
+				return true;
+			}
+			return false;
+		}
 		return false;
 	}
 
