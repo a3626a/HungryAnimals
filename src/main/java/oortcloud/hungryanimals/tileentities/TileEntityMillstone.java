@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.tileentities;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -23,7 +24,7 @@ import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
 import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.recipes.RecipeMillstone;
 
-public class TileEntityMillstone extends TileEntityEnergyTransporter implements IInventory, IFluidHandler {
+public class TileEntityMillstone extends TileEntityEnergyTransporter implements IInventory, IFluidHandler, ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
@@ -245,7 +246,7 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return true;
+		return RecipeMillstone.getRecipe(stack)>0;
 	}
 
 	@Override
@@ -310,5 +311,20 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 
 	public FluidTank getFluidTank() {
 		return fluidTank;
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		return new int[] {0};
+	}
+
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		return isItemValidForSlot(index, itemStackIn);
+	}
+
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+		return true;
 	}
 }

@@ -6,17 +6,19 @@ import oortcloud.hungryanimals.energy.EnergyNetwork;
 import oortcloud.hungryanimals.recipes.RecipeBlender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class TileEntityBlender extends TileEntityEnergyTransporter implements IInventory {
+public class TileEntityBlender extends TileEntityEnergyTransporter implements IInventory, ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
@@ -330,6 +332,25 @@ public class TileEntityBlender extends TileEntityEnergyTransporter implements II
 			}
 		}
 		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		if (side==EnumFacing.UP)
+			return new int [] {0,1};
+		if (side==EnumFacing.DOWN)
+			return new int [] {3,2};
+		return new int [] {side.getHorizontalIndex()};
+	}
+
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		return true;
+	}
+
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+		return true;
 	}
 
 }

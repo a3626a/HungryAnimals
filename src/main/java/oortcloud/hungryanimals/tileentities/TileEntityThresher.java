@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +21,7 @@ import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
 import oortcloud.hungryanimals.energy.EnergyNetwork;
 import oortcloud.hungryanimals.recipes.RecipeThresher;
 
-public class TileEntityThresher extends TileEntityEnergyTransporter implements IInventory {
+public class TileEntityThresher extends TileEntityEnergyTransporter implements IInventory, ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
@@ -192,7 +194,7 @@ public class TileEntityThresher extends TileEntityEnergyTransporter implements I
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return true;
+		return RecipeThresher.getRecipe(stack) != null;
 	}
 
 	@Override
@@ -273,6 +275,21 @@ public class TileEntityThresher extends TileEntityEnergyTransporter implements I
 	
 	public boolean canTakeOut() {
 		return leftAttempt==4;
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		return new int[] {0};
+	}
+
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		return isItemValidForSlot(index, itemStackIn);
+	}
+
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+		return true;
 	}
 
 }

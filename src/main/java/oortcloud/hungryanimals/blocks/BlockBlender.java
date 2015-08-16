@@ -18,6 +18,7 @@ import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketTileEntityServer;
 import oortcloud.hungryanimals.energy.EnergyNetwork;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
+import oortcloud.hungryanimals.utils.InventoryUtil;
 
 public class BlockBlender extends BlockEnergyTransporter {
 
@@ -94,33 +95,7 @@ public class BlockBlender extends BlockEnergyTransporter {
 					}
 				}
 				index = (index - rotationalOffset + 4) % 4;
-				ItemStack itemStackBlender = blender.getStackInSlot(index);
-				ItemStack itemStackPlayer = playerIn.getCurrentEquippedItem();
-				if (itemStackBlender != null && itemStackPlayer == null) {
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, itemStackBlender);
-					blender.setInventorySlotContents(index, null);
-					return true;
-				}
-				if (itemStackBlender == null && itemStackPlayer != null) {
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-					blender.setInventorySlotContents(index, itemStackPlayer);
-					return true;
-				}
-				if (itemStackBlender != null && itemStackPlayer != null) {
-					if (itemStackBlender.isItemEqual(itemStackPlayer)) {
-						int space = itemStackBlender.getMaxStackSize()-itemStackBlender.stackSize;
-						if (space >= itemStackPlayer.stackSize) {
-							itemStackBlender.stackSize+=itemStackPlayer.stackSize;
-							playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-						} else {
-							itemStackBlender.stackSize=itemStackBlender.getMaxStackSize();
-							itemStackPlayer.stackSize-=space;
-						}
-						return true;
-					}
-					return false;
-				}
-				return false;
+				return InventoryUtil.interactInventory(playerIn, blender, index);
 			}
 		}
 		return true;

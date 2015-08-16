@@ -27,6 +27,7 @@ import oortcloud.hungryanimals.energy.EnergyNetwork;
 import oortcloud.hungryanimals.recipes.RecipeMillstone;
 import oortcloud.hungryanimals.tileentities.TileEntityMillstone;
 import oortcloud.hungryanimals.tileentities.TileEntityThresher;
+import oortcloud.hungryanimals.utils.InventoryUtil;
 
 public class BlockMillstone extends BlockEnergyTransporter {
 
@@ -87,33 +88,7 @@ public class BlockMillstone extends BlockEnergyTransporter {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityMillstone tileEntity = (TileEntityMillstone) worldIn.getTileEntity(pos);
 
-		ItemStack itemStackMillstone = tileEntity.getStackInSlot(0);
-		ItemStack itemStackPlayer = playerIn.getHeldItem();
-		if (itemStackMillstone != null && itemStackPlayer == null) {
-			playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, itemStackMillstone);
-			tileEntity.setInventorySlotContents(0, null);
-			return true;
-		}
-		if (itemStackMillstone == null && itemStackPlayer != null) {
-			playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-			tileEntity.setInventorySlotContents(0, itemStackPlayer);
-			return true;
-		}
-		if (itemStackMillstone != null && itemStackPlayer != null) {
-			if (itemStackMillstone.isItemEqual(itemStackPlayer)) {
-				int space = itemStackMillstone.getMaxStackSize()-itemStackMillstone.stackSize;
-				if (space >= itemStackPlayer.stackSize) {
-					itemStackMillstone.stackSize+=itemStackPlayer.stackSize;
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-				} else {
-					itemStackMillstone.stackSize=itemStackMillstone.getMaxStackSize();
-					itemStackPlayer.stackSize-=space;
-				}
-				return true;
-			}
-			return false;
-		}
-		return false;
+		return InventoryUtil.interactInventory(playerIn, tileEntity, 0);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.energy.EnergyNetwork;
 import oortcloud.hungryanimals.tileentities.TileEntityThresher;
+import oortcloud.hungryanimals.utils.InventoryUtil;
 
 public class BlockThresher extends BlockEnergyTransporter {
 
@@ -79,39 +80,7 @@ public class BlockThresher extends BlockEnergyTransporter {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityThresher tileEntity = (TileEntityThresher) worldIn.getTileEntity(pos);
 
-		ItemStack itemStackThresher = tileEntity.getStackInSlot(0);
-		ItemStack itemStackPlayer = playerIn.getHeldItem();
-		if (itemStackThresher != null && itemStackPlayer == null) {
-			if (tileEntity.canTakeOut()) {
-				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, itemStackThresher);
-				tileEntity.setInventorySlotContents(0, null);
-				return true;
-			} else if (itemStackThresher.stackSize > 1) {
-				ItemStack split = itemStackThresher.splitStack(itemStackThresher.stackSize-1);
-				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, split);
-				return true;
-			}
-		}
-		if (itemStackThresher == null && itemStackPlayer != null) {
-			playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-			tileEntity.setInventorySlotContents(0, itemStackPlayer);
-			return true;
-		}
-		if (itemStackThresher != null && itemStackPlayer != null) {
-			if (itemStackThresher.isItemEqual(itemStackPlayer)) {
-				int space = itemStackThresher.getMaxStackSize()-itemStackThresher.stackSize;
-				if (space >= itemStackPlayer.stackSize) {
-					itemStackThresher.stackSize+=itemStackPlayer.stackSize;
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-				} else {
-					itemStackThresher.stackSize=itemStackThresher.getMaxStackSize();
-					itemStackPlayer.stackSize-=space;
-				}
-				return true;
-			}
-			return false;
-		}
-		return false;
+		return InventoryUtil.interactInventory(playerIn, tileEntity, 0);
 	}
 
 	@Override
