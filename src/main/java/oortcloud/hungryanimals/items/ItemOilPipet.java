@@ -14,6 +14,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.fluids.ModFluids;
 
 public class ItemOilPipet extends Item implements IFluidContainerItem {
@@ -22,6 +24,7 @@ public class ItemOilPipet extends Item implements IFluidContainerItem {
 	
 	public ItemOilPipet(int capacity) {
 		super();
+		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemOilPipetName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		this.setCapacity(capacity);
 		ModItems.register(this);

@@ -37,6 +37,7 @@ item.hungryanimals:itemcompositewood.name=Composite Wood
 item.hungryanimals:itemcompositewoodcasing.name=Composite Wood Casing
 item.hungryanimals:itemblade.name=Blade
 item.hungryanimals:itemcrankanimal.name=Large Crank
+item.hungryanimals:itemoilpipet.name=Oil Pipet
 
 chicken.tooltip=Modify some constants of chickens
 cow.tooltip=Modify some constants of cows

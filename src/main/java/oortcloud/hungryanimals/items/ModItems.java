@@ -40,6 +40,7 @@ public class ModItems {
 		debugGlass = new ItemDebugGlass();
 		poppyseed = new ItemPoppySeed();
 		crankAnimal = new ItemCrankAnimal();
+		oilpipet = new ItemOilPipet(1000);
 		manure = new Item().setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemManureName).setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModItems.register(manure);
 		woodash = new Item().setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemWoodashName).setCreativeTab(HungryAnimals.tabHungryAnimals);
@@ -64,7 +65,6 @@ public class ModItems {
 		ModItems.register(compositeWoodCasing);
 		blade = new Item().setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemBladeName).setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModItems.register(blade);
-		oilpipet = new ItemOilPipet(1000).setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemOilPipetName);
 	}
 
 	public static String getUnwrappedUnlocalizedName(String unlocalizedName) {

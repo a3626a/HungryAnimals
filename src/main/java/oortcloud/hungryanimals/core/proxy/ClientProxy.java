@@ -90,6 +90,7 @@ public class ClientProxy extends CommonProxy {
 		mesher.register(ModItems.compositeWoodCasing, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemCompositeWoodCasingName, "inventory"));
 		mesher.register(ModItems.blade, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBladeName, "inventory"));
 		mesher.register(ModItems.crankAnimal, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemCrankAnimalName, "inventory"));
+		mesher.register(ModItems.oilpipet, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemOilPipetName, "inventory"));
 	}
 
 	public void registerTileEntityRendering() {
