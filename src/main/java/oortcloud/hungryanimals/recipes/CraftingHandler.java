@@ -46,5 +46,6 @@ public class CraftingHandler {
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.floorcover_hay), "a","b", 'a',new ItemStack(Blocks.hay_block), 'b', new ItemStack(ModItems.compositeWood));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.blade), "aab","aab",'b', new ItemStack(ModItems.compositeWood), 'a', "ingotIron"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.trapcover), "a a", " a ","a a" ,'a', "stickWood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.oilpipet), " aa", " ba","b  " ,'a', "dyeRed", 'b', "blockGlass"));
 	}
 }

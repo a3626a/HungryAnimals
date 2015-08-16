@@ -27,6 +27,7 @@ public class ItemOilPipet extends Item implements IFluidContainerItem {
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemOilPipetName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		this.setCapacity(capacity);
+		this.setMaxStackSize(1);
 		ModItems.register(this);
 	}
 
