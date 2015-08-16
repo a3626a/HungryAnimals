@@ -49,9 +49,12 @@ public class Strings {
 	public static final String itemCompositeWoodCasingName = "itemcompositewoodcasing";
 	public static final String itemBladeName = "itemblade";
 	public static final String itemCrankAnimalName = "itemcrankanimal";
+	public static final String itemOilPipetName = "itemoilpipet";
 	
 	public static final String potionGrowthName = "potion.growth";
 	public static final String potionDiseaseName = "potion.disease";
 
 	public static final String extendedPropertiesKey = "extendedPropertiesHungryAnimal";
+	
+	public static final String fluidSeedOilName = "seedoil";
 }

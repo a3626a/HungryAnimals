@@ -1,10 +1,11 @@
 package oortcloud.hungryanimals;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -32,6 +33,7 @@ import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
 import oortcloud.hungryanimals.core.network.PacketTileEntityServer;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
 import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
+import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.recipes.CraftingHandler;
@@ -76,6 +78,7 @@ public class HungryAnimals {
 		ModBlocks.init();
 		ModItems.init();
 		ModPotions.init();
+		ModFluids.init();
 		proxy.registerEntities();
 		proxy.registerBlockRendering();
 		proxy.registerItemModel();

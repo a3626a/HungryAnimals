@@ -3,13 +3,15 @@ package oortcloud.hungryanimals.core.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
 import oortcloud.hungryanimals.tileentities.TileEntityEnergyTransporter;
-import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 import oortcloud.hungryanimals.tileentities.TileEntityMillstone;
 import oortcloud.hungryanimals.tileentities.TileEntityThresher;
+import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntityClient, PacketTileEntityServer> {
 
@@ -34,7 +36,7 @@ public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntity
 					}
 					break;
 				case 3:
-					((TileEntityMillstone) te).liquidAmount = message.getDouble();
+					((TileEntityMillstone)te).getFluidTank().setFluid(new FluidStack(ModFluids.seedoil, message.getInt()));
 					break;
 				case 4:
 					ItemStack[] items2 = message.getItemStackArray();

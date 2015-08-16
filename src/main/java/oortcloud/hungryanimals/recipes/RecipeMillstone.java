@@ -12,17 +12,17 @@ import oortcloud.hungryanimals.configuration.util.HashItem;
 
 public class RecipeMillstone {
 
-	private static HashMap<HashItem, Double> recipe;
+	private static HashMap<HashItem, Integer> recipe;
 
 	public static void init() {
-		recipe = new HashMap<HashItem, Double>();
+		recipe = new HashMap<HashItem, Integer>();
 	}
 
-	public static void addRecipe(HashItem input, double output) {
+	public static void addRecipe(HashItem input, int output) {
 		recipe.put(input, output);
 	}
 
-	public static double getRecipe(ItemStack item) {
+	public static int getRecipe(ItemStack item) {
 
 		if (recipe.containsKey(new HashItem(item.getItem()))) {
 			return recipe.get(new HashItem(item.getItem()));
@@ -38,7 +38,7 @@ public class RecipeMillstone {
 		if (split.length == 2) {
 			HashItem input = ConfigurationHelper.instance.getHashItem(split[0]);
 			if (input != null) {
-				RecipeMillstone.addRecipe(input, Double.parseDouble(split[1].substring(1, split[1].length() - 1)));
+				RecipeMillstone.addRecipe(input, Integer.parseInt(split[1].substring(1, split[1].length() - 1)));
 			}
 		} else {
 			HungryAnimals.logger.warn("\"" + i + "\" is not added. Format error");

@@ -1,8 +1,5 @@
 package oortcloud.hungryanimals.tileentities;
 
-import java.util.ArrayList;
-
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,20 +7,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.configuration.util.ProbItemStack;
 import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
-import oortcloud.hungryanimals.core.network.PacketTileEntityServer;
+import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.recipes.RecipeMillstone;
-import oortcloud.hungryanimals.recipes.RecipeThresher;
 
-public class TileEntityMillstone extends TileEntityEnergyTransporter implements IInventory {
+public class TileEntityMillstone extends TileEntityEnergyTransporter implements IInventory, IFluidHandler {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
@@ -34,10 +34,12 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 
 	private boolean needSync = true;
 
-	private static double maxLiquidAmount = 1000;
-	public double liquidAmount = 0;
+	private FluidTank fluidTank;
+
+	private static int fluidCapacity = 1000;
 
 	public TileEntityMillstone() {
+		fluidTank = new FluidTank(fluidCapacity);
 	}
 
 	@Override
@@ -56,8 +58,8 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 			ItemStack item = getStackInSlot(0);
 			if (item != null) {
 				if (this.getNetwork().getEnergy() > energyUsage) {
-					
-					double amount = RecipeMillstone.getRecipe(item);
+
+					int amount = RecipeMillstone.getRecipe(item);
 					if (amount > 0) {
 						this.getNetwork().consumeEnergy(energyUsage);
 						this.grindTime += 1;
@@ -66,10 +68,10 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 							this.grindTime = 0;
 
 							decrStackSize(0, 1);
-							this.liquidAmount = Math.min(this.liquidAmount + amount, this.maxLiquidAmount);
+							fluidTank.fill(new FluidStack(ModFluids.seedoil, amount), true);
 
 							PacketTileEntityClient msg = new PacketTileEntityClient(3, this.worldObj.provider.getDimensionId(), this.pos);
-							msg.setDouble(this.liquidAmount);
+							msg.setInt(fluidTank.getFluidAmount());
 							HungryAnimals.simpleChannel.sendToAll(msg);
 						}
 					}
@@ -83,7 +85,7 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
-		compound.setDouble("liquidAmount", this.liquidAmount);
+		fluidTank.writeToNBT(compound);
 
 		for (int i = 0; i < getSizeInventory(); i++) {
 			NBTTagCompound tag = new NBTTagCompound();
@@ -99,9 +101,7 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 
-		if (compound.hasKey("liquidAmount")) {
-			this.liquidAmount = compound.getDouble("liquidAmount");
-		}
+		fluidTank.readFromNBT(compound);
 
 		for (int i = 0; i < getSizeInventory(); i++) {
 			if (compound.hasKey("items" + i)) {
@@ -114,7 +114,8 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		NBTTagCompound compound = pkt.getNbtCompound();
-		liquidAmount = compound.getDouble("liquidAmount");
+
+		fluidTank.readFromNBT(compound);
 
 		for (int i = 0; i < getSizeInventory(); i++) {
 			if (compound.hasKey("items" + i)) {
@@ -127,7 +128,8 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setDouble("liquidAmount", liquidAmount);
+
+		fluidTank.writeToNBT(compound);
 
 		for (int i = 0; i < getSizeInventory(); i++) {
 			NBTTagCompound tag = new NBTTagCompound();
@@ -141,7 +143,7 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 	}
 
 	public double getHeight() {
-		return this.liquidAmount / this.maxLiquidAmount;
+		return fluidTank.getFluidAmount() / (double) fluidTank.getCapacity();
 	}
 
 	@Override
@@ -230,8 +232,7 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
-				(double) this.pos.getZ() + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -268,5 +269,46 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 		for (int i = 0; i < this.inventory.length; ++i) {
 			this.inventory[i] = null;
 		}
+	}
+
+	@Override
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+		if (resource.getFluid() == ModFluids.seedoil)
+			return fluidTank.fill(resource, doFill);
+		else 
+			return 0;
+	}
+
+	@Override
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+		if (resource.getFluid() == ModFluids.seedoil)
+			return fluidTank.drain(resource.amount, doDrain);
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+		return fluidTank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(EnumFacing from, Fluid fluid) {
+		return fluidTank.getFluidAmount() < fluidTank.getCapacity() && ModFluids.seedoil == fluid;
+	}
+
+	@Override
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
+		return fluidTank.getFluidAmount() > 0 && ModFluids.seedoil == fluid;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
+		return new FluidTankInfo[] { fluidTank.getInfo() };
+	}
+
+	public FluidTank getFluidTank() {
+		return fluidTank;
 	}
 }

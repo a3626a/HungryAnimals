@@ -22,8 +22,7 @@ import oortcloud.hungryanimals.core.lib.Strings;
 public class ItemPoppySeed extends Item implements IPlantable {
 
 	public ItemPoppySeed() {
-		this.setUnlocalizedName(References.RESOURCESPREFIX
-				+ Strings.itemPoppySeedName);
+		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemPoppySeedName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModItems.register(this);
 	}
@@ -37,15 +36,11 @@ public class ItemPoppySeed extends Item implements IPlantable {
 	 */
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn,
-			World worldIn, BlockPos pos, EnumFacing side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (side != EnumFacing.UP) {
 			return false;
 		} else if (playerIn.canPlayerEdit(pos.up(), side, stack)) {
-			if (worldIn.getBlockState(pos).getBlock().canSustainPlant(worldIn,
-					pos, EnumFacing.UP, this)
-					&& worldIn.isAirBlock(pos.up())) {
+			if (worldIn.getBlockState(pos).getBlock().canSustainPlant(worldIn, pos, EnumFacing.UP, this) && worldIn.isAirBlock(pos.up())) {
 				worldIn.setBlockState(pos.up(), ModBlocks.poppy.getDefaultState());
 				--stack.stackSize;
 				return true;
