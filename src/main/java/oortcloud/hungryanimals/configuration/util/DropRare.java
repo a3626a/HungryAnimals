@@ -6,16 +6,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class DropRare {
-	private ItemStack item;
+	private HashItem hashItem;
 	private double probability;
 	
-	public DropRare(ItemStack item, double probability) {
-		this.item = item;
+	public DropRare(HashItem item, double probability) {
+		this.hashItem = item;
 		this.probability = probability;
 	}
 	
-	public DropRare(HashItem hashitem, double probability) {
-		this(hashitem.toItemStack(),probability);
+	public DropRare(Item item, double probability) {
+		this(new HashItem(item), probability);
 	}
 	
 	/**
@@ -25,12 +25,16 @@ public class DropRare {
 	 */
 	public ItemStack getDrop(Random rand, int looting) {
 		if (rand.nextDouble() < probability*(0.5*looting)) {
-			return item;
+			return hashItem.toItemStack();
 		}
 		return null;
 	}
 	
 	public ItemStack getItemStack() {
-		return item;
+		return hashItem.toItemStack();
+	}
+	
+	public String toString() {
+		return "("+hashItem.toString()+","+probability+")";
 	}
 }

@@ -34,8 +34,16 @@ public class HashItem {
 	public int hashCode() {
 		return item.getUnlocalizedName().hashCode() + (damage << 16) + ((ignoreDamage ? 1 : 0) << 15);
 	}
-	
+
 	public ItemStack toItemStack() {
-		return new ItemStack(item,1,damage);
+		return new ItemStack(item, 1, damage);
+	}
+
+	public String toString() {
+		if (ignoreDamage) {
+			return "(" + String.valueOf(Item.itemRegistry.getNameForObject(item)) + ")";
+		} else {
+			return "(" + String.valueOf(Item.itemRegistry.getNameForObject(item)) + "," + damage + ")";
+		}
 	}
 }

@@ -66,6 +66,8 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public double child_hunger;
 	public double attribute_maxhealth;
 	public double attribute_movespeed;
+	public double crank_production;
+	public double crank_food_consumption;
 	
 	public double taming_factor = 0.998;
 
@@ -93,6 +95,8 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		child_hunger = genericProperty.child_hunger;
 		attribute_maxhealth = genericProperty.attribute_maxhealth;
 		attribute_movespeed = genericProperty.attribute_movespeed;
+		crank_production = genericProperty.crank_production;
+		crank_food_consumption = genericProperty.crank_food_consumption;
 	}
 	
 	@Override
@@ -152,17 +156,17 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			ArrayList<EntityItem> toRemove = new ArrayList<EntityItem>();
 			for (EntityItem i : drops) {
 				for (DropMeat j : drop_meat) {
-					if (i.getEntityItem().getItem() == j.getItemStack().getItem() && i.getEntityItem().getItemDamage() == j.getItemStack().getItemDamage()) {
+					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}
 				for (DropRandom j : drop_random) {
-					if (i.getEntityItem().getItem() == j.getItemStack().getItem() && i.getEntityItem().getItemDamage() == j.getItemStack().getItemDamage()) {
+					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}
 				for (DropRare j : drop_rare) {
-					if (i.getEntityItem().getItem() == j.getItemStack().getItem() && i.getEntityItem().getItemDamage() == j.getItemStack().getItemDamage()) {
+					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}

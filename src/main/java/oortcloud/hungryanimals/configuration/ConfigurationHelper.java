@@ -8,6 +8,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.util.DropMeat;
 import oortcloud.hungryanimals.configuration.util.DropRandom;
@@ -27,55 +28,64 @@ public class ConfigurationHelper {
 
 	/**
 	 * 
-	 * @param input ; ((item),min_amount,max_amount)
+	 * @param input
+	 *            ; ((item),min_amount,max_amount)
 	 * @return
 	 */
 	public DropMeat getDropMeat(String input) {
 		input = StringParser.reduceLevel(input);
 		String[] split = StringParser.splitByLevel(input);
-		
+
 		if (split.length == 3) {
-			return new DropMeat(getHashItem(split[0]),Integer.parseInt(split[1]),Integer.parseInt(split[2]));
+			return new DropMeat(getHashItem(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
 		} else {
 			HungryAnimals.logger.warn("The Drop Meat \"" + input + "\" is not considered. Format error at " + input);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 
-	 * @param input ; ((item),min_amount,max_amount)
+	 * @param input
+	 *            ; ((item),min_amount,max_amount)
 	 * @return
 	 */
 	public DropRandom getDropRandom(String input) {
 		input = StringParser.reduceLevel(input);
 		String[] split = StringParser.splitByLevel(input);
-		
+
 		if (split.length == 3) {
-			return new DropRandom(getHashItem(split[0]),Integer.parseInt(split[1]),Integer.parseInt(split[2]));
+			return new DropRandom(getHashItem(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
 		} else {
 			HungryAnimals.logger.warn("The Drop Random \"" + input + "\" is not considered. Format error at " + input);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 
-	 * @param input ; ((item),probability)
+	 * @param input
+	 *            ; ((item),probability)
 	 * @return
 	 */
 	public DropRare getDropRare(String input) {
 		input = StringParser.reduceLevel(input);
 		String[] split = StringParser.splitByLevel(input);
-		
+
 		if (split.length == 2) {
-			return new DropRare(getHashItem(split[0]),Double.parseDouble(split[1]));
+			HashItem item = getHashItem(split[0]);
+			if (item != null) {
+				return new DropRare(item, Double.parseDouble(split[1]));
+			} else {
+				HungryAnimals.logger.warn("The Item \"" + split[0] + "\" is not considered. Format error at " + input);
+				return null;
+			}
 		} else {
-			HungryAnimals.logger.warn("The Drop Rare \"" + input + "\" is not considered. Format error at " + input);
+			HungryAnimals.logger.warn("The Drop Rare \"" + input + "\" is not added. Format error at " + input);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param input
@@ -99,7 +109,7 @@ public class ConfigurationHelper {
 			return output;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param input
@@ -113,7 +123,13 @@ public class ConfigurationHelper {
 		String[] split = StringParser.splitByLevel(input);
 
 		if (split.length == 1) {
-			return new HashBlock(Block.getBlockFromName(StringParser.reduceLevel(split[0])));
+			Block block = Block.getBlockFromName(StringParser.reduceLevel(split[0]));
+			if (block != null) {
+				return new HashBlock(block);
+			} else {
+				HungryAnimals.logger.warn("The Block \"" + split[0] + "\" is not added. Format error at " + input);
+				return null;
+			}
 		} else if (split.length == 2) {
 
 			Block block = Block.getBlockFromName(StringParser.reduceLevel(split[0]));
@@ -123,7 +139,7 @@ public class ConfigurationHelper {
 			for (String i : properties) {
 				i = StringParser.reduceLevel(i);
 				String[] propertyParameter = StringParser.splitByLevel(i);
- 
+
 				if (propertyParameter.length == 2) {
 					String name = propertyParameter[0];
 					String value = propertyParameter[1];
@@ -155,9 +171,9 @@ public class ConfigurationHelper {
 					HungryAnimals.logger.warn("The Property \"" + i + "\" is not considered. Format error at " + input);
 				}
 			}
-
 			return new HashBlock(state);
 		} else {
+			HungryAnimals.logger.warn("The Block \"" + input + "\" is not added. Format error at " + input);
 			return null;
 		}
 	}
@@ -242,9 +258,21 @@ public class ConfigurationHelper {
 		String[] split = StringParser.splitByLevel(input);
 
 		if (split.length == 1) {
-			return new HashItem((Item) Item.itemRegistry.getObject(split[0]));
+			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			if (item != null) {
+				return new HashItem(item);
+			} else {
+				HungryAnimals.logger.warn("\"" + split[0] + "\" is not added. Format error at " + input);
+				return null;
+			}
 		} else if (split.length == 2) {
-			return new HashItem((Item) Item.itemRegistry.getObject(split[0]), Integer.parseInt(split[1]));
+			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			if (item != null) {
+				return new HashItem(item, Integer.parseInt(split[1]));
+			} else {
+				HungryAnimals.logger.warn("\"" + split[0] + "\" is not added. Format error at " + input);
+				return null;
+			}
 		} else {
 			HungryAnimals.logger.warn("\"" + input + "\" is not added. Format error at " + input);
 			return null;
@@ -273,8 +301,7 @@ public class ConfigurationHelper {
 			} else if (split2.length == 3) {
 				output.add(new ProbItemStack(Double.parseDouble(split2[0]), new ItemStack((Item) Item.itemRegistry.getObject(split2[1]), Integer.parseInt(split2[2]))));
 			} else if (split2.length == 4) {
-				output.add(new ProbItemStack(Double.parseDouble(split2[0]), new ItemStack((Item) Item.itemRegistry.getObject(split2[1]), Integer.parseInt(split2[2]), Integer
-						.parseInt(split2[3]))));
+				output.add(new ProbItemStack(Double.parseDouble(split2[0]), new ItemStack((Item) Item.itemRegistry.getObject(split2[1]), Integer.parseInt(split2[2]), Integer.parseInt(split2[3]))));
 			} else {
 				HungryAnimals.logger.warn("\"" + input + "\" is not added. Format error at " + j);
 				output = null;

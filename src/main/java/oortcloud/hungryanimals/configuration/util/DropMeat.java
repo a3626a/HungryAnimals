@@ -4,24 +4,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class DropMeat {
-	private Item item;
-	private int damage;
+	private HashItem hashItem;
 	private int min_amount;
 	private int max_amount;
 	
-	public DropMeat(Item item, int damage, int min_amount, int max_amount) {
-		this.item = item;
-		this.damage = damage;
+	public DropMeat(HashItem hashItem, int min_amount, int max_amount) {
+		this.hashItem = hashItem;
 		this.min_amount = min_amount;
 		this.max_amount = max_amount;
 	}
 	
-	public DropMeat(ItemStack itemstack, int min_amount, int max_amount) {
-		this(itemstack.getItem(), itemstack.getItemDamage(), min_amount, max_amount);
-	}
-	
-	public DropMeat(HashItem hashitem, int min_amount, int max_amount) {
-		this(hashitem.toItemStack(),min_amount,max_amount);
+	public DropMeat(Item item,int min_amount, int max_amount) {
+		this(new HashItem(item),min_amount,max_amount);
 	}
 	
 	/**
@@ -30,12 +24,16 @@ public class DropMeat {
 	 * @return
 	 */
 	public ItemStack getDrop(double hunger) {
-		ItemStack stack = new ItemStack(item,1,damage);
+		ItemStack stack = hashItem.toItemStack();
 		stack.stackSize= min_amount+(int)((max_amount-min_amount+1)*hunger)-(int)hunger;
 		return stack;
 	}
 	
 	public ItemStack getItemStack() {
-		return new ItemStack(item,1,damage);
+		return hashItem.toItemStack();
+	}
+	
+	public String toString() {
+		return "("+hashItem.toString()+","+min_amount+","+max_amount+")";
 	}
 }

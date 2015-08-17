@@ -6,24 +6,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class DropRandom {
-	private Item item;
-	private int damage;
+	private HashItem hashItem;
 	private int min_amount;
 	private int max_amount;
 	
-	public DropRandom(Item item, int damage, int min_amount, int max_amount) {
-		this.item = item;
-		this.damage = damage;
+	public DropRandom(HashItem hashitem, int min_amount, int max_amount) {
+		this.hashItem = hashitem;
 		this.min_amount = min_amount;
 		this.max_amount = max_amount;
 	}
 	
-	public DropRandom(ItemStack itemstack, int min_amount, int max_amount) {
-		this(itemstack.getItem(), itemstack.getItemDamage(), min_amount, max_amount);
-	}
-	
-	public DropRandom(HashItem hashitem, int min_amount, int max_amount) {
-		this(hashitem.toItemStack(),min_amount,max_amount);
+	public DropRandom(Item item, int min_amount, int max_amount) {
+		this(new HashItem(item),min_amount,max_amount);
 	}
 	
 	/**
@@ -32,12 +26,16 @@ public class DropRandom {
 	 * @return
 	 */
 	public ItemStack getDrop(Random rand) {
-		ItemStack stack = new ItemStack(item,1,damage);
+		ItemStack stack = hashItem.toItemStack();
 		stack.stackSize= min_amount+rand.nextInt(max_amount-min_amount+1);
 		return stack;
 	}
 	
 	public ItemStack getItemStack() {
-		return new ItemStack(item,1,damage);
+		return hashItem.toItemStack();
+	}
+	
+	public String toString() { 
+		return "("+hashItem.toString()+","+min_amount+","+max_amount+")";
 	}
 }
