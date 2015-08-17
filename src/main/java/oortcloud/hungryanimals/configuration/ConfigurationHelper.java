@@ -35,9 +35,14 @@ public class ConfigurationHelper {
 	public DropMeat getDropMeat(String input) {
 		input = StringParser.reduceLevel(input);
 		String[] split = StringParser.splitByLevel(input);
-
 		if (split.length == 3) {
-			return new DropMeat(getHashItem(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+			HashItem item = getHashItem(split[0]);
+			if (item != null) {
+				return new DropMeat(item, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+			} else {
+				HungryAnimals.logger.warn("The Drop Meat Item \"" + split[0] + "\" is not considered. Format error at " + input);
+				return null;
+			}
 		} else {
 			HungryAnimals.logger.warn("The Drop Meat \"" + input + "\" is not considered. Format error at " + input);
 			return null;
@@ -55,7 +60,13 @@ public class ConfigurationHelper {
 		String[] split = StringParser.splitByLevel(input);
 
 		if (split.length == 3) {
-			return new DropRandom(getHashItem(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+			HashItem item = getHashItem(split[0]);
+			if (item != null) {
+				return new DropRandom(item, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+			} else {
+				HungryAnimals.logger.warn("The Drop Random Item \"" + split[0] + "\" is not considered. Format error at " + input);
+				return null;
+			}
 		} else {
 			HungryAnimals.logger.warn("The Drop Random \"" + input + "\" is not considered. Format error at " + input);
 			return null;
@@ -102,7 +113,6 @@ public class ConfigurationHelper {
 				output.add(j);
 			}
 		}
-
 		if (!output.isEmpty()) {
 			return output;
 		} else {

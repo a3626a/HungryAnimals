@@ -81,7 +81,8 @@ public class TileEntityCrankAnimal extends TileEntityEnergyTransporter {
 				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) leashedAnimal.getExtendedProperties(Strings.extendedPropertiesKey);
 				if (property != null) {
 					double angleDifference = property.ai_crank.getAngleDifference();
-					this.getNetwork().produceEnergy(energyProduction*(1-Math.abs(90-angleDifference)/90.0));
+					this.getNetwork().produceEnergy(property.crank_production*(1-Math.abs(90-angleDifference)/90.0));
+					property.subHunger(property.crank_food_consumption);
 				}
 				
 			}
