@@ -35,17 +35,15 @@ public class ConfigurationHandlerRecipe {
 
 	public static void sync() {
 		HungryAnimals.logger.info("Configuration: Recipe start");
-		
+
 		HungryAnimals.logger.info("Configuration: Read and Register Thresher Recipe");
 		String[] recipeString;
 		recipeString = config.get(
 				CATEGORY_Thresher,
 				KEY_thresherRecipeList,
-				new String[] {
-						"(" + Item.itemRegistry.getNameForObject(Items.wheat) + ")=(0.5," + Item.itemRegistry.getNameForObject(Items.wheat_seeds) + "),(1.0,"
-								+ Item.itemRegistry.getNameForObject(ModItems.straw) + ")",
-						"(" + Item.itemRegistry.getNameForObject(ModItems.poppycrop) + ")=(0.5," + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + "),(1.0,"
-								+ Item.itemRegistry.getNameForObject(ModItems.straw) + ")" }).getStringList();
+				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat) + ")=((0.5," + Item.itemRegistry.getNameForObject(Items.wheat_seeds) + "),(1.0," + Item.itemRegistry.getNameForObject(ModItems.straw) + "))",
+						"(" + Item.itemRegistry.getNameForObject(ModItems.poppycrop) + ")=((0.5," + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + "),(1.0," + Item.itemRegistry.getNameForObject(ModItems.straw) + "))" })
+				.getStringList();
 
 		for (String i : recipeString) {
 			RecipeThresher.readConfiguration(i);
@@ -56,35 +54,27 @@ public class ConfigurationHandlerRecipe {
 				CATEGORY_Millstone,
 				KEY_millstoneRecipeList,
 				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.wheat_seeds) + ")=(10)", "(" + Item.itemRegistry.getNameForObject(Items.pumpkin_seeds) + ")=(10)",
-						"(" + Item.itemRegistry.getNameForObject(Items.melon_seeds) + ")=(10)", "(" + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + ")=(50)" })
-				.getStringList();
+						"(" + Item.itemRegistry.getNameForObject(Items.melon_seeds) + ")=(10)", "(" + Item.itemRegistry.getNameForObject(ModItems.poppyseed) + ")=(50)" }).getStringList();
 
 		for (String i : recipeString) {
 			RecipeMillstone.readConfiguration(i);
 		}
 
 		HungryAnimals.logger.info("Configuration: Read and Register Blender Recipe");
-		recipeString = config.get(	
+		recipeString = config.get(
 				CATEGORY_Blender,
 				KEY_blenderRecipeList,
-				new String[] {
-						"(" + Item.itemRegistry.getNameForObject(Items.carrot) + "),(" + Item.itemRegistry.getNameForObject(Items.potato) + ")=("
-								+ Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")",
-						"(" + Item.itemRegistry.getNameForObject(ModItems.saltpeter) + "),(" + Item.itemRegistry.getNameForObject(ModItems.manure) + ")=("
-								+ Item.itemRegistry.getNameForObject(Items.dye) + ",6,15)" }).getStringList();
+				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.carrot) + "),(" + Item.itemRegistry.getNameForObject(Items.potato) + ")=(" + Item.itemRegistry.getNameForObject(ModItems.mixedFeed) + ")",
+						"(" + Item.itemRegistry.getNameForObject(ModItems.saltpeter) + "),(" + Item.itemRegistry.getNameForObject(ModItems.manure) + ")=(" + Item.itemRegistry.getNameForObject(Items.dye) + ",6,15)" }).getStringList();
 
 		for (String i : recipeString) {
 			RecipeBlender.readConfiguration(i);
 		}
-		
+
 		HungryAnimals.logger.info("Configuration: Read and Register Animals Glue Recipe");
-		recipeString = config.get(
-				CATEGORY_AnimalGlue,
-				KEY_AnimalGlueRecipeList,
-				new String[] {
-						"(" + Item.itemRegistry.getNameForObject(Items.leather) + ")=(6)",
-						"(" + Item.itemRegistry.getNameForObject(ModItems.tendon) + ")=(4)",
-						"(" + Item.itemRegistry.getNameForObject(Items.bone) + ")=(2)"}).getStringList();
+		recipeString = config.get(CATEGORY_AnimalGlue, KEY_AnimalGlueRecipeList,
+				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.leather) + ")=(6)", "(" + Item.itemRegistry.getNameForObject(ModItems.tendon) + ")=(4)", "(" + Item.itemRegistry.getNameForObject(Items.bone) + ")=(2)" })
+				.getStringList();
 
 		for (String i : recipeString) {
 			RecipeAnimalGlue.readConfiguration(i);

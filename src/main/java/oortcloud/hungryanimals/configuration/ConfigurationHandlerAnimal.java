@@ -307,12 +307,12 @@ public class ConfigurationHandlerAnimal {
 		drops = config.get(category, KEY_drop_meat, defaultfood).getStringList();
 		for (String i : drops) {
 			DropMeat j = ConfigurationHelper.instance.getDropMeat(i);
-			if (j != null) {
-				target.drop_meat.add(j);
-			} else {
-				System.out.println("\"" + i + "\" is not added. Format error");
+			if (j == null) {
+				ConfigurationHelper.exceptionInvalidFormat(i);
+				exceptionPrintPosition(category, KEY_drop_meat);
 				continue;
 			}
+			target.drop_meat.add(j);
 		}
 	}
 
@@ -321,12 +321,12 @@ public class ConfigurationHandlerAnimal {
 		drops = config.get(category, KEY_drop_random, defaultfood).getStringList();
 		for (String i : drops) {
 			DropRandom j = ConfigurationHelper.instance.getDropRandom(i);
-			if (j != null) {
-				target.drop_random.add(j);
-			} else {
-				System.out.println("\"" + i + "\" is not added. Format error");
+			if (j == null) {
+				ConfigurationHelper.exceptionInvalidFormat(i);
+				exceptionPrintPosition(category, KEY_drop_random);
 				continue;
 			}
+			target.drop_random.add(j);
 		}
 	}
 
@@ -335,12 +335,12 @@ public class ConfigurationHandlerAnimal {
 		drops = config.get(category, KEY_drop_rare, defaultfood).getStringList();
 		for (String i : drops) {
 			DropRare j = ConfigurationHelper.instance.getDropRare(i);
-			if (j != null) {
-				target.drop_rare.add(j);
-			} else {
-				System.out.println("\"" + i + "\" is not added. Format error");
+			if (j == null) {
+				ConfigurationHelper.exceptionInvalidFormat(i);
+				exceptionPrintPosition(category, KEY_drop_rare);
 				continue;
 			}
+			target.drop_rare.add(j);
 		}
 	}
 
@@ -356,41 +356,54 @@ public class ConfigurationHandlerAnimal {
 		food = config.get(category, KEY_hunger_food, defaultfood).getStringList();
 		for (String i : food) {
 			String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
-
 			if (split.length == 2) {
 				HashItem item = ConfigurationHelper.instance.getHashItem(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				if (item != null) {
-					target.hunger_food.put(item, hunger);
-				} else {
-					HungryAnimals.logger.warn("\"" + i + "\" is not added. Format error at " + category);
+				if (item == null) {
+					ConfigurationHelper.exceptionInvalidFormat(split[0]);
+					exceptionPrintPosition(category, KEY_hunger_food);
+					continue;
 				}
+				target.hunger_food.put(item, hunger);
 			} else {
-				HungryAnimals.logger.warn("\"" + i + "\" is not added. Format error at " + category);
+				ConfigurationHelper.exceptionInvalidNumberOfArgument(i);
+				exceptionPrintPosition(category, KEY_hunger_food);
 				continue;
 			}
 		}
 	}
 
+	/**
+	 * 
+	 * @param defaultBlock
+	 *            : (block)=(hunger)
+	 * @param category
+	 * @param target
+	 */
 	private static void ByBlockRate(String[] defaultBlock, String category, GeneralProperty target) {
 		String[] block;
 		block = config.get(category, KEY_hunger_block, defaultBlock).getStringList();
 		for (String i : block) {
 			String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
-
 			if (split.length == 2) {
 				HashBlock hashblock = ConfigurationHelper.instance.getHashBlock(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				if (hashblock != null) {
-					target.hunger_block.put(hashblock, hunger);
-				} else {
-					HungryAnimals.logger.warn("\"" + split[0] + "\" is not added. Format error at " + category);
+				if (hashblock == null) {
+					ConfigurationHelper.exceptionInvalidFormat(split[0]);
+					exceptionPrintPosition(category, KEY_hunger_block);
+					continue;
 				}
+				target.hunger_block.put(hashblock, hunger);
 			} else {
-				HungryAnimals.logger.warn("\"" + i + "\" is not added. Format error at " + category);
+				ConfigurationHelper.exceptionInvalidNumberOfArgument(i);
+				exceptionPrintPosition(category, KEY_hunger_block);
 				continue;
 			}
 		}
+	}
+
+	private static void exceptionPrintPosition(String category, String key) {
+		HungryAnimals.logger.warn("Exception occured at " + category + "-" + key);
 	}
 
 }
