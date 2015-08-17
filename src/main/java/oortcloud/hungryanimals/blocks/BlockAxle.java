@@ -78,15 +78,17 @@ public class BlockAxle extends BlockEnergyTransporter {
 		if (item != null) {
 			if (meta.getValue(VARIANT) == EnumType.AXLE && item.getItem() == ModItems.wheel) {
 				worldIn.setBlockState(pos, meta.withProperty(VARIANT, EnumType.WHEEL), 2);
-				if (--item.stackSize == 0) {
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-				}
+				if (!playerIn.capabilities.isCreativeMode)
+					if (--item.stackSize == 0) {
+						playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+					}
 				return true;
 			} else if (meta.getValue(VARIANT) == EnumType.WHEEL && item.getItem() == ItemBlock.getItemFromBlock(ModBlocks.belt)) {
 				worldIn.setBlockState(pos, meta.withProperty(VARIANT, EnumType.BELT), 2);
-				if (--item.stackSize == 0) {
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-				}
+				if (!playerIn.capabilities.isCreativeMode)
+					if (--item.stackSize == 0) {
+						playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+					}
 				if (!worldIn.isRemote)
 					setNetwork(worldIn, pos, new EnergyNetwork(0));
 				return true;
