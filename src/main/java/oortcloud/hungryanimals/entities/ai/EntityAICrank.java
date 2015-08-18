@@ -157,7 +157,7 @@ public class EntityAICrank extends EntityAIBase {
 	public double getAngleDifference() {
 		double angleEntity = Math.toDegrees(Math.atan2(entity.posZ - crankAnimal.getPos().getZ() - 0.5, entity.posX - crankAnimal.getPos().getX() - 0.5)) - 90;
 		angleEntity = (angleEntity + 360) % 360;
-		double angleTile = crankAnimal.getNetwork().getAngle(0);
+		double angleTile = crankAnimal.getPowerNetwork().getAngle(0);
 		double angleDiff = angleEntity - angleTile;
 		angleDiff = (angleDiff + 360) % 360;
 		if (angleDiff > 270)

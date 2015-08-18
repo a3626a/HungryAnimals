@@ -1,8 +1,0 @@
-{
-    "variants": {
-	"facing=north": { "model": "hungryanimals:blockbelt"},
-	"facing=south": { "model": "hungryanimals:blockbelt"},
-	"facing=east": { "model": "hungryanimals:blockbelt"},
-	"facing=west": { "model": "hungryanimals:blockbelt"}
-    }
-}

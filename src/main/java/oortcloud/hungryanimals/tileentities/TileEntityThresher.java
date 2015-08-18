@@ -18,14 +18,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.util.ProbItemStack;
 import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.recipes.RecipeThresher;
 
-public class TileEntityThresher extends TileEntityEnergyTransporter implements IInventory, ISidedInventory {
+public class TileEntityThresher extends TileEntityPowerTransporter implements IInventory, ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
-	private double energyUsage = 0.5;
+	private double powerUsage = 0.5;
 
 	private int leftAttempt;
 	private int threshTime;
@@ -33,10 +33,11 @@ public class TileEntityThresher extends TileEntityEnergyTransporter implements I
 
 	private boolean needSync = true;
 
-	private static double energyCapacity = EnergyNetwork.energyUnit * 3;
+	private static double powerCapacity = PowerNetwork.powerUnit * 3;
 
 	public TileEntityThresher() {
-		super(energyCapacity);
+		super();
+		super.powerCapacity=TileEntityThresher.powerCapacity;
 		leftAttempt = 0;
 	}
 
@@ -55,8 +56,8 @@ public class TileEntityThresher extends TileEntityEnergyTransporter implements I
 			if (getStackInSlot(0) != null) {
 				if (leftAttempt > 0) {
 					ArrayList<ProbItemStack> output = RecipeThresher.getRecipe(getStackInSlot(0));
-					if (output != null && this.getNetwork().getEnergy() > energyUsage) {
-						this.getNetwork().consumeEnergy(energyUsage);
+					if (output != null && this.getPowerNetwork().getPowerStored() > powerUsage) {
+						this.getPowerNetwork().consumeEnergy(powerUsage);
 						this.threshTime += 1;
 
 						if (this.threshTime >= this.totalthreshTime) {

@@ -36,7 +36,7 @@ public class RenderTileEntityMillstone extends TileEntitySpecialRenderer {
 
 		this.bindTexture(texture);
 		float height = (float) millstone.getHeight();
-		float angle = millstone.getNetwork().getAngle(partialTick);
+		float angle = millstone.getPowerNetwork().getAngle(partialTick);
 		this.modelMillstone.renderModel(0.0625F, angle, height);
 
 		GL11.glPopMatrix();

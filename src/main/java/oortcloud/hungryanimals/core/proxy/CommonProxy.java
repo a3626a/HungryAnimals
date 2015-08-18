@@ -17,7 +17,6 @@ import oortcloud.hungryanimals.entities.event.EntityEventHandler;
 import oortcloud.hungryanimals.items.event.BucketEventHandler;
 import oortcloud.hungryanimals.recipes.event.CraftingEventHandler;
 import oortcloud.hungryanimals.tileentities.TileEntityAxle;
-import oortcloud.hungryanimals.tileentities.TileEntityBelt;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankAnimal;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankPlayer;
@@ -30,7 +29,6 @@ public class CommonProxy {
 	public void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityTrough.class, Strings.blockFoodBoxName);
 		GameRegistry.registerTileEntity(TileEntityAxle.class, Strings.blockAxleName);
-		GameRegistry.registerTileEntity(TileEntityBelt.class, Strings.blockBeltName);
 		GameRegistry.registerTileEntity(TileEntityCrankPlayer.class, Strings.blockCrankPlayerName);
 		GameRegistry.registerTileEntity(TileEntityThresher.class, Strings.blockThresherName);
 		GameRegistry.registerTileEntity(TileEntityMillstone.class, Strings.blockMillstoneName);

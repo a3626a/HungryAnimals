@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.tileentities;
 
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.recipes.RecipeBlender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,7 +18,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class TileEntityBlender extends TileEntityEnergyTransporter implements IInventory, ISidedInventory {
+public class TileEntityBlender extends TileEntityPowerTransporter implements IInventory, ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
@@ -35,10 +35,11 @@ public class TileEntityBlender extends TileEntityEnergyTransporter implements II
 	private int blendTime;
 	private int totalBlendTime = 5 * 20;
 
-	private static double energyCapacity = EnergyNetwork.energyUnit * 5;
+	private static double powerCapacity = PowerNetwork.powerUnit * 5;
 
 	public TileEntityBlender() {
-		super(energyCapacity);
+		super();
+		super.powerCapacity=TileEntityBlender.powerCapacity;
 	}
 	
 	@Override
@@ -132,8 +133,8 @@ public class TileEntityBlender extends TileEntityEnergyTransporter implements II
 
 		if (canWork) {
 
-			if (this.getNetwork().getEnergy() > energyUsage) {
-				this.getNetwork().consumeEnergy(energyUsage);
+			if (this.getPowerNetwork().getPowerStored() > energyUsage) {
+				this.getPowerNetwork().consumeEnergy(energyUsage);
 				this.blendTime += 1;
 
 				if (this.blendTime >= this.totalBlendTime) {

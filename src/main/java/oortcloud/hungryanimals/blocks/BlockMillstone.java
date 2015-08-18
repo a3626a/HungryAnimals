@@ -7,29 +7,21 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.blocks.BlockTrough.EnumPartType;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
-import oortcloud.hungryanimals.recipes.RecipeMillstone;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.tileentities.TileEntityMillstone;
-import oortcloud.hungryanimals.tileentities.TileEntityThresher;
 import oortcloud.hungryanimals.utils.InventoryUtil;
 
-public class BlockMillstone extends BlockEnergyTransporter {
+public class BlockMillstone extends BlockContainer {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
@@ -62,20 +54,6 @@ public class BlockMillstone extends BlockEnergyTransporter {
 	@Override
 	public boolean isNormalCube() {
 		return false;
-	}
-
-	@Override
-	public void divideNetwork(World world, BlockPos pos) {
-		Block block;
-		block = world.getBlockState(pos.up()).getBlock();
-		if (block instanceof BlockEnergyTransporter) {
-			((BlockEnergyTransporter) block).setNetwork(world, pos.up(), new EnergyNetwork(0));
-		}
-	}
-
-	@Override
-	public boolean isTowards(World world, BlockPos pos, EnumFacing side) {
-		return side == EnumFacing.UP;
 	}
 
 	@Override

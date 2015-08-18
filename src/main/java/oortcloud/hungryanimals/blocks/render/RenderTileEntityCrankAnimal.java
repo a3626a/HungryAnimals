@@ -43,7 +43,7 @@ public class RenderTileEntityCrankAnimal extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 
 		this.bindTexture(texture);
-		this.modelCrank.renderModel(0.0625F, crank.getNetwork().getAngle(partialTick));
+		this.modelCrank.renderModel(0.0625F, crank.getPowerNetwork().getAngle(partialTick));
 
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
@@ -51,7 +51,7 @@ public class RenderTileEntityCrankAnimal extends TileEntitySpecialRenderer {
 		EntityLiving leashedAnimal = crank.getLeashedAnimal();
 		
 		if (leashedAnimal != null ) {
-			double angle = Math.toRadians(crank.getNetwork().getAngle(partialTick)+90);
+			double angle = Math.toRadians(crank.getPowerNetwork().getAngle(partialTick)+90);
 			double posX = crank.getPos().getX() + 0.5 + 1.3*Math.cos(angle);
 			double posY = crank.getPos().getY() - 1;
 			double posZ = crank.getPos().getZ() + 0.5 + 1.3*Math.sin(angle);

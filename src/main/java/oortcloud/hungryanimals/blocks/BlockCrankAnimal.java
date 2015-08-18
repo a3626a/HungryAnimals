@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLeashKnot;
@@ -19,10 +20,10 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankAnimal;
 
-public class BlockCrankAnimal extends BlockEnergyTransporter {
+public class BlockCrankAnimal extends BlockContainer {
 
 	protected BlockCrankAnimal() {
 		super(Material.wood);
@@ -139,29 +140,6 @@ public class BlockCrankAnimal extends BlockEnergyTransporter {
 	@Override
 	public boolean isFullCube() {
 		return false;
-	}
-
-	@Override
-	public void divideNetwork(World world, BlockPos pos) {
-		Block block;
-		block = world.getBlockState(pos.up()).getBlock();
-		if (block instanceof BlockEnergyTransporter) {
-			((BlockEnergyTransporter) block).setNetwork(world, pos.up(), new EnergyNetwork(0));
-		}
-		block = world.getBlockState(pos.down()).getBlock();
-		if (block instanceof BlockEnergyTransporter) {
-			((BlockEnergyTransporter) block).setNetwork(world, pos.down(), new EnergyNetwork(0));
-		}
-	}
-
-	@Override
-	public boolean isTowards(World world, BlockPos pos, EnumFacing side) {
-		TileEntityCrankAnimal crankAnimal = (TileEntityCrankAnimal) world.getTileEntity(pos);
-		if (crankAnimal.isPrimary()) {
-			return side == EnumFacing.DOWN || side == EnumFacing.UP;
-		} else {
-			return false;
-		}
 	}
 
 }

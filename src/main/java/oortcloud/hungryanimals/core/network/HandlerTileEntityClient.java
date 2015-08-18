@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
-import oortcloud.hungryanimals.tileentities.TileEntityEnergyTransporter;
+import oortcloud.hungryanimals.tileentities.TileEntityPowerTransporter;
 import oortcloud.hungryanimals.tileentities.TileEntityMillstone;
 import oortcloud.hungryanimals.tileentities.TileEntityThresher;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
@@ -27,7 +27,7 @@ public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntity
 					((TileEntityTrough) te).stack = message.getItemStack();
 					break;
 				case 1:
-					((TileEntityEnergyTransporter) te).getNetwork().setAngle(message.getFloat());
+					((TileEntityPowerTransporter) te).getPowerNetwork().setAngle(message.getFloat());
 					break;
 				case 2:
 					ItemStack[] items1 = message.getItemStackArray();
@@ -51,7 +51,7 @@ public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntity
 					}
 					break;
 				case 6:
-					((TileEntityEnergyTransporter) te).getNetwork().setAngularVelocity(message.getFloat());
+					((TileEntityPowerTransporter) te).getPowerNetwork().setAngularVelocity(message.getFloat());
 					break;
 				}
 			}

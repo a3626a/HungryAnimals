@@ -24,14 +24,14 @@ import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
 import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.recipes.RecipeMillstone;
 
-public class TileEntityMillstone extends TileEntityEnergyTransporter implements IInventory, IFluidHandler, ISidedInventory {
+public class TileEntityMillstone extends TileEntityPowerTransporter implements IInventory, IFluidHandler, ISidedInventory {
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 
 	private int grindTime;
 	private int totalgrindTime = 5 * 20;
 
-	private double energyUsage = 0.5;
+	private double powerUsage = 0.5;
 
 	private boolean needSync = true;
 
@@ -58,11 +58,11 @@ public class TileEntityMillstone extends TileEntityEnergyTransporter implements 
 
 			ItemStack item = getStackInSlot(0);
 			if (item != null) {
-				if (this.getNetwork().getEnergy() > energyUsage) {
+				if (this.getPowerNetwork().getPowerStored() > powerUsage) {
 
 					int amount = RecipeMillstone.getRecipe(item);
 					if (amount > 0) {
-						this.getNetwork().consumeEnergy(energyUsage);
+						this.getPowerNetwork().consumeEnergy(powerUsage);
 						this.grindTime += 1;
 
 						if (this.grindTime >= this.totalgrindTime) {

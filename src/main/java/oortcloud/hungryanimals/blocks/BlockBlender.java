@@ -1,13 +1,12 @@
 package oortcloud.hungryanimals.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -15,12 +14,11 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.core.network.PacketTileEntityServer;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
 import oortcloud.hungryanimals.utils.InventoryUtil;
 
-public class BlockBlender extends BlockEnergyTransporter {
+public class BlockBlender extends BlockContainer {
 
 	protected BlockBlender() {
 		super(Material.iron);
@@ -47,26 +45,12 @@ public class BlockBlender extends BlockEnergyTransporter {
 	}
 
 	@Override
-	public void divideNetwork(World world, BlockPos pos) {
-		Block block;
-		block = world.getBlockState(pos.up()).getBlock();
-		if (block instanceof BlockEnergyTransporter) {
-			((BlockEnergyTransporter) block).setNetwork(world, pos.up(), new EnergyNetwork(0));
-		}
-	}
-
-	@Override
-	public boolean isTowards(World world, BlockPos pos, EnumFacing side) {
-		return side == EnumFacing.UP;
-	}
-
-	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (side == EnumFacing.UP) {
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			if (tileEntity != null) {
 				TileEntityBlender blender = (TileEntityBlender) tileEntity;
-				float angle = blender.getNetwork().getAngle(0.0F);
+				float angle = blender.getPowerNetwork().getAngle(0.0F);
 				int rotationalOffset = (int) (angle / 90);
 				angle = angle % 90;
 				int index = 0;

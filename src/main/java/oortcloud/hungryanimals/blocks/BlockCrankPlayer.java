@@ -1,24 +1,21 @@
 package oortcloud.hungryanimals.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankPlayer;
 
-public class BlockCrankPlayer extends BlockEnergyTransporter {
+public class BlockCrankPlayer extends BlockContainer {
 
 	public static final float exhaustion = 0.5F;
 
@@ -50,20 +47,6 @@ public class BlockCrankPlayer extends BlockEnergyTransporter {
 	@Override
 	public boolean isFullCube() {
 		return false;
-	}
-
-	@Override
-	public void divideNetwork(World world, BlockPos pos) {
-		Block block;
-		block = world.getBlockState(pos.down()).getBlock();
-		if (block instanceof BlockEnergyTransporter) {
-			((BlockEnergyTransporter) block).setNetwork(world, pos.down(), new EnergyNetwork(0));
-		}
-	}
-
-	@Override
-	public boolean isTowards(World world, BlockPos pos, EnumFacing side) {
-		return side == EnumFacing.DOWN;
 	}
 
 	@Override

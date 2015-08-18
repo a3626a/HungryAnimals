@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityAxle;
-import oortcloud.hungryanimals.blocks.render.RenderTileEntityBelt;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityBlender;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityCrankAnimal;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityCrankPlayer;
@@ -37,7 +36,6 @@ import oortcloud.hungryanimals.items.render.CameraTransformModelItemBola;
 import oortcloud.hungryanimals.items.render.SmartModelItemSlingshot;
 import oortcloud.hungryanimals.keybindings.ModKeyBindings;
 import oortcloud.hungryanimals.tileentities.TileEntityAxle;
-import oortcloud.hungryanimals.tileentities.TileEntityBelt;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankAnimal;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankPlayer;
@@ -64,7 +62,6 @@ public class ClientProxy extends CommonProxy {
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockTrapCoverName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTrapCoverName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockAxleName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockAxleName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockCrankPlayerName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockCrankPlayerName, "inventory"));
-		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockBeltName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockBeltName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockMillstoneName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockMillstoneName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockThresherName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockThresherName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockBlenderName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockBlenderName, "inventory"));
@@ -96,7 +93,6 @@ public class ClientProxy extends CommonProxy {
 	public void registerTileEntityRendering() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrough.class, new RenderTileEntityTrough());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAxle.class, new RenderTileEntityAxle());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBelt.class, new RenderTileEntityBelt());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrankPlayer.class, new RenderTileEntityCrankPlayer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityThresher.class, new RenderTileEntityThresher());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMillstone.class, new RenderTileEntityMillstone());

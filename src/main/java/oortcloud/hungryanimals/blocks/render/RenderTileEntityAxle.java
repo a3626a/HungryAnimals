@@ -9,7 +9,7 @@ import oortcloud.hungryanimals.blocks.BlockAxle;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.tileentities.TileEntityAxle;
-import oortcloud.hungryanimals.tileentities.TileEntityEnergyTransporter;
+import oortcloud.hungryanimals.tileentities.TileEntityPowerTransporter;
 
 import org.lwjgl.opengl.GL11;
 
@@ -43,56 +43,18 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		IBlockState state = tileentity.getWorld().getBlockState(tileentity.getPos());
 		if (state.getBlock() != ModBlocks.axle) return;
 		
-		if (state.getValue(BlockAxle.VARIANT) == BlockAxle.EnumType.AXLE) {
-			/*
-			if (axle.lastRotating) {
-				this.bindTexture(texture_Axle);
-				this.modelAxle.renderModel(0.0625F, (tileentity.getWorld().getWorldTime()+partialTick)*9);
-			} else {
-				this.bindTexture(texture_Axle);
-				this.modelAxle.renderModel(0.0625F, 0);	
-			}
-			*/
+		if (state.getValue(BlockAxle.VARIANT) == Boolean.FALSE) {
 			this.bindTexture(texture_Axle);
-			this.modelAxle.renderModel(0.0625F, axle.getNetwork().getAngle(partialTick));
+			this.modelAxle.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
 		}
-		if (state.getValue(BlockAxle.VARIANT) == BlockAxle.EnumType.WHEEL) {
-			/*
-			if (axle.lastRotating) {
-				this.bindTexture(texture_Axle);
-				this.modelAxle.renderModel(0.0625F, (tileentity.getWorld().getWorldTime()+partialTick)*9);
-				this.bindTexture(texture_Wheel);
-				this.modelWheel.renderModel(0.0625F, (tileentity.getWorld().getWorldTime()+partialTick)*9);
-			} else {
-				this.bindTexture(texture_Axle);
-				this.modelAxle.renderModel(0.0625F, 0);
-				this.bindTexture(texture_Wheel);
-				this.modelWheel.renderModel(0.0625F, 0);
-			}
-			*/
+		if (state.getValue(BlockAxle.VARIANT) == Boolean.TRUE) {
 			this.bindTexture(texture_Axle);
-			this.modelAxle.renderModel(0.0625F, axle.getNetwork().getAngle(partialTick));
+			this.modelAxle.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
 			this.bindTexture(texture_Wheel);
-			this.modelWheel.renderModel(0.0625F, axle.getNetwork().getAngle(partialTick));
+			this.modelWheel.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
 		}
+		/*
 		if (state.getValue(BlockAxle.VARIANT) == BlockAxle.EnumType.BELT) {
-			/*
-			if (((TileEntityEnergyTransporter)tileentity).lastRotating) {
-				this.bindTexture(texture_Axle);
-				this.modelAxle.renderModel(0.0625F, (tileentity.getWorld().getWorldTime()+partialTick)*9);
-				this.bindTexture(texture_Wheel);
-				this.modelWheel.renderModel(0.0625F, (tileentity.getWorld().getWorldTime()+partialTick)*9);
-				this.bindTexture(texture_Axle);
-				this.modelBelt.renderModel(0.0625F, ((EnumFacing)state.getValue(BlockAxle.FACING)).getHorizontalIndex()*90);
-			} else {
-				this.bindTexture(texture_Axle);
-				this.modelAxle.renderModel(0.0625F, 0);	
-				this.bindTexture(texture_Wheel);
-				this.modelWheel.renderModel(0.0625F, 0);
-				this.bindTexture(texture_Axle);
-				this.modelBelt.renderModel(0.0625F, ((EnumFacing)state.getValue(BlockAxle.FACING)).getHorizontalIndex()*90);
-			}
-			*/
 			this.bindTexture(texture_Axle);
 			this.modelAxle.renderModel(0.0625F, axle.getNetwork().getAngle(partialTick));
 			this.bindTexture(texture_Wheel);
@@ -100,7 +62,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 			this.bindTexture(texture_Axle);
 			this.modelBelt.renderModel(0.0625F, ((EnumFacing)state.getValue(BlockAxle.FACING)).getHorizontalIndex()*90);
 		}
-
+		*/
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		

@@ -14,7 +14,6 @@ public class ModBlocks {
 	public static Block foodBox;
 	public static Block trapcover;
 	public static Block axle;
-	public static Block belt;
 	public static Block crankPlayer;
 	public static Block thresher;
 	public static Block poppy;
@@ -33,7 +32,6 @@ public class ModBlocks {
 		foodBox = new BlockTrough();
 		trapcover = new BlockTrapCover();
 		axle = new BlockAxle();
-		belt = new BlockBelt();
 		crankPlayer = new BlockCrankPlayer();
 		thresher = new BlockThresher();
 		poppy = new BlockPoppy();

@@ -18,13 +18,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.energy.EnergyNetwork;
+import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
-public class TileEntityCrankAnimal extends TileEntityEnergyTransporter {
+public class TileEntityCrankAnimal extends TileEntityPowerTransporter {
 
-	public static double energyProduction = 5;
-	private static double energyCapacity = EnergyNetwork.energyUnit * 10;
+	public static double powerProduction = 5;
+	private static double powerCapacity = PowerNetwork.powerUnit * 10;
 	private BlockPos primaryPos;
 
 	private EntityAnimal leashedAnimal;
@@ -34,7 +34,8 @@ public class TileEntityCrankAnimal extends TileEntityEnergyTransporter {
 	private int leashedAnimalID;
 
 	public TileEntityCrankAnimal() {
-		super(energyCapacity);
+		super();
+		super.powerCapacity=TileEntityCrankAnimal.powerCapacity;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			leashedAnimalID = -1;
 		}
@@ -81,7 +82,7 @@ public class TileEntityCrankAnimal extends TileEntityEnergyTransporter {
 				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) leashedAnimal.getExtendedProperties(Strings.extendedPropertiesKey);
 				if (property != null) {
 					double angleDifference = property.ai_crank.getAngleDifference();
-					this.getNetwork().produceEnergy(property.crank_production*(1-Math.abs(90-angleDifference)/90.0));
+					this.getPowerNetwork().producePower(property.crank_production*(1-Math.abs(90-angleDifference)/90.0));
 					property.subHunger(property.crank_food_consumption);
 				}
 				

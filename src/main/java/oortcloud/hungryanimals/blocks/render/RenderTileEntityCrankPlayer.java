@@ -30,7 +30,7 @@ public class RenderTileEntityCrankPlayer extends TileEntitySpecialRenderer {
 		TileEntityCrankPlayer crank = (TileEntityCrankPlayer) tileentity;
 		this.bindTexture(texture);
 
-		this.modelCrank.renderModel(0.0625F, crank.getNetwork().getAngle(partialTick));
+		this.modelCrank.renderModel(0.0625F, crank.getPowerNetwork().getAngle(partialTick));
 
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();

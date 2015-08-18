@@ -44,8 +44,6 @@ public class CraftingHandler {
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.blender), " a ", "aba", " a ", 'a', new ItemStack(ModItems.blade), 'b', new ItemStack(ModItems.compositeWoodCasing));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.thresher), "aaa", "bba", "aaa", 'a', new ItemStack(ModItems.compositeWood), 'b', new ItemStack(ModItems.blade));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModItems.trough), "a a", "aaa", 'a', new ItemStack(ModItems.compositeWood));
-		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.belt), "aba", "b b", "aba", 'a', new ItemStack(Items.leather), 'b', new ItemStack(ModItems.animalGlue));
-		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.belt), "aba", "b b", "aba", 'b', new ItemStack(Items.leather), 'a', new ItemStack(ModItems.animalGlue));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.floorcover_leaf), "a","b", 'a', "treeLeaves", 'b', new ItemStack(ModItems.compositeWood)));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.floorcover_wool), "c", "a","b", 'a',new ItemStack(Items.feather), 'c',new ItemStack(Blocks.wool),'b', new ItemStack(ModItems.compositeWood));
 		CraftingManager.getInstance().addRecipe(new ItemStack(ModBlocks.floorcover_hay), "a","b", 'a',new ItemStack(Blocks.hay_block), 'b', new ItemStack(ModItems.compositeWood));

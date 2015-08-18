@@ -33,7 +33,7 @@ public class RenderTileEntityBlender extends TileEntitySpecialRenderer {
 
 		this.bindTexture(texture);
 
-		this.modelBlender.renderModel(0.0625F, blender.getNetwork().getAngle(partialTick));
+		this.modelBlender.renderModel(0.0625F, blender.getPowerNetwork().getAngle(partialTick));
 
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
@@ -41,13 +41,13 @@ public class RenderTileEntityBlender extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
 
-		GL11.glRotatef(-blender.getNetwork().getAngle(partialTick), 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(-blender.getPowerNetwork().getAngle(partialTick), 0.0F, 1.0F, 0.0F);
 
 		for (int i = 0; i < blender.getSizeInventory(); i++) {
 			ItemStack stack = blender.getStackInSlot(i);
 			if (stack != null) {
 				EntityItem item = new EntityItem(tileentity.getWorld(), 0, 0, 0, stack);
-				item.hoverStart = blender.getNetwork().getAngle(partialTick) / 20.0F;
+				item.hoverStart = blender.getPowerNetwork().getAngle(partialTick) / 20.0F;
 				RenderManager render = Minecraft.getMinecraft().getRenderManager();
 				switch (i) {
 				case 0:

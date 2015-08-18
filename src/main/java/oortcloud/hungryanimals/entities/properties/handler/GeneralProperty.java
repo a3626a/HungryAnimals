@@ -55,7 +55,7 @@ public class GeneralProperty {
 		default_cow.attribute_maxhealth = 30.0;
 		default_cow.attribute_movespeed = 0.2;
 		default_cow.crank_food_consumption = default_cow.hunger_bmr*2.0;
-		default_cow.crank_production = TileEntityCrankAnimal.energyProduction;
+		default_cow.crank_production = TileEntityCrankAnimal.powerProduction;
 		default_cow.drop_meat.add(new DropMeat(Items.beef,5,10));
 		default_cow.drop_random.add(new DropRandom(Items.leather,5,10));
 		default_cow.drop_random.add(new DropRandom(ModItems.tendon,2,3));
@@ -76,7 +76,7 @@ public class GeneralProperty {
 		default_chicken.attribute_maxhealth = 8.0;
 		default_chicken.attribute_movespeed = 0.15;
 		default_chicken.crank_food_consumption = default_chicken.hunger_bmr*2.0;
-		default_chicken.crank_production = TileEntityCrankAnimal.energyProduction*(default_chicken.crank_food_consumption/default_cow.crank_food_consumption);
+		default_chicken.crank_production = TileEntityCrankAnimal.powerProduction*(default_chicken.crank_food_consumption/default_cow.crank_food_consumption);
 		default_chicken.drop_meat.add(new DropMeat(Items.chicken,2,4));
 		default_chicken.drop_random.add(new DropRandom(Items.feather,3,6));
 		default_chicken.hunger_food.put(new HashItem(Items.wheat_seeds), 20.0);
@@ -97,7 +97,7 @@ public class GeneralProperty {
 		default_pig.attribute_maxhealth = 20.0;
 		default_pig.attribute_movespeed = 0.25;
 		default_pig.crank_food_consumption = default_pig.hunger_bmr*2.0;
-		default_pig.crank_production = TileEntityCrankAnimal.energyProduction*(default_pig.crank_food_consumption/default_cow.crank_food_consumption);
+		default_pig.crank_production = TileEntityCrankAnimal.powerProduction*(default_pig.crank_food_consumption/default_cow.crank_food_consumption);
 		default_pig.drop_meat.add(new DropMeat(Items.porkchop,4,8));
 		default_pig.drop_random.add(new DropRandom(ModItems.tendon,1,2));
 		default_pig.hunger_food.put(new HashItem(Items.carrot), 40.0);
@@ -116,7 +116,7 @@ public class GeneralProperty {
 		default_rabbit.attribute_maxhealth = 10.0;
 		default_rabbit.attribute_movespeed = 0.25;
 		default_rabbit.crank_food_consumption = default_rabbit.hunger_bmr*2.0;
-		default_rabbit.crank_production = TileEntityCrankAnimal.energyProduction*(default_rabbit.crank_food_consumption/default_cow.crank_food_consumption);
+		default_rabbit.crank_production = TileEntityCrankAnimal.powerProduction*(default_rabbit.crank_food_consumption/default_cow.crank_food_consumption);
 		default_rabbit.drop_meat.add(new DropMeat(Items.rabbit,1,2));
 		default_rabbit.drop_random.add(new DropRandom(Items.rabbit_hide,1,2));
 		default_rabbit.drop_rare.add(new DropRare(Items.rabbit_foot,0.025));
@@ -138,7 +138,7 @@ public class GeneralProperty {
 		default_sheep.attribute_maxhealth = 20.0;
 		default_sheep.attribute_movespeed = 0.20;
 		default_sheep.crank_food_consumption = default_sheep.hunger_bmr*2.0;
-		default_sheep.crank_production = TileEntityCrankAnimal.energyProduction*(default_sheep.crank_food_consumption/default_cow.crank_food_consumption);
+		default_sheep.crank_production = TileEntityCrankAnimal.powerProduction*(default_sheep.crank_food_consumption/default_cow.crank_food_consumption);
 		default_sheep.drop_meat.add(new DropMeat(Items.mutton,3,6));
 		default_sheep.drop_random.add(new DropRandom(ModItems.tendon,1,2));
 		default_sheep.hunger_food.put(new HashItem(Items.wheat), 50.0);
