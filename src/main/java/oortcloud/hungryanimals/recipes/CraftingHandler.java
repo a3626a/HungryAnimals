@@ -1,13 +1,16 @@
 package oortcloud.hungryanimals.recipes;
 
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.items.ModItems;
 
 public class CraftingHandler {
@@ -17,6 +20,8 @@ public class CraftingHandler {
 	}
 
 	private static void registerRecipe() {
+		RecipeSorter.register(References.RESOURCESPREFIX+"shapeddistinctore",     ShapedDistinctOreRecipe.class,    SHAPED,    "after:forge:shapedore before:minecraft:shapeless");
+		
 		OreDictionary.registerOre("dustSaltpeter", ModItems.saltpeter);
 		OreDictionary.registerOre("dustWoodAsh", ModItems.woodash);
 		

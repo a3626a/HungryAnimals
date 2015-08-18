@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class ClientRenderEventHandler {
 	
+	/*
 	@SubscribeEvent
 	public void renderHerbicideGrass(RenderWorldLastEvent event) {
 		Tessellator tessellator = Tessellator.getInstance();
@@ -81,7 +82,8 @@ public class ClientRenderEventHandler {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}
-
+	*/
+	
 	@SubscribeEvent
 	public void renderDebugGlassEntity(RenderLivingEvent.Post event) {
 
