@@ -16,19 +16,18 @@ import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class ItemDebugGlass extends Item {
-	
+
 	public ItemDebugGlass() {
 		super();
-		this.setUnlocalizedName(References.RESOURCESPREFIX+Strings.itemDebugGlassName);
+		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemDebugGlassName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		this.setMaxStackSize(1);
 		ModItems.register(this);
 	}
-	
+
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world,
-			EntityPlayer player) {
-		
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+
 		if (world.isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
@@ -37,10 +36,10 @@ public class ItemDebugGlass extends Item {
 				HungryAnimals.simpleChannel.sendToServer(msg);
 			}
 		}
-		
+
 		return stack;
 	}
-	
+
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!worldIn.isRemote) {
@@ -48,8 +47,7 @@ public class ItemDebugGlass extends Item {
 			if (tag != null && tag.hasKey("target")) {
 				Entity target = worldIn.getEntityByID(tag.getInteger("target"));
 				if (target != null) {
-					ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) target
-							.getExtendedProperties(Strings.extendedPropertiesKey);
+					ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) target.getExtendedProperties(Strings.extendedPropertiesKey);
 					if (property != null) {
 						tag.setDouble("hunger", property.hunger);
 						tag.setDouble("excretion", property.excretion);

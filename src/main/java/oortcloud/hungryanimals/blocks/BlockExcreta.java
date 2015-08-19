@@ -107,8 +107,8 @@ public class BlockExcreta extends BlockFalling {
 
 	@Override
 	public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam) {
+		super.updateTick(worldIn, pos, state, null);
 		if (!worldIn.isRemote) {
-			this.checkFallable(worldIn, pos);
 			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
 				IBlockState metaTop = worldIn.getBlockState(pos);
 				IBlockState metaBot = worldIn.getBlockState(pos.down());
@@ -117,8 +117,6 @@ public class BlockExcreta extends BlockFalling {
 				if (excretaBot + manureBot < 4) {
 					this.stackBlock(worldIn, pos.down(), metaTop, metaBot, true);
 				}
-			} else if (!worldIn.getBlockState(pos.down()).getBlock().getMaterial().isSolid()) {
-				worldIn.setBlockToAir(pos.down());
 			} else if (worldIn.getBlockState(pos.up()).getBlock() == this) {
 				IBlockState metaTop = worldIn.getBlockState(pos.up());
 				IBlockState metaBot = worldIn.getBlockState(pos);
@@ -236,9 +234,7 @@ public class BlockExcreta extends BlockFalling {
 				}
 			};
 
-			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class,
-					new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius), pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)),
-					hungryAnimalSelector)) {
+			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius), pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
 				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease.id, 24000, 1));
 			}
 		}
@@ -269,8 +265,7 @@ public class BlockExcreta extends BlockFalling {
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (!worldIn.isRemote && entityIn instanceof EntityFallingBlock && ((EntityFallingBlock) entityIn).getBlock().getBlock() == this
-				&& ((EntityFallingBlock) entityIn).fallTime > 1 && !entityIn.isDead) {
+		if (!worldIn.isRemote && entityIn instanceof EntityFallingBlock && ((EntityFallingBlock) entityIn).getBlock().getBlock() == this && ((EntityFallingBlock) entityIn).fallTime > 1 && !entityIn.isDead) {
 
 			entityIn.setDead();
 
@@ -330,32 +325,6 @@ public class BlockExcreta extends BlockFalling {
 		}
 	}
 
-	private void checkFallable(World worldIn, BlockPos pos) {
-		if (canFallInto(worldIn, pos.down()) && pos.getY() >= 0) {
-			byte b0 = 32;
-
-			if (!fallInstantly && worldIn.isAreaLoaded(pos.add(-b0, -b0, -b0), pos.add(b0, b0, b0))) {
-				if (!worldIn.isRemote) {
-					EntityFallingBlock entityfallingblock = new EntityFallingBlock(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D,
-							worldIn.getBlockState(pos));
-					this.onStartFalling(entityfallingblock);
-					worldIn.spawnEntityInWorld(entityfallingblock);
-				}
-			} else {
-				worldIn.setBlockToAir(pos);
-				BlockPos blockpos1;
-
-				for (blockpos1 = pos.down(); canFallInto(worldIn, blockpos1) && blockpos1.getY() > 0; blockpos1 = blockpos1.down()) {
-					;
-				}
-
-				if (blockpos1.getY() > 0) {
-					worldIn.setBlockState(blockpos1.up(), this.getDefaultState());
-				}
-			}
-		}
-	}
-
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
@@ -372,8 +341,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	public static enum EnumType implements IStringSerializable {
-		E1M0(0, 1, 0), E2M0(1, 2, 0), E3M0(2, 3, 0), E4M0(3, 4, 0), E0M1(4, 0, 1), E1M1(5, 1, 1), E2M1(6, 2, 1), E3M1(7, 3, 1), E0M2(8, 0, 2), E1M2(9, 1, 2), E2M2(10, 2, 2), E0M3(
-				11, 0, 3), E1M3(12, 1, 3), E0M4(13, 0, 4);
+		E1M0(0, 1, 0), E2M0(1, 2, 0), E3M0(2, 3, 0), E4M0(3, 4, 0), E0M1(4, 0, 1), E1M1(5, 1, 1), E2M1(6, 2, 1), E3M1(7, 3, 1), E0M2(8, 0, 2), E1M2(9, 1, 2), E2M2(10, 2, 2), E0M3(11, 0, 3), E1M3(12, 1, 3), E0M4(13, 0, 4);
 
 		private static final BlockExcreta.EnumType[] META_LOOKUP = new BlockExcreta.EnumType[values().length];
 		private final int meta;
@@ -426,13 +394,10 @@ public class BlockExcreta extends BlockFalling {
 		}
 
 		public static EnumType getValue(int exc, int man) {
-
 			if (exc + man > 4 || exc + man <= 0) {
 				return values()[0];
 			}
-
 			int ind = 0;
-
 			switch (man) {
 			case 0:
 				ind = exc - 1;
@@ -449,7 +414,6 @@ public class BlockExcreta extends BlockFalling {
 			case 4:
 				ind = exc + 13;
 			}
-
 			return values()[ind];
 		}
 	}

@@ -86,13 +86,13 @@ public abstract class TileEntityPowerTransporter extends TileEntity implements I
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setDouble("energyStored", powerNetwork.getPowerStored() / powerNetwork.getPowerCapacity() * getPowerCapacity());
+		compound.setDouble("powerStored", powerNetwork.getPowerStored() / powerNetwork.getPowerCapacity() * getPowerCapacity());
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.powerNetwork.setPowerStored(compound.getDouble("energyStored"));
+		this.powerNetwork.setPowerStored(compound.getDouble("powerStored"));
 	}
 
 	@Override

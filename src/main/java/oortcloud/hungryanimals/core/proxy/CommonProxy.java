@@ -14,7 +14,6 @@ import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler;
-import oortcloud.hungryanimals.items.event.BucketEventHandler;
 import oortcloud.hungryanimals.recipes.event.CraftingEventHandler;
 import oortcloud.hungryanimals.tileentities.TileEntityAxle;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
@@ -68,7 +67,6 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHandler());
-		MinecraftForge.EVENT_BUS.register(new BucketEventHandler());
 	}
 
 	public void registerKeyBindings() {
