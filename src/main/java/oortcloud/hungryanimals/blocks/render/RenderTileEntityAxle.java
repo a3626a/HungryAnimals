@@ -15,34 +15,30 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 
-	public static final ResourceLocation texture_Axle = new ResourceLocation(
-			References.MODID, "textures/blocks/ModelAxle.png");
-	public static final ResourceLocation texture_Wheel = new ResourceLocation(
-			References.MODID, "textures/blocks/ModelWheel.png");
+	public static final ResourceLocation texture_Axle = new ResourceLocation(References.MODID, "textures/blocks/ModelAxle.png");
+	public static final ResourceLocation texture_Wheel = new ResourceLocation(References.MODID, "textures/blocks/ModelWheel.png");
 	private ModelAxle modelAxle;
 	private ModelWheel modelWheel;
-	private ModelWheelBelt modelBelt;
 
 	public RenderTileEntityAxle() {
 		modelAxle = new ModelAxle();
 		modelWheel = new ModelWheel();
-		modelBelt = new ModelWheelBelt();
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x,
-			double y, double z, float partialTick, int p_180535_9_) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTick, int p_180535_9_) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glRotatef(0, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(0.0F, +0.0F, 0.0F);
 		GL11.glRotatef(180, 0.0F, 0.0F, 1.0F);
 		GL11.glPushMatrix();
-		
+
 		TileEntityAxle axle = (TileEntityAxle) tileentity;
 		IBlockState state = tileentity.getWorld().getBlockState(tileentity.getPos());
-		if (state.getBlock() != ModBlocks.axle) return;
-		
+		if (state.getBlock() != ModBlocks.axle)
+			return;
+
 		if (state.getValue(BlockAxle.VARIANT) == Boolean.FALSE) {
 			this.bindTexture(texture_Axle);
 			this.modelAxle.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
@@ -53,19 +49,9 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 			this.bindTexture(texture_Wheel);
 			this.modelWheel.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
 		}
-		/*
-		if (state.getValue(BlockAxle.VARIANT) == BlockAxle.EnumType.BELT) {
-			this.bindTexture(texture_Axle);
-			this.modelAxle.renderModel(0.0625F, axle.getNetwork().getAngle(partialTick));
-			this.bindTexture(texture_Wheel);
-			this.modelWheel.renderModel(0.0625F, axle.getNetwork().getAngle(partialTick));
-			this.bindTexture(texture_Axle);
-			this.modelBelt.renderModel(0.0625F, ((EnumFacing)state.getValue(BlockAxle.FACING)).getHorizontalIndex()*90);
-		}
-		*/
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-		
+
 	}
 
 }

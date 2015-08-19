@@ -16,11 +16,11 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderTileEntityThresher extends TileEntitySpecialRenderer {
 
-	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/ModelThresher__.png");
-	private ModelThresher__ modelThresher;
+	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/ModelThresher.png");
+	private ModelThresher modelThresher;
 
 	public RenderTileEntityThresher() {
-		modelThresher = new ModelThresher__();
+		modelThresher = new ModelThresher();
 	}
 
 	@Override
