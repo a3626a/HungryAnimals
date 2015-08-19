@@ -46,6 +46,9 @@ public class ItemBelt extends Item {
 		}
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SelectedBlockPos")) {
 			BlockPos selectedPos = BlockPos.fromLong(stack.getTagCompound().getLong("SelectedBlockPos"));
+			if (pos.equals(selectedPos)) {
+				return false;
+			}
 			if (pos.getY()!=selectedPos.getY()) {
 				return false;
 			}
@@ -88,11 +91,11 @@ public class ItemBelt extends Item {
 		}
 	}
 
-	public boolean isValidAxle(World worldIn, BlockPos pos) {
+	public static boolean isValidAxle(World worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos) == ModBlocks.axle.getDefaultState().withProperty(BlockAxle.VARIANT, true);
 	}
 
-	public boolean isConnected(World worldIn, TileEntityAxle axle) {
+	public static boolean isConnected(World worldIn, TileEntityAxle axle) {
 		if (axle.getConnectedAxle() == null) {
 			return false;
 		} else {
