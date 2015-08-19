@@ -75,7 +75,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glColor4f(1, 0, 0, 1);
+				GL11.glColor4f(0.78F, 0.36F, 0.21F, 1);
 				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 				drawBelt(tessellator,renderer,2/16.0,-5/16.0,-2/16.0,-5/16.0);
 				drawBelt(tessellator,renderer,-2/16.0,-5/16.0,-5/16.0,-2/16.0);
