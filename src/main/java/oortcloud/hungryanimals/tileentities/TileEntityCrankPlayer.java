@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.tileentities;
 
 import oortcloud.hungryanimals.energy.PowerNetwork;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -29,4 +31,8 @@ public class TileEntityCrankPlayer extends TileEntityPowerTransporter
 
 	}
 
+	@Override
+	public BlockPos[] getConnectedBlocks() {
+		return new BlockPos[] {pos.down()};
+	}
 }

@@ -10,5 +10,5 @@ public interface IPowerTransporter {
 	public void setPowerNetwork(PowerNetwork powerNetwork);
 	public void mergePowerNetwork(PowerNetwork powerNetwork);
 	public double getPowerCapacity();
-	public BlockPos[] getConnectedBlocks(World world, BlockPos pos);
+	public BlockPos[] getConnectedBlocks();
 }

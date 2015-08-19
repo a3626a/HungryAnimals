@@ -166,4 +166,8 @@ public class TileEntityCrankAnimal extends TileEntityPowerTransporter {
 			leashedAnimalID = compound.getInteger("leashedAnimalID");
 	}
 
+	@Override
+	public BlockPos[] getConnectedBlocks() {
+		return new BlockPos[] {pos.up(), pos.down()};
+	}
 }

@@ -11,8 +11,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -293,4 +295,8 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 		return true;
 	}
 
+	@Override
+	public BlockPos[] getConnectedBlocks() {
+		return new BlockPos[] {pos.up(), pos.down()};
+	}
 }

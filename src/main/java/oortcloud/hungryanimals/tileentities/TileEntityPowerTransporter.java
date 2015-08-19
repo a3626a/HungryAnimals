@@ -1,23 +1,26 @@
 package oortcloud.hungryanimals.tileentities;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.energy.PowerNetwork;
 
-public class TileEntityPowerTransporter extends TileEntity implements IUpdatePlayerListBox, IPowerTransporter {
-	
+public abstract class TileEntityPowerTransporter extends TileEntity implements IUpdatePlayerListBox, IPowerTransporter {
+
 	protected PowerNetwork powerNetwork;
 	protected double powerCapacity;
-	private boolean isInitialized=false;
-	
+	private boolean isInitialized = false;
+
 	public TileEntityPowerTransporter() {
 		powerCapacity = PowerNetwork.powerUnit;
-		powerNetwork = new PowerNetwork();
+		powerNetwork = new PowerNetwork(powerCapacity);
 	}
 
 	public void setNetwork(PowerNetwork net) {
@@ -27,41 +30,47 @@ public class TileEntityPowerTransporter extends TileEntity implements IUpdatePla
 	@Override
 	public void mergePowerNetwork(PowerNetwork powerNetwork) {
 		if (powerNetwork != this.powerNetwork) {
-			double containedPower = this.powerNetwork.getPowerStored()/this.powerNetwork.getPowerCapacity()*this.powerNetwork.getPowerCapacity();
-			this.powerNetwork.setPowerStored(this.powerNetwork.getPowerStored()-containedPower);
-			this.powerNetwork.setPowerCapacity(this.powerNetwork.getPowerCapacity()-this.powerNetwork.getPowerCapacity());
-			powerNetwork.setPowerCapacity(powerNetwork.getPowerCapacity()+this.powerNetwork.getPowerCapacity());
-			powerNetwork.setPowerStored(powerNetwork.getPowerStored()+containedPower);;
-			
+			double containedPower = this.powerNetwork.getPowerStored() / this.powerNetwork.getPowerCapacity() * this.getPowerCapacity();
+			this.powerNetwork.setPowerStored(this.powerNetwork.getPowerStored() - containedPower);
+			this.powerNetwork.setPowerCapacity(this.powerNetwork.getPowerCapacity() - this.getPowerCapacity());
+			powerNetwork.setPowerCapacity(powerNetwork.getPowerCapacity() + this.getPowerCapacity());
+			powerNetwork.setPowerStored(powerNetwork.getPowerStored() + containedPower);
+
 			this.setPowerNetwork(powerNetwork);
-		}
-		
-		for (BlockPos i : getConnectedBlocks(getWorld(), pos)) {
-			TileEntity tileEntity = getWorld().getTileEntity(pos);
-			if (tileEntity!=null&&!tileEntity.isInvalid()&&tileEntity instanceof IPowerTransporter) {
-				IPowerTransporter nextPowerTransporter = (IPowerTransporter)tileEntity;
-				nextPowerTransporter.mergePowerNetwork(powerNetwork);
+
+			for (BlockPos i : this.getConnectedBlocks()) {
+				if (getWorld().getChunkProvider().chunkExists(i.getX() >> 4, i.getZ() >> 4)) {
+					TileEntity tileEntity = getWorld().getChunkFromBlockCoords(i).getTileEntity(i, EnumCreateEntityType.CHECK);
+					if (tileEntity != null && !tileEntity.isInvalid() && tileEntity instanceof IPowerTransporter) {
+						IPowerTransporter nextPowerTransporter = (IPowerTransporter) tileEntity;
+						if (ArrayUtils.contains(nextPowerTransporter.getConnectedBlocks(), pos))
+							nextPowerTransporter.mergePowerNetwork(powerNetwork);
+					}
+				}
 			}
 		}
 	}
+
 	@Override
 	public void validate() {
-		this.mergePowerNetwork(new PowerNetwork(0));
 		super.validate();
+		this.mergePowerNetwork(new PowerNetwork(0));
 	}
-	
+
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		for (BlockPos i : getConnectedBlocks(getWorld(), pos)) {
-			TileEntity tileEntity = getWorld().getTileEntity(pos);
-			if (tileEntity!=null&&!tileEntity.isInvalid()&&tileEntity instanceof IPowerTransporter) {
-				IPowerTransporter powerTransporter = (IPowerTransporter)tileEntity;
-				powerTransporter.mergePowerNetwork(new PowerNetwork(0));
+		for (BlockPos i : getConnectedBlocks()) {
+			if (getWorld().getChunkProvider().chunkExists(i.getX() >> 4, i.getZ() >> 4)) {
+				TileEntity tileEntity = getWorld().getChunkFromBlockCoords(i).getTileEntity(i, EnumCreateEntityType.CHECK);
+				if (tileEntity != null && !tileEntity.isInvalid() && tileEntity instanceof IPowerTransporter) {
+					IPowerTransporter powerTransporter = (IPowerTransporter) tileEntity;
+					powerTransporter.mergePowerNetwork(new PowerNetwork(0));
+				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void update() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
@@ -93,13 +102,11 @@ public class TileEntityPowerTransporter extends TileEntity implements IUpdatePla
 
 	@Override
 	public void setPowerNetwork(PowerNetwork powerNetwork) {
-		this.powerNetwork=powerNetwork;
+		this.powerNetwork = powerNetwork;
 	}
 
 	@Override
-	public BlockPos[] getConnectedBlocks(World world, BlockPos pos) {
-		return new BlockPos[] {};
-	}
+	abstract public BlockPos[] getConnectedBlocks();
 
 	@Override
 	public double getPowerCapacity() {

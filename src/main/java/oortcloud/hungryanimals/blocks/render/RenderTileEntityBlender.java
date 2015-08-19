@@ -34,7 +34,7 @@ public class RenderTileEntityBlender extends TileEntitySpecialRenderer {
 		this.bindTexture(texture);
 
 		this.modelBlender.renderModel(0.0625F, blender.getPowerNetwork().getAngle(partialTick));
-
+		
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 

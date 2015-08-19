@@ -15,6 +15,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -353,5 +354,10 @@ public class TileEntityBlender extends TileEntityPowerTransporter implements IIn
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
 		return true;
 	}
-
+	
+	@Override
+	public BlockPos[] getConnectedBlocks() {
+		return new BlockPos[] {pos.up()};
+	}
+	
 }

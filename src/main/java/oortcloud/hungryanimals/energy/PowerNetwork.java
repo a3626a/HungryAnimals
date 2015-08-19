@@ -70,7 +70,6 @@ public class PowerNetwork {
 	}
 
 	public void update(World world, BlockPos pos) {
-		
 		if (world.isRemote) {
 			if (world.getWorldTime() != this.lastWorldtick) {
 				this.angle = (this.angle+this.angularVelocity)%360;

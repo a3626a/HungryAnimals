@@ -41,9 +41,15 @@ public class BlockAxle extends BlockContainer {
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModBlocks.register(this);
 	}
-
+	
+	@Override
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] { VARIANT });
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileEntityAxle();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -64,11 +70,6 @@ public class BlockAxle extends BlockContainer {
 	@Override
 	public boolean isFullCube() {
 		return false;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityAxle();
 	}
 
 	@Override
