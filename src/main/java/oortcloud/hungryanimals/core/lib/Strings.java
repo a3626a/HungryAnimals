@@ -38,7 +38,6 @@ public class Strings {
 	public static final String itemTendonName = "itemtendon";
 	public static final String itemDebugGlassName = "itemdebugglass";
 	public static final String itemWheelName = "itemwheel";
-	public static final String itemBeltName = "itembelt";
 	public static final String itemStrawName = "itemstraw";
 	public static final String itemPoppySeedName = "itempoppyseed";
 	public static final String itemPoppyCropName = "itempoppycrop";
