@@ -32,6 +32,7 @@ public class ModItems {
 	public static Item blade;
 	public static Item crankAnimal;
 	public static Item oilpipet;
+	public static Item belt;
 	
 	public static void init() {
 		trough = new ItemTrough();
@@ -42,6 +43,7 @@ public class ModItems {
 		poppyseed = new ItemPoppySeed();
 		crankAnimal = new ItemCrankAnimal();
 		oilpipet = new ItemOilPipet(1000);
+		belt = new ItemBelt();
 		manure = new Item().setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemManureName).setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModItems.register(manure);
 		woodash = new Item().setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemWoodashName).setCreativeTab(HungryAnimals.tabHungryAnimals);
@@ -68,14 +70,8 @@ public class ModItems {
 		ModItems.register(blade);
 	}
 
-	public static String getUnwrappedUnlocalizedName(String unlocalizedName) {
-		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
-
-	}
-
 	public static String getName(String unlocalizedName) {
 		return unlocalizedName.substring(unlocalizedName.indexOf(":") + 1);
-
 	}
 
 	public static void register(Item item) {

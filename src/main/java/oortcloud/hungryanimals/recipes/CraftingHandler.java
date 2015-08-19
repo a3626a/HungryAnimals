@@ -50,5 +50,7 @@ public class CraftingHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.blade), "aab","aab",'b', new ItemStack(ModItems.compositeWood), 'a', "ingotIron"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.trapcover), "a a", " a ","a a" ,'a', "stickWood"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.oilpipet), " aa", " ba","b  " ,'a', "dyeRed", 'b', "blockGlass"));
+		CraftingManager.getInstance().addRecipe(new ItemStack(ModItems.belt,1,4), "aba","b b", "aba",'a',new ItemStack(Items.leather), 'b', new ItemStack(ModItems.animalGlue));
+		CraftingManager.getInstance().addRecipe(new ItemStack(ModItems.belt,1,4), "aba","b b", "aba",'b',new ItemStack(Items.leather), 'a', new ItemStack(ModItems.animalGlue));
 	}
 }

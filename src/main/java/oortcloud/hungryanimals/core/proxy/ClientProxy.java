@@ -1,11 +1,13 @@
 package oortcloud.hungryanimals.core.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -88,6 +90,12 @@ public class ClientProxy extends CommonProxy {
 		mesher.register(ModItems.blade, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBladeName, "inventory"));
 		mesher.register(ModItems.crankAnimal, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemCrankAnimalName, "inventory"));
 		mesher.register(ModItems.oilpipet, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemOilPipetName, "inventory"));
+		mesher.register(ModItems.belt, new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				return new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBeltName, "inventory");
+			}
+		});
 	}
 
 	public void registerTileEntityRendering() {
