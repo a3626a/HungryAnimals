@@ -46,6 +46,9 @@ public class ItemBelt extends Item {
 		}
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SelectedBlockPos")) {
 			BlockPos selectedPos = BlockPos.fromLong(stack.getTagCompound().getLong("SelectedBlockPos"));
+			if (pos.getY()!=selectedPos.getY()) {
+				return false;
+			}
 			if (!isValidAxle(worldIn, selectedPos)) {
 				stack.getTagCompound().removeTag("SelectedBlockPos");
 				return false;
