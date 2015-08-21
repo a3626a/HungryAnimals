@@ -39,10 +39,6 @@ import com.google.common.base.Predicate;
 public class BlockExcreta extends BlockFalling {
 
 	public static final PropertyEnum CONTENT = PropertyEnum.create("content", BlockExcreta.EnumType.class);
-	// public static final PropertyInteger MANURE =
-	// PropertyInteger.create("manure", 0, 4);
-	// public static final PropertyInteger EXCRETA =
-	// PropertyInteger.create("excreta", 0, 4);
 
 	private static int[] metaToManure = { 1, 2, 3, 4, 0, 1, 2, 3, 0, 1, 2, 0, 1, 0, 0, 0 };
 	private static int[] metaToExcreta = { 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 0, 0 };
@@ -144,8 +140,10 @@ public class BlockExcreta extends BlockFalling {
 	@Override
 	public float getBlockHardness(World worldIn, BlockPos pos) {
 		IBlockState meta = worldIn.getBlockState(pos);
-
-		return (((EnumType) meta.getValue(CONTENT)).exc + ((EnumType) meta.getValue(CONTENT)).man) * hardnessConstant;
+		if (meta.getBlock() == this) {
+			return (((EnumType) meta.getValue(CONTENT)).exc + ((EnumType) meta.getValue(CONTENT)).man) * hardnessConstant;
+		}
+		return 0;
 	}
 
 	@Override
