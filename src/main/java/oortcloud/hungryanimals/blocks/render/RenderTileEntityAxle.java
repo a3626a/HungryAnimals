@@ -1,6 +1,7 @@
 package oortcloud.hungryanimals.blocks.render;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -72,18 +73,30 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 
 				Tessellator tessellator = Tessellator.getInstance();
 				WorldRenderer renderer = tessellator.getWorldRenderer();
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+				/*
+				 * GL11.glEnable(GL11.GL_BLEND);
+				 * GL11.glDisable(GL11.GL_TEXTURE_2D);
+				 * OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+				 */
+				GlStateManager.disableTexture2D();
+				GlStateManager.enableBlend();
+				GlStateManager.disableAlpha();
+				GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+				GlStateManager.shadeModel(7425);
 				drawBelt3(tessellator, renderer, 2 / 16.0, -5 / 16.0, distance, externalAngle);
 				drawBelt1(tessellator, renderer, 2 / 16.0, -5 / 16.0, -2 / 16.0, -5 / 16.0);
 				drawBelt1(tessellator, renderer, -2 / 16.0, -5 / 16.0, -5 / 16.0, -2 / 16.0);
 				drawBelt1(tessellator, renderer, -5 / 16.0, -2 / 16.0, -5 / 16.0, +2 / 16.0);
 				drawBelt1(tessellator, renderer, -5 / 16.0, +2 / 16.0, -2 / 16.0, +5 / 16.0);
-				drawBelt2(tessellator, renderer, -2 / 16.0, +5 / 16.0 , distance, externalAngle);
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glColor4f(1, 1, 1, 1);
+				drawBelt2(tessellator, renderer, -2 / 16.0, +5 / 16.0, distance, externalAngle);
+				/*
+				 * GL11.glEnable(GL11.GL_TEXTURE_2D);
+				 * GL11.glDisable(GL11.GL_BLEND); GL11.glColor4f(1, 1, 1, 1);
+				 */
+				GlStateManager.shadeModel(7424);
+				GlStateManager.disableBlend();
+				GlStateManager.enableAlpha();
+				GlStateManager.enableTexture2D();
 			}
 		}
 		GL11.glPopMatrix();
@@ -138,37 +151,37 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		renderer.addVertex(x + dx, -2 / 16.0, z + dz);
 		renderer.addVertex(x, -2 / 16.0, z);
 		tessellator.draw();
-		
+
 		double radius = 0.125;
-		double length = Math.sqrt(x*x + z*z);
-		double ddx = radius * Math.cos(Math.toRadians(angle+90));
-		double ddz = radius * Math.sin(Math.toRadians(angle+90));
+		double length = Math.sqrt(x * x + z * z);
+		double ddx = radius * Math.cos(Math.toRadians(angle + 90));
+		double ddz = radius * Math.sin(Math.toRadians(angle + 90));
 		renderer.startDrawingQuads();
 		renderer.setColorRGBA(198, 92, 53, 255);
 		renderer.addVertex(x + dx + ddx, 2 / 16.0, z + dz + ddz);
-		renderer.addVertex(x + radius*(x/length), 2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), 2 / 16.0, z + radius * (z / length));
 		renderer.setColorRGBA(158, 73, 42, 255);
-		renderer.addVertex(x + radius*(x/length), -2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), -2 / 16.0, z + radius * (z / length));
 		renderer.addVertex(x + dx + ddx, -2 / 16.0, z + dz + ddz);
 		tessellator.draw();
-		
+
 		renderer.startDrawingQuads();
 		renderer.setColorRGBA(158, 73, 42, 255);
 		renderer.addVertex(x, -2 / 16.0, z);
 		renderer.addVertex(x + dx, -2 / 16.0, z + dz);
 		renderer.addVertex(x + dx + ddx, -2 / 16.0, z + dz + ddz);
-		renderer.addVertex(x + radius*(x/length), -2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), -2 / 16.0, z + radius * (z / length));
 		tessellator.draw();
-		
+
 		renderer.startDrawingQuads();
 		renderer.setColorRGBA(198, 92, 53, 255);
-		renderer.addVertex(x + radius*(x/length), 2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), 2 / 16.0, z + radius * (z / length));
 		renderer.addVertex(x + dx + ddx, 2 / 16.0, z + dz + ddz);
 		renderer.addVertex(x + dx, 2 / 16.0, z + dz);
 		renderer.addVertex(x, 2 / 16.0, z);
 		tessellator.draw();
 	}
-	
+
 	public void drawBelt3(Tessellator tessellator, WorldRenderer renderer, double x, double z, double distance, double angle) {
 		double dx = distance / 2.0 * Math.cos(Math.toRadians(angle));
 		double dz = distance / 2.0 * Math.sin(Math.toRadians(angle));
@@ -180,34 +193,34 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		renderer.addVertex(x, -2 / 16.0, z);
 		renderer.addVertex(x + dx, -2 / 16.0, z + dz);
 		tessellator.draw();
-		
+
 		double radius = 0.125;
-		double length = Math.sqrt(x*x + z*z);
-		double ddx = radius * Math.cos(Math.toRadians(angle-90));
-		double ddz = radius * Math.sin(Math.toRadians(angle-90));
+		double length = Math.sqrt(x * x + z * z);
+		double ddx = radius * Math.cos(Math.toRadians(angle - 90));
+		double ddz = radius * Math.sin(Math.toRadians(angle - 90));
 		renderer.startDrawingQuads();
 		renderer.setColorRGBA(198, 92, 53, 255);
-		renderer.addVertex(x + radius*(x/length), 2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), 2 / 16.0, z + radius * (z / length));
 		renderer.addVertex(x + dx + ddx, 2 / 16.0, z + dz + ddz);
 		renderer.setColorRGBA(158, 73, 42, 255);
 		renderer.addVertex(x + dx + ddx, -2 / 16.0, z + dz + ddz);
-		renderer.addVertex(x + radius*(x/length), -2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), -2 / 16.0, z + radius * (z / length));
 		tessellator.draw();
-		
+
 		renderer.startDrawingQuads();
 		renderer.setColorRGBA(198, 92, 53, 255);
 		renderer.addVertex(x, 2 / 16.0, z);
 		renderer.addVertex(x + dx, 2 / 16.0, z + dz);
 		renderer.addVertex(x + dx + ddx, 2 / 16.0, z + dz + ddz);
-		renderer.addVertex(x + radius*(x/length), 2 / 16.0, z + radius*(z/length));
+		renderer.addVertex(x + radius * (x / length), 2 / 16.0, z + radius * (z / length));
 		tessellator.draw();
-		
+
 		renderer.startDrawingQuads();
 		renderer.setColorRGBA(158, 73, 42, 255);
-		renderer.addVertex(x + radius*(x/length), - 2 / 16.0, z + radius*(z/length));
-		renderer.addVertex(x + dx + ddx, - 2 / 16.0, z + dz + ddz);
-		renderer.addVertex(x + dx, - 2 / 16.0, z + dz);
-		renderer.addVertex(x, - 2 / 16.0, z);
+		renderer.addVertex(x + radius * (x / length), -2 / 16.0, z + radius * (z / length));
+		renderer.addVertex(x + dx + ddx, -2 / 16.0, z + dz + ddz);
+		renderer.addVertex(x + dx, -2 / 16.0, z + dz);
+		renderer.addVertex(x, -2 / 16.0, z);
 		tessellator.draw();
 	}
 }
