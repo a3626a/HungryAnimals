@@ -1,10 +1,14 @@
 package oortcloud.hungryanimals.tileentities;
 
+import oortcloud.hungryanimals.blocks.BlockAxle;
+import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.energy.PowerNetwork;
+import oortcloud.hungryanimals.items.ItemBelt;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -55,4 +59,45 @@ public class TileEntityAxle extends TileEntityPowerTransporter {
 			connectedAxle=BlockPos.fromLong(compound.getLong("connectedAxle"));
 		}
 	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		if (TileEntityAxle.isConnected(worldObj, this)) {
+			return super.getRenderBoundingBox().expand(getBeltLength(), 0, getBeltLength());
+		}
+		return super.getRenderBoundingBox();
+
+	}
+	
+	public int getBeltLength() {
+		double dist = pos.distanceSq(this.getConnectedAxle());
+		int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
+		return requiredBelt;
+	}
+	
+	public static boolean isValidAxle(World worldIn, BlockPos pos) {
+		return worldIn.getBlockState(pos) == ModBlocks.axle.getDefaultState().withProperty(BlockAxle.VARIANT, true);
+	}
+	
+	public static boolean isConnected(World worldIn, TileEntityAxle axle) {
+		if (axle.getConnectedAxle() == null) {
+			return false;
+		} else {
+			if (!isValidAxle(worldIn, axle.getConnectedAxle())) {
+				return false;
+			} else {
+				TileEntityAxle axleConnected = (TileEntityAxle) worldIn.getTileEntity(axle.getConnectedAxle());
+				if (axleConnected == null) {
+					return false;
+				} else {
+					if (axleConnected.getConnectedAxle() == null) {
+						return false;
+					} else {
+						return axle.getPos().equals(axleConnected.getConnectedAxle());
+					}
+				}
+			}
+		}
+	}
+	
 }

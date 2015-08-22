@@ -86,9 +86,8 @@ public class BlockAxle extends BlockContainer {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity != null && tileEntity instanceof TileEntityAxle) {
 			TileEntityAxle axle = (TileEntityAxle)tileEntity;
-			if (ItemBelt.isConnected(tileEntity.getWorld(),axle)) {
-				double dist = pos.distanceSq(axle.getConnectedAxle());
-				int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
+			if (TileEntityAxle.isConnected(tileEntity.getWorld(),axle)) {
+				int requiredBelt = axle.getBeltLength();
 				spawnAsEntity(worldIn, pos, new ItemStack(ModItems.belt, 1, requiredBelt));
 			}
 		}

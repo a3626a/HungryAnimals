@@ -59,7 +59,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
 		if (state.getValue(BlockAxle.VARIANT) == Boolean.TRUE) {
-			if (ItemBelt.isConnected(getWorld(), axle)) {
+			if (TileEntityAxle.isConnected(getWorld(), axle)) {
 				// Use degree, not radian
 				double offsetX = axle.getConnectedAxle().getX() - axle.getPos().getX();
 				double offsetZ = axle.getConnectedAxle().getZ() - axle.getPos().getZ();

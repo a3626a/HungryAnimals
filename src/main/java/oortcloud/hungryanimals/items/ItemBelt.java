@@ -41,7 +41,7 @@ public class ItemBelt extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!isValidAxle(worldIn, pos)) {
+		if (!TileEntityAxle.isValidAxle(worldIn, pos)) {
 			return false;
 		}
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SelectedBlockPos")) {
@@ -52,21 +52,20 @@ public class ItemBelt extends Item {
 			if (pos.getY()!=selectedPos.getY()) {
 				return false;
 			}
-			if (!isValidAxle(worldIn, selectedPos)) {
+			if (!TileEntityAxle.isValidAxle(worldIn, selectedPos)) {
 				stack.getTagCompound().removeTag("SelectedBlockPos");
 				return false;
 			}
 			TileEntityAxle axle1 = (TileEntityAxle) worldIn.getTileEntity(selectedPos);
 			TileEntityAxle axle2 = (TileEntityAxle) worldIn.getTileEntity(pos);
-			if (axle1 == null || isConnected(worldIn, axle1)) {
+			if (axle1 == null || TileEntityAxle.isConnected(worldIn, axle1)) {
 				stack.getTagCompound().removeTag("SelectedBlockPos");
 				return false;
 			}
-			if (axle2 == null || isConnected(worldIn, axle2)) {
+			if (axle2 == null || TileEntityAxle.isConnected(worldIn, axle2)) {
 				return false;
 			}
-			double dist = pos.distanceSq(selectedPos);
-			int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
+			int requiredBelt = axle1.getBeltLength();
 			if (requiredBelt <= Math.min(stack.getItemDamage(), MAX_LENGTH)) {
 				stack.setItemDamage(stack.getItemDamage() - requiredBelt);
 				axle1.setConnectedAxle(pos);
@@ -81,7 +80,7 @@ public class ItemBelt extends Item {
 			return false;
 		} else {
 			TileEntityAxle axle = (TileEntityAxle) worldIn.getTileEntity(pos);
-			if (axle != null && !isConnected(worldIn, axle)) {
+			if (axle != null && !TileEntityAxle.isConnected(worldIn, axle)) {
 				if (!stack.hasTagCompound()) {
 					stack.setTagCompound(new NBTTagCompound());
 				}
@@ -89,31 +88,6 @@ public class ItemBelt extends Item {
 				return true;
 			}
 			return false;
-		}
-	}
-
-	public static boolean isValidAxle(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos) == ModBlocks.axle.getDefaultState().withProperty(BlockAxle.VARIANT, true);
-	}
-
-	public static boolean isConnected(World worldIn, TileEntityAxle axle) {
-		if (axle.getConnectedAxle() == null) {
-			return false;
-		} else {
-			if (!isValidAxle(worldIn, axle.getConnectedAxle())) {
-				return false;
-			} else {
-				TileEntityAxle axleConnected = (TileEntityAxle) worldIn.getTileEntity(axle.getConnectedAxle());
-				if (axleConnected == null) {
-					return false;
-				} else {
-					if (axleConnected.getConnectedAxle() == null) {
-						return false;
-					} else {
-						return axle.getPos().equals(axleConnected.getConnectedAxle());
-					}
-				}
-			}
 		}
 	}
 
