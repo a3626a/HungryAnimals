@@ -124,7 +124,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		tessellator.draw();
 
 		renderer.startDrawingQuads();
-		renderer.setColorRGBA(198, 92, 53, 255);
+		renderer.setColorRGBA(223, 104, 60, 255);
 		renderer.addVertex(x2, +2 / 16.0, z2);
 		renderer.addVertex(x1, +2 / 16.0, z1);
 		renderer.addVertex(x1 + radius * (x1 / length), +2 / 16.0, z1 + radius * (z1 / length));
@@ -132,7 +132,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		tessellator.draw();
 
 		renderer.startDrawingQuads();
-		renderer.setColorRGBA(158, 73, 42, 255);
+		renderer.setColorRGBA(136, 63, 36, 255);
 		renderer.addVertex(x2 + radius * (x2 / length), -2 / 16.0, z2 + radius * (z2 / length));
 		renderer.addVertex(x1 + radius * (x1 / length), -2 / 16.0, z1 + radius * (z1 / length));
 		renderer.addVertex(x1, -2 / 16.0, z1);
@@ -166,7 +166,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		tessellator.draw();
 
 		renderer.startDrawingQuads();
-		renderer.setColorRGBA(158, 73, 42, 255);
+		renderer.setColorRGBA(136, 63, 36, 255);
 		renderer.addVertex(x, -2 / 16.0, z);
 		renderer.addVertex(x + dx, -2 / 16.0, z + dz);
 		renderer.addVertex(x + dx + ddx, -2 / 16.0, z + dz + ddz);
@@ -174,7 +174,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		tessellator.draw();
 
 		renderer.startDrawingQuads();
-		renderer.setColorRGBA(198, 92, 53, 255);
+		renderer.setColorRGBA(223, 104, 60, 255);
 		renderer.addVertex(x + radius * (x / length), 2 / 16.0, z + radius * (z / length));
 		renderer.addVertex(x + dx + ddx, 2 / 16.0, z + dz + ddz);
 		renderer.addVertex(x + dx, 2 / 16.0, z + dz);
@@ -208,7 +208,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		tessellator.draw();
 
 		renderer.startDrawingQuads();
-		renderer.setColorRGBA(198, 92, 53, 255);
+		renderer.setColorRGBA(223, 104, 60, 255);
 		renderer.addVertex(x, 2 / 16.0, z);
 		renderer.addVertex(x + dx, 2 / 16.0, z + dz);
 		renderer.addVertex(x + dx + ddx, 2 / 16.0, z + dz + ddz);
@@ -216,7 +216,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		tessellator.draw();
 
 		renderer.startDrawingQuads();
-		renderer.setColorRGBA(158, 73, 42, 255);
+		renderer.setColorRGBA(136, 63, 36, 255);
 		renderer.addVertex(x + radius * (x / length), -2 / 16.0, z + radius * (z / length));
 		renderer.addVertex(x + dx + ddx, -2 / 16.0, z + dz + ddz);
 		renderer.addVertex(x + dx, -2 / 16.0, z + dz);
