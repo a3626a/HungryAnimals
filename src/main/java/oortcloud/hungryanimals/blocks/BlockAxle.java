@@ -1,30 +1,28 @@
 package oortcloud.hungryanimals.blocks;
 
-import net.minecraft.block.Block;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.energy.PowerNetwork;
+import oortcloud.hungryanimals.items.ItemBelt;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.tileentities.TileEntityAxle;
 
@@ -73,6 +71,25 @@ public class BlockAxle extends BlockContainer {
 	}
 
 	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		List<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(new ItemStack(ModBlocks.axle));
+		if (state.getValue(VARIANT) == Boolean.TRUE) {
+			ret.add(new ItemStack(ModItems.wheel));
+		}
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity != null && tileEntity instanceof TileEntityAxle) {
+			TileEntityAxle axle = (TileEntityAxle)tileEntity;
+			if (ItemBelt.isConnected(tileEntity.getWorld(), axle)) {
+				double dist = pos.distanceSq(axle.getConnectedAxle());
+				int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
+				ret.add(new ItemStack(ModItems.belt, 1, requiredBelt));
+			}
+		}
+		return super.getDrops(world, pos, state, fortune);
+	}
+	
+	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 
 		ItemStack item = playerIn.inventory.getCurrentItem();
@@ -86,19 +103,6 @@ public class BlockAxle extends BlockContainer {
 					}
 				return true;
 			}
-			//TODO
-			/*
-			else if ((Boolean)meta.getValue(VARIANT) == true && item.getItem() == ItemBlock.getItemFromBlock(ModBlocks.belt)) {
-				worldIn.setBlockState(pos, meta.withProperty(VARIANT, EnumType.BELT), 2);
-				if (!playerIn.capabilities.isCreativeMode)
-					if (--item.stackSize == 0) {
-						playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-					}
-				if (!worldIn.isRemote)
-					setNetwork(worldIn, pos, new EnergyNetwork(0));
-				return true;
-			}
-			*/
 		}
 		return false;
 	}

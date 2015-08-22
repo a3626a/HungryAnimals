@@ -66,8 +66,9 @@ public class ItemBelt extends Item {
 				return false;
 			}
 			double dist = pos.distanceSq(selectedPos);
-			if (dist <= Math.min(stack.getItemDamage() * stack.getItemDamage(), MAX_LENGTH * MAX_LENGTH)) {
-				stack.setItemDamage(stack.getItemDamage() - (int) (Math.ceil(Math.sqrt(dist))));
+			int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
+			if (requiredBelt <= Math.min(stack.getItemDamage(), MAX_LENGTH)) {
+				stack.setItemDamage(stack.getItemDamage() - requiredBelt);
 				axle1.setConnectedAxle(pos);
 				axle2.setConnectedAxle(selectedPos);
 				axle1.mergePowerNetwork(new PowerNetwork(0));
