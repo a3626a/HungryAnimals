@@ -77,16 +77,22 @@ public class BlockAxle extends BlockContainer {
 		if (state.getValue(VARIANT) == Boolean.TRUE) {
 			ret.add(new ItemStack(ModItems.wheel));
 		}
-		TileEntity tileEntity = world.getTileEntity(pos);
+		
+		return ret;
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity != null && tileEntity instanceof TileEntityAxle) {
 			TileEntityAxle axle = (TileEntityAxle)tileEntity;
-			if (ItemBelt.isConnected(tileEntity.getWorld(), axle)) {
+			if (ItemBelt.isConnected(tileEntity.getWorld(),axle)) {
 				double dist = pos.distanceSq(axle.getConnectedAxle());
 				int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
-				ret.add(new ItemStack(ModItems.belt, 1, requiredBelt));
+				spawnAsEntity(worldIn, pos, new ItemStack(ModItems.belt, 1, requiredBelt));
 			}
 		}
-		return ret;
+		super.breakBlock(worldIn, pos, state);
 	}
 	
 	@Override
