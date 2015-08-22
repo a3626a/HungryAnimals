@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.blocks;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -10,17 +11,21 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemLead;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.energy.PowerNetwork;
+import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.tileentities.TileEntityCrankAnimal;
 
 public class BlockCrankAnimal extends BlockContainer {
@@ -32,41 +37,10 @@ public class BlockCrankAnimal extends BlockContainer {
 		ModBlocks.register(this);
 	}
 
-	/*
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-		TileEntityCrankAnimal crankAnimal = (TileEntityCrankAnimal) worldIn.getTileEntity(pos);
-		if (crankAnimal != null) {
-			BlockPos primaryPos = crankAnimal.getPrimaryPos();
-			BlockPos offset = pos.add(primaryPos.multiply(-1));
-			int index = offset.getX() * offset.getX() + offset.getZ() * offset.getZ();
-
-			double x1 = pos.getX();
-			double x2 = pos.getX() + 1;
-			double z1 = pos.getZ();
-			double z2 = pos.getZ() + 1;
-
-			if (index == 2) {
-				if (offset.getX() == 1) {
-					x1 = pos.getX();
-					x2 = pos.getX() + 0.5;
-				} else {
-					x1 = pos.getX() + 0.5;
-					x2 = pos.getX() + 1;
-				}
-				if (offset.getZ() == 1) {
-					z1 = pos.getZ();
-					z2 = pos.getZ() + 0.5;
-				} else {
-					z1 = pos.getZ() + 0.5;
-					z2 = pos.getZ() + 1;
-				}
-			}
-			return new AxisAlignedBB(x1, (double) pos.getY(), z1, x2, (double) pos.getY() + 1, z2);
-		}
-		return super.getCollisionBoundingBox(worldIn, pos, state);
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return null;
 	}
-*/
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -99,9 +73,11 @@ public class BlockCrankAnimal extends BlockContainer {
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		
 		TileEntityCrankAnimal crankAnimal = (TileEntityCrankAnimal) worldIn.getTileEntity(pos);
 
 		if (crankAnimal != null) {
+			if (crankAnimal.isPrimary()) spawnAsEntity(worldIn, pos, new ItemStack(ModItems.crankAnimal));
 			worldIn.destroyBlock(crankAnimal.getPrimaryPos(), false);
 		}
 
