@@ -86,7 +86,7 @@ public class BlockAxle extends BlockContainer {
 				ret.add(new ItemStack(ModItems.belt, 1, requiredBelt));
 			}
 		}
-		return super.getDrops(world, pos, state, fortune);
+		return ret;
 	}
 	
 	@Override
