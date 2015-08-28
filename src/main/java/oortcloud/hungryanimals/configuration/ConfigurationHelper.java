@@ -203,7 +203,6 @@ public class ConfigurationHelper {
 			return null;
 		}
 		return output;
-
 	}
 
 	/**

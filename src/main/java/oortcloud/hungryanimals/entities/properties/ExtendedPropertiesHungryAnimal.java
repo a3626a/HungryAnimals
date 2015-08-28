@@ -353,7 +353,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			IBlockState meta = this.worldObj.getBlockState(pos);
 			Block block = meta.getBlock();
 
-			if (block.equals(ModBlocks.excreta)) {
+			if (block == ModBlocks.excreta) {
 				int exc = ((BlockExcreta.EnumType) meta.getValue(BlockExcreta.CONTENT)).getExcreta();
 				int man = ((BlockExcreta.EnumType) meta.getValue(BlockExcreta.CONTENT)).getManure();
 				if (exc + man < 4) {
