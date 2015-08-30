@@ -149,7 +149,9 @@ public class BlockExcreta extends BlockFalling {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
 		IBlockState meta = worldIn.getBlockState(pos);
-		this.setBlockBounds(0, 0, 0, 1, 0.25F * (((EnumType) meta.getValue(CONTENT)).exc + ((EnumType) meta.getValue(CONTENT)).man), 1);
+		if (meta.getBlock() == this) {
+			this.setBlockBounds(0, 0, 0, 1, 0.25F * (((EnumType) meta.getValue(CONTENT)).exc + ((EnumType) meta.getValue(CONTENT)).man), 1);
+		}
 	}
 
 	@Override

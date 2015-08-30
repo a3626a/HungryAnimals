@@ -32,30 +32,26 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 public class SmartModelItemSlingshot implements ISmartItemModel {
 
-	public static final ModelResourceLocation modelresourcelocation_shooting = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemSlingShotName + "_shooting",
-			"inventory");
-	public static final ModelResourceLocation modelresourcelocation = new ModelResourceLocation(
-			References.RESOURCESPREFIX + Strings.itemSlingShotName, "inventory");
-	public static final ResourceLocation textureresourcelocation = new ResourceLocation(References.RESOURCESPREFIX + "items/"+Strings.itemSlingShotName+"_string");
-	
+	public static final ModelResourceLocation modelresourcelocation_shooting = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemSlingShotName + "_shooting", "inventory");
+	public static final ModelResourceLocation modelresourcelocation = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemSlingShotName, "inventory");
+	public static final ResourceLocation textureresourcelocation = new ResourceLocation(References.RESOURCESPREFIX + "items/" + Strings.itemSlingShotName + "_string");
+
 	private IBakedModel parent;
 	private IBakedModel iBakedModel;
 	private BakedQuad leftString;
 	private BakedQuad rightString;
 	private TextureAtlasSprite texture;
-	
+
 	public SmartModelItemSlingshot(IBakedModel iBakedModel) {
 		this.parent = iBakedModel;
 		this.iBakedModel = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getModel(modelresourcelocation_shooting);
 		this.texture = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getTextureMap().getAtlasSprite(SmartModelItemSlingshot.textureresourcelocation.toString());
 		float length = 0.6F;
-		this.leftString = new BakedQuad(Ints.concat(vertexToInts(12.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
-				vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0), vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 32),
-				vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 32)), 0, EnumFacing.UP);
+		this.leftString = new BakedQuad(Ints.concat(vertexToInts(12.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0), vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
+				vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 32), vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 32)), 0, EnumFacing.UP);
 
-		this.rightString = new BakedQuad(Ints.concat(vertexToInts(6.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
-				vertexToInts(4.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0), vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 32),
-				vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 32)), 0, EnumFacing.UP);
+		this.rightString = new BakedQuad(Ints.concat(vertexToInts(6.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0), vertexToInts(4.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
+				vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 32), vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 32)), 0, EnumFacing.UP);
 	}
 
 	@Override
@@ -102,13 +98,11 @@ public class SmartModelItemSlingshot implements ISmartItemModel {
 		int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
 		float length = (float) (inuseTick / 150.0 + 0.9);
 
-		this.leftString = new BakedQuad(Ints.concat(vertexToInts(12.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
-				vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0), vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 16),
-				vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 16)), 0, EnumFacing.UP);
+		this.leftString = new BakedQuad(Ints.concat(vertexToInts(12.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0), vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
+				vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 16), vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 16)), 0, EnumFacing.UP);
 
-		this.rightString = new BakedQuad(Ints.concat(vertexToInts(6.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
-				vertexToInts(4.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0), vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 16),
-				vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 16)), 0, EnumFacing.UP);
+		this.rightString = new BakedQuad(Ints.concat(vertexToInts(6.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0), vertexToInts(4.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
+				vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 16), vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 16)), 0, EnumFacing.UP);
 
 		if (inuseTick == itemStack.getMaxItemUseDuration()) {
 			return this.parent;
@@ -119,8 +113,7 @@ public class SmartModelItemSlingshot implements ISmartItemModel {
 	}
 
 	private int[] vertexToInts(float x, float y, float z, int color, float u, float v) {
-		return new int[] { Float.floatToRawIntBits(x), Float.floatToRawIntBits(y), Float.floatToRawIntBits(z), color, Float.floatToRawIntBits(texture.getInterpolatedU(u)),
-				Float.floatToRawIntBits(texture.getInterpolatedV(v)), 0 };
+		return new int[] { Float.floatToRawIntBits(x), Float.floatToRawIntBits(y), Float.floatToRawIntBits(z), color, Float.floatToRawIntBits(texture.getInterpolatedU(u)), Float.floatToRawIntBits(texture.getInterpolatedV(v)), 0 };
 	}
 
 }
