@@ -10,6 +10,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ItemLayerModel.BakedModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -71,8 +72,9 @@ public class ClientProxy extends CommonProxy {
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverWoolName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverWoolName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverHayName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverHayName, "inventory"));
 
-		mesher.register(ModItems.bola, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBolaName, "inventory"));
-		mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation);
+		mesher.register(ModItems.bola, 0, CameraTransformModelItemBola.modelresourcelocation_normal);
+		mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation_normal);
+		//mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation_shooting);
 		mesher.register(ModItems.debugGlass, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemDebugGlassName, "inventory"));
 		mesher.register(ModItems.trough, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemFoodBoxName, "inventory"));
 		mesher.register(ModItems.wheel, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemWheelName, "inventory"));
@@ -117,18 +119,18 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerCustomBakedModel(ModelBakeEvent event) {
 		Object object;
-		object = event.modelRegistry.getObject(CameraTransformModelItemBola.modelresourcelocation);
+		object = event.modelRegistry.getObject(CameraTransformModelItemBola.modelresourcelocation_spin);
 		if (object instanceof IBakedModel) {
 			IBakedModel existingModel = (IBakedModel) object;
 			CameraTransformModelItemBola customModel = new CameraTransformModelItemBola(existingModel);
-			event.modelRegistry.putObject(CameraTransformModelItemBola.modelresourcelocation, customModel);
+			event.modelRegistry.putObject(CameraTransformModelItemBola.modelresourcelocation_spin, customModel);
 		}
 
-		object = event.modelRegistry.getObject(SmartModelItemSlingshot.modelresourcelocation);
+		object = event.modelRegistry.getObject(SmartModelItemSlingshot.modelresourcelocation_normal);
 		if (object instanceof IBakedModel) {
 			IBakedModel existingModel = (IBakedModel) object;
 			SmartModelItemSlingshot customModel = new SmartModelItemSlingshot(existingModel);
-			event.modelRegistry.putObject(SmartModelItemSlingshot.modelresourcelocation, customModel);
+			event.modelRegistry.putObject(SmartModelItemSlingshot.modelresourcelocation_normal, customModel);
 		}
 	}
 

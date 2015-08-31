@@ -15,18 +15,21 @@ import net.minecraft.client.renderer.block.model.ModelBlock;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Lists;
 
-public class CameraTransformModelItemBola implements IBakedModel {
+public class CameraTransformModelItemBola implements ISmartItemModel {
 
 	IBakedModel model;
 	protected ItemCameraTransforms cameraTransforms;
-	public static final ModelResourceLocation modelresourcelocation = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBolaName + "_spin", "inventory");
-
+	public static final ModelResourceLocation modelresourcelocation_spin = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBolaName + "_spin", "inventory");
+	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemBolaName, "inventory");
+	
 	private static final float radiusFirst = (float) (Math.sqrt(2) * 6);
 	private static final float radiusThird = (float) (Math.sqrt(2) * 2.25);
 
@@ -70,6 +73,12 @@ public class CameraTransformModelItemBola implements IBakedModel {
 				* Math.sin(Math.toRadians(angle + 45))) / 16.0F)), new Vector3f(1.7F, 1.7F, 1.7F));
 
 		this.cameraTransforms = new ItemCameraTransforms(transThird, transFirst, model.getItemCameraTransforms().head, model.getItemCameraTransforms().gui);
+	}
+
+	@Override
+	public IBakedModel handleItemState(ItemStack stack) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

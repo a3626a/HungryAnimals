@@ -23,93 +23,80 @@ import oortcloud.hungryanimals.items.render.CameraTransformModelItemBola;
 import oortcloud.hungryanimals.items.render.SmartModelItemSlingshot;
 
 public class ItemSlingShot extends Item {
-	
-	public ItemSlingShot()
-    {
+
+	public ItemSlingShot() {
 		super();
-        this.maxStackSize = 1;
-        this.setMaxDamage(64);
-        this.setCreativeTab(HungryAnimals.tabHungryAnimals);
-		this.setUnlocalizedName(References.RESOURCESPREFIX
-				+ Strings.itemSlingShotName);
+		this.maxStackSize = 1;
+		this.setMaxDamage(64);
+		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
+		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemSlingShotName);
 		ModItems.register(this);
-    }
+	}
 
-    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int itemInUseCount)
-    {
-        int useDuration = this.getMaxItemUseDuration(stack) - itemInUseCount;
+	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int itemInUseCount) {
+		int useDuration = this.getMaxItemUseDuration(stack) - itemInUseCount;
 
-        ArrowLooseEvent event = new ArrowLooseEvent(player, stack, useDuration);
-        MinecraftForge.EVENT_BUS.post(event);
-        if (event.isCanceled())
-        {
-            return;
-        }
-        useDuration = event.charge;
+		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, useDuration);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.isCanceled()) {
+			return;
+		}
+		useDuration = event.charge;
 
-     
-        if (player.capabilities.isCreativeMode || player.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.cobblestone)))
-        {
-            float f = (float)useDuration / 20.0F;
-            f = (f * f + f * 2.0F) / 3.0F;
+		if (player.capabilities.isCreativeMode || player.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.cobblestone))) {
+			float f = (float) useDuration / 20.0F;
+			f = (f * f + f * 2.0F) / 3.0F;
 
-            if ((double)f < 0.1D)
-            {
-                return;
-            }
+			if ((double) f < 0.1D) {
+				return;
+			}
 
-            if (f > 1.0F)
-            {
-                f = 1.0F;
-            }
+			if (f > 1.0F) {
+				f = 1.0F;
+			}
 
-            EntitySlingShotBall entityball = new EntitySlingShotBall(world, player, f * 2.0F);
+			EntitySlingShotBall entityball = new EntitySlingShotBall(world, player, f * 2.0F);
 
-            stack.damageItem(1, player);
-            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+			stack.damageItem(1, player);
+			world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
-            if (!player.capabilities.isCreativeMode) {
-            	player.inventory.consumeInventoryItem(ItemBlock.getItemFromBlock(Blocks.cobblestone));
-            }
+			if (!player.capabilities.isCreativeMode) {
+				player.inventory.consumeInventoryItem(ItemBlock.getItemFromBlock(Blocks.cobblestone));
+			}
 
-            if (!world.isRemote)
-            {
-                world.spawnEntityInWorld(entityball);
-            }
-        }
-    }
+			if (!world.isRemote) {
+				world.spawnEntityInWorld(entityball);
+			}
+		}
+	}
 
-    public ItemStack onEaten(ItemStack p_77654_1_, World p_77654_2_, EntityPlayer p_77654_3_)
-    {
-        return p_77654_1_;
-    }
+	public ItemStack onEaten(ItemStack p_77654_1_, World p_77654_2_, EntityPlayer p_77654_3_) {
+		return p_77654_1_;
+	}
 
-    /**
-     * How long it takes to use or consume an item
-     */
-    public int getMaxItemUseDuration(ItemStack p_77626_1_)
-    {
-        return 72000;
-    }
-    
-    /**
-     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
-     */
-    public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_)
-    {
-        ArrowNockEvent event = new ArrowNockEvent(p_77659_3_, p_77659_1_);
-        MinecraftForge.EVENT_BUS.post(event);
-        if (event.isCanceled())
-        {
-            return event.result;
-        }
+	/**
+	 * How long it takes to use or consume an item
+	 */
+	public int getMaxItemUseDuration(ItemStack p_77626_1_) {
+		return 72000;
+	}
 
-        if (p_77659_3_.capabilities.isCreativeMode || p_77659_3_.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.cobblestone)))
-        {
-            p_77659_3_.setItemInUse(p_77659_1_, this.getMaxItemUseDuration(p_77659_1_));
-        }
+	/**
+	 * Called whenever this item is equipped and the right mouse button is
+	 * pressed. Args: itemStack, world, entityPlayer
+	 */
+	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_) {
+		ArrowNockEvent event = new ArrowNockEvent(p_77659_3_, p_77659_1_);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.isCanceled()) {
+			return event.result;
+		}
 
-        return p_77659_1_;
-    }
-    
+		if (p_77659_3_.capabilities.isCreativeMode || p_77659_3_.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.cobblestone))) {
+			p_77659_3_.setItemInUse(p_77659_1_, this.getMaxItemUseDuration(p_77659_1_));
+		}
+
+		return p_77659_1_;
+	}
+
 }

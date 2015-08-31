@@ -102,13 +102,13 @@ public class ItemBola extends Item {
 		} else {
 
 			CameraTransformModelItemBola model = (CameraTransformModelItemBola) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager()
-					.getModel(CameraTransformModelItemBola.modelresourcelocation);
+					.getModel(CameraTransformModelItemBola.modelresourcelocation_spin);
 
 			float angle = 0.3f * inuseTick * inuseTick + 10 * inuseTick;
 
 			model.setRotation(angle);
 
-			return CameraTransformModelItemBola.modelresourcelocation;
+			return CameraTransformModelItemBola.modelresourcelocation_spin;
 
 		}
 
