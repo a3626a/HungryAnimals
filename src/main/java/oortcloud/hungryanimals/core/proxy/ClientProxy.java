@@ -127,8 +127,8 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		object = event.modelRegistry.getObject(SmartModelItemSlingshot.modelresourcelocation_normal);
-		if (object instanceof IBakedModel) {
-			IBakedModel existingModel = (IBakedModel) object;
+		if (object instanceof BakedModel) {
+			BakedModel existingModel = (BakedModel) object;
 			SmartModelItemSlingshot customModel = new SmartModelItemSlingshot(existingModel);
 			event.modelRegistry.putObject(SmartModelItemSlingshot.modelresourcelocation_normal, customModel);
 		}

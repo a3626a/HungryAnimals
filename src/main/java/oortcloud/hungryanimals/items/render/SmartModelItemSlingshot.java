@@ -30,6 +30,7 @@ import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.client.model.ItemLayerModel.BakedModel;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
+import sun.net.ftp.FtpClient.TransferType;
 
 import com.google.common.primitives.Ints;
 
@@ -39,13 +40,13 @@ public class SmartModelItemSlingshot implements ISmartItemModel, IPerspectiveAwa
 	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemSlingShotName, "inventory");
 	public static final ResourceLocation textureresourcelocation = new ResourceLocation(References.RESOURCESPREFIX + "items/" + Strings.itemSlingShotName + "_string");
 
-	private IBakedModel model_normal;
+	private BakedModel model_normal;
 	private BakedModel model_shooting;
 	private BakedQuad leftString;
 	private BakedQuad rightString;
 	private TextureAtlasSprite texture;
 
-	public SmartModelItemSlingshot(IBakedModel iBakedModel) {
+	public SmartModelItemSlingshot(BakedModel iBakedModel) {
 		this.model_normal = iBakedModel;
 		this.model_shooting = (BakedModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getModel(modelresourcelocation_shooting);
 		this.texture = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getTextureMap().getAtlasSprite(SmartModelItemSlingshot.textureresourcelocation.toString());
@@ -97,7 +98,11 @@ public class SmartModelItemSlingshot implements ISmartItemModel, IPerspectiveAwa
 	
 	@Override
 	public Pair<IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-		return Pair.of((IBakedModel)this, model_shooting.handlePerspective(cameraTransformType).getRight());
+		if (cameraTransformType==TransformType.GUI) {
+			return model_normal.handlePerspective(cameraTransformType);
+		} else {
+			return Pair.of((IBakedModel)this, model_shooting.handlePerspective(cameraTransformType).getRight());
+		}
 	}
 	
 	@Override
