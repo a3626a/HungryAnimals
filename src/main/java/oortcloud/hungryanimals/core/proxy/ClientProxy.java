@@ -119,11 +119,11 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerCustomBakedModel(ModelBakeEvent event) {
 		Object object;
-		object = event.modelRegistry.getObject(CameraTransformModelItemBola.modelresourcelocation_spin);
-		if (object instanceof IBakedModel) {
-			IBakedModel existingModel = (IBakedModel) object;
+		object = event.modelRegistry.getObject(CameraTransformModelItemBola.modelresourcelocation_normal);
+		if (object instanceof BakedModel) {
+			BakedModel existingModel = (BakedModel) object;
 			CameraTransformModelItemBola customModel = new CameraTransformModelItemBola(existingModel);
-			event.modelRegistry.putObject(CameraTransformModelItemBola.modelresourcelocation_spin, customModel);
+			event.modelRegistry.putObject(CameraTransformModelItemBola.modelresourcelocation_normal, customModel);
 		}
 
 		object = event.modelRegistry.getObject(SmartModelItemSlingshot.modelresourcelocation_normal);

@@ -90,28 +90,4 @@ public class ItemBola extends Item {
 		return item;
 	}
 
-	@Override
-	public ModelResourceLocation getModel(ItemStack itemStack, EntityPlayer player, int useRemaining) {
-		int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
-
-		ItemBola item = ((ItemBola) itemStack.getItem());
-		if (inuseTick == itemStack.getMaxItemUseDuration()) {
-
-			return super.getModel(itemStack, player, useRemaining);
-
-		} else {
-
-			CameraTransformModelItemBola model = (CameraTransformModelItemBola) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager()
-					.getModel(CameraTransformModelItemBola.modelresourcelocation_spin);
-
-			float angle = 0.3f * inuseTick * inuseTick + 10 * inuseTick;
-
-			model.setRotation(angle);
-
-			return CameraTransformModelItemBola.modelresourcelocation_spin;
-
-		}
-
-	}
-
 }
