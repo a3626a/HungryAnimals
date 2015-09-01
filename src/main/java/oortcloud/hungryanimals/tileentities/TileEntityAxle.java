@@ -62,11 +62,10 @@ public class TileEntityAxle extends TileEntityPowerTransporter {
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		if (TileEntityAxle.isConnected(worldObj, this)) {
+		if (isConnected()) {
 			return super.getRenderBoundingBox().expand(getBeltLength(), 0, getBeltLength());
 		}
 		return super.getRenderBoundingBox();
-
 	}
 	
 	public int getBeltLength() {
@@ -75,29 +74,29 @@ public class TileEntityAxle extends TileEntityPowerTransporter {
 		return requiredBelt;
 	}
 	
-	public static boolean isValidAxle(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos) == ModBlocks.axle.getDefaultState().withProperty(BlockAxle.VARIANT, true);
-	}
-	
-	public static boolean isConnected(World worldIn, TileEntityAxle axle) {
-		if (axle.getConnectedAxle() == null) {
+	public boolean isConnected() {
+		if (this.getConnectedAxle() == null) {
 			return false;
 		} else {
-			if (!isValidAxle(worldIn, axle.getConnectedAxle())) {
+			if (!isValidAxle(worldObj, this.getConnectedAxle())) {
 				return false;
 			} else {
-				TileEntityAxle axleConnected = (TileEntityAxle) worldIn.getTileEntity(axle.getConnectedAxle());
+				TileEntityAxle axleConnected = (TileEntityAxle) worldObj.getTileEntity(this.getConnectedAxle());
 				if (axleConnected == null) {
 					return false;
 				} else {
 					if (axleConnected.getConnectedAxle() == null) {
 						return false;
 					} else {
-						return axle.getPos().equals(axleConnected.getConnectedAxle());
+						return this.getPos().equals(axleConnected.getConnectedAxle());
 					}
 				}
 			}
 		}
+	}
+	
+	public static boolean isValidAxle(World worldIn, BlockPos pos) {
+		return worldIn.getBlockState(pos) == ModBlocks.axle.getDefaultState().withProperty(BlockAxle.VARIANT, true);
 	}
 	
 }

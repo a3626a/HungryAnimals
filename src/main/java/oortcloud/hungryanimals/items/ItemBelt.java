@@ -58,11 +58,11 @@ public class ItemBelt extends Item {
 			}
 			TileEntityAxle axle1 = (TileEntityAxle) worldIn.getTileEntity(selectedPos);
 			TileEntityAxle axle2 = (TileEntityAxle) worldIn.getTileEntity(pos);
-			if (axle1 == null || TileEntityAxle.isConnected(worldIn, axle1)) {
+			if (axle1 == null || axle1.isConnected()) {
 				stack.getTagCompound().removeTag("SelectedBlockPos");
 				return false;
 			}
-			if (axle2 == null || TileEntityAxle.isConnected(worldIn, axle2)) {
+			if (axle2 == null || axle2.isConnected()) {
 				return false;
 			}
 			int requiredBelt = axle1.getBeltLength();
@@ -80,7 +80,7 @@ public class ItemBelt extends Item {
 			return false;
 		} else {
 			TileEntityAxle axle = (TileEntityAxle) worldIn.getTileEntity(pos);
-			if (axle != null && !TileEntityAxle.isConnected(worldIn, axle)) {
+			if (axle != null && !axle.isConnected()) {
 				if (!stack.hasTagCompound()) {
 					stack.setTagCompound(new NBTTagCompound());
 				}

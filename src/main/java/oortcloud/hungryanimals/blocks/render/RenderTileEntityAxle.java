@@ -32,17 +32,14 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTick, int p_180535_9_) {
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		GL11.glRotatef(0, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(180, 0.0F, 0.0F, 1.0F);
-		GL11.glPushMatrix();
-
 		TileEntityAxle axle = (TileEntityAxle) tileentity;
 		IBlockState state = tileentity.getWorld().getBlockState(tileentity.getPos());
 		if (state.getBlock() != ModBlocks.axle)
 			return;
-
+		
+		GlStateManager.pushAttrib();
+		GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
+		GlStateManager.rotate(180, 0, 0, 1);
 		if (state.getValue(BlockAxle.VARIANT) == Boolean.FALSE) {
 			this.bindTexture(texture_Axle);
 			this.modelAxle.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
@@ -53,31 +50,25 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 			this.bindTexture(texture_Wheel);
 			this.modelWheel.renderModel(0.0625F, axle.getPowerNetwork().getAngle(partialTick));
 		}
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5);
 		if (state.getValue(BlockAxle.VARIANT) == Boolean.TRUE) {
-			if (TileEntityAxle.isConnected(getWorld(), axle)) {
+			if (axle.isConnected()) {
 				// Use degree, not radian
 				double offsetX = axle.getConnectedAxle().getX() - axle.getPos().getX();
 				double offsetZ = axle.getConnectedAxle().getZ() - axle.getPos().getZ();
 				double externalAngle = (Math.toDegrees(Math.atan2(offsetZ, offsetX)) + 360) % 360;
 				double distance = Math.sqrt(axle.getConnectedAxle().distanceSq(axle.getPos()));
 				float internalAngle = (axle.getPowerNetwork().getAngle(partialTick) + 90) % 360;
-				GL11.glRotatef(-internalAngle, 0, 1.0F, 0);
+				GlStateManager.rotate(-internalAngle, 0, 1, 0);
 				externalAngle = (externalAngle - internalAngle + 360) % 360;
-				GL11.glRotatef((float) (-45 * ((int) externalAngle / 45)), 0, 1.0F, 0);
-				externalAngle = (externalAngle - 45 * ((int) externalAngle / 45) + 360) % 360;
+				GlStateManager.rotate(-45*((int)externalAngle/45), 0, 1, 0);
+				externalAngle = (externalAngle - 45*((int)externalAngle/45) + 360) % 360;
 
 				Tessellator tessellator = Tessellator.getInstance();
 				WorldRenderer renderer = tessellator.getWorldRenderer();
-				/*
-				 * GL11.glEnable(GL11.GL_BLEND);
-				 * GL11.glDisable(GL11.GL_TEXTURE_2D);
-				 * OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-				 */
 				GlStateManager.disableTexture2D();
 				GlStateManager.enableBlend();
 				GlStateManager.disableAlpha();
@@ -89,17 +80,13 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 				drawBelt1(tessellator, renderer, -5 / 16.0, -2 / 16.0, -5 / 16.0, +2 / 16.0);
 				drawBelt1(tessellator, renderer, -5 / 16.0, +2 / 16.0, -2 / 16.0, +5 / 16.0);
 				drawBelt2(tessellator, renderer, -2 / 16.0, +5 / 16.0, distance, externalAngle);
-				/*
-				 * GL11.glEnable(GL11.GL_TEXTURE_2D);
-				 * GL11.glDisable(GL11.GL_BLEND); GL11.glColor4f(1, 1, 1, 1);
-				 */
 				GlStateManager.shadeModel(7424);
 				GlStateManager.disableBlend();
 				GlStateManager.enableAlpha();
 				GlStateManager.enableTexture2D();
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	public void drawBelt1(Tessellator tessellator, WorldRenderer renderer, double x1, double z1, double x2, double z2) {
