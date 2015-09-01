@@ -1,6 +1,8 @@
 package oortcloud.hungryanimals.entities.render;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -19,11 +21,7 @@ public class RenderEntitySlingShotBall extends Render {
 	public void doRender(EntitySlingShotBall entity, double x, double y, double z, float p_76986_8_, float p_76986_9_) {
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
-		GlStateManager.translate(x, y + 0.25, z);
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
-		GlStateManager.color(0.25F, 0.2F, 0.2F, 1.0F);
-		Render.renderOffsetAABB(AxisAlignedBB.fromBounds(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F), 0, 0, 0);
+		renderOffsetAABBColored(AxisAlignedBB.fromBounds(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F), x, y, z, 0.25F, 0.2F, 0.2F, 1.0F);
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}
@@ -56,4 +54,47 @@ public class RenderEntitySlingShotBall extends Render {
 		this.doRender((EntitySlingShotBall) p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
+	public static void renderOffsetAABBColored(AxisAlignedBB box, double x, double y, double z, float r, float g, float b, float a)
+    {
+        GlStateManager.disableTexture2D();
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        GlStateManager.color(r, g, b, a);
+        worldrenderer.startDrawingQuads();
+        worldrenderer.setTranslation(x, y, z);
+        worldrenderer.setNormal(0.0F, 0.0F, -1.0F);
+        worldrenderer.addVertex(box.minX, box.maxY, box.minZ);
+        worldrenderer.addVertex(box.maxX, box.maxY, box.minZ);
+        worldrenderer.addVertex(box.maxX, box.minY, box.minZ);
+        worldrenderer.addVertex(box.minX, box.minY, box.minZ);
+        worldrenderer.setNormal(0.0F, 0.0F, 1.0F);
+        worldrenderer.addVertex(box.minX, box.minY, box.maxZ);
+        worldrenderer.addVertex(box.maxX, box.minY, box.maxZ);
+        worldrenderer.addVertex(box.maxX, box.maxY, box.maxZ);
+        worldrenderer.addVertex(box.minX, box.maxY, box.maxZ);
+        worldrenderer.setNormal(0.0F, -1.0F, 0.0F);
+        worldrenderer.addVertex(box.minX, box.minY, box.minZ);
+        worldrenderer.addVertex(box.maxX, box.minY, box.minZ);
+        worldrenderer.addVertex(box.maxX, box.minY, box.maxZ);
+        worldrenderer.addVertex(box.minX, box.minY, box.maxZ);
+        worldrenderer.setNormal(0.0F, 1.0F, 0.0F);
+        worldrenderer.addVertex(box.minX, box.maxY, box.maxZ);
+        worldrenderer.addVertex(box.maxX, box.maxY, box.maxZ);
+        worldrenderer.addVertex(box.maxX, box.maxY, box.minZ);
+        worldrenderer.addVertex(box.minX, box.maxY, box.minZ);
+        worldrenderer.setNormal(-1.0F, 0.0F, 0.0F);
+        worldrenderer.addVertex(box.minX, box.minY, box.maxZ);
+        worldrenderer.addVertex(box.minX, box.maxY, box.maxZ);
+        worldrenderer.addVertex(box.minX, box.maxY, box.minZ);
+        worldrenderer.addVertex(box.minX, box.minY, box.minZ);
+        worldrenderer.setNormal(1.0F, 0.0F, 0.0F);
+        worldrenderer.addVertex(box.maxX, box.minY, box.minZ);
+        worldrenderer.addVertex(box.maxX, box.maxY, box.minZ);
+        worldrenderer.addVertex(box.maxX, box.maxY, box.maxZ);
+        worldrenderer.addVertex(box.maxX, box.minY, box.maxZ);
+        worldrenderer.setTranslation(0.0D, 0.0D, 0.0D);
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+    }
+	
 }
