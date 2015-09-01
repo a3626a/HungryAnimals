@@ -289,8 +289,11 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.addHunger(hunger);
 
 		if (this.entity.getGrowingAge() < 0) {
-			int duration = (int) (hunger / hunger_bmr);
-			this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth.id, duration, 1));
+			NBTTagCompound tag = item.getTagCompound();
+			if (tag==null||!tag.hasKey("isNatural")||!tag.getBoolean("isNatural")) {
+				int duration = (int) (hunger / hunger_bmr);
+				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth.id, duration, 1));
+			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
