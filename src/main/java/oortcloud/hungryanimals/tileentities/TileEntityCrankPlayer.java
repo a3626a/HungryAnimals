@@ -28,7 +28,6 @@ public class TileEntityCrankPlayer extends TileEntityPowerTransporter
 				leftTick--;
 			}
 		}
-
 	}
 
 	@Override

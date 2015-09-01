@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.energy.PowerNetwork;
 
 public abstract class TileEntityPowerTransporter extends TileEntity implements IUpdatePlayerListBox, IPowerTransporter {
@@ -37,8 +38,10 @@ public abstract class TileEntityPowerTransporter extends TileEntity implements I
 			powerNetwork.setPowerStored(powerNetwork.getPowerStored() + containedPower);
 
 			this.setPowerNetwork(powerNetwork);
-
+			isInitialized=true;
+			
 			for (BlockPos i : this.getConnectedBlocks()) {
+				
 				if (getWorld().getChunkProvider().chunkExists(i.getX() >> 4, i.getZ() >> 4)) {
 					TileEntity tileEntity = getWorld().getChunkFromBlockCoords(i).getTileEntity(i, EnumCreateEntityType.CHECK);
 					if (tileEntity != null && !tileEntity.isInvalid() && tileEntity instanceof IPowerTransporter) {
@@ -49,12 +52,6 @@ public abstract class TileEntityPowerTransporter extends TileEntity implements I
 				}
 			}
 		}
-	}
-
-	@Override
-	public void validate() {
-		super.validate();
-		this.mergePowerNetwork(new PowerNetwork(0));
 	}
 
 	@Override
@@ -73,6 +70,10 @@ public abstract class TileEntityPowerTransporter extends TileEntity implements I
 
 	@Override
 	public void update() {
+		if (!isInitialized) {
+			this.mergePowerNetwork(new PowerNetwork(0));
+		}
+		
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			PowerNetwork network = getPowerNetwork();
 

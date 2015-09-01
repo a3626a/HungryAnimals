@@ -77,6 +77,7 @@ public class PowerNetwork {
 			this.lastWorldtick = world.getWorldTime();
 		} else {
 			if (world.getWorldTime() != this.lastWorldtick) {
+				HungryAnimals.logger.info(""+this+" : "+this.powerStored);
 				float angularSpeed = (float) (angularVelocityFactor*powerStored/powerCapacity);
 				this.angle = (this.angle+angularSpeed)%360;
 				if (lastAngle != angle) {
