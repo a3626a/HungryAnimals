@@ -35,7 +35,7 @@ public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAni
 	@Override
 	public void eatBlockBonus(IBlockState block) {
 		if (block.getBlock() == Blocks.tallgrass) {
-			double prob = getBlockHunger(Blocks.tallgrass.getDefaultState()) / 2.0 / getFoodHunger(new ItemStack(Items.wheat_seeds));
+			double prob = getBlockHunger(block) / 2.0 / getFoodHunger(new ItemStack(Items.wheat_seeds));
 			if (this.entity.getRNG().nextDouble() < prob) {
 				ItemStack stack = new ItemStack(Items.wheat_seeds);
 				NBTTagCompound tag = new NBTTagCompound();

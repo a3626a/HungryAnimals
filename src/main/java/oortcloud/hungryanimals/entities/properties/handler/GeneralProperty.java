@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -63,7 +64,8 @@ public class GeneralProperty {
 		default_cow.hunger_food.put(new HashItemType(Items.reeds), 20.0);
 		default_cow.hunger_food.put(new HashItemType(ModItems.straw), 10.0);
 		default_cow.hunger_food.put(new HashItemType(ModItems.mixedFeed), 80.0);
-		default_cow.hunger_block.put(new HashBlockState(Blocks.tallgrass), 15.0);
+		default_cow.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
+		default_cow.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		default_cow.hunger_block.put(new HashBlockState(Blocks.wheat.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
 		
 		default_chicken.hunger_bmr = 0.002;
@@ -84,7 +86,8 @@ public class GeneralProperty {
 		default_chicken.hunger_food.put(new HashItemType(Items.melon_seeds), 25.0);
 		default_chicken.hunger_food.put(new HashItemType(ModItems.poppyseed), 20.0);
 		default_chicken.hunger_food.put(new HashItemType(ModItems.mixedFeed), 80.0);
-		default_chicken.hunger_block.put(new HashBlockState(Blocks.tallgrass), 15.0);
+		default_chicken.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
+		default_chicken.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		default_chicken.hunger_block.put(new HashBlockState(Blocks.wheat.getDefaultState().withProperty(BlockCrops.AGE, 0)), 20.0);
 		
 		default_pig.hunger_bmr = 0.004;
@@ -103,7 +106,8 @@ public class GeneralProperty {
 		default_pig.hunger_food.put(new HashItemType(Items.carrot), 40.0);
 		default_pig.hunger_food.put(new HashItemType(Items.rotten_flesh), 15.0);
 		default_pig.hunger_food.put(new HashItemType(ModItems.mixedFeed), 80.0);
-		default_pig.hunger_block.put(new HashBlockState(Blocks.tallgrass), 15.0);
+		default_pig.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
+		default_pig.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		default_pig.hunger_block.put(new HashBlockState(Blocks.carrots.getDefaultState().withProperty(BlockCrops.AGE, 7)), 40.0);
 		
 		default_rabbit.hunger_bmr = 0.003;
@@ -124,7 +128,8 @@ public class GeneralProperty {
 		default_rabbit.hunger_food.put(new HashItemType(Items.golden_carrot), 150.0);
 		default_rabbit.hunger_food.put(new HashItemType(Item.getItemFromBlock(Blocks.yellow_flower)), 20.0);
 		default_rabbit.hunger_food.put(new HashItemType(ModItems.mixedFeed), 80.0);
-		default_rabbit.hunger_block.put(new HashBlockState(Blocks.tallgrass), 15.0);
+		default_rabbit.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
+		default_rabbit.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		default_rabbit.hunger_block.put(new HashBlockState(Blocks.yellow_flower), 20.0);
 		default_rabbit.hunger_block.put(new HashBlockState(Blocks.carrots.getDefaultState().withProperty(BlockCrops.AGE, 7)), 40.0);
 		
@@ -145,7 +150,8 @@ public class GeneralProperty {
 		default_sheep.hunger_food.put(new HashItemType(Items.reeds), 20.0);
 		default_sheep.hunger_food.put(new HashItemType(ModItems.straw), 10.0);
 		default_sheep.hunger_food.put(new HashItemType(ModItems.mixedFeed), 80.0);
-		default_sheep.hunger_block.put(new HashBlockState(Blocks.tallgrass), 15.0);
+		default_sheep.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
+		default_sheep.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		default_sheep.hunger_block.put(new HashBlockState(Blocks.wheat.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
 	}
 	
