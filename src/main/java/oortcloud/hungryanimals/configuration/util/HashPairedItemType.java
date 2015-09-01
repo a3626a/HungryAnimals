@@ -1,12 +1,12 @@
 package oortcloud.hungryanimals.configuration.util;
 
 
-public class PairHashItem {
+public class HashPairedItemType {
 
-	private HashItem left;
-	private HashItem right;
+	private HashItemType left;
+	private HashItemType right;
 	
-	public PairHashItem(HashItem l, HashItem r) {
+	public HashPairedItemType(HashItemType l, HashItemType r) {
 		left=l;
 		right=r;
 	}
@@ -14,9 +14,9 @@ public class PairHashItem {
 	@Override
 	public boolean equals(Object arg) {
 		
-		if (arg instanceof PairHashItem) {
+		if (arg instanceof HashPairedItemType) {
 			
-			PairHashItem obj = (PairHashItem)arg;
+			HashPairedItemType obj = (HashPairedItemType)arg;
 			
 			if (this == obj) {
 				return true;

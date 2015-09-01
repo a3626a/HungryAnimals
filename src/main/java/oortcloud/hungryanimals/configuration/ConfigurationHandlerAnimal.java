@@ -16,11 +16,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.configuration.util.DropMeat;
-import oortcloud.hungryanimals.configuration.util.DropRandom;
-import oortcloud.hungryanimals.configuration.util.DropRare;
-import oortcloud.hungryanimals.configuration.util.HashBlock;
-import oortcloud.hungryanimals.configuration.util.HashItem;
+import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
+import oortcloud.hungryanimals.configuration.util.HashDropMeat;
+import oortcloud.hungryanimals.configuration.util.HashDropRandom;
+import oortcloud.hungryanimals.configuration.util.HashDropRare;
+import oortcloud.hungryanimals.configuration.util.HashBlockState;
+import oortcloud.hungryanimals.configuration.util.HashItemType;
+import oortcloud.hungryanimals.configuration.util.StringParser;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryChicken;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryCow;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryPig;
@@ -306,7 +308,7 @@ public class ConfigurationHandlerAnimal {
 		String[] drops;
 		drops = config.get(category, KEY_drop_meat, defaultfood).getStringList();
 		for (String i : drops) {
-			DropMeat j = ConfigurationHelper.instance.getDropMeat(i);
+			HashDropMeat j = ConfigurationHelper.instance.getDropMeat(i);
 			if (j == null) {
 				ConfigurationHelper.exceptionInvalidFormat(i);
 				exceptionPrintPosition(category, KEY_drop_meat);
@@ -320,7 +322,7 @@ public class ConfigurationHandlerAnimal {
 		String[] drops;
 		drops = config.get(category, KEY_drop_random, defaultfood).getStringList();
 		for (String i : drops) {
-			DropRandom j = ConfigurationHelper.instance.getDropRandom(i);
+			HashDropRandom j = ConfigurationHelper.instance.getDropRandom(i);
 			if (j == null) {
 				ConfigurationHelper.exceptionInvalidFormat(i);
 				exceptionPrintPosition(category, KEY_drop_random);
@@ -334,7 +336,7 @@ public class ConfigurationHandlerAnimal {
 		String[] drops;
 		drops = config.get(category, KEY_drop_rare, defaultfood).getStringList();
 		for (String i : drops) {
-			DropRare j = ConfigurationHelper.instance.getDropRare(i);
+			HashDropRare j = ConfigurationHelper.instance.getDropRare(i);
 			if (j == null) {
 				ConfigurationHelper.exceptionInvalidFormat(i);
 				exceptionPrintPosition(category, KEY_drop_rare);
@@ -357,7 +359,7 @@ public class ConfigurationHandlerAnimal {
 		for (String i : food) {
 			String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
 			if (split.length == 2) {
-				HashItem item = ConfigurationHelper.instance.getHashItem(split[0]);
+				HashItemType item = ConfigurationHelper.instance.getHashItem(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
 				if (item == null) {
 					ConfigurationHelper.exceptionInvalidFormat(split[0]);
@@ -386,7 +388,7 @@ public class ConfigurationHandlerAnimal {
 		for (String i : block) {
 			String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
 			if (split.length == 2) {
-				HashBlock hashblock = ConfigurationHelper.instance.getHashBlock(split[0]);
+				HashBlockState hashblock = ConfigurationHelper.instance.getHashBlock(split[0]);
 				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
 				if (hashblock == null) {
 					ConfigurationHelper.exceptionInvalidFormat(split[0]);

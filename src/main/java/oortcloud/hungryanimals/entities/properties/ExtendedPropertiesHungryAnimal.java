@@ -32,11 +32,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
-import oortcloud.hungryanimals.configuration.util.DropMeat;
-import oortcloud.hungryanimals.configuration.util.DropRandom;
-import oortcloud.hungryanimals.configuration.util.DropRare;
-import oortcloud.hungryanimals.configuration.util.HashBlock;
-import oortcloud.hungryanimals.configuration.util.HashItem;
+import oortcloud.hungryanimals.configuration.util.HashDropMeat;
+import oortcloud.hungryanimals.configuration.util.HashDropRandom;
+import oortcloud.hungryanimals.configuration.util.HashDropRare;
+import oortcloud.hungryanimals.configuration.util.HashBlockState;
+import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
 import oortcloud.hungryanimals.entities.ai.EntityAICrank;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
@@ -54,11 +54,11 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 	public double hunger_max;
 	public double hunger_bmr;
-	public HashMap<HashItem, Double> hunger_food = new HashMap<HashItem, Double>();
-	public HashMap<HashBlock, Double> hunger_block = new HashMap<HashBlock, Double>();
-	public ArrayList<DropMeat> drop_meat = new ArrayList<DropMeat>();
-	public ArrayList<DropRandom> drop_random = new ArrayList<DropRandom>();
-	public ArrayList<DropRare> drop_rare = new ArrayList<DropRare>();
+	public HashMap<HashItemType, Double> hunger_food = new HashMap<HashItemType, Double>();
+	public HashMap<HashBlockState, Double> hunger_block = new HashMap<HashBlockState, Double>();
+	public ArrayList<HashDropMeat> drop_meat = new ArrayList<HashDropMeat>();
+	public ArrayList<HashDropRandom> drop_random = new ArrayList<HashDropRandom>();
+	public ArrayList<HashDropRare> drop_rare = new ArrayList<HashDropRare>();
 	public double courtship_hunger;
 	public double courtship_probability;
 	public double courtship_hungerCondition;
@@ -155,17 +155,17 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		if (this.entity.getGrowingAge() >= 0) {
 			ArrayList<EntityItem> toRemove = new ArrayList<EntityItem>();
 			for (EntityItem i : drops) {
-				for (DropMeat j : drop_meat) {
+				for (HashDropMeat j : drop_meat) {
 					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}
-				for (DropRandom j : drop_random) {
+				for (HashDropRandom j : drop_random) {
 					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}
-				for (DropRare j : drop_rare) {
+				for (HashDropRare j : drop_rare) {
 					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
@@ -175,7 +175,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				drops.remove(i);
 			}
 			
-			for (DropMeat j : drop_meat) {
+			for (HashDropMeat j : drop_meat) {
 				ItemStack drop = j.getDrop(getHungry());
 				if (drop != null) {
 					drop.stackSize = (int) (drop.stackSize * (1+entity.getRNG().nextInt(1 + looting) / 3.0));
@@ -184,7 +184,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 					drops.add(entityitem);
 				}
 			}
-			for (DropRandom j : drop_random) {
+			for (HashDropRandom j : drop_random) {
 				ItemStack drop = j.getDrop(entity.getRNG());
 				if (drop != null) {
 					drop.stackSize = (int) (drop.stackSize * (1+(entity.getRNG().nextInt(1 + looting)) / 3.0));
@@ -193,7 +193,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 					drops.add(entityitem);
 				}
 			}
-			for (DropRare j : drop_rare) {
+			for (HashDropRare j : drop_rare) {
 				ItemStack drop = j.getDrop(entity.getRNG(), looting);
 				if (drop != null) {
 					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, drop);
@@ -223,10 +223,10 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	}
 
 	public double getFoodHunger(ItemStack food) {
-		HashItem key;
-		if (this.hunger_food.containsKey(key = new HashItem(food.getItem()))) {
+		HashItemType key;
+		if (this.hunger_food.containsKey(key = new HashItemType(food.getItem()))) {
 			return this.hunger_food.get(key);
-		} else if (this.hunger_food.containsKey(key = new HashItem(food.getItem(), food.getItemDamage()))) {
+		} else if (this.hunger_food.containsKey(key = new HashItemType(food.getItem(), food.getItemDamage()))) {
 			return this.hunger_food.get(key);
 		} else {
 			return 0;
@@ -234,10 +234,10 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	}
 
 	public double getBlockHunger(IBlockState block) {
-		HashBlock key;
-		if (this.hunger_block.containsKey(key = new HashBlock(block, true))) {
+		HashBlockState key;
+		if (this.hunger_block.containsKey(key = new HashBlockState(block, true))) {
 			return this.hunger_block.get(key);
-		} else if (this.hunger_block.containsKey(key = new HashBlock(block, false))) {
+		} else if (this.hunger_block.containsKey(key = new HashBlockState(block, false))) {
 			return this.hunger_block.get(key);
 		} else {
 			return 0;

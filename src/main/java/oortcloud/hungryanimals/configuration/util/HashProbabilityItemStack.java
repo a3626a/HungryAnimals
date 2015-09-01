@@ -2,11 +2,11 @@ package oortcloud.hungryanimals.configuration.util;
 
 import net.minecraft.item.ItemStack;
 
-public class ProbItemStack {
+public class HashProbabilityItemStack {
 	public double prob;
 	public ItemStack item;
 
-	public ProbItemStack(double prob, ItemStack item) {
+	public HashProbabilityItemStack(double prob, ItemStack item) {
 		this.prob = prob;
 		this.item = item;
 	}

@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.configuration.util.ProbItemStack;
+import oortcloud.hungryanimals.configuration.util.HashProbabilityItemStack;
 import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
 import oortcloud.hungryanimals.energy.PowerNetwork;
 import oortcloud.hungryanimals.recipes.RecipeThresher;
@@ -57,7 +57,7 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 
 			if (getStackInSlot(0) != null) {
 				if (leftAttempt > 0) {
-					ArrayList<ProbItemStack> output = RecipeThresher.getRecipe(getStackInSlot(0));
+					ArrayList<HashProbabilityItemStack> output = RecipeThresher.getRecipe(getStackInSlot(0));
 					if (output != null && this.getPowerNetwork().getPowerStored() > powerUsage) {
 						this.getPowerNetwork().consumeEnergy(powerUsage);
 						this.threshTime += 1;
@@ -65,7 +65,7 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 						if (this.threshTime >= this.totalthreshTime) {
 							this.threshTime = 0;
 							
-							for (ProbItemStack i : output) {
+							for (HashProbabilityItemStack i : output) {
 								if (this.worldObj.rand.nextDouble() < i.prob) {
 
 									float f = this.worldObj.rand.nextFloat() * 0.8F + 0.1F;

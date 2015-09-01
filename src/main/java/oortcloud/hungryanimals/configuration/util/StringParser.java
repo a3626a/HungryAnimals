@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.configuration;
+package oortcloud.hungryanimals.configuration.util;
 
 import java.util.ArrayList;
 

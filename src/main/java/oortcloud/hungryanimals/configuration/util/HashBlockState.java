@@ -6,35 +6,35 @@ import net.minecraft.block.state.IBlockState;
 
 import com.google.common.collect.ImmutableSet;
 
-public class HashBlock {
+public class HashBlockState {
 	private IBlockState block;
 	private boolean ignoreProperty;
 
-	public HashBlock(Block block) {
+	public HashBlockState(Block block) {
 		this(block.getDefaultState(), true);
 	}
 
-	public HashBlock(IBlockState block) {
+	public HashBlockState(IBlockState block) {
 		this(block, false);
 	}
 
-	public HashBlock(IBlockState block, boolean ignoreProperty) {
+	public HashBlockState(IBlockState block, boolean ignoreProperty) {
 		this.block = block;
 		this.ignoreProperty = ignoreProperty;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this.ignoreProperty && ((HashBlock) obj).ignoreProperty) {
-			return block.getBlock() == ((HashBlock) obj).block.getBlock();
-		} else if (!this.ignoreProperty && !((HashBlock) obj).ignoreProperty) {
+		if (this.ignoreProperty && ((HashBlockState) obj).ignoreProperty) {
+			return block.getBlock() == ((HashBlockState) obj).block.getBlock();
+		} else if (!this.ignoreProperty && !((HashBlockState) obj).ignoreProperty) {
 
-			if (block.getBlock() != ((HashBlock) obj).block.getBlock())
+			if (block.getBlock() != ((HashBlockState) obj).block.getBlock())
 				return false;
 
 			for (Object i : block.getProperties().keySet()) {
 				IProperty property = (IProperty) i;
-				if (!block.getValue(property).equals(((HashBlock) obj).block.getValue(property)))
+				if (!block.getValue(property).equals(((HashBlockState) obj).block.getValue(property)))
 					return false;
 			}
 

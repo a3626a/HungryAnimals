@@ -6,31 +6,31 @@ import java.util.HashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.configuration.ConfigurationHelper;
-import oortcloud.hungryanimals.configuration.StringParser;
-import oortcloud.hungryanimals.configuration.util.HashItem;
-import oortcloud.hungryanimals.configuration.util.PairHashItem;
+import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
+import oortcloud.hungryanimals.configuration.util.HashItemType;
+import oortcloud.hungryanimals.configuration.util.HashPairedItemType;
+import oortcloud.hungryanimals.configuration.util.StringParser;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 public class RecipeBlender {
 
-	private static HashMap<PairHashItem, ItemStack> recipe;
+	private static HashMap<HashPairedItemType, ItemStack> recipe;
 
 	public static void init() {
-		recipe = new HashMap<PairHashItem, ItemStack>();
+		recipe = new HashMap<HashPairedItemType, ItemStack>();
 	}
 
-	public static void addRecipe(HashItem input1, HashItem input2, ItemStack output) {
-		recipe.put(new PairHashItem(input1, input2), output);
+	public static void addRecipe(HashItemType input1, HashItemType input2, ItemStack output) {
+		recipe.put(new HashPairedItemType(input1, input2), output);
 	}
 
 	public static ItemStack getRecipe(ItemStack input1, ItemStack input2) {
 
-		PairHashItem key1 = new PairHashItem(new HashItem(input1.getItem()), new HashItem(input2.getItem()));
-		PairHashItem key2 = new PairHashItem(new HashItem(input1.getItem(), input1.getItemDamage()), new HashItem(input2.getItem(), input2.getItemDamage()));
-		PairHashItem key3 = new PairHashItem(new HashItem(input1.getItem(), input1.getItemDamage()), new HashItem(input2.getItem()));
-		PairHashItem key4 = new PairHashItem(new HashItem(input1.getItem()), new HashItem(input2.getItem(), input2.getItemDamage()));
+		HashPairedItemType key1 = new HashPairedItemType(new HashItemType(input1.getItem()), new HashItemType(input2.getItem()));
+		HashPairedItemType key2 = new HashPairedItemType(new HashItemType(input1.getItem(), input1.getItemDamage()), new HashItemType(input2.getItem(), input2.getItemDamage()));
+		HashPairedItemType key3 = new HashPairedItemType(new HashItemType(input1.getItem(), input1.getItemDamage()), new HashItemType(input2.getItem()));
+		HashPairedItemType key4 = new HashPairedItemType(new HashItemType(input1.getItem()), new HashItemType(input2.getItem(), input2.getItemDamage()));
 		
 		if (recipe.containsKey(key1)) {
 			return recipe.get(key1);
@@ -48,7 +48,7 @@ public class RecipeBlender {
 	public static void readConfiguration(String i) {
 		String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
 		if (split.length == 2) {
-			ArrayList<HashItem> input = ConfigurationHelper.instance.getListHashItem(split[0]);
+			ArrayList<HashItemType> input = ConfigurationHelper.instance.getListHashItem(split[0]);
 			ItemStack output = ConfigurationHelper.instance.getItemStack(split[1]);
 			RecipeBlender.addRecipe(input.get(0), input.get(1), output);
 		} else {
