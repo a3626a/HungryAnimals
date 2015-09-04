@@ -25,7 +25,8 @@ public class ShapedDistinctOreRecipe implements IRecipe {
 
     protected ItemStack output = null;
     protected Object[] input = null;
-    protected Character[] ore = null;
+    protected Character[] characters = null;
+    protected String[] ores = null;
     protected int width = 0;
     protected int height = 0;
     protected boolean mirrored = true;
@@ -87,7 +88,8 @@ public class ShapedDistinctOreRecipe implements IRecipe {
         }
 
         HashMap<Character, Object> itemMap = new HashMap<Character, Object>();
-
+        HashMap<Character, String> oreMap = new HashMap<Character, String>();
+        
         for (; idx < recipe.length; idx += 2)
         {
             Character chr = (Character)recipe[idx];
@@ -108,6 +110,7 @@ public class ShapedDistinctOreRecipe implements IRecipe {
             else if (in instanceof String)
             {
                 itemMap.put(chr, OreDictionary.getOres((String)in));
+                oreMap.put(chr, (String)in);
             }
             else
             {
@@ -122,13 +125,15 @@ public class ShapedDistinctOreRecipe implements IRecipe {
         }
 
         input = new Object[width * height];
-        ore = new Character[width * height];
+        characters = new Character[width * height];
+        ores = new String[width * height];
         int x = 0;
         for (char chr : shape.toCharArray())
         {
             input[x] = itemMap.get(chr);
             if (input[x] instanceof List) {
-                ore[x] = chr;
+                characters[x] = chr;
+                ores[x] = oreMap.get(chr);
             }
             x++;
         }
@@ -190,11 +195,11 @@ public class ShapedDistinctOreRecipe implements IRecipe {
                 {
                     if (mirror)
                     {
-                        target = ore[width - subX - 1 + subY * width];
+                        target = characters[width - subX - 1 + subY * width];
                     }
                     else
                     {
-                        target = ore[subX + subY * width];
+                        target = characters[subX + subY * width];
                     }
                 }
 
@@ -301,4 +306,19 @@ public class ShapedDistinctOreRecipe implements IRecipe {
         return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 
+    public int getWidth() {
+    	return width;
+    }
+    
+    public int getHeight() {
+    	return height;
+    }
+
+    public Character[] getCharacters() {
+    	return characters;
+    }
+    
+    public String[] getOres() {
+    	return ores;
+    }
 }

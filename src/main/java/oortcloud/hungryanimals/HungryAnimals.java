@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.RecipeSorter;
+import oortcloud.hungryanimals.api.nei.NEIHandler;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.command.CommandTickRate;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
@@ -108,6 +110,8 @@ public class HungryAnimals {
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
 		ConfigurationHandler.postSync();
+		if (Loader.isModLoaded("NotEnoughItems"))
+			NEIHandler.init();
 	}
 
 	@EventHandler
