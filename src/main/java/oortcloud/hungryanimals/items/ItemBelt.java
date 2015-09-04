@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.items;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,6 +32,12 @@ public class ItemBelt extends Item {
 		ModItems.register(this);
 	}
 
+	@Override
+	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
+		ItemStack itemStack = new ItemStack(this,1,16);
+		subItems.add(itemStack);
+	}
+	
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
 		tooltip.add("Length: " + stack.getItemDamage() + " m");
