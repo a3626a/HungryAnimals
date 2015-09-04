@@ -65,7 +65,8 @@ public class ItemBelt extends Item {
 			if (axle2 == null || axle2.isConnected()) {
 				return false;
 			}
-			int requiredBelt = axle1.getBeltLength();
+			double dist = pos.distanceSq(selectedPos);
+			int requiredBelt = (int) (Math.ceil(Math.sqrt(dist)));
 			if (requiredBelt <= Math.min(stack.getItemDamage(), MAX_LENGTH)) {
 				stack.setItemDamage(stack.getItemDamage() - requiredBelt);
 				axle1.setConnectedAxle(pos);

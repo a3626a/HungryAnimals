@@ -37,7 +37,7 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 		if (state.getBlock() != ModBlocks.axle)
 			return;
 		
-		GlStateManager.pushAttrib();
+		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
 		GlStateManager.rotate(180, 0, 0, 1);
 		if (state.getValue(BlockAxle.VARIANT) == Boolean.FALSE) {
