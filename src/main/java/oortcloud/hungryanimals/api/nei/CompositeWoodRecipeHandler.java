@@ -7,9 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.oredict.OreDictionary;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -77,21 +81,33 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 		public List<PositionedStack> getIngredients() {
 			int cycle = cycleticks / 20;
 
-			HashMap<String, HashMap<Character, Integer>> permMap = new HashMap<String, HashMap<Character, Integer>>();
+			HashMap<String, HashMap<Character, ItemStack>> permMap = new HashMap<String, HashMap<Character, ItemStack>>();
 
 			for (int itemIndex = 0; itemIndex < ingredients.size(); itemIndex++) {
 				if (ores[itemIndex] != null) {
 					if (permMap.containsKey(ores[itemIndex])) {
-						HashMap<Character, Integer> charMap = permMap.get(ores[itemIndex]);
+						HashMap<Character, ItemStack> charMap = permMap.get(ores[itemIndex]);
 						if (charMap.containsKey(characters[itemIndex])) {
-							ingredients.get(itemIndex).setPermutationToRender(charMap.get(characters[itemIndex]));
+							ingredients.get(itemIndex).item = charMap.get(characters[itemIndex]).copy();
+					        if(ingredients.get(itemIndex).item.getItem() == null)
+					        	ingredients.get(itemIndex).item = new ItemStack(Blocks.fire);
+					        else if(ingredients.get(itemIndex).item.getItemDamage() == OreDictionary.WILDCARD_VALUE)
+					        	ingredients.get(itemIndex).item.setItemDamage(0);
 						} else {
 							Random rand = new Random(cycle + itemIndex + offset);
 							int preIndex = Math.abs(rand.nextInt()) % (ingredients.get(itemIndex).items.length - charMap.size());
 							// TODO Exception Handling ; number of ores in
 							// oredictname < characters with same oredictname
 							Integer[] indices = new Integer[charMap.size()];
-							indices = charMap.values().toArray(indices);
+							int next=0;
+							for (ItemStack i : charMap.values()) {
+								ItemStack[] stacks = ingredients.get(itemIndex).items;
+								for (int j = 0 ; j < stacks.length; j++) {
+									if (OreDictionary.itemMatches(i, stacks[j], false)) {
+										indices[next++] = j;
+									}
+								}
+							}
 							Arrays.sort(indices);
 
 							for (int i = 0; i < indices.length; i++) {
@@ -99,17 +115,17 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 									preIndex += 1;
 								}
 							}
-
-							charMap.put(characters[itemIndex], preIndex);
-
+							
 							ingredients.get(itemIndex).setPermutationToRender(preIndex);
+							
+							charMap.put(characters[itemIndex], ingredients.get(itemIndex).item);
 						}
 					} else {
 						Random rand = new Random(cycle + itemIndex + offset);
 						int index = Math.abs(rand.nextInt()) % ingredients.get(itemIndex).items.length;
 						ingredients.get(itemIndex).setPermutationToRender(index);
-						HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-						map.put(characters[itemIndex], index);
+						HashMap<Character, ItemStack> map = new HashMap<Character, ItemStack>();
+						map.put(characters[itemIndex], ingredients.get(itemIndex).item);
 						permMap.put(ores[itemIndex], map);
 					}
 				} else {
