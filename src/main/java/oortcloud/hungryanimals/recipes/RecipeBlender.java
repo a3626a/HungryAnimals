@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.recipes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,6 +56,10 @@ public class RecipeBlender {
 			HungryAnimals.logger.warn("\"" + i + "\" is not added. Format error");
 			return;
 		}
+	}
+
+	public static Map<HashPairedItemType, ItemStack> getRecipeList() {
+		return recipe;
 	}
 	
 	

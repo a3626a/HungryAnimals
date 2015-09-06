@@ -11,7 +11,7 @@ public class ModBlocks {
 	public static Block millStone;
 	public static Block excreta;
 	public static Block niterBed;
-	public static Block foodBox;
+	public static Block trough;
 	public static Block trapcover;
 	public static Block axle;
 	public static Block crankPlayer;
@@ -29,7 +29,7 @@ public class ModBlocks {
 	{
 		excreta = new BlockExcreta();
 		niterBed = new BlockNiterBed();
-		foodBox = new BlockTrough();
+		trough = new BlockTrough();
 		trapcover = new BlockTrapCover();
 		axle = new BlockAxle();
 		crankPlayer = new BlockCrankPlayer();

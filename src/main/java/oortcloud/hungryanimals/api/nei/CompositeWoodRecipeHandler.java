@@ -2,16 +2,14 @@ package oortcloud.hungryanimals.api.nei;
 
 import java.awt.Rectangle;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -30,6 +28,49 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 			super(width, height, items, out);
 			characters = character;
 			ores = ore;
+		}
+
+		public void setIngredientPermutation(Collection<PositionedStack> ingredients, ItemStack ingredient) {
+			Character shape = null;
+			PositionedStack[] stacks = new PositionedStack[ingredients.size()];
+			stacks = ingredients.toArray(stacks);
+			for (int i = 0; i < ingredients.size(); i++) {
+				PositionedStack stack = stacks[i];
+				if (ores[i] == null)
+					for (int j = 0; j < stack.items.length; j++) {
+						if (NEIServerUtils.areStacksSameTypeCrafting(ingredient, stack.items[j])) {
+							stack.item = stack.items[j];
+							stack.item.setItemDamage(ingredient.getItemDamage());
+							stack.items = new ItemStack[] { stack.item };
+							stack.setPermutationToRender(0);
+							break;
+						}
+					}
+				else {
+					if (shape==null) {
+						for (int j = 0; j < stack.items.length; j++) {
+							if (NEIServerUtils.areStacksSameTypeCrafting(ingredient, stack.items[j])) {
+								stack.item = stack.items[j];
+								stack.item.setItemDamage(ingredient.getItemDamage());
+								stack.items = new ItemStack[] { stack.item };
+								stack.setPermutationToRender(0);
+								shape = characters[i];
+								break;
+							}
+						}
+					} else if (shape.equals(characters[i])) {
+						for (int j = 0; j < stack.items.length; j++) {
+							if (NEIServerUtils.areStacksSameTypeCrafting(ingredient, stack.items[j])) {
+								stack.item = stack.items[j];
+								stack.item.setItemDamage(ingredient.getItemDamage());
+								stack.items = new ItemStack[] { stack.item };
+								stack.setPermutationToRender(0);
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		@Override
@@ -108,7 +149,7 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 	public void loadCraftingRecipes(String outputId, Object... results) {
 		if (outputId.equals("compositewoodcrafting") && getClass() == CompositeWoodRecipeHandler.class) {
 			for (IRecipe irecipe : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
-				CachedShapedRecipe recipe = null;
+				CachedDistinctOreShapedRecipe recipe = null;
 				if (irecipe instanceof ShapedDistinctOreRecipe)
 					recipe = forgeShapedRecipe((ShapedDistinctOreRecipe) irecipe);
 
@@ -127,7 +168,7 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 	public void loadCraftingRecipes(ItemStack result) {
 		for (IRecipe irecipe : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
 			if (NEIServerUtils.areStacksSameTypeCrafting(irecipe.getRecipeOutput(), result)) {
-				CachedShapedRecipe recipe = null;
+				CachedDistinctOreShapedRecipe recipe = null;
 				if (irecipe instanceof ShapedDistinctOreRecipe)
 					recipe = forgeShapedRecipe((ShapedDistinctOreRecipe) irecipe);
 
@@ -143,7 +184,7 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient) {
 		for (IRecipe irecipe : (List<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
-			CachedShapedRecipe recipe = null;
+			CachedDistinctOreShapedRecipe recipe = null;
 			if (irecipe instanceof ShapedDistinctOreRecipe)
 				recipe = forgeShapedRecipe((ShapedDistinctOreRecipe) irecipe);
 
@@ -170,11 +211,6 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 				return null;
 
 		return new CachedDistinctOreShapedRecipe(width, height, items, recipe.getCharacters(), recipe.getOres(), recipe.getRecipeOutput());
-	}
-
-	@Override
-	public String getGuiTexture() {
-		return "textures/gui/container/crafting_table.png";
 	}
 
 	@Override

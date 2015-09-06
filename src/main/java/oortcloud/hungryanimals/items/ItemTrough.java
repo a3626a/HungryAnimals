@@ -62,7 +62,7 @@ public class ItemTrough extends Item {
                 if (flag2 && flag3 && World.doesBlockHaveSolidTopSurface(worldIn, pos.down()) && World.doesBlockHaveSolidTopSurface(worldIn, blockpos1.down()))
                 {
                     int j = enumfacing1.getHorizontalIndex();
-                    IBlockState iblockstate1 = ModBlocks.foodBox.getDefaultState().withProperty(BlockTrough.FACING, enumfacing1).withProperty(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
+                    IBlockState iblockstate1 = ModBlocks.trough.getDefaultState().withProperty(BlockTrough.FACING, enumfacing1).withProperty(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
 
                     if (worldIn.setBlockState(pos, iblockstate1, 3))
                     {

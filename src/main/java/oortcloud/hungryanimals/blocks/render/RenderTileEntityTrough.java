@@ -32,7 +32,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer {
 		
 		TileEntityTrough foodbox = (TileEntityTrough) tileentity;
 		IBlockState state = tileentity.getWorld().getBlockState(tileentity.getPos());
-		if (state.getBlock() != ModBlocks.foodBox) return;
+		if (state.getBlock() != ModBlocks.trough) return;
 		EnumFacing rot = (EnumFacing)state.getValue(BlockTrough.FACING);
 		int rotation = rot.getHorizontalIndex();
 		

@@ -44,7 +44,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	public boolean shouldExecute() {
 
 		IBlockState state = world.getBlockState(new BlockPos(x, y, z));
-		if (state.getBlock() == ModBlocks.foodBox) {
+		if (state.getBlock() == ModBlocks.trough) {
 			TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, new BlockPos(x, y, z));
 
 			if (property.taming >= 1 && temp != null && temp instanceof TileEntityTrough) {
@@ -72,7 +72,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 		if (Math.abs(entity.posX - this.x - 0.5) <= 1.5 && Math.abs(entity.posY - this.y - 0.5) <= 1 && Math.abs(entity.posZ - this.z - 0.5) <= 1.5) {
 			IBlockState state = world.getBlockState(new BlockPos(x, y, z));
-			if (state.getBlock() == ModBlocks.foodBox) {
+			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, new BlockPos(x, y, z));
 
 				if (temp != null && temp instanceof TileEntityTrough) {

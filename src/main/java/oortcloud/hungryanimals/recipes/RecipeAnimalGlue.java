@@ -13,6 +13,10 @@ public class RecipeAnimalGlue {
 
 	private static HashMap<HashItemType, Integer> recipe;
 
+	public static HashMap<HashItemType, Integer> getRecipeList() {
+		return recipe;
+	}
+	
 	public static void init() {
 		recipe = new HashMap<HashItemType, Integer>();
 	}

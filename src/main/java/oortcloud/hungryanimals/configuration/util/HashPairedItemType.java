@@ -11,6 +11,14 @@ public class HashPairedItemType {
 		right=r;
 	}
 	
+	public HashItemType getLeft() {
+		return left;
+	}
+	
+	public HashItemType getRight() {
+		return right;
+	}
+	
 	@Override
 	public boolean equals(Object arg) {
 		
