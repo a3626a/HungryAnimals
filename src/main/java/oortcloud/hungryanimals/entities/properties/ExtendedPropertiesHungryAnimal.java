@@ -404,7 +404,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				if (this.taming < 0)
 					this.taming *= this.taming_factor;
 			}
-			this.ai_avoidPlayer.players = players;
+			this.ai_avoidPlayer.predators = players;
 		}
 	}
 

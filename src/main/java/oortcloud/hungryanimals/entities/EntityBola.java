@@ -28,8 +28,7 @@ public class EntityBola extends Entity implements IProjectile {
 		this.setSize(1.0F, 0.25F);
 	}
 
-	public EntityBola(World world, double posx, double posy, double posz,
-			double speed, float rotationYaw, float rotationPitch) {
+	public EntityBola(World world, double posx, double posy, double posz, double speed, float rotationYaw, float rotationPitch) {
 		super(world);
 		this.renderDistanceWeight = 10.0D;
 		this.setSize(1.0F, 0.25F);
@@ -37,10 +36,8 @@ public class EntityBola extends Entity implements IProjectile {
 		this.setThrowableHeading(speed, rotationYaw, rotationPitch);
 	}
 
-	public EntityBola(World world, EntityPlayer player, double d,
-			float rotationYaw, float rotationPitch) {
-		this(world, player.posX, player.posY + player.getEyeHeight(),
-				player.posZ, d, rotationYaw, rotationPitch);
+	public EntityBola(World world, EntityPlayer player, double d, float rotationYaw, float rotationPitch) {
+		this(world, player.posX, player.posY + player.getEyeHeight(), player.posZ, d, rotationYaw, rotationPitch);
 		this.shootingEntity = player;
 	}
 
@@ -50,26 +47,16 @@ public class EntityBola extends Entity implements IProjectile {
 		this.shootingEntity = player;
 
 		this.setSize(1.0F, 0.25F);
-		this.setLocationAndAngles(player.posX,
-				player.posY + (double) player.getEyeHeight(), player.posZ,
-				player.rotationYaw, player.rotationPitch);
-		this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F
-				* (float) Math.PI) * 0.16F);
+		this.setLocationAndAngles(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ, player.rotationYaw, player.rotationPitch);
+		this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
 		this.posY -= 0.10000000149011612D;
-		this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F
-				* (float) Math.PI) * 0.16F);
+		this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
 		this.setPosition(this.posX, this.posY, this.posZ);
 
-		this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F
-				* (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F
-				* (float) Math.PI));
-		this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F
-				* (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F
-				* (float) Math.PI));
-		this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F
-				* (float) Math.PI));
-		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ,
-				d * 1.5F, 1.0F);
+		this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
+		this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
+		this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
+		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, d * 1.5F, 1.0F);
 	}
 
 	@Override
@@ -78,25 +65,17 @@ public class EntityBola extends Entity implements IProjectile {
 
 		++this.ticksInAir;
 		Vec3 vec31 = new Vec3(this.posX, this.posY, this.posZ);
-		Vec3 vec3 = new Vec3(this.posX + this.motionX, this.posY
-				+ this.motionY, this.posZ + this.motionZ);
-		MovingObjectPosition movingobjectposition = this.worldObj
-				.rayTraceBlocks(vec31, vec3, false, true, false);
+		Vec3 vec3 = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+		MovingObjectPosition movingobjectposition = this.worldObj.rayTraceBlocks(vec31, vec3, false, true, false);
 		vec31 = new Vec3(this.posX, this.posY, this.posZ);
-		vec3 = new Vec3(this.posX + this.motionX, this.posY
-				+ this.motionY, this.posZ + this.motionZ);
+		vec3 = new Vec3(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
 		if (movingobjectposition != null) {
-			vec3 = new Vec3(movingobjectposition.hitVec.xCoord,
-					movingobjectposition.hitVec.yCoord,
-					movingobjectposition.hitVec.zCoord);
+			vec3 = new Vec3(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
 		}
 
 		Entity entity = null;
-		List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(
-				this,
-				this.getEntityBoundingBox().addCoord(this.motionX, this.motionY,
-						this.motionZ).expand(1.0D, 1.0D, 1.0D));
+		List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
 		double d0 = 0.0D;
 		int i;
 		float f1;
@@ -104,13 +83,10 @@ public class EntityBola extends Entity implements IProjectile {
 		for (i = 0; i < list.size(); ++i) {
 			Entity entity1 = (Entity) list.get(i);
 
-			if (entity1.canBeCollidedWith()
-					&& (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
+			if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
 				f1 = 0.3F;
-				AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().expand(
-						(double) f1, (double) f1, (double) f1);
-				MovingObjectPosition movingobjectposition1 = axisalignedbb1
-						.calculateIntercept(vec31, vec3);
+				AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().expand((double) f1, (double) f1, (double) f1);
+				MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
 
 				if (movingobjectposition1 != null) {
 					double d1 = vec31.distanceTo(movingobjectposition1.hitVec);
@@ -127,15 +103,10 @@ public class EntityBola extends Entity implements IProjectile {
 			movingobjectposition = new MovingObjectPosition(entity);
 		}
 
-		if (movingobjectposition != null
-				&& movingobjectposition.entityHit != null
-				&& movingobjectposition.entityHit instanceof EntityPlayer) {
+		if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) movingobjectposition.entityHit;
 
-			if (entityplayer.capabilities.disableDamage
-					|| this.shootingEntity instanceof EntityPlayer
-					&& !((EntityPlayer) this.shootingEntity)
-							.canAttackPlayer(entityplayer)) {
+			if (entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
 				movingobjectposition = null;
 			}
 		}
@@ -147,20 +118,16 @@ public class EntityBola extends Entity implements IProjectile {
 				if (this.shootingEntity == null) {
 					damagesource = DamageSource.causeThrownDamage(this, this);
 				} else {
-					damagesource = DamageSource.causeThrownDamage(this,
-							this.shootingEntity);
+					damagesource = DamageSource.causeThrownDamage(this, this.shootingEntity);
 				}
 
-				if (movingobjectposition.entityHit.attackEntityFrom(
-						damagesource, 1.0F)) {
+				if (movingobjectposition.entityHit.attackEntityFrom(damagesource, 1.0F)) {
 					if (movingobjectposition.entityHit instanceof EntityLivingBase) {
-						((EntityLivingBase) movingobjectposition.entityHit)
-								.addPotionEffect(new PotionEffect(
-										Potion.moveSlowdown.id, 1200, 3));
+						((EntityLivingBase) movingobjectposition.entityHit).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 1200, 3));
 					}
 
 					this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
-					
+
 					if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
 						this.setDead();
 					}
@@ -189,19 +156,13 @@ public class EntityBola extends Entity implements IProjectile {
 		return this.shootingEntity;
 	}
 
-	public void setThrowableHeading(double speed, float rotationYaw,
-			float rotationPitch) {
+	public void setThrowableHeading(double speed, float rotationYaw, float rotationPitch) {
 		this.prevRotationYaw = this.rotationYaw = rotationYaw;
 		this.prevRotationPitch = this.rotationPitch = rotationPitch;
 
-		this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F
-				* (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F
-				* (float) Math.PI));
-		this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F
-				* (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F
-				* (float) Math.PI));
-		this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F
-				* (float) Math.PI));
+		this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
+		this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
+		this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
 
 		this.motionX *= speed;
 		this.motionY *= speed;
@@ -230,21 +191,14 @@ public class EntityBola extends Entity implements IProjectile {
 	 * Similar to setArrowHeading, it's point the throwable entity to a x, y, z
 	 * direction.
 	 */
-	public void setThrowableHeading(double x, double y, double z, float speed,
-			float vari) {
+	public void setThrowableHeading(double x, double y, double z, float speed, float vari) {
 		float f2 = MathHelper.sqrt_double(x * x + y * y + z * z);
 		x /= (double) f2;
 		y /= (double) f2;
 		z /= (double) f2;
-		x += this.rand.nextGaussian()
-				* (double) (this.rand.nextBoolean() ? -1 : 1)
-				* 0.007499999832361937D * (double) vari;
-		y += this.rand.nextGaussian()
-				* (double) (this.rand.nextBoolean() ? -1 : 1)
-				* 0.007499999832361937D * (double) vari;
-		z += this.rand.nextGaussian()
-				* (double) (this.rand.nextBoolean() ? -1 : 1)
-				* 0.007499999832361937D * (double) vari;
+		x += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) vari;
+		y += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) vari;
+		z += this.rand.nextGaussian() * (double) (this.rand.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) vari;
 		x *= (double) speed;
 		y *= (double) speed;
 		z *= (double) speed;
@@ -253,8 +207,7 @@ public class EntityBola extends Entity implements IProjectile {
 		this.motionZ = z;
 		float f3 = MathHelper.sqrt_double(x * x + z * z);
 		this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(x, z) * 180.0D / Math.PI);
-		this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(y,
-				(double) f3) * 180.0D / Math.PI);
+		this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(y, (double) f3) * 180.0D / Math.PI);
 	}
 
 }
