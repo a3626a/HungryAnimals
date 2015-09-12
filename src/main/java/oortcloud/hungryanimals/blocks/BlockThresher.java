@@ -24,7 +24,9 @@ public class BlockThresher extends BlockContainer {
 
 	protected BlockThresher() {
 		super(Material.wood);
-
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
+		
 		this.setBlockBounds((float) 0.375, 0, (float) 0.375, (float) 0.625, 1, (float) 0.625);
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockThresherName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);

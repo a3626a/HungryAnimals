@@ -32,6 +32,8 @@ public class BlockCrankAnimal extends BlockContainer {
 
 	protected BlockCrankAnimal() {
 		super(Material.wood);
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
 
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockCrankAnimalName);
 		ModBlocks.register(this);

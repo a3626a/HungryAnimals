@@ -32,7 +32,9 @@ public class BlockAxle extends BlockContainer {
 
 	public BlockAxle() {
 		super(Material.wood);
-
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
+		
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, false));
 		this.setBlockBounds((float) 0.375, 0, (float) 0.375, (float) 0.625, 1, (float) 0.625);
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockAxleName);

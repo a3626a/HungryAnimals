@@ -21,9 +21,11 @@ import oortcloud.hungryanimals.utils.InventoryUtil;
 public class BlockBlender extends BlockContainer {
 
 	protected BlockBlender() {
-		super(Material.iron);
+		super(Material.wood);
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
+		
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockBlenderName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModBlocks.register(this);

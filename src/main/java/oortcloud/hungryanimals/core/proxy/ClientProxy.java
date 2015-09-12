@@ -17,6 +17,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.nei.NEIHandler;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityAxle;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityBlender;
@@ -155,6 +156,11 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerKeyBindings() {
 		ModKeyBindings.init();
+	}
+	
+	@Override
+	public void initNEI() {
+		NEIHandler.init();
 	}
 
 }

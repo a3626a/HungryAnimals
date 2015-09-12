@@ -72,4 +72,9 @@ public class CommonProxy {
 	public void registerKeyBindings() {
 	}
 
+	public void initNEI() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -21,9 +21,10 @@ public class BlockCrankPlayer extends BlockContainer {
 
 	protected BlockCrankPlayer() {
 		super(Material.wood);
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
 
 		this.setBlockBounds(0.375F, 0, 0.375F, 0.625F, 0.5625F, 0.625F);
-
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockCrankPlayerName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModBlocks.register(this);

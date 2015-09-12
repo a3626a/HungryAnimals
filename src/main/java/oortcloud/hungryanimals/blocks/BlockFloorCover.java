@@ -24,10 +24,11 @@ public class BlockFloorCover extends Block {
 
 	public BlockFloorCover(Block blockIn, String UnlocalizedName) {
 		super(blockIn.getMaterial());
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
 		
 		material=blockIn;
 		
-		this.setHardness(2.0F);
 		this.setUnlocalizedName(UnlocalizedName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
 		GameRegistry.registerBlock(this, ItemBlockFloorCover.class, ModBlocks.getName(this.getUnlocalizedName()));

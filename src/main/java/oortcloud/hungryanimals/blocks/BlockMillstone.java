@@ -28,7 +28,9 @@ public class BlockMillstone extends BlockContainer {
 	public static final float exhaustion = 0.5F;
 
 	protected BlockMillstone() {
-		super(Material.rock);
+		super(Material.wood);
+		this.setHarvestLevel("axe", 0);
+		this.setHardness(2.0F);
 
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH));
 		this.setBlockBounds(0, 0, 0, 1.0F, 0.625F, 1.0F);

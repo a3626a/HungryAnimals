@@ -111,7 +111,7 @@ public class HungryAnimals {
 	public static void postInit(FMLPostInitializationEvent event) {
 		ConfigurationHandler.postSync();
 		if (Loader.isModLoaded("NotEnoughItems"))
-			NEIHandler.init();
+			proxy.initNEI();
 	}
 
 	@EventHandler
