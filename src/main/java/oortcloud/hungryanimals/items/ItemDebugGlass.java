@@ -53,9 +53,9 @@ public class ItemDebugGlass extends Item {
 						tag.setDouble("excretion", property.excretion);
 						tag.setDouble("taming", property.taming);
 						tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
-						tag.setInteger("target_X", property.ai_moveToFoodbox.x);
-						tag.setInteger("target_Y", property.ai_moveToFoodbox.y);
-						tag.setInteger("target_Z", property.ai_moveToFoodbox.z);
+						tag.setInteger("target_X", property.ai_moveToFoodbox.pos.getX());
+						tag.setInteger("target_Y", property.ai_moveToFoodbox.pos.getX());
+						tag.setInteger("target_Z", property.ai_moveToFoodbox.pos.getX());
 					}
 				}
 			}
