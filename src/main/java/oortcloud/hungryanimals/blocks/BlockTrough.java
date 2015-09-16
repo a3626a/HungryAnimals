@@ -65,11 +65,6 @@ public class BlockTrough extends BlockContainer {
 		return EnumWorldBlockLayer.CUTOUT;
 	}
 
-	@Override
-	public int getRenderType() {
-		return 3;
-	}
-
 	public int getMobilityFlag() {
 		return 1;
 	}
@@ -101,6 +96,9 @@ public class BlockTrough extends BlockContainer {
 
 			if (!worldIn.isRemote) {
 				this.dropBlockAsItem(worldIn, pos, state, 0);
+				TileEntityTrough trough = (TileEntityTrough) worldIn.getTileEntity(pos);
+				if (trough != null)
+					dropStoredItems(worldIn, pos, trough);
 			}
 		}
 	}
@@ -119,6 +117,7 @@ public class BlockTrough extends BlockContainer {
 
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+		// to prevent item drop in creative mode
 		if (player.capabilities.isCreativeMode && state.getValue(PART) == BlockTrough.EnumPartType.HEAD) {
 			BlockPos blockpos1 = pos.offset(((EnumFacing) state.getValue(FACING)).getOpposite());
 
@@ -126,6 +125,7 @@ public class BlockTrough extends BlockContainer {
 				worldIn.setBlockToAir(blockpos1);
 			}
 		}
+		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 
 	@Override
@@ -170,7 +170,6 @@ public class BlockTrough extends BlockContainer {
 		} else {
 			return null;
 		}
-
 	}
 
 	@Override
@@ -222,10 +221,16 @@ public class BlockTrough extends BlockContainer {
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		TileEntityTrough trough = (TileEntityTrough) getTileEntity(worldIn, pos);
-		HungryAnimals.logger.info("breakBlock0");
-		if (trough != null) {
 
+		TileEntityTrough trough = (TileEntityTrough) worldIn.getTileEntity(pos);
+		if (trough != null)
+			dropStoredItems(worldIn, pos, trough);
+
+		super.breakBlock(worldIn, pos, state);
+	}
+
+	private void dropStoredItems(World worldIn, BlockPos pos, TileEntityTrough trough) {
+		if (trough != null) {
 			ItemStack itemstack = trough.stack;
 			HungryAnimals.logger.info("breakBlock1");
 			if (itemstack != null) {
@@ -258,8 +263,6 @@ public class BlockTrough extends BlockContainer {
 			}
 
 		}
-
-		super.breakBlock(worldIn, pos, state);
 	}
 
 	public IBlockState getStateFromMeta(int meta) {
