@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +19,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private final int serchingIteration = 10;
 	private final int serchingApprox = 3;
 
-	private EntityAnimal entity;
+	private EntityLiving entity;
 	private ExtendedPropertiesHungryAnimal property;
 	private World worldObj;
 	private int x_search;
@@ -33,14 +34,12 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private double closestX = 0;
 	private double closestY = 0;
 	private double closestZ = 0;
-	private int bestX = 0;
-	private int bestY = 0;
-	private int bestZ = 0;
+	private BlockPos bestPos;
 	private double bestf = 0;
 	private int phase;
 	private double speed;
 
-	public EntityAIMoveToEatBlock(EntityAnimal entity, ExtendedPropertiesHungryAnimal property, double speed) {
+	public EntityAIMoveToEatBlock(EntityLiving entity, ExtendedPropertiesHungryAnimal property, double speed) {
 		this.entity = entity;
 		this.property = property;
 		this.worldObj = this.entity.worldObj;
@@ -48,19 +47,15 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		this.setMutexBits(1);
 	}
 
-	/**
-	 * Returns whether the EntityAIBase should begin execution.
-	 */
+	@Override
 	public boolean shouldExecute() {
-
 		return this.property.getHungry() < this.property.courtship_hungerCondition;
-
 	}
 
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
+	@Override
 	public void startExecuting() {
+		float radius = 32.0F;
+
 		this.phase = 0;
 		double posX = entity.posX;
 		this.x_init = (int) posX;
@@ -78,17 +73,17 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		this.closestX = 0;
 		this.closestY = 0;
 		this.closestZ = 0;
-		List list = this.worldObj.getEntitiesWithinAABB(entity.getClass(), entity.getEntityBoundingBox().expand(32, 4, 32));
+		ArrayList<EntityLiving> list = (ArrayList<EntityLiving>) this.worldObj.getEntitiesWithinAABB(entity.getClass(), entity.getEntityBoundingBox().expand(radius, radius, radius));
 		int size = list.size();
 		if (list.isEmpty()) {
 			entity.setDead();
 			return;
 		} else {
-			double minR = 64;
-			for (Object e : list) {
-				double eX = ((EntityLiving) e).posX;
-				double eZ = ((EntityLiving) e).posZ;
-				double eY = ((EntityLiving) e).posY;
+			double minR = Double.MAX_VALUE;
+			for (EntityLiving e : list) {
+				double eX = e.posX;
+				double eZ = e.posZ;
+				double eY = e.posY;
 				comX += eX;
 				comY += eY;
 				comZ += eZ;
@@ -109,9 +104,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 
 	}
 
-	/**
-	 * Returns whether an in-progress EntityAIBase should continue executing
-	 */
+	@Override
 	public boolean continueExecuting() {
 		if (this.phase == 0) {
 
@@ -126,15 +119,12 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 						int j = this.y_init + this.y_search;
 						int k = this.z_init + this.z_search;
 
-						double f = this.property.getBlockPathWeight(i, j, k) * (1 + entity.getRNG().nextDouble())
-								* centralizationFunction(Math.sqrt((this.comX - i) * (this.comX - i) + (this.comZ - k) * (this.comZ - k)))
+						double f = this.property.getBlockPathWeight(i, j, k) * (1 + entity.getRNG().nextDouble()) * centralizationFunction(Math.sqrt((this.comX - i) * (this.comX - i) + (this.comZ - k) * (this.comZ - k)))
 								* (0.1 * (Math.sqrt((closestX - i) * (closestX - i) + (closestY - j) * (closestY - j) + (closestZ - k) * (closestZ - k))) + 1);
 
 						if (f > bestf) {
 							bestf = f;
-							bestX = i;
-							bestY = j;
-							bestZ = k;
+							bestPos = new BlockPos(i, j, k);
 						}
 						int rand = entity.getRNG().nextInt(serchingApprox);
 						iter += rand + 1;
@@ -145,27 +135,24 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 				this.x_search = ((this.x_search + serchingX) % (serchingX * 2 + 1)) - serchingX;
 			}
 
-			entity.getNavigator().tryMoveToXYZ(this.bestX, this.bestY, this.bestZ, this.speed);
+			entity.getNavigator().tryMoveToXYZ(bestPos.getX(), bestPos.getY(), bestPos.getZ(), this.speed);
 			this.phase = 1;
 			return true;
 		}
-
 		if (this.phase == 1) {
 			if (entity.getNavigator().noPath()) {
-				IBlockState block = this.worldObj.getBlockState(new BlockPos(this.bestX, this.bestY, this.bestZ));
-				if (this.property.canEatBlock(block) && Math.abs(entity.posX - this.bestX - 0.5) <= 1.2 && Math.abs(entity.posY - this.bestY - 0.5) <= 1.2
-						&& Math.abs(entity.posZ - this.bestZ - 0.5) <= 1.2) {
+				float distanceSq = 2;
+				IBlockState block = this.worldObj.getBlockState(bestPos);
+				if (this.property.canEatBlock(block) && bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
 					if (this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing")) {
-						this.worldObj.setBlockToAir(new BlockPos(bestX, bestY, bestZ));
+						this.worldObj.setBlockToAir(bestPos);
 					}
-
 					property.eatBlockBonus(block);
 				}
 				return false;
 			}
 			return true;
 		}
-
 		return false;
 	}
 

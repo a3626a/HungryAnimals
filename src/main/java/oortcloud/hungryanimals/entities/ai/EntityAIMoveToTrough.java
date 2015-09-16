@@ -66,7 +66,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	@Override
 	public boolean continueExecuting() {
 		float distSq = 2;
-		if (entity.getPosition().distanceSq(pos) <= distSq) {
+		if (pos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distSq) {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);

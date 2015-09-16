@@ -102,7 +102,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	@Override
 	public boolean continueExecuting() {
 		if (entity.getNavigator().noPath()) {
-			if (entity.getEntityBoundingBox().expand(1, 1, 1).isVecInside(target.getPositionVector())) {
+			float distanceSq = 2;
+			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
 				ItemStack foodStack = target.getEntityItem();
 				foodStack.stackSize--;
 				if (foodStack.stackSize <= 0)
