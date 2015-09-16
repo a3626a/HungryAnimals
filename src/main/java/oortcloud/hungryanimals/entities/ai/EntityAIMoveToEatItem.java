@@ -67,7 +67,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	public boolean shouldExecute() {
 		float radius = 16.0F;
 		initializeFoodCondition();
-		if (this.property.hunger_max - this.property.hunger < foodCondition)
+		if (property.hunger_max - property.hunger < foodCondition)
 			return false;
 
 		if (this.delayCounter > 0) {
@@ -76,7 +76,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		} else {
 
 			ArrayList<EntityItem> list;
-			list = (ArrayList<EntityItem>) this.worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
@@ -85,7 +85,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			if (entity.getRNG().nextInt(executeProbability()) != 0)
 				return false;
 
-			list = (ArrayList<EntityItem>) this.worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), EAT_EDIBLE);
+			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), EAT_EDIBLE);
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;

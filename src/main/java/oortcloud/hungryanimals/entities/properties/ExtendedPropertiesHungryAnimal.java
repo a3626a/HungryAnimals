@@ -42,7 +42,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
-import oortcloud.hungryanimals.entities.ai.EntityAITemptEatableItem;
+import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
 import oortcloud.hungryanimals.potion.ModPotions;
 
@@ -130,7 +130,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, this, 16.0F, 1.0D, 2.0D));
 		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
 		this.entity.tasks.addTask(3, this.ai_moveToFoodbox);
-		this.entity.tasks.addTask(4, new EntityAITemptEatableItem(this.entity, this, 1.5D));
+		this.entity.tasks.addTask(4, new EntityAITemptEdibleItem(this.entity, this, 1.5D));
 		this.entity.tasks.addTask(5, new EntityAIMoveToEatItem(this.entity, this, 1.5D));
 		this.entity.tasks.addTask(7, new EntityAIMoveToEatBlock(this.entity, this, 1.0D));
 		this.entity.tasks.addTask(8, new EntityAIWander(this.entity, 1.0D));
