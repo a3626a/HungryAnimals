@@ -26,7 +26,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 public class CommonProxy {
 
 	public void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityTrough.class, Strings.blockFoodBoxName);
+		GameRegistry.registerTileEntity(TileEntityTrough.class, Strings.blockTroughName);
 		GameRegistry.registerTileEntity(TileEntityAxle.class, Strings.blockAxleName);
 		GameRegistry.registerTileEntity(TileEntityCrankPlayer.class, Strings.blockCrankPlayerName);
 		GameRegistry.registerTileEntity(TileEntityThresher.class, Strings.blockThresherName);

@@ -10,6 +10,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.util.StatCollector;
 import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.items.ModItems;
@@ -58,7 +59,7 @@ public class AnimalGlueRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public String getRecipeName() {
-        return "animalglue";
+        return StatCollector.translateToLocal("api.nei.hanlder.animalglue");
     }
     
     @Override

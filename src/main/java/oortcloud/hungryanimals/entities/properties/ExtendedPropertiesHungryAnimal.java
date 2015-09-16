@@ -38,6 +38,7 @@ import oortcloud.hungryanimals.configuration.util.HashDropRare;
 import oortcloud.hungryanimals.configuration.util.HashBlockState;
 import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
+import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
 import oortcloud.hungryanimals.entities.ai.EntityAICrank;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
@@ -68,7 +69,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public double attribute_movespeed;
 	public double crank_production;
 	public double crank_food_consumption;
-	
+
 	public double taming_factor = 0.998;
 
 	public EntityAnimal entity;
@@ -76,7 +77,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public double hunger;
 	public double excretion;
 	public double taming;
-	public EntityAIAvoidPlayer ai_avoidPlayer;
 	public EntityAIMoveToTrough ai_moveToFoodbox;
 	public EntityAICrank ai_crank;
 
@@ -98,7 +98,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		crank_production = genericProperty.crank_production;
 		crank_food_consumption = genericProperty.crank_food_consumption;
 	}
-	
+
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		NBTTagCompound tag = new NBTTagCompound();
@@ -122,20 +122,19 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public void init(Entity entity, World world) {
 		this.entity = (EntityAnimal) entity;
 		this.worldObj = world;
-		this.ai_avoidPlayer = new EntityAIAvoidPlayer(this.entity, this, 2.0D);
 		this.ai_moveToFoodbox = new EntityAIMoveToTrough(this.entity, this, 1.0D);
 		this.ai_crank = new EntityAICrank(this.entity, this);
 	}
 
 	public void postInit() {
-		this.removeAI(new Class[] { EntityAITempt.class, EntityAIFollowParent.class, EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class,
-				EntityAILookIdle.class });
+		this.removeAI(new Class[] { EntityAITempt.class, EntityAIFollowParent.class, EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class, EntityAILookIdle.class });
 
 		this.entity.tasks.addTask(0, this.ai_crank);
-		this.entity.tasks.addTask(1, this.ai_avoidPlayer);
+		//this.entity.tasks.addTask(1, this.ai_avoidPlayer);
+		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, this, 16.0F, 1.0D, 2.0D));
 		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
 		this.entity.tasks.addTask(3, this.ai_moveToFoodbox);
-		this.entity.tasks.addTask(4, new EntityAITemptEatableItem(this.entity, this, 1.5D, false));
+		this.entity.tasks.addTask(4, new EntityAITemptEatableItem(this.entity, this, 1.5D));
 		this.entity.tasks.addTask(5, new EntityAIMoveToEatItem(this.entity, this, 1.5D));
 		this.entity.tasks.addTask(6, new EntityAIMoveToEatNaturalItem(this.entity, this, 1.5D));
 		this.entity.tasks.addTask(7, new EntityAIMoveToEatBlock(this.entity, this, 1.0D));
@@ -174,22 +173,22 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			for (EntityItem i : toRemove) {
 				drops.remove(i);
 			}
-			
+
 			for (HashDropMeat j : drop_meat) {
 				ItemStack drop = j.getDrop(getHungry());
 				if (drop != null) {
-					drop.stackSize = (int) (drop.stackSize * (1+entity.getRNG().nextInt(1 + looting) / 3.0));
+					drop.stackSize = (int) (drop.stackSize * (1 + entity.getRNG().nextInt(1 + looting) / 3.0));
 					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, drop);
-		            entityitem.setDefaultPickupDelay();
+					entityitem.setDefaultPickupDelay();
 					drops.add(entityitem);
 				}
 			}
 			for (HashDropRandom j : drop_random) {
 				ItemStack drop = j.getDrop(entity.getRNG());
 				if (drop != null) {
-					drop.stackSize = (int) (drop.stackSize * (1+(entity.getRNG().nextInt(1 + looting)) / 3.0));
+					drop.stackSize = (int) (drop.stackSize * (1 + (entity.getRNG().nextInt(1 + looting)) / 3.0));
 					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, drop);
-		            entityitem.setDefaultPickupDelay();
+					entityitem.setDefaultPickupDelay();
 					drops.add(entityitem);
 				}
 			}
@@ -197,7 +196,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				ItemStack drop = j.getDrop(entity.getRNG(), looting);
 				if (drop != null) {
 					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, drop);
-		            entityitem.setDefaultPickupDelay();
+					entityitem.setDefaultPickupDelay();
 					drops.add(entityitem);
 				}
 			}
@@ -290,17 +289,17 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 		if (this.entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
-			if (tag==null||!tag.hasKey("isNatural")||!tag.getBoolean("isNatural")) {
+			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (hunger / hunger_bmr);
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth.id, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
-		if (tag == null||!tag.hasKey("isNatural")||!tag.getBoolean("isNatural")) {
+		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			this.taming += 0.0002 / hunger_bmr * hunger;
 		}
-		
+
 	}
 
 	public void eatBlockBonus(IBlockState block) {
@@ -338,8 +337,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	}
 
 	private void updateCourtship() {
-		if (this.entity.getGrowingAge() == 0 && !this.entity.isInLove() && this.getHungry() > this.courtship_hungerCondition
-				&& this.entity.getRNG().nextDouble() < this.courtship_probability) {
+		if (this.entity.getGrowingAge() == 0 && !this.entity.isInLove() && this.getHungry() > this.courtship_hungerCondition && this.entity.getRNG().nextDouble() < this.courtship_probability) {
 			this.entity.setInLove(null);
 			this.subHunger(this.courtship_hunger);
 		}
@@ -387,7 +385,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			}
 		}
 		if (floor.getBlock() == ModBlocks.floorcover_ironbar) {
-
+			//TODO
 		}
 	}
 
@@ -395,8 +393,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		double radius = 16;
 
 		if ((this.worldObj.getWorldTime() + this.entity.getEntityId()) % 100 == 0) {
-			List players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.entity.posX - radius, this.entity.posY - radius, this.entity.posZ
-					- radius, this.entity.posX + radius, this.entity.posY + radius, this.entity.posZ + radius));
+			ArrayList<EntityPlayer> players = (ArrayList<EntityPlayer>) this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, entity.getEntityBoundingBox().expand(radius, radius, radius));
 			if (players.isEmpty()) {
 				if (this.taming > 0)
 					this.taming *= this.taming_factor;
@@ -404,7 +401,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				if (this.taming < 0)
 					this.taming *= this.taming_factor;
 			}
-			this.ai_avoidPlayer.predators = players;
 		}
 	}
 

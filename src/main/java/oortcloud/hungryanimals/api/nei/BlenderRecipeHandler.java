@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import oortcloud.hungryanimals.api.nei.AnimalGlueRecipeHandler.CachedAnimalGlueRecipe;
 import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.configuration.util.HashPairedItemType;
@@ -58,7 +59,7 @@ public class BlenderRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public String getRecipeName() {
-        return "blender";
+        return StatCollector.translateToLocal("api.nei.hanlder.blender");
     }
     
     @Override

@@ -40,21 +40,6 @@ item.hungryanimals:itemcrankanimal.name=Large Crank
 item.hungryanimals:itemoilpipet.name=Oil Pipet
 item.hungryanimals:itembelt.name=Belt
 
-chicken.tooltip=Modify some constants of chickens
-cow.tooltip=Modify some constants of cows
-pig.tooltip=Modify some constants of pigs
-sheep.tooltip=Modify some constants of sheep
-block.tooltip=Modify some constants of block
-
-Hunger Rate.tooltip=hunger decrement every tick
-Courtship Price.tooltip=hunger decrement when the animal starts to fall in love
-Courtship Probability.tooltip=chance to fall in love when the animal is full
-Courtship Hunger.tooltip=hunger that the animal have a chance to fall in love[1.0 when full, 0.0 die]
-Grass Hunger.tooltip=hunger increment when the animal eats grass
-Fermentation Probability.tooltip=Fermentation speed of excreta
-Excretion Constant.tooltip=Ratio between consumed hunger value and excretion value
-Max Hunger.tooltip=Maximum hunger value that the animals can hold
-Child Price.tooltip=Hunger Usage when the animal makes a child
-Disease Probability.tooltip=Probability that excreta can infect animals every block tick
-Food List.tooltip=Foods that the animal can eat and follows
-Hunger List.tooltip=Hunger increment when the animal eats corresponding food
+api.nei.hanlder.compositewoodcrafting=Composite Wood Crafting Recipe
+api.nei.hanlder.animalglue=Animal Glue
+api.nei.hanlder.blender=Blender

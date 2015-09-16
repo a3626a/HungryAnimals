@@ -48,10 +48,6 @@ public class EntityEventHandler {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryCow());
 			return;
 		}
-		if (event.entity.getClass() == EntityMooshroom.class) {
-			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryCow());
-			return;
-		}
 		if (event.entity.getClass() == EntityPig.class) {
 			event.entity.registerExtendedProperties(Strings.extendedPropertiesKey, new ExtendedPropertiesHungryPig());
 			return;

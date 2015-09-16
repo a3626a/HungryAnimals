@@ -14,7 +14,7 @@ public class Strings {
 	public static final String blockMillStoneName = "blockmillstone";
 	public static final String blockExcretaName = "blockexcreta";
 	public static final String blockNiterBedName = "blockniterbed";
-	public static final String blockFoodBoxName = "blocktrough";
+	public static final String blockTroughName = "blocktrough";
 	public static final String blockTrapCoverName = "blocktrapcover";
 	public static final String blockAxleName = "blockaxle";
 	public static final String blockCrankPlayerName = "blockcrankplayer";

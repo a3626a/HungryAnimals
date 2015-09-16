@@ -35,19 +35,18 @@ public class TileEntityCrankAnimal extends TileEntityPowerTransporter {
 
 	public TileEntityCrankAnimal() {
 		super();
-		super.powerCapacity=TileEntityCrankAnimal.powerCapacity;
+		super.powerCapacity = TileEntityCrankAnimal.powerCapacity;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			leashedAnimalID = -1;
 		}
 	}
 
-	public void setLeashed(EntityPlayer player, World worldIn) {
+	public boolean setLeashed(EntityPlayer player, World worldIn) {
 		double d0 = 7.0D;
 		int i = pos.getX();
 		int j = pos.getY();
 		int k = pos.getZ();
-		List list = worldIn.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0,
-				(double) k + d0));
+		List list = worldIn.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB((double) i - d0, (double) j - d0, (double) k - d0, (double) i + d0, (double) j + d0, (double) k + d0));
 		Iterator iterator = list.iterator();
 
 		while (iterator.hasNext()) {
@@ -57,14 +56,14 @@ public class TileEntityCrankAnimal extends TileEntityPowerTransporter {
 
 				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) entityliving.getExtendedProperties(Strings.extendedPropertiesKey);
 
-				// if (property != null && property.taming >= 1)
-				if (property != null) {
+				if (property != null && property.crank_production > 0 && property.taming >= 1) {
 					leashedAnimal = entityliving;
 					property.ai_crank.crankAnimal = this;
+					return true;
 				}
 			}
 		}
-
+		return false;
 	}
 
 	public EntityAnimal getLeashedAnimal() {
@@ -82,10 +81,10 @@ public class TileEntityCrankAnimal extends TileEntityPowerTransporter {
 				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) leashedAnimal.getExtendedProperties(Strings.extendedPropertiesKey);
 				if (property != null) {
 					double angleDifference = property.ai_crank.getAngleDifference();
-					this.getPowerNetwork().producePower(property.crank_production*(1-Math.abs(90-angleDifference)/90.0));
+					this.getPowerNetwork().producePower(property.crank_production * (1 - Math.abs(90 - angleDifference) / 90.0));
 					property.subHunger(property.crank_food_consumption);
 				}
-				
+
 			}
 			if (leashedAnimal == null && leashedAnimalUUID != null) {
 				for (Object i : worldObj.loadedEntityList) {
@@ -168,6 +167,6 @@ public class TileEntityCrankAnimal extends TileEntityPowerTransporter {
 
 	@Override
 	public BlockPos[] getConnectedBlocks() {
-		return new BlockPos[] {pos.up(), pos.down()};
+		return new BlockPos[] { pos.up(), pos.down() };
 	}
 }

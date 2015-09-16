@@ -43,7 +43,7 @@ public class BlockCrankAnimal extends BlockContainer {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return null;
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityCrankAnimal crankAnimal = (TileEntityCrankAnimal) worldIn.getTileEntity(pos);
@@ -51,22 +51,20 @@ public class BlockCrankAnimal extends BlockContainer {
 		if (crankAnimal != null) {
 			TileEntityCrankAnimal crankAnimalPrimary = (TileEntityCrankAnimal) worldIn.getTileEntity(crankAnimal.getPrimaryPos());
 			if (crankAnimalPrimary != null) {
-				crankAnimalPrimary.setLeashed(playerIn, worldIn);
+				if (crankAnimalPrimary.setLeashed(playerIn, worldIn)) {
+					// release leash from the player
+					double d0 = 7.0D;
+					List list = worldIn.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.getX() - d0, pos.getY() - d0, pos.getZ() - d0, pos.getX() + d0, pos.getY() + d0, pos.getZ() + d0));
+					Iterator iterator = list.iterator();
+					while (iterator.hasNext()) {
+						EntityLiving entityliving = (EntityLiving) iterator.next();
 
-				double d0 = 7.0D;
-				List list = worldIn.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.getX() - d0, pos.getY() - d0, pos.getZ() - d0, pos.getX() + d0,
-						pos.getY() + d0, pos.getZ() + d0));
-				Iterator iterator = list.iterator();
-
-				while (iterator.hasNext()) {
-					EntityLiving entityliving = (EntityLiving) iterator.next();
-
-					if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == playerIn) {
-						entityliving.clearLeashed(true, false);
+						if (entityliving.getLeashed() && entityliving.getLeashedToEntity() == playerIn) {
+							entityliving.clearLeashed(true, false);
+						}
 					}
+					return true;
 				}
-
-				return true;
 			}
 		}
 		return false;
@@ -75,11 +73,12 @@ public class BlockCrankAnimal extends BlockContainer {
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		
+
 		TileEntityCrankAnimal crankAnimal = (TileEntityCrankAnimal) worldIn.getTileEntity(pos);
 
 		if (crankAnimal != null) {
-			if (crankAnimal.isPrimary()) spawnAsEntity(worldIn, pos, new ItemStack(ModItems.crankAnimal));
+			if (crankAnimal.isPrimary())
+				spawnAsEntity(worldIn, pos, new ItemStack(ModItems.crankAnimal));
 			worldIn.destroyBlock(crankAnimal.getPrimaryPos(), false);
 		}
 

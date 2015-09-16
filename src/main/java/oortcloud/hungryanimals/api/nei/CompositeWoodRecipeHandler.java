@@ -9,11 +9,15 @@ import java.util.Random;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -158,7 +162,7 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 
 	@Override
 	public String getRecipeName() {
-		return "compositewoodcrafting";
+		return StatCollector.translateToLocal("api.nei.hanlder.compositewoodcrafting");
 	}
 
 	@Override

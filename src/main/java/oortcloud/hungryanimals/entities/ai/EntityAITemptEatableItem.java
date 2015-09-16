@@ -1,25 +1,17 @@
 package oortcloud.hungryanimals.entities.ai;
 
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
+import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class EntityAITemptEatableItem extends EntityAIBase {
 	/** The entity using this AI that is tempted by the player. */
-    private EntityAnimal temptedEntity;
+    private EntityCreature temptedEntity;
     private ExtendedPropertiesHungryAnimal property;
     private double speed;
-    /** X position of player tempting this mob */
-    private double targetX;
-    /** Y position of player tempting this mob */
-    private double targetY;
-    /** Z position of player tempting this mob */
-    private double targetZ;
-    private double field_75278_f;
-    private double field_75279_g;
     /** The player that is tempting the entity that is using this AI. */
     private EntityPlayer temptingPlayer;
     /**
@@ -29,17 +21,13 @@ public class EntityAITemptEatableItem extends EntityAIBase {
     private int delayTemptCounter;
     /** True if this EntityAITempt task is running */
     private boolean isRunning;
-    /** Whether the entity using this AI will be scared by the tempter's sudden movement. */
-    private boolean scaredByPlayerMovement;
     private boolean field_75286_m;
-    private static final String __OBFID = "CL_00001616";
 
-    public EntityAITemptEatableItem(EntityAnimal animal,ExtendedPropertiesHungryAnimal propertyIn, double speedIn, boolean p_i45316_5_)
+    public EntityAITemptEatableItem(EntityCreature animal, ExtendedPropertiesHungryAnimal propertyIn, double speedIn)
     {
         this.temptedEntity = animal;
         this.property = propertyIn;
         this.speed = speedIn;
-        this.scaredByPlayerMovement = p_i45316_5_;
         this.setMutexBits(3);
 
         if (!(animal.getNavigator() instanceof PathNavigateGround))
@@ -79,31 +67,6 @@ public class EntityAITemptEatableItem extends EntityAIBase {
      */
     public boolean continueExecuting()
     {
-        if (this.scaredByPlayerMovement)
-        {
-            if (this.temptedEntity.getDistanceSqToEntity(this.temptingPlayer) < 36.0D)
-            {
-                if (this.temptingPlayer.getDistanceSq(this.targetX, this.targetY, this.targetZ) > 0.010000000000000002D)
-                {
-                    return false;
-                }
-
-                if (Math.abs((double)this.temptingPlayer.rotationPitch - this.field_75278_f) > 5.0D || Math.abs((double)this.temptingPlayer.rotationYaw - this.field_75279_g) > 5.0D)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                this.targetX = this.temptingPlayer.posX;
-                this.targetY = this.temptingPlayer.posY;
-                this.targetZ = this.temptingPlayer.posZ;
-            }
-
-            this.field_75278_f = (double)this.temptingPlayer.rotationPitch;
-            this.field_75279_g = (double)this.temptingPlayer.rotationYaw;
-        }
-
         return this.shouldExecute();
     }
 
@@ -112,9 +75,6 @@ public class EntityAITemptEatableItem extends EntityAIBase {
      */
     public void startExecuting()
     {
-        this.targetX = this.temptingPlayer.posX;
-        this.targetY = this.temptingPlayer.posY;
-        this.targetZ = this.temptingPlayer.posZ;
         this.isRunning = true;
         this.field_75286_m = ((PathNavigateGround)this.temptedEntity.getNavigator()).func_179689_e();
         ((PathNavigateGround)this.temptedEntity.getNavigator()).func_179690_a(false);
@@ -147,13 +107,5 @@ public class EntityAITemptEatableItem extends EntityAIBase {
         {
             this.temptedEntity.getNavigator().tryMoveToEntityLiving(this.temptingPlayer, this.speed);
         }
-    }
-
-    /**
-     * @see #isRunning
-     */
-    public boolean isRunning()
-    {
-        return this.isRunning;
     }
 }

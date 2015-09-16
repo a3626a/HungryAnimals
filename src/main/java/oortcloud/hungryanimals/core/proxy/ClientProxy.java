@@ -72,7 +72,10 @@ public class ClientProxy extends CommonProxy {
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverLeafName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverLeafName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverWoolName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverWoolName, "inventory"));
 		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockFloorCoverHayName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverHayName, "inventory"));
-
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockPoppyName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockPoppyName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockTroughName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTroughName, "inventory"));
+		mesher.register(GameRegistry.findItem(References.MODID, Strings.blockCrankAnimalName), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTroughName, "inventory"));
+		
 		mesher.register(ModItems.bola, 0, CameraTransformModelItemBola.modelresourcelocation_normal);
 		mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation_normal);
 		//mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation_shooting);
