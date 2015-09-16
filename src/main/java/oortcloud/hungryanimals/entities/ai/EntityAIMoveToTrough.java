@@ -29,9 +29,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	private ExtendedPropertiesHungryAnimal property;
 	private double speed;
 	private World world;
-	public int x;
-	public int y;
-	public int z;
+	public BlockPos pos;
 
 	public EntityAIMoveToTrough(EntityAnimal entity, ExtendedPropertiesHungryAnimal property, double speed) {
 		this.entity = entity;
@@ -43,18 +41,14 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 	public boolean shouldExecute() {
 
-		IBlockState state = world.getBlockState(new BlockPos(x, y, z));
+		IBlockState state = world.getBlockState(pos);
 		if (state.getBlock() == ModBlocks.trough) {
-			TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, new BlockPos(x, y, z));
+			TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 
 			if (property.taming >= 1 && temp != null && temp instanceof TileEntityTrough) {
 				TileEntityTrough tile;
 				tile = (TileEntityTrough) temp;
-				if (tile.stack != null && this.property.canEatFood(tile.stack)) {
-					return true;
-				} else {
-					return false;
-				}
+				return tile.stack != null && this.property.canEatFood(tile.stack);
 			} else {
 				return false;
 			}
@@ -65,27 +59,25 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	}
 
 	public void startExecuting() {
-		this.entity.getNavigator().tryMoveToXYZ(this.x, this.y, this.z, this.speed);
+		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), this.speed);
 	}
 
 	public boolean continueExecuting() {
-
-		if (Math.abs(entity.posX - this.x - 0.5) <= 1.5 && Math.abs(entity.posY - this.y - 0.5) <= 1 && Math.abs(entity.posZ - this.z - 0.5) <= 1.5) {
-			IBlockState state = world.getBlockState(new BlockPos(x, y, z));
+		float distSq = 2;
+		if (entity.getPosition().distanceSq(pos) <= distSq) {
+			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
-				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, new BlockPos(x, y, z));
+				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
+				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
+					TileEntityTrough trough = (TileEntityTrough) tileEntity;
+					if (trough.stack != null && this.property.canEatFood(trough.stack)) {
+						property.eatFoodBonus(trough.stack);
+						trough.stack.stackSize--;
+						if (trough.stack.stackSize == 0)
+							trough.stack = null;
 
-				if (temp != null && temp instanceof TileEntityTrough) {
-					TileEntityTrough tile;
-					tile = (TileEntityTrough) temp;
-					if (tile.stack != null && this.property.canEatFood(tile.stack)) {
-						property.eatFoodBonus(tile.stack);
-						tile.stack.stackSize--;
-						if (tile.stack.stackSize == 0)
-							tile.stack = null;
-
-						PacketTileEntityClient msg0 = new PacketTileEntityClient(0, this.world.provider.getDimensionId(), new BlockPos(this.x, this.y, this.z));
-						msg0.setItemStack(tile.stack);
+						PacketTileEntityClient msg0 = new PacketTileEntityClient(0, this.world.provider.getDimensionId(), pos);
+						msg0.setItemStack(trough.stack);
 						HungryAnimals.simpleChannel.sendToAll(msg0);
 					}
 				}

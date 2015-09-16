@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.tileentities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.omg.PortableServer.IdUniquenessPolicy;
@@ -47,21 +48,12 @@ public class TileEntityTrough extends TileEntity implements IUpdatePlayerListBox
 
 	@Override
 	public void update() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER
-				&& this.worldObj.getWorldTime() % this.period == 0
-				&& this.stack != null) {
-			List list = this.worldObj.getEntitiesWithinAABB(EntityAnimal.class,
-					new AxisAlignedBB(this.pos.add(-radius, -radius, -radius),this.pos.add(radius+1,radius+1,radius+1)));
-			for (Object i : list) {
-
-				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) ((EntityAnimal) i)
-						.getExtendedProperties(Strings.extendedPropertiesKey);
-
-				if (property != null && property.taming >= 1
-						&& property.canEatFood(this.stack)) {
-					property.ai_moveToFoodbox.x = this.pos.getX();
-					property.ai_moveToFoodbox.y = this.pos.getY();
-					property.ai_moveToFoodbox.z = this.pos.getZ();
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.worldObj.getWorldTime() % this.period == 0 && this.stack != null) {
+			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.worldObj.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
+			for (EntityAnimal i : list) {
+				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) ((EntityAnimal) i).getExtendedProperties(Strings.extendedPropertiesKey);
+				if (property != null && property.taming >= 1 && property.canEatFood(this.stack)) {
+					property.ai_moveToFoodbox.pos = this.pos;
 				}
 			}
 		}
@@ -104,8 +96,7 @@ public class TileEntityTrough extends TileEntity implements IUpdatePlayerListBox
 			stack.writeToNBT(tag);
 			compound.setTag("foodbox", tag);
 		}
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(),
-				compound);
+		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
 	}
-	
+
 }

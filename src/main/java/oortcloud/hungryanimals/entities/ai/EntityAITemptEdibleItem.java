@@ -35,9 +35,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 		}
 	}
 
-	/**
-	 * Returns whether the EntityAIBase should begin execution.
-	 */
+	@Override
 	public boolean shouldExecute() {
 		if (this.delayTemptCounter > 0) {
 			--this.delayTemptCounter;
@@ -57,36 +55,19 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 		}
 	}
 
-	/**
-	 * Returns whether an in-progress EntityAIBase should continue executing
-	 */
-	public boolean continueExecuting() {
-		return this.shouldExecute();
-	}
-
-	/**
-	 * Execute a one shot task or start executing a continuous task
-	 */
+	@Override
 	public void startExecuting() {
 		this.isRunning = true;
 		this.field_75286_m = ((PathNavigateGround) this.temptedEntity.getNavigator()).func_179689_e();
 		((PathNavigateGround) this.temptedEntity.getNavigator()).func_179690_a(false);
 	}
-
-	/**
-	 * Resets the task
-	 */
-	public void resetTask() {
-		this.temptingPlayer = null;
-		this.temptedEntity.getNavigator().clearPathEntity();
-		this.delayTemptCounter = 100;
-		this.isRunning = false;
-		((PathNavigateGround) this.temptedEntity.getNavigator()).func_179690_a(this.field_75286_m);
+	
+	@Override
+	public boolean continueExecuting() {
+		return this.shouldExecute();
 	}
 
-	/**
-	 * Updates the task
-	 */
+	@Override
 	public void updateTask() {
 		this.temptedEntity.getLookHelper().setLookPositionWithEntity(this.temptingPlayer, 30.0F, (float) this.temptedEntity.getVerticalFaceSpeed());
 
@@ -95,5 +76,14 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 		} else {
 			this.temptedEntity.getNavigator().tryMoveToEntityLiving(this.temptingPlayer, this.speed);
 		}
+	}
+	
+	@Override
+	public void resetTask() {
+		this.temptingPlayer = null;
+		this.temptedEntity.getNavigator().clearPathEntity();
+		this.delayTemptCounter = 100;
+		this.isRunning = false;
+		((PathNavigateGround) this.temptedEntity.getNavigator()).func_179690_a(this.field_75286_m);
 	}
 }
