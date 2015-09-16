@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
@@ -74,17 +75,15 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			--this.delayCounter;
 			return false;
 		} else {
-
-			ArrayList<EntityItem> list;
-			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
 			}
-
-			if (entity.getRNG().nextInt(executeProbability()) != 0)
+			if (entity.getRNG().nextInt(executeProbability()) != 0) {
 				return false;
-
+			}
+			
 			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), EAT_EDIBLE);
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
@@ -112,8 +111,9 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			}
 			return false;
 		}
-		if (target.isDead)
+		if (target.isDead) {
 			return false;
+		}
 
 		return true;
 	}
@@ -130,7 +130,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (taming > 1) {
 			taming = 1;
 		}
-		if (taming > -1) {
+		if (taming < -1) {
 			taming = -1;
 		}
 		return (int) (200 * (taming - 1) * (taming - 1) * hunger) + 1;
