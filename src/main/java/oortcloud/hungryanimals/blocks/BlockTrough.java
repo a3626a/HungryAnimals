@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
@@ -221,13 +222,14 @@ public class BlockTrough extends BlockContainer {
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		TileEntityTrough foodbox = (TileEntityTrough) getTileEntity(worldIn, pos);
+		TileEntityTrough trough = (TileEntityTrough) getTileEntity(worldIn, pos);
+		HungryAnimals.logger.info("breakBlock0");
+		if (trough != null) {
 
-		if (foodbox != null) {
-
-			ItemStack itemstack = foodbox.stack;
-
+			ItemStack itemstack = trough.stack;
+			HungryAnimals.logger.info("breakBlock1");
 			if (itemstack != null) {
+				HungryAnimals.logger.info("breakBlock2");
 				float f = this.random.nextFloat() * 0.8F + 0.1F;
 				float f1 = this.random.nextFloat() * 0.8F + 0.1F;
 				float f2 = this.random.nextFloat() * 0.8F + 0.1F;

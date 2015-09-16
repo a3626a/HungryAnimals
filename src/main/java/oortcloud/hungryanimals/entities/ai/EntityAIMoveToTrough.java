@@ -19,17 +19,12 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class EntityAIMoveToTrough extends EntityAIBase {
 
-	private final int serchingX = 8;
-	private final int serchingY = 2;
-	private final int serchingZ = 8;
-	private final int serchingIteration = 10;
-	private final int serchingApprox = 3;
-
 	private EntityAnimal entity;
 	private ExtendedPropertiesHungryAnimal property;
 	private double speed;
 	private World world;
 	public BlockPos pos;
+	private int delayCounter;
 
 	public EntityAIMoveToTrough(EntityAnimal entity, ExtendedPropertiesHungryAnimal property, double speed) {
 		this.entity = entity;
@@ -39,29 +34,36 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		this.setMutexBits(1);
 	}
 
+	@Override
 	public boolean shouldExecute() {
-
-		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() == ModBlocks.trough) {
-			TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
-
-			if (property.taming >= 1 && temp != null && temp instanceof TileEntityTrough) {
-				TileEntityTrough tile;
-				tile = (TileEntityTrough) temp;
-				return tile.stack != null && this.property.canEatFood(tile.stack);
+		if (pos == null)
+			return false;
+		
+		if (this.delayCounter > 0) {
+			--this.delayCounter;
+			return false;
+		} else {
+			IBlockState state = world.getBlockState(pos);
+			if (state.getBlock() == ModBlocks.trough) {
+				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
+				if (property.taming >= 1 && temp != null && temp instanceof TileEntityTrough) {
+					TileEntityTrough trough = (TileEntityTrough) temp;
+					return trough.stack != null && this.property.canEatFood(trough.stack);
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
-		} else {
-			return false;
 		}
-
 	}
 
+	@Override
 	public void startExecuting() {
 		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), this.speed);
 	}
 
+	@Override
 	public boolean continueExecuting() {
 		float distSq = 2;
 		if (entity.getPosition().distanceSq(pos) <= distSq) {
@@ -91,4 +93,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		}
 	}
 
+	@Override
+	public void resetTask() {
+		delayCounter = 100;
+	}
+	
 }
