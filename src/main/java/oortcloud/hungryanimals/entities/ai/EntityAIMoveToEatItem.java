@@ -66,7 +66,6 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		float radius = 16.0F;
 		initializeFoodCondition();
 		if (property.hunger_max - property.hunger < foodCondition)
 			return false;
@@ -75,6 +74,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			--this.delayCounter;
 			return false;
 		} else {
+			float radius = 16.0F;
 			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);

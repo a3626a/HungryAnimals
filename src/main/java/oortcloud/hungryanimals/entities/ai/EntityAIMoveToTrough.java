@@ -86,11 +86,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			}
 			return false;
 		}
-		if (entity.getNavigator().noPath()) {
-			return false;
-		} else {
-			return true;
-		}
+		return !entity.getNavigator().noPath();
 	}
 
 	@Override

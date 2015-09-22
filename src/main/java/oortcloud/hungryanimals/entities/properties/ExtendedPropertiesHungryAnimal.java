@@ -450,14 +450,14 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		return false;
 	}
 
-	public double getBlockPathWeight(int x, int y, int z) {
-		IBlockState state = this.worldObj.getBlockState(new BlockPos(x, y, z));
-		if (state.getBlock().equals(ModBlocks.excreta)) {
-			return -1.0F;
+	public double getBlockPathWeight(BlockPos pos) {
+		IBlockState state = this.worldObj.getBlockState(pos);
+		if (state.getBlock()==ModBlocks.excreta) {
+			return -1.0;
 		} else if (canEatBlock(state)) {
 			return getBlockHunger(state);
 		} else {
-			return 1.0F;
+			return 1.0;
 		}
 	}
 
