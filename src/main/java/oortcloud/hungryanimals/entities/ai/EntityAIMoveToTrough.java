@@ -25,8 +25,11 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	private World world;
 	public BlockPos pos;
 	private int delayCounter;
+	private static int delay = 100;
 
 	public EntityAIMoveToTrough(EntityAnimal entity, ExtendedPropertiesHungryAnimal property, double speed) {
+		this.delayCounter = entity.getRNG().nextInt(delay);
+		
 		this.entity = entity;
 		this.property = property;
 		this.world = this.entity.worldObj;
@@ -91,7 +94,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 	@Override
 	public void resetTask() {
-		delayCounter = 100;
+		delayCounter = delay;
 	}
 	
 }

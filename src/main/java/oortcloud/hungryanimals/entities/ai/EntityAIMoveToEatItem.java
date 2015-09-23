@@ -29,7 +29,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	private double foodCondition = Double.MAX_VALUE;
 
 	private int delayCounter;
-
+	private static int delay = 100;
+	
 	private Predicate EAT_EDIBLE = new Predicate() {
 		public boolean apply(EntityItem entityIn) {
 			return property.canEatFood(entityIn.getEntityItem());
@@ -57,6 +58,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	};
 
 	public EntityAIMoveToEatItem(EntityLiving entity, ExtendedPropertiesHungryAnimal property, double speed) {
+		this.delayCounter = entity.getRNG().nextInt(delay);
+		
 		this.entity = entity;
 		this.property = property;
 		this.worldObj = this.entity.worldObj;
@@ -121,7 +124,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		this.target = null;
-		this.delayCounter = 100;
+		this.delayCounter = delay;
 	}
 
 	private int executeProbability() {

@@ -34,8 +34,11 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private double foodCondition = Double.MAX_VALUE;
 
 	private int delayCounter;
+	private static int delay = 100;
 
 	public EntityAIMoveToEatBlock(EntityLiving entity, ExtendedPropertiesHungryAnimal property, double speed) {
+		this.delayCounter = entity.getRNG().nextInt(delay);
+		
 		this.entity = entity;
 		this.property = property;
 		this.worldObj = this.entity.worldObj;
@@ -148,7 +151,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		bestPos=null;
-		delayCounter = 100;
+		delayCounter = delay;
 	}
 
 	private double centralizationFunction(double R) {

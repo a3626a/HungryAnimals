@@ -20,11 +20,15 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	 * delayTemptCounter is greater than 0.
 	 */
 	private int delayTemptCounter;
+	private static int delay = 100;
+	
 	/** True if this EntityAITempt task is running */
 	private boolean isRunning;
 	private boolean field_75286_m;
 
 	public EntityAITemptEdibleItem(EntityCreature animal, ExtendedPropertiesHungryAnimal propertyIn, double speedIn) {
+		this.delayTemptCounter = animal.getRNG().nextInt(delay);
+		
 		this.temptedEntity = animal;
 		this.property = propertyIn;
 		this.speed = speedIn;
@@ -82,7 +86,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	public void resetTask() {
 		this.temptingPlayer = null;
 		this.temptedEntity.getNavigator().clearPathEntity();
-		this.delayTemptCounter = 100;
+		this.delayTemptCounter = delay;
 		this.isRunning = false;
 		((PathNavigateGround) this.temptedEntity.getNavigator()).func_179690_a(this.field_75286_m);
 	}
