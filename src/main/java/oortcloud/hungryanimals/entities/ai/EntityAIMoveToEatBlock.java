@@ -134,10 +134,14 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	
 	@Override
 	public boolean continueExecuting() {
+		IBlockState block = this.worldObj.getBlockState(bestPos);
+		if (!this.property.canEatBlock(block)) {
+			this.entity.getNavigator().clearPathEntity();
+			return false;
+		}
 		if (entity.getNavigator().noPath()) {
 			float distanceSq = 2;
-			IBlockState block = this.worldObj.getBlockState(bestPos);
-			if (this.property.canEatBlock(block) && bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
+			if (bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
 				if (this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing")) {
 					this.worldObj.setBlockToAir(bestPos);
 				}

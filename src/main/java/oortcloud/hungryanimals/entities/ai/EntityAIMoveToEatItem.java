@@ -103,6 +103,10 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	@Override
 	public boolean continueExecuting() {
+		if (target.isDead) {
+			this.entity.getNavigator().clearPathEntity();
+			return false;
+		}
 		if (entity.getNavigator().noPath()) {
 			float distanceSq = 2;
 			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
@@ -112,9 +116,6 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 					target.setDead();
 				this.property.eatFoodBonus(target.getEntityItem());
 			}
-			return false;
-		}
-		if (target.isDead) {
 			return false;
 		}
 
