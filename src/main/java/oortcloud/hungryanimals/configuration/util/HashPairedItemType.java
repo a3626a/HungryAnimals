@@ -40,7 +40,7 @@ public class HashPairedItemType {
 	
 	@Override
 	public int hashCode() {
-		return left.hashCode() + right.hashCode();
+		return left.hashCode()^right.hashCode();
 	}
 	
 }
