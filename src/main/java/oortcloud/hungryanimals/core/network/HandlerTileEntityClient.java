@@ -20,23 +20,10 @@ public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntity
 
 		if (Minecraft.getMinecraft().theWorld.provider.getDimensionId() == message.dim) {
 			TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(message.pos);
-
 			if (te != null) {
 				switch (message.index) {
-				case 0:
-					((TileEntityTrough) te).stack = message.getItemStack();
-					break;
 				case 1:
 					((TileEntityPowerTransporter) te).getPowerNetwork().setAngle(message.getFloat());
-					break;
-				case 2:
-					ItemStack[] items1 = message.getItemStackArray();
-					for (int i = 0; i < items1.length; i++) {
-						((TileEntityThresher) te).setInventorySlotContents(i, items1[i]);
-					}
-					break;
-				case 3:
-					((TileEntityMillstone)te).getFluidTank().setFluid(new FluidStack(ModFluids.seedoil, message.getInt()));
 					break;
 				case 4:
 					ItemStack[] items2 = message.getItemStackArray();

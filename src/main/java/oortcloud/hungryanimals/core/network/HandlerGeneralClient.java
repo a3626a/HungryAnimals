@@ -4,14 +4,12 @@ import oortcloud.hungryanimals.HungryAnimals;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class HandlerGeneralClient implements
-		IMessageHandler<PacketGeneralClient, PacketGeneralServer> {
+public class HandlerGeneralClient implements IMessageHandler<PacketGeneralClient, PacketGeneralServer> {
 
 	@Override
-	public PacketGeneralServer onMessage(PacketGeneralClient message,
-			MessageContext ctx) {
+	public PacketGeneralServer onMessage(PacketGeneralClient message, MessageContext ctx) {
 		switch (message.index) {
-		case 0:
+		case SyncIndex.ENTITYOVERLAY_SYNC:
 			if (HungryAnimals.entityOverlay.getEnabled()) {
 				HungryAnimals.entityOverlay.bar_hunger = message.getDouble();
 				HungryAnimals.entityOverlay.bar_health = message.getDouble();

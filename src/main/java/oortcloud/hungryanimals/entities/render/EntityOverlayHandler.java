@@ -22,6 +22,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
+import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.potion.PotionHungryAnimals;
 
@@ -79,7 +80,7 @@ public class EntityOverlayHandler extends Gui {
 			}
 			
 			if (isEnabled && mc.theWorld != null && mc.theWorld.getWorldTime()%5==0) {
-				PacketGeneralServer msg = new PacketGeneralServer(4);
+				PacketGeneralServer msg = new PacketGeneralServer(SyncIndex.ENTITYOVERLAY_SYNC_REQUEST);
 				msg.setInt(targetAnimal.getEntityId());
 				HungryAnimals.simpleChannel.sendToServer(msg);
 			}

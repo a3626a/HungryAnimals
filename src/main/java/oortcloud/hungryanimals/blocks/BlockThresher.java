@@ -26,7 +26,7 @@ public class BlockThresher extends BlockContainer {
 		super(Material.wood);
 		this.setHarvestLevel("axe", 0);
 		this.setHardness(2.0F);
-		
+
 		this.setBlockBounds((float) 0.375, 0, (float) 0.375, (float) 0.625, 1, (float) 0.625);
 		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockThresherName);
 		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
@@ -54,21 +54,23 @@ public class BlockThresher extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-		TileEntityThresher tileEntity = (TileEntityThresher) worldIn.getTileEntity(pos);
-
-		return InventoryUtil.interactInventory(playerIn, tileEntity, 0);
+		if (!worldIn.isRemote) {
+			TileEntityThresher tileEntity = (TileEntityThresher) worldIn.getTileEntity(pos);
+			if (tileEntity.canTakeOut()) {
+				return InventoryUtil.interactInventory(playerIn, tileEntity, 0);
+			}
+		}
+		return false;
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        if (tileentity instanceof IInventory)
-        {
-            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
-        }
+		if (tileentity instanceof IInventory) {
+			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
+		}
 
-        super.breakBlock(worldIn, pos, state);
-    }
+		super.breakBlock(worldIn, pos, state);
+	}
 }

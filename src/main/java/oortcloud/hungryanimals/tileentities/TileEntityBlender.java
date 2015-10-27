@@ -306,6 +306,8 @@ public class TileEntityBlender extends TileEntityPowerTransporter implements IIn
 			if (compound.hasKey("items" + i)) {
 				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
 			}
 		}
 	}
@@ -317,6 +319,8 @@ public class TileEntityBlender extends TileEntityPowerTransporter implements IIn
 			if (compound.hasKey("items" + i)) {
 				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
 			}
 		}
 	}

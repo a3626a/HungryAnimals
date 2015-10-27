@@ -8,21 +8,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import oortcloud.hungryanimals.tileentities.TileEntityBlender;
 
-public class HandlerTileEntityServer implements
-		IMessageHandler<PacketTileEntityServer, PacketTileEntityClient> {
+public class HandlerTileEntityServer implements IMessageHandler<PacketTileEntityServer, PacketTileEntityClient> {
 
 	@Override
-	public PacketTileEntityClient onMessage(PacketTileEntityServer message,
-			MessageContext ctx) {
-
-		TileEntity te = MinecraftServer.getServer().worldServerForDimension(message.dim)
-				.getTileEntity(message.pos);
-
+	public PacketTileEntityClient onMessage(PacketTileEntityServer message, MessageContext ctx) {
+		TileEntity te = MinecraftServer.getServer().worldServerForDimension(message.dim).getTileEntity(message.pos);
 		switch (message.index) {
-		case 0 :
+		case 0:
 			break;
 		}
-		
+
 		return null;
 	}
 

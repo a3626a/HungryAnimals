@@ -48,7 +48,7 @@ public class BlockTrough extends BlockContainer {
 		this.setHarvestLevel("axe", 0);
 		this.setHardness(2.0F);
 		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
-		GameRegistry.registerBlock(this, ModBlocks.getName(this.getUnlocalizedName()));
+		ModBlocks.register(this);
 	}
 
 	protected BlockState createBlockState() {

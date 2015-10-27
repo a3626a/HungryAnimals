@@ -63,40 +63,43 @@ public class TileEntityTrough extends TileEntity implements IUpdatePlayerListBox
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		if (stack != null) {
-			NBTTagCompound tag = new NBTTagCompound();
-			stack.writeToNBT(tag);
-			compound.setTag("foodbox", tag);
-		}
+		writeSyncableDataToNBT(compound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("foodbox")) {
-			NBTTagCompound tag = (NBTTagCompound) compound.getTag("foodbox");
-			stack = ItemStack.loadItemStackFromNBT(tag);
-		}
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		NBTTagCompound compound = pkt.getNbtCompound();
-		if (compound.hasKey("foodbox")) {
-			NBTTagCompound tag = (NBTTagCompound) compound.getTag("foodbox");
-			stack = ItemStack.loadItemStackFromNBT(tag);
-		}
+		readSyncableDataFromNBT(compound);
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound compound = new NBTTagCompound();
+		writeSyncableDataToNBT(compound);
+		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		NBTTagCompound compound = pkt.getNbtCompound();
+		readSyncableDataFromNBT(compound);
+	}
+	
+	private void writeSyncableDataToNBT(NBTTagCompound compound) {
 		if (stack != null) {
 			NBTTagCompound tag = new NBTTagCompound();
 			stack.writeToNBT(tag);
 			compound.setTag("foodbox", tag);
 		}
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
+
+	private void readSyncableDataFromNBT(NBTTagCompound compound) {
+		if (compound.hasKey("foodbox")) {
+			NBTTagCompound tag = (NBTTagCompound) compound.getTag("foodbox");
+			stack = ItemStack.loadItemStackFromNBT(tag);
+		} else {
+			stack = null;
+		}
 	}
 
 }

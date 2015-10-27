@@ -5,6 +5,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
+import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.items.gui.GuiLabelNBT.EnumFormat;
 
 public class GuiLabelNBTEditable extends GuiLabelNBT {
@@ -36,14 +37,14 @@ public class GuiLabelNBTEditable extends GuiLabelNBT {
 	public void increase() {
 		switch (format) {
 		case INT :
-			PacketGeneralServer msg1 = new PacketGeneralServer(2);
+			PacketGeneralServer msg1 = new PacketGeneralServer(SyncIndex.ENTITYOVERLAY_EDIT_INT);
 			msg1.setInt(id.intData);
 			msg1.setString(key);
 			msg1.setInt(intData+intUnit);
 			HungryAnimals.simpleChannel.sendToServer(msg1);
 			break;
 		case DOUBLE :
-			PacketGeneralServer msg2 = new PacketGeneralServer(3);
+			PacketGeneralServer msg2 = new PacketGeneralServer(SyncIndex.ENTITYOVERLAY_EDIT_DOUBLE);
 			msg2.setInt(id.intData);
 			msg2.setString(key);
 			msg2.setDouble(doubleData+doubleUnit);
@@ -55,14 +56,14 @@ public class GuiLabelNBTEditable extends GuiLabelNBT {
 	public void decrease() {
 		switch (format) {
 		case INT :
-			PacketGeneralServer msg1 = new PacketGeneralServer(2);
+			PacketGeneralServer msg1 = new PacketGeneralServer(SyncIndex.ENTITYOVERLAY_EDIT_INT);
 			msg1.setInt(id.intData);
 			msg1.setString(key);
 			msg1.setInt(intData-intUnit);
 			HungryAnimals.simpleChannel.sendToServer(msg1);
 			break;
 		case DOUBLE :
-			PacketGeneralServer msg2 = new PacketGeneralServer(3);
+			PacketGeneralServer msg2 = new PacketGeneralServer(SyncIndex.ENTITYOVERLAY_EDIT_DOUBLE);
 			msg2.setInt(id.intData);
 			msg2.setString(key);
 			msg2.setDouble(doubleData-doubleUnit);

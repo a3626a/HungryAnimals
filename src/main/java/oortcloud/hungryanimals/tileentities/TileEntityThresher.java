@@ -39,7 +39,7 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 
 	public TileEntityThresher() {
 		super();
-		super.powerCapacity=TileEntityThresher.powerCapacity;
+		super.powerCapacity = TileEntityThresher.powerCapacity;
 		leftAttempt = 0;
 	}
 
@@ -49,9 +49,8 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 
 			if (needSync) {
-				PacketTileEntityClient msg = new PacketTileEntityClient(2, worldObj.provider.getDimensionId(), pos);
-				msg.setItemStackArray(inventory);
-				HungryAnimals.simpleChannel.sendToAll(msg);
+				worldObj.markBlockForUpdate(pos);
+				markDirty();
 				needSync = false;
 			}
 
@@ -64,7 +63,7 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 
 						if (this.threshTime >= this.totalthreshTime) {
 							this.threshTime = 0;
-							
+
 							for (HashProbabilityItemStack i : output) {
 								if (this.worldObj.rand.nextDouble() < i.prob) {
 
@@ -72,8 +71,7 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 									float f1 = this.worldObj.rand.nextFloat() * 0.8F + 0.1F;
 									float f2 = this.worldObj.rand.nextFloat() * 0.8F + 0.1F;
 
-									EntityItem entityitem = new EntityItem(this.worldObj, (double) ((float) this.pos.getX() + f), (double) ((float) this.pos.getY() + f1),
-											(double) ((float) this.pos.getZ() + f2), i.item.copy());
+									EntityItem entityitem = new EntityItem(this.worldObj, (double) ((float) this.pos.getX() + f), (double) ((float) this.pos.getY() + f1), (double) ((float) this.pos.getZ() + f2), i.item.copy());
 
 									float f3 = 0.05F;
 									entityitem.motionX = (double) ((float) this.worldObj.rand.nextGaussian() * f3);
@@ -128,8 +126,8 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
 		if (this.inventory[index] != null) {
-			needSync=true;
-			
+			needSync = true;
+
 			ItemStack itemstack;
 
 			if (this.inventory[index].stackSize <= count) {
@@ -183,8 +181,7 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D,
-				(double) this.pos.getZ() + 0.5D) <= 64.0D;
+		return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -226,45 +223,31 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound tag = new NBTTagCompound();
-			ItemStack item = getStackInSlot(i);
-			if (item != null) {
-				item.writeToNBT(tag);
-				compound.setTag("items" + i, tag);
-			}
-		}
+		compound.setInteger("leftAttempt", leftAttempt);
+		writeSyncableDataToNBT(compound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.leftAttempt=compound.getInteger("leftAttempt");
-		for (int i = 0; i < getSizeInventory(); i++) {
-			if (compound.hasKey("items" + i)) {
-				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
-				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
-			}
-		}
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		NBTTagCompound compound = pkt.getNbtCompound();
-		compound.setInteger("leftAttempt", leftAttempt);
-		for (int i = 0; i < getSizeInventory(); i++) {
-			if (compound.hasKey("items" + i)) {
-				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
-				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
-			}
-		}
+		this.leftAttempt = compound.getInteger("leftAttempt");
+		readSyncableDataFromNBT(compound);
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound compound = new NBTTagCompound();
+		writeSyncableDataToNBT(compound);
+		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
 
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		NBTTagCompound compound = pkt.getNbtCompound();
+		readSyncableDataFromNBT(compound);
+	}
+
+	private void writeSyncableDataToNBT(NBTTagCompound compound) {
 		for (int i = 0; i < getSizeInventory(); i++) {
 			NBTTagCompound tag = new NBTTagCompound();
 			ItemStack item = getStackInSlot(i);
@@ -273,16 +256,27 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 				compound.setTag("items" + i, tag);
 			}
 		}
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
 	}
-	
+
+	private void readSyncableDataFromNBT(NBTTagCompound compound) {
+
+		for (int i = 0; i < getSizeInventory(); i++) {
+			if (compound.hasKey("items" + i)) {
+				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
+				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
+			}
+		}
+	}
+
 	public boolean canTakeOut() {
-		return leftAttempt==4;
+		return leftAttempt == 4;
 	}
 
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
-		return new int[] {0};
+		return new int[] { 0 };
 	}
 
 	@Override
@@ -297,6 +291,6 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 
 	@Override
 	public BlockPos[] getConnectedBlocks() {
-		return new BlockPos[] {pos.up(), pos.down()};
+		return new BlockPos[] { pos.up(), pos.down() };
 	}
 }

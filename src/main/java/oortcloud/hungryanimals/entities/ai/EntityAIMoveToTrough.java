@@ -80,10 +80,8 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 						trough.stack.stackSize--;
 						if (trough.stack.stackSize == 0)
 							trough.stack = null;
-
-						PacketTileEntityClient msg0 = new PacketTileEntityClient(0, this.world.provider.getDimensionId(), pos);
-						msg0.setItemStack(trough.stack);
-						HungryAnimals.simpleChannel.sendToAll(msg0);
+						
+						world.markBlockForUpdate(pos);
 					}
 				}
 			}

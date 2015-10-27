@@ -73,9 +73,7 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 							decrStackSize(0, 1);
 							fluidTank.fill(new FluidStack(ModFluids.seedoil, amount), true);
 
-							PacketTileEntityClient msg = new PacketTileEntityClient(3, this.worldObj.provider.getDimensionId(), this.pos);
-							msg.setInt(fluidTank.getFluidAmount());
-							HungryAnimals.simpleChannel.sendToAll(msg);
+							worldObj.addBlockEvent(pos, getBlockType(), 0, fluidTank.getFluidAmount());
 						}
 					}
 				}
@@ -110,6 +108,8 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 			if (compound.hasKey("items" + i)) {
 				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
 			}
 		}
 	}
@@ -124,6 +124,8 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 			if (compound.hasKey("items" + i)) {
 				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
 			}
 		}
 	}
@@ -145,6 +147,16 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
 	}
 
+	@Override
+	public boolean receiveClientEvent(int id, int type) {
+		switch (id) {
+		case 0 :
+			fluidTank.setFluid(new FluidStack(ModFluids.seedoil, type));
+			return true;
+		}
+		return super.receiveClientEvent(id, type);
+	}
+	
 	public double getHeight() {
 		return fluidTank.getFluidAmount() / (double) fluidTank.getCapacity();
 	}

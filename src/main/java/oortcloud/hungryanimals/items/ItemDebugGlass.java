@@ -13,6 +13,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
+import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class ItemDebugGlass extends Item {
@@ -31,7 +32,7 @@ public class ItemDebugGlass extends Item {
 		if (world.isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
-				PacketPlayerServer msg = new PacketPlayerServer(0, player.getName());
+				PacketPlayerServer msg = new PacketPlayerServer(SyncIndex.DEBUG_SETTARGET, player.getName());
 				msg.setInt(entity.getEntityId());
 				HungryAnimals.simpleChannel.sendToServer(msg);
 			}
