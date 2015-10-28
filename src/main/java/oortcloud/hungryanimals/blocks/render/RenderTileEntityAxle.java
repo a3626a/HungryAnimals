@@ -34,8 +34,6 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTick, int p_180535_9_) {
 		TileEntityAxle axle = (TileEntityAxle) tileentity;
 		IBlockState state = tileentity.getWorld().getBlockState(tileentity.getPos());
-		if (state.getBlock() != ModBlocks.axle)
-			return;
 		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
@@ -70,19 +68,15 @@ public class RenderTileEntityAxle extends TileEntitySpecialRenderer {
 				Tessellator tessellator = Tessellator.getInstance();
 				WorldRenderer renderer = tessellator.getWorldRenderer();
 				GlStateManager.disableTexture2D();
-				GlStateManager.enableBlend();
-				GlStateManager.disableAlpha();
-				GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-				GlStateManager.shadeModel(7425);
+				GlStateManager.disableLighting();
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				drawBelt3(tessellator, renderer, 2 / 16.0, -5 / 16.0, distance, externalAngle);
 				drawBelt1(tessellator, renderer, 2 / 16.0, -5 / 16.0, -2 / 16.0, -5 / 16.0);
 				drawBelt1(tessellator, renderer, -2 / 16.0, -5 / 16.0, -5 / 16.0, -2 / 16.0);
 				drawBelt1(tessellator, renderer, -5 / 16.0, -2 / 16.0, -5 / 16.0, +2 / 16.0);
 				drawBelt1(tessellator, renderer, -5 / 16.0, +2 / 16.0, -2 / 16.0, +5 / 16.0);
 				drawBelt2(tessellator, renderer, -2 / 16.0, +5 / 16.0, distance, externalAngle);
-				GlStateManager.shadeModel(7424);
-				GlStateManager.disableBlend();
-				GlStateManager.enableAlpha();
+				GlStateManager.enableLighting();
 				GlStateManager.enableTexture2D();
 			}
 		}
