@@ -259,7 +259,6 @@ public class TileEntityThresher extends TileEntityPowerTransporter implements II
 	}
 
 	private void readSyncableDataFromNBT(NBTTagCompound compound) {
-
 		for (int i = 0; i < getSizeInventory(); i++) {
 			if (compound.hasKey("items" + i)) {
 				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);

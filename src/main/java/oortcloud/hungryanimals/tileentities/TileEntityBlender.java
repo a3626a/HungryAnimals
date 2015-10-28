@@ -54,9 +54,8 @@ public class TileEntityBlender extends TileEntityPowerTransporter implements IIn
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 
 			if (needSync) {
-				PacketTileEntityClient msg = new PacketTileEntityClient(5, worldObj.provider.getDimensionId(), pos);
-				msg.setItemStackArray(inventory);
-				HungryAnimals.simpleChannel.sendToAll(msg);
+				worldObj.markBlockForUpdate(pos);
+				markDirty();
 				needSync=false;
 			}
 			
@@ -287,48 +286,29 @@ public class TileEntityBlender extends TileEntityPowerTransporter implements IIn
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound tag = new NBTTagCompound();
-			ItemStack item = getStackInSlot(i);
-			if (item != null) {
-				item.writeToNBT(tag);
-				compound.setTag("items" + i, tag);
-			}
-		}
+		writeSyncableDataToNBT(compound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-
-		for (int i = 0; i < getSizeInventory(); i++) {
-			if (compound.hasKey("items" + i)) {
-				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
-				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
-			} else {
-				setInventorySlotContents(i, null);
-			}
-		}
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		NBTTagCompound compound = pkt.getNbtCompound();
-		for (int i = 0; i < getSizeInventory(); i++) {
-			if (compound.hasKey("items" + i)) {
-				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
-				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
-			} else {
-				setInventorySlotContents(i, null);
-			}
-		}
+		readSyncableDataFromNBT(compound);
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound compound = new NBTTagCompound();
+		writeSyncableDataToNBT(compound);
+		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		NBTTagCompound compound = pkt.getNbtCompound();
+		readSyncableDataFromNBT(compound);
+	}
 
+	private void writeSyncableDataToNBT(NBTTagCompound compound) {
 		for (int i = 0; i < getSizeInventory(); i++) {
 			NBTTagCompound tag = new NBTTagCompound();
 			ItemStack item = getStackInSlot(i);
@@ -337,7 +317,17 @@ public class TileEntityBlender extends TileEntityPowerTransporter implements IIn
 				compound.setTag("items" + i, tag);
 			}
 		}
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
+
+	private void readSyncableDataFromNBT(NBTTagCompound compound) {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			if (compound.hasKey("items" + i)) {
+				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
+				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
+			}
+		}
 	}
 
 	@Override

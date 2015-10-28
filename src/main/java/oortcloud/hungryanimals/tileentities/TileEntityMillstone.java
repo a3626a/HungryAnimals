@@ -52,9 +52,8 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 
 			if (needSync) {
-				PacketTileEntityClient msg = new PacketTileEntityClient(4, worldObj.provider.getDimensionId(), pos);
-				msg.setItemStackArray(inventory);
-				HungryAnimals.simpleChannel.sendToAll(msg);
+				worldObj.markBlockForUpdate(pos);
+				markDirty();
 				needSync = false;
 			}
 
@@ -72,8 +71,6 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 
 							decrStackSize(0, 1);
 							fluidTank.fill(new FluidStack(ModFluids.seedoil, amount), true);
-
-							worldObj.addBlockEvent(pos, getBlockType(), 0, fluidTank.getFluidAmount());
 						}
 					}
 				}
@@ -85,57 +82,30 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-
-		fluidTank.writeToNBT(compound);
-
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound tag = new NBTTagCompound();
-			ItemStack item = getStackInSlot(i);
-			if (item != null) {
-				item.writeToNBT(tag);
-				compound.setTag("items" + i, tag);
-			}
-		}
+		writeSyncableDataToNBT(compound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-
-		fluidTank.readFromNBT(compound);
-
-		for (int i = 0; i < getSizeInventory(); i++) {
-			if (compound.hasKey("items" + i)) {
-				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
-				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
-			} else {
-				setInventorySlotContents(i, null);
-			}
-		}
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		NBTTagCompound compound = pkt.getNbtCompound();
-
-		fluidTank.readFromNBT(compound);
-
-		for (int i = 0; i < getSizeInventory(); i++) {
-			if (compound.hasKey("items" + i)) {
-				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
-				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
-			} else {
-				setInventorySlotContents(i, null);
-			}
-		}
+		readSyncableDataFromNBT(compound);
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound compound = new NBTTagCompound();
-
+		writeSyncableDataToNBT(compound);
+		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		NBTTagCompound compound = pkt.getNbtCompound();
+		readSyncableDataFromNBT(compound);
+	}
+	
+	private void writeSyncableDataToNBT(NBTTagCompound compound) {
 		fluidTank.writeToNBT(compound);
-
 		for (int i = 0; i < getSizeInventory(); i++) {
 			NBTTagCompound tag = new NBTTagCompound();
 			ItemStack item = getStackInSlot(i);
@@ -144,19 +114,20 @@ public class TileEntityMillstone extends TileEntityPowerTransporter implements I
 				compound.setTag("items" + i, tag);
 			}
 		}
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
 	}
 
-	@Override
-	public boolean receiveClientEvent(int id, int type) {
-		switch (id) {
-		case 0 :
-			fluidTank.setFluid(new FluidStack(ModFluids.seedoil, type));
-			return true;
+	private void readSyncableDataFromNBT(NBTTagCompound compound) {
+		fluidTank.readFromNBT(compound);
+		for (int i = 0; i < getSizeInventory(); i++) {
+			if (compound.hasKey("items" + i)) {
+				NBTTagCompound tag = (NBTTagCompound) compound.getTag("items" + i);
+				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tag));
+			} else {
+				setInventorySlotContents(i, null);
+			}
 		}
-		return super.receiveClientEvent(id, type);
 	}
-	
+
 	public double getHeight() {
 		return fluidTank.getFluidAmount() / (double) fluidTank.getCapacity();
 	}

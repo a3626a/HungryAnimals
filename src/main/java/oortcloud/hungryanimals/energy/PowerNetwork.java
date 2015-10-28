@@ -6,6 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
+import oortcloud.hungryanimals.core.network.SyncIndex;
 
 public class PowerNetwork {
 
@@ -80,12 +81,12 @@ public class PowerNetwork {
 				float angularSpeed = (float) (angularVelocityFactor*powerStored/powerCapacity);
 				this.angle = (this.angle+angularSpeed)%360;
 				if (lastAngle != angle) {
-					PacketTileEntityClient msg = new PacketTileEntityClient(1, world.provider.getDimensionId(), pos);
+					PacketTileEntityClient msg = new PacketTileEntityClient(SyncIndex.IENERGYTRANSPORTER_SYNC_ANGLE, world.provider.getDimensionId(), pos);
 					msg.setFloat(angle);
 					HungryAnimals.simpleChannel.sendToAll(msg);
 				}
 				if (lastPowerStored != powerStored) {
-					PacketTileEntityClient msg = new PacketTileEntityClient(6, world.provider.getDimensionId(), pos);
+					PacketTileEntityClient msg = new PacketTileEntityClient(SyncIndex.IENERGYTRANSPORTER_SYNC_ANGULARVELOCITY, world.provider.getDimensionId(), pos);
 					msg.setFloat(angularSpeed);
 					HungryAnimals.simpleChannel.sendToAll(msg);
 				}

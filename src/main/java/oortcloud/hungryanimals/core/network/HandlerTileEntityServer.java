@@ -14,8 +14,6 @@ public class HandlerTileEntityServer implements IMessageHandler<PacketTileEntity
 	public PacketTileEntityClient onMessage(PacketTileEntityServer message, MessageContext ctx) {
 		TileEntity te = MinecraftServer.getServer().worldServerForDimension(message.dim).getTileEntity(message.pos);
 		switch (message.index) {
-		case 0:
-			break;
 		}
 
 		return null;

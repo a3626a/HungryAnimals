@@ -22,22 +22,10 @@ public class HandlerTileEntityClient implements IMessageHandler<PacketTileEntity
 			TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(message.pos);
 			if (te != null) {
 				switch (message.index) {
-				case 1:
+				case SyncIndex.IENERGYTRANSPORTER_SYNC_ANGLE:
 					((TileEntityPowerTransporter) te).getPowerNetwork().setAngle(message.getFloat());
 					break;
-				case 4:
-					ItemStack[] items2 = message.getItemStackArray();
-					for (int i = 0; i < items2.length; i++) {
-						((TileEntityMillstone) te).setInventorySlotContents(i, items2[i]);
-					}
-					break;
-				case 5:
-					ItemStack[] items3 = message.getItemStackArray();
-					for (int i = 0; i < items3.length; i++) {
-						((TileEntityBlender) te).setInventorySlotContents(i, items3[i]);
-					}
-					break;
-				case 6:
+				case SyncIndex.IENERGYTRANSPORTER_SYNC_ANGULARVELOCITY:
 					((TileEntityPowerTransporter) te).getPowerNetwork().setAngularVelocity(message.getFloat());
 					break;
 				}

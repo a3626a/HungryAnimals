@@ -9,6 +9,9 @@ public class SyncIndex {
 	public static final int ENTITYOVERLAY_EDIT_DOUBLE = 3;
 	public static final int ENTITYOVERLAY_SYNC_REQUEST = 4;
 	
+	public static final int IENERGYTRANSPORTER_SYNC_ANGLE = 0;
+	public static final int IENERGYTRANSPORTER_SYNC_ANGULARVELOCITY = 1;
+	
 	public static final int DEBUG_SETTARGET = 0;
 	
 	public static final int PLANTPOPPY = 1;
