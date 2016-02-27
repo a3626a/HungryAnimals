@@ -19,11 +19,11 @@ public class BlockTrapCover extends Block {
 
 	public BlockTrapCover() {
 		super(Material.wood);
-		this.setHarvestLevel("axe", 0);
-		this.setHardness(2.0F);
+		setHarvestLevel("axe", 0);
+		setHardness(2.0F);
 
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockTrapCoverName);
-		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
+		setUnlocalizedName(Strings.blockTrapCoverName);
+		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		ModBlocks.register(this);
 	}
 

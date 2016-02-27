@@ -5,7 +5,7 @@ import java.io.File;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
-import oortcloud.hungryanimals.core.handler.FMLEventHandler;
+import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import net.minecraftforge.common.config.Configuration;
 
 public class ConfigurationHandlerWorld {
@@ -40,7 +40,7 @@ public class ConfigurationHandlerWorld {
 		BlockNiterBed.ripeningProbability = config.get(CATEGORY_Block, KEY_ripeningProbability, BlockNiterBed.default_ripeningProbability).getDouble();
 		
 		HungryAnimals.logger.info("Configuration: Read and Register properties of Grass Growth");
-		FMLEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, FMLEventHandler.default_grassProbability).getDouble();
+		WorldEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, WorldEventHandler.default_grassProbability).getDouble();
 
 		config.save();
 

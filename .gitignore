@@ -1,26 +1,22 @@
-#eclipse
-.project
-.classpath
-.metadata
-.recommenders
-org.*
+# eclipse
 bin
-eclipse
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-
-#idea
-*.iml
+# idea
+out
 *.ipr
 *.iws
+*.iml
 .idea
-out
 
-#gradle
+# gradle
 build
 .gradle
 
-#runtime
+# other
+eclipse
 run
-
-#mac
-.DS_Store

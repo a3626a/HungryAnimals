@@ -13,36 +13,28 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnimal {
 
 	public EntitySheep entity;
 	public int wool;
 
-	public static int wool_delay;
-	public static double wool_hunger;
-
-	public static int default_wool_delay;
-	public static double default_wool_hunger;
-
 	@Override
 	public void init(Entity entity, World world) {
 		super.init(entity, world);
 		this.entity = (EntitySheep) entity;
-
-		acceptProperty(((GeneralProperty)GeneralPropertiesHandler.getInstance().propertyMap.get(entity.getClass())));
-		
-		taming_factor = 0.998;
-		wool_delay = default_wool_delay;
-		wool_hunger = default_wool_hunger;
-		this.hunger = this.hunger_max / 2.0;
-		this.excretion = 0;
-		this.taming = -2;
-		this.wool = this.wool_delay;
 	}
-
+	
+	@Override
+	public void postInit() {
+		super.postInit();
+		this.removeAI(new Class[] { EntityAIEatGrass.class });
+		this.wool = (int) this.entity.getAttributeMap().getAttributeInstance(ModAttributes.wool_delay).getAttributeValue();
+	}
+	
 	@Override
 	public void update() {
 		if (!this.worldObj.isRemote) {
@@ -51,16 +43,11 @@ public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnima
 			}
 			if (this.wool == 0 && this.entity.getSheared()) {
 				this.entity.setSheared(false);
-				this.subHunger(this.wool_hunger);
-				this.wool = this.wool_delay;
+				this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.wool_hunger).getAttributeValue());
+				this.wool = (int)entity.getAttributeMap().getAttributeInstance(ModAttributes.wool_delay).getAttributeValue();
 			}
 		}
 		super.update();
-	}
-
-	public void postInit() {
-		super.postInit();
-		this.removeAI(new Class[] { EntityAIEatGrass.class });
 	}
 
 	@Override

@@ -26,10 +26,11 @@ public class ItemSlingShot extends Item {
 
 	public ItemSlingShot() {
 		super();
-		this.maxStackSize = 1;
-		this.setMaxDamage(64);
-		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemSlingShotName);
+		setUnlocalizedName(Strings.itemSlingShotName);
+		setCreativeTab(HungryAnimals.tabHungryAnimals);
+		
+		setMaxStackSize(1);
+		setMaxDamage(64);
 		ModItems.register(this);
 	}
 

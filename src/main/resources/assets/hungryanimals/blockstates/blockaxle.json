@@ -1,6 +1,0 @@
-{
-    "variants": {
-	"haswheel=true": { "model": "hungryanimals:blockaxle"},
-	"haswheel=false": { "model": "hungryanimals:blockaxle"}
-    }
-}

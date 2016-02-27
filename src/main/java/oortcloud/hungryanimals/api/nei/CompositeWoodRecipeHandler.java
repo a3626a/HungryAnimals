@@ -100,8 +100,7 @@ public class CompositeWoodRecipeHandler extends ShapedRecipeHandler {
 						} else {
 							Random rand = new Random(cycle + itemIndex + offset);
 							int preIndex = Math.abs(rand.nextInt()) % (ingredients.get(itemIndex).items.length - charMap.size());
-							// TODO Exception Handling ; number of ores in
-							// oredictname < characters with same oredictname
+							// TODO Exception Handling ; number of ores in oredictname < characters with same oredictname
 							Integer[] indices = new Integer[charMap.size()];
 							int next=0;
 							for (ItemStack i : charMap.values()) {

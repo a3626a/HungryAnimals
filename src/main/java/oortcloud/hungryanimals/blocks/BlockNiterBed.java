@@ -30,13 +30,13 @@ public class BlockNiterBed extends Block {
 
 	public BlockNiterBed() {
 		super(Material.ground);
-
-		this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockNiterBedName);
-		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
-		this.setHarvestLevel("shovel", 0);
-		this.setTickRandomly(true);
-		this.setHardness(0.5F);
+		setHarvestLevel("shovel", 0);
+		setHardness(0.5F);
+		
+		setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
+		setUnlocalizedName(Strings.blockNiterBedName);
+		setCreativeTab(HungryAnimals.tabHungryAnimals);
+		setTickRandomly(true);
 		ModBlocks.register(this);
 	}
 

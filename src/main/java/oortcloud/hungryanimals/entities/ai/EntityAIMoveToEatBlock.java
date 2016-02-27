@@ -1,21 +1,17 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.ChunkCache;
-import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 import com.google.common.base.Predicate;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatBlock extends EntityAIBase {
 
@@ -49,7 +45,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		initializeFoodCondition();
-		if (property.hunger_max - property.hunger < foodCondition)
+		if (entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() - property.hunger < foodCondition)
 			return false;
 
 		if (this.delayCounter > 0) {
@@ -71,8 +67,8 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		BlockPos closestPos = null;
 		double minimumDistanceSq = Double.MAX_VALUE;
 
-		ArrayList<EntityLiving> list = (ArrayList<EntityLiving>) this.worldObj.func_175674_a(entity, entity.getEntityBoundingBox().expand(herdRadius, herdRadius, herdRadius), predicate);
-		for (EntityLiving e : list) {
+		ArrayList<Entity> list = (ArrayList<Entity>) this.worldObj.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(herdRadius, herdRadius, herdRadius), predicate);
+		for (Entity e : list) {
 			centralPos = centralPos.add(e.getPosition());
 
 			double dist = entity.getPosition().distanceSq(e.getPosition());
@@ -142,7 +138,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		if (entity.getNavigator().noPath()) {
 			float distanceSq = 2;
 			if (bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
-				if (this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing")) {
+				if (this.worldObj.getGameRules().getBoolean("mobGriefing")) {
 					this.worldObj.setBlockToAir(bestPos);
 				}
 				property.eatBlockBonus(block);

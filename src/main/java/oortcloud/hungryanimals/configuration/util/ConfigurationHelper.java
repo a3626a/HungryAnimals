@@ -28,7 +28,7 @@ public class ConfigurationHelper {
 	 *            ; ((item),min_amount,max_amount)
 	 * @return
 	 */
-	public HashDropMeat getDropMeat(String input) {
+	public ValueDropMeat getDropMeat(String input) {
 		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
 		if (split.length == 3) {
 			HashItemType item = getHashItem(split[0]);
@@ -36,7 +36,7 @@ public class ConfigurationHelper {
 				exceptionNameDoesntExist(split[0]);
 				return null;
 			}
-			return new HashDropMeat(item, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+			return new ValueDropMeat(item, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
 		} else {
 			exceptionInvalidNumberOfArgument(input);
 			return null;
@@ -49,7 +49,7 @@ public class ConfigurationHelper {
 	 *            ; ((item),min_amount,max_amount)
 	 * @return
 	 */
-	public HashDropRandom getDropRandom(String input) {
+	public ValueDropRandom getDropRandom(String input) {
 		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
 		if (split.length == 3) {
 			HashItemType item = getHashItem(split[0]);
@@ -57,7 +57,7 @@ public class ConfigurationHelper {
 				exceptionNameDoesntExist(split[0]);
 				return null;
 			}
-			return new HashDropRandom(item, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+			return new ValueDropRandom(item, Integer.parseInt(split[1]), Integer.parseInt(split[2]));
 		} else {
 			exceptionInvalidNumberOfArgument(input);
 			return null;
@@ -70,7 +70,7 @@ public class ConfigurationHelper {
 	 *            ; ((item),probability)
 	 * @return
 	 */
-	public HashDropRare getDropRare(String input) {
+	public ValueDropRare getDropRare(String input) {
 		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
 		if (split.length == 2) {
 			HashItemType item = getHashItem(split[0]);
@@ -78,7 +78,7 @@ public class ConfigurationHelper {
 				exceptionNameDoesntExist(split[0]);
 				return null;
 			}
-			return new HashDropRare(item, Double.parseDouble(split[1]));
+			return new ValueDropRare(item, Double.parseDouble(split[1]));
 		} else {
 			exceptionInvalidNumberOfArgument(input);
 			return null;
@@ -208,21 +208,21 @@ public class ConfigurationHelper {
 	public ItemStack getItemStack(String input) {
 		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
 		if (split.length == 1) {
-			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			Item item = (Item) Item.getByNameOrId(split[0]);
 			if (item == null) {
 				exceptionNameDoesntExist(split[0]);
 				return null;
 			}
 			return new ItemStack(item);
 		} else if (split.length == 2) {
-			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			Item item = (Item) Item.getByNameOrId(split[0]);
 			if (item == null) {
 				exceptionNameDoesntExist(split[0]);
 				return null;
 			}
 			return new ItemStack(item, Integer.parseInt(split[1]));
 		} else if (split.length == 3) {
-			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			Item item = (Item) Item.getByNameOrId(split[0]);
 			if (item == null) {
 				exceptionNameDoesntExist(split[0]);
 				return null;
@@ -267,14 +267,14 @@ public class ConfigurationHelper {
 	public HashItemType getHashItem(String input) {
 		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
 		if (split.length == 1) {
-			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			Item item = (Item) Item.getByNameOrId(split[0]);
 			if (item == null) {
 				exceptionNameDoesntExist(split[0]);
 				return null;
 			}
 			return new HashItemType(item);
 		} else if (split.length == 2) {
-			Item item = (Item) Item.itemRegistry.getObject(split[0]);
+			Item item = (Item) Item.getByNameOrId(split[0]);
 			if (item == null) {
 				exceptionNameDoesntExist(split[0]);
 				return null;
@@ -284,51 +284,6 @@ public class ConfigurationHelper {
 			exceptionInvalidNumberOfArgument(input);
 			return null;
 		}
-	}
-
-	/**
-	 * 
-	 * @param input
-	 *            : (probability,(itemstack))
-	 * @return
-	 */
-	public HashProbabilityItemStack getProbItemStack(String input) {
-		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
-		if (split.length == 2) {
-			ArrayList<HashProbabilityItemStack> output = new ArrayList<HashProbabilityItemStack>();
-			ItemStack itemStack = getItemStack(split[1]);
-			if (itemStack == null) {
-				exceptionInvalidFormat(split[1]);
-				return null;
-			}
-			return new HashProbabilityItemStack(Double.parseDouble(split[0]), itemStack);
-		} else {
-			exceptionInvalidNumberOfArgument(input);
-			return null;
-		}
-	}
-
-	/**
-	 * 
-	 * @param input : ((probitemstack),(probitemstack),...)
-	 * @return
-	 */
-	public ArrayList<HashProbabilityItemStack> getListProbItemStack(String input) {
-		String[] split = StringParser.splitByLevel(StringParser.reduceLevel(input));
-		ArrayList<HashProbabilityItemStack> output = new ArrayList<HashProbabilityItemStack>();
-		for (String i : split) {
-			HashProbabilityItemStack j = getProbItemStack(i);
-			if (j == null) {
-				exceptionInvalidFormat(i);
-				return null;
-			}
-			output.add(j);
-		}
-		if (output.isEmpty()) {
-			exceptionEmptyList(input);
-			return null;
-		}
-		return output;
 	}
 
 	public static void exceptionInvalidNumberOfArgument(String input) {

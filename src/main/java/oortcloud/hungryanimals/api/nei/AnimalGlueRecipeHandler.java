@@ -6,21 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+import codechicken.nei.recipe.TemplateRecipeHandler.CachedRecipe;
+import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.StatCollector;
 import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
-import codechicken.nei.NEIClientUtils;
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.FurnaceRecipeHandler.SmeltingPair;
-import codechicken.nei.recipe.ShapedRecipeHandler;
-import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class AnimalGlueRecipeHandler extends TemplateRecipeHandler {
 

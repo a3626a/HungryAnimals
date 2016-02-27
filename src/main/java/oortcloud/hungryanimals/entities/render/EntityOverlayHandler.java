@@ -1,11 +1,14 @@
 package oortcloud.hungryanimals.entities.render;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
@@ -149,11 +152,11 @@ public class EntityOverlayHandler extends Gui {
 	public static void drawTexturedRect(int left, int up, int width, int height) {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.startDrawingQuads();
-        worldrenderer.addVertexWithUV((double)left, (double)(up + height), 0.0D, 0.0D, 1.0D);
-        worldrenderer.addVertexWithUV((double)(left + width), (double)(up + height), 0.0D, 1.0D, 1.0D);
-        worldrenderer.addVertexWithUV((double)(left + width), (double)up, 0.0D, 1.0D, 0.0D);
-        worldrenderer.addVertexWithUV((double)left, (double)up, 0.0D, 0.0D, 0.0D);
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos((double)left, (double)(up + height), 0.0D).tex(0.0D, 1.0D).endVertex();
+        worldrenderer.pos((double)(left + width), (double)(up + height), 0.0D).tex(1.0D, 1.0D).endVertex();
+        worldrenderer.pos((double)(left + width), (double)up, 0.0D).tex(1.0D, 0.0D).endVertex();
+        worldrenderer.pos((double)left, (double)up, 0.0D).tex(0.0D, 0.0D).endVertex();
         tessellator.draw();
 	}
 	

@@ -4,35 +4,23 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
-import oortcloud.hungryanimals.core.handler.FMLEventHandler;
-import oortcloud.hungryanimals.core.handler.ForgeEventHandler;
+import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler;
 import oortcloud.hungryanimals.recipes.event.CraftingEventHandler;
-import oortcloud.hungryanimals.tileentities.TileEntityAxle;
-import oortcloud.hungryanimals.tileentities.TileEntityBlender;
-import oortcloud.hungryanimals.tileentities.TileEntityCrankAnimal;
-import oortcloud.hungryanimals.tileentities.TileEntityCrankPlayer;
-import oortcloud.hungryanimals.tileentities.TileEntityMillstone;
-import oortcloud.hungryanimals.tileentities.TileEntityThresher;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class CommonProxy {
 
 	public void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityTrough.class, Strings.blockTroughName);
-		GameRegistry.registerTileEntity(TileEntityAxle.class, Strings.blockAxleName);
-		GameRegistry.registerTileEntity(TileEntityCrankPlayer.class, Strings.blockCrankPlayerName);
-		GameRegistry.registerTileEntity(TileEntityThresher.class, Strings.blockThresherName);
-		GameRegistry.registerTileEntity(TileEntityMillstone.class, Strings.blockMillstoneName);
-		GameRegistry.registerTileEntity(TileEntityBlender.class, Strings.blockBlenderName);
-		GameRegistry.registerTileEntity(TileEntityCrankAnimal.class, Strings.blockCrankAnimalName);
 	}
 
 	public void registerEntities() {
@@ -41,9 +29,6 @@ public class CommonProxy {
 	}
 
 	public void registerEntityRendering() {
-	}
-
-	public void registerBlockRendering() {
 	}
 
 	public void registerTileEntityRendering() {
@@ -62,9 +47,8 @@ public class CommonProxy {
 	}
 
 	public void registerEventHandler() {
-		FMLCommonHandler.instance().bus().register(new FMLEventHandler());
-		FMLCommonHandler.instance().bus().register(new ConfigurationEventHandler());
-		MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
+		MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
+		MinecraftForge.EVENT_BUS.register(new ConfigurationEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHandler());
 	}
@@ -73,8 +57,10 @@ public class CommonProxy {
 	}
 
 	public void initNEI() {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public void initWAILA() {
+		FMLInterModComms.sendMessage("Waila", "register", "oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals.callbackRegister");
 	}
 
 }

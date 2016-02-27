@@ -32,40 +32,30 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.configuration.util.HashBlockState;
-import oortcloud.hungryanimals.configuration.util.HashDropMeat;
-import oortcloud.hungryanimals.configuration.util.HashDropRandom;
-import oortcloud.hungryanimals.configuration.util.HashDropRare;
 import oortcloud.hungryanimals.configuration.util.HashItemType;
+import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
+import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
+import oortcloud.hungryanimals.configuration.util.ValueDropRare;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
-import oortcloud.hungryanimals.entities.ai.EntityAICrank;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {
 
-	protected static String key = "ExtendedPropertiesHungryAnimal";
+	public static String key = "ExtendedPropertiesHungryAnimal";
 
-	public double hunger_max;
-	public double hunger_bmr;
 	public HashMap<HashItemType, Double> hunger_food = new HashMap<HashItemType, Double>();
 	public HashMap<HashBlockState, Double> hunger_block = new HashMap<HashBlockState, Double>();
-	public ArrayList<HashDropMeat> drop_meat = new ArrayList<HashDropMeat>();
-	public ArrayList<HashDropRandom> drop_random = new ArrayList<HashDropRandom>();
-	public ArrayList<HashDropRare> drop_rare = new ArrayList<HashDropRare>();
-	public double courtship_hunger;
-	public double courtship_probability;
-	public double courtship_hungerCondition;
-	public double excretion_factor;
-	public double child_hunger;
-	public double attribute_maxhealth;
-	public double attribute_movespeed;
-	public double crank_production;
-	public double crank_food_consumption;
+	public ArrayList<ValueDropMeat> drop_meat = new ArrayList<ValueDropMeat>();
+	public ArrayList<ValueDropRandom> drop_random = new ArrayList<ValueDropRandom>();
+	public ArrayList<ValueDropRare> drop_rare = new ArrayList<ValueDropRare>();
 
 	public double taming_factor = 0.998;
 
@@ -75,25 +65,13 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public double excretion;
 	public double taming;
 	public EntityAIMoveToTrough ai_moveToFoodbox;
-	public EntityAICrank ai_crank;
+	//public EntityAICrank ai_crank;
 
-	public void acceptProperty(GeneralProperty genericProperty) {
-		hunger_max = genericProperty.hunger_max;
-		hunger_bmr = genericProperty.hunger_bmr;
-		hunger_food = genericProperty.hunger_food;
-		hunger_block = genericProperty.hunger_block;
-		drop_meat = genericProperty.drop_meat;
-		drop_random = genericProperty.drop_random;
-		drop_rare = genericProperty.drop_rare;
-		courtship_hunger = genericProperty.courtship_hunger;
-		courtship_probability = genericProperty.courtship_probability;
-		courtship_hungerCondition = genericProperty.courtship_hungerCondition;
-		excretion_factor = genericProperty.excretion_factor;
-		child_hunger = genericProperty.child_hunger;
-		attribute_maxhealth = genericProperty.attribute_maxhealth;
-		attribute_movespeed = genericProperty.attribute_movespeed;
-		crank_production = genericProperty.crank_production;
-		crank_food_consumption = genericProperty.crank_food_consumption;
+	
+	
+	public void acceptProperty() {
+		HungryAnimalManager.getInstance().applyAttributes(this);
+		entity.setHealth(this.entity.getMaxHealth());
 	}
 
 	@Override
@@ -120,13 +98,12 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity = (EntityAnimal) entity;
 		this.worldObj = world;
 		this.ai_moveToFoodbox = new EntityAIMoveToTrough(this.entity, this, 1.0D);
-		this.ai_crank = new EntityAICrank(this.entity, this);
 	}
 
 	public void postInit() {
 		this.removeAI(new Class[] { EntityAITempt.class, EntityAIFollowParent.class, EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class, EntityAILookIdle.class });
 
-		this.entity.tasks.addTask(0, this.ai_crank);
+		//this.entity.tasks.addTask(0, this.ai_crank);
 		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, this, 16.0F, 1.0D, 2.0D));
 		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
 		this.entity.tasks.addTask(3, this.ai_moveToFoodbox);
@@ -136,30 +113,31 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity.tasks.addTask(8, new EntityAIWander(this.entity, 1.0D));
 		this.entity.tasks.addTask(9, new EntityAIWatchClosest(this.entity, EntityPlayer.class, 6.0F));
 		this.entity.tasks.addTask(10, new EntityAILookIdle(this.entity));
-		this.applyEntityAttributes();
-	}
-
-	protected void applyEntityAttributes() {
-		this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(attribute_maxhealth);
-		this.entity.heal(this.entity.getMaxHealth());
-		this.entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(attribute_movespeed);
+		
+		HungryAnimalManager.getInstance().registerAttributes(this.entity);
+		acceptProperty();
+		
+		taming_factor = 0.998;
+		this.hunger = this.entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue()/2.0;
+		this.excretion = 0;
+		this.taming = -2;
 	}
 
 	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
 		if (this.entity.getGrowingAge() >= 0) {
 			ArrayList<EntityItem> toRemove = new ArrayList<EntityItem>();
 			for (EntityItem i : drops) {
-				for (HashDropMeat j : drop_meat) {
+				for (ValueDropMeat j : drop_meat) {
 					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}
-				for (HashDropRandom j : drop_random) {
+				for (ValueDropRandom j : drop_random) {
 					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
 				}
-				for (HashDropRare j : drop_rare) {
+				for (ValueDropRare j : drop_rare) {
 					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
 						toRemove.add(i);
 					}
@@ -169,7 +147,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				drops.remove(i);
 			}
 
-			for (HashDropMeat j : drop_meat) {
+			for (ValueDropMeat j : drop_meat) {
 				ItemStack drop = j.getDrop(getHungry());
 				if (drop != null) {
 					drop.stackSize = (int) (drop.stackSize * (1 + entity.getRNG().nextInt(1 + looting) / 3.0));
@@ -178,7 +156,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 					drops.add(entityitem);
 				}
 			}
-			for (HashDropRandom j : drop_random) {
+			for (ValueDropRandom j : drop_random) {
 				ItemStack drop = j.getDrop(entity.getRNG());
 				if (drop != null) {
 					drop.stackSize = (int) (drop.stackSize * (1 + (entity.getRNG().nextInt(1 + looting)) / 3.0));
@@ -187,7 +165,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 					drops.add(entityitem);
 				}
 			}
-			for (HashDropRare j : drop_rare) {
+			for (ValueDropRare j : drop_rare) {
 				ItemStack drop = j.getDrop(entity.getRNG(), looting);
 				if (drop != null) {
 					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, drop);
@@ -199,7 +177,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	}
 
 	public double getHungry() {
-		return this.hunger / this.hunger_max;
+		return this.hunger/entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
 	}
 
 	protected void removeAI(Class[] target) {
@@ -245,7 +223,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		if (saturation == 0) {
 			return false;
 		} else {
-			return saturation + this.hunger < this.hunger_max;
+			return saturation + this.hunger < entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
 		}
 
 	}
@@ -256,14 +234,14 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		if (saturation == 0) {
 			return false;
 		} else {
-			return saturation + this.hunger < this.hunger_max;
+			return saturation + this.hunger < entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
 		}
 	}
 
 	public void addHunger(double value) {
 		this.hunger += value;
-		if (this.hunger > this.hunger_max) {
-			this.hunger = this.hunger_max;
+		if (this.hunger > this.entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue()) {
+			this.hunger = this.entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
 		}
 	}
 
@@ -272,7 +250,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		if (hunger <= 0) {
 			this.hunger = 0;
 		}
-		this.excretion += value * this.excretion_factor;
+		this.excretion += value * entity.getAttributeMap().getAttributeInstance(ModAttributes.excretion_factor).getAttributeValue();
 	}
 
 	public void eatFoodBonus(ItemStack item) {
@@ -285,14 +263,14 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		if (this.entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger / hunger_bmr);
+				int duration = (int) (hunger / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth.id, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.taming += 0.0002 / hunger_bmr * hunger;
+			this.taming += 0.0002 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * hunger;
 		}
 
 	}
@@ -328,13 +306,13 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		 * this.entity.motionZ this.entity.motionZ : 0; vel = 20 *
 		 * Math.sqrt(vel); this.subHunger(this.hunger_bmr * (1 + vel / 2.0));
 		 */
-		this.subHunger(this.hunger_bmr);
+		this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
 	}
 
 	private void updateCourtship() {
-		if (this.entity.getGrowingAge() == 0 && !this.entity.isInLove() && this.getHungry() > this.courtship_hungerCondition && this.entity.getRNG().nextDouble() < this.courtship_probability) {
+		if (this.entity.getGrowingAge() == 0 && !this.entity.isInLove() && this.getHungry() > entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_hungerCondition).getAttributeValue() && this.entity.getRNG().nextDouble() < entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_probability).getAttributeValue()) {
 			this.entity.setInLove(null);
-			this.subHunger(this.courtship_hunger);
+			this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_hunger).getAttributeValue());
 		}
 	}
 
@@ -402,7 +380,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	private void updateRecovery() {
 		if (this.entity.getHealth() < this.entity.getMaxHealth() && this.getHungry() > 0.8 && (this.worldObj.getWorldTime() % 200) == 0) {
 			this.entity.heal(1.0F);
-			this.subHunger(this.hunger_max / this.entity.getMaxHealth());
+			this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / this.entity.getMaxHealth());
 		}
 	}
 

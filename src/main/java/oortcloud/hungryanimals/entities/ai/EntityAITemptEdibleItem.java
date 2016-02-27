@@ -24,7 +24,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	
 	/** True if this EntityAITempt task is running */
 	private boolean isRunning;
-	private boolean field_75286_m;
+	private boolean avoidWater;
 
 	public EntityAITemptEdibleItem(EntityCreature animal, ExtendedPropertiesHungryAnimal propertyIn, double speedIn) {
 		this.delayTemptCounter = animal.getRNG().nextInt(delay);
@@ -62,8 +62,8 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		this.isRunning = true;
-		this.field_75286_m = ((PathNavigateGround) this.temptedEntity.getNavigator()).func_179689_e();
-		((PathNavigateGround) this.temptedEntity.getNavigator()).func_179690_a(false);
+		this.avoidWater = ((PathNavigateGround) this.temptedEntity.getNavigator()).getAvoidsWater();
+		((PathNavigateGround) this.temptedEntity.getNavigator()).setAvoidsWater(false);
 	}
 	
 	@Override
@@ -88,6 +88,6 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 		this.temptedEntity.getNavigator().clearPathEntity();
 		this.delayTemptCounter = delay;
 		this.isRunning = false;
-		((PathNavigateGround) this.temptedEntity.getNavigator()).func_179690_a(this.field_75286_m);
+		((PathNavigateGround) this.temptedEntity.getNavigator()).setAvoidsWater(this.avoidWater);
 	}
 }

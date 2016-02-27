@@ -23,6 +23,6 @@ public class BlockRenderEventHandler {
 	@SubscribeEvent
 	public void registerTextures(TextureStitchEvent  event) {
 		HungryAnimals.proxy.registerSprite(event);
-	}
+	} 
 	
 }

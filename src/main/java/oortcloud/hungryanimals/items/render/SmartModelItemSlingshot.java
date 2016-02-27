@@ -13,6 +13,8 @@ import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.primitives.Ints;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -25,14 +27,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IFlexibleBakedModel;
+import net.minecraftforge.client.model.IModelState;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.client.model.ItemLayerModel.BakedModel;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import sun.net.ftp.FtpClient.TransferType;
-
-import com.google.common.primitives.Ints;
+import oortcloud.hungryanimals.utils.CameraTransformUtil;
 
 public class SmartModelItemSlingshot implements ISmartItemModel, IPerspectiveAwareModel {
 
@@ -40,15 +42,15 @@ public class SmartModelItemSlingshot implements ISmartItemModel, IPerspectiveAwa
 	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemSlingShotName, "inventory");
 	public static final ResourceLocation textureresourcelocation = new ResourceLocation(References.RESOURCESPREFIX + "items/" + Strings.itemSlingShotName + "_string");
 
-	private BakedModel model_normal;
-	private BakedModel model_shooting;
+	private IPerspectiveAwareModel model_normal;
+	private IPerspectiveAwareModel model_shooting;
 	private BakedQuad leftString;
 	private BakedQuad rightString;
 	private TextureAtlasSprite texture;
 
-	public SmartModelItemSlingshot(BakedModel iBakedModel) {
+	public SmartModelItemSlingshot(IPerspectiveAwareModel iBakedModel) {
 		this.model_normal = iBakedModel;
-		this.model_shooting = (BakedModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getModel(modelresourcelocation_shooting);
+		this.model_shooting = (IPerspectiveAwareModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getModel(modelresourcelocation_shooting);
 		this.texture = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getTextureMap().getAtlasSprite(SmartModelItemSlingshot.textureresourcelocation.toString());
 		float length = 0.6F;
 		this.leftString = new BakedQuad(Ints.concat(vertexToInts(12.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0), vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
@@ -87,8 +89,8 @@ public class SmartModelItemSlingshot implements ISmartItemModel, IPerspectiveAwa
 	}
 
 	@Override
-	public TextureAtlasSprite getTexture() {
-		return model_shooting.getTexture();
+	public TextureAtlasSprite getParticleTexture() {
+		return model_shooting.getParticleTexture();
 	}
 
 	@Override
@@ -97,11 +99,16 @@ public class SmartModelItemSlingshot implements ISmartItemModel, IPerspectiveAwa
 	}
 	
 	@Override
-	public Pair<IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
+	public VertexFormat getFormat() {
+		return model_shooting.getFormat();
+	}
+	
+	@Override
+	public Pair<? extends IFlexibleBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		if (cameraTransformType==TransformType.GUI) {
-			return model_normal.handlePerspective(cameraTransformType);
+			return Pair.of(model_normal,CameraTransformUtil.getMatrix4f(model_normal, cameraTransformType));
 		} else {
-			return Pair.of((IBakedModel)this, model_shooting.handlePerspective(cameraTransformType).getRight());
+			return Pair.of(this, model_shooting.handlePerspective(cameraTransformType).getRight());
 		}
 	}
 	

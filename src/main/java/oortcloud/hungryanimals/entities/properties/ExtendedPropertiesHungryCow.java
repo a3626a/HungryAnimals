@@ -12,34 +12,25 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal {
 
 	public EntityCow entity;
 	public int milk;
 
-	public static int milk_delay;
-	public static double milk_hunger;
-
-	public static int default_milk_delay;
-	public static double default_milk_hunger;
-
 	@Override
 	public void init(Entity entity, World world) {
 		super.init(entity, world);
 		this.entity = (EntityCow) entity;
-
-		acceptProperty(((GeneralProperty)GeneralPropertiesHandler.getInstance().propertyMap.get(entity.getClass())));
-		
-		taming_factor = 0.998;
-		milk_delay = default_milk_delay;
-		milk_hunger = default_milk_hunger;
-		this.hunger = this.hunger_max / 2.0;
-		this.excretion = 0;
-		this.taming = -2;
-		this.milk = this.milk_delay;
+	}
+	
+	@Override
+	public void postInit() {
+		super.postInit();
+		this.milk = (int) this.entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_delay).getAttributeValue();
 	}
 
 	@Override
@@ -65,8 +56,8 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 			} else if (!entity.inventory.addItemStackToInventory(new ItemStack(Items.milk_bucket))) {
 				entity.dropPlayerItemWithRandomChoice(new ItemStack(Items.milk_bucket, 1, 0), false);
 			}
-			this.subHunger(milk_hunger);
-			this.milk = this.milk_delay;
+			this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_hunger).getAttributeValue());
+			this.milk = (int)entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_delay).getAttributeValue();
 
 			return true;
 		}

@@ -58,11 +58,12 @@ public class BlockExcreta extends BlockFalling {
 
 	public BlockExcreta() {
 		super(ModMaterials.excreta);
-		this.setDefaultState(this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0)));
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockExcretaName);
-		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
-		this.setHarvestLevel("shovel", 0);
-		this.setTickRandomly(true);
+		setHarvestLevel("shovel", 0);
+
+		setDefaultState(this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0)));
+		setUnlocalizedName(Strings.blockExcretaName);
+		setCreativeTab(HungryAnimals.tabHungryAnimals);
+		setTickRandomly(true);
 		ModBlocks.register(this);
 	}
 
@@ -104,6 +105,10 @@ public class BlockExcreta extends BlockFalling {
 	@Override
 	public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam) {
 		super.updateTick(worldIn, pos, state, null);
+
+		if (worldIn.getBlockState(pos).getBlock() != this)
+			return false;
+
 		if (!worldIn.isRemote) {
 			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
 				IBlockState metaTop = worldIn.getBlockState(pos);
@@ -157,9 +162,14 @@ public class BlockExcreta extends BlockFalling {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (!worldIn.isRemote) {
-			fermentate(worldIn, pos, rand);
-			disease(worldIn, pos, rand);
-			dissolve(worldIn, pos, rand);
+			if (worldIn.getBlockState(pos).getBlock() == this)
+				fermentate(worldIn, pos, rand);
+
+			if (worldIn.getBlockState(pos).getBlock() == this)
+				disease(worldIn, pos, rand);
+
+			if (worldIn.getBlockState(pos).getBlock() == this)
+				dissolve(worldIn, pos, rand);
 		}
 	}
 

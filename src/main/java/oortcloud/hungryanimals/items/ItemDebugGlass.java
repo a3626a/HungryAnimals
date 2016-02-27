@@ -20,9 +20,10 @@ public class ItemDebugGlass extends Item {
 
 	public ItemDebugGlass() {
 		super();
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemDebugGlassName);
-		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
-		this.setMaxStackSize(1);
+		setUnlocalizedName(Strings.itemDebugGlassName);
+		setCreativeTab(HungryAnimals.tabHungryAnimals);
+		
+		setMaxStackSize(1);
 		ModItems.register(this);
 	}
 

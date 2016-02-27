@@ -1,22 +1,18 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
-import net.minecraft.command.IEntitySelector;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
 
@@ -70,7 +66,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		initializeFoodCondition();
-		if (property.hunger_max - property.hunger < foodCondition)
+		if (entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() - property.hunger < foodCondition)
 			return false;
 
 		if (this.delayCounter > 0) {

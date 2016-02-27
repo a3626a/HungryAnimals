@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
@@ -12,7 +13,7 @@ import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 
 import org.lwjgl.opengl.GL11;
 
-public class RenderEntitySlingShotBall extends Render {
+public class RenderEntitySlingShotBall extends Render<EntitySlingShotBall> {
 
 	public RenderEntitySlingShotBall(RenderManager renderManager) {
 		super(renderManager);
@@ -30,71 +31,47 @@ public class RenderEntitySlingShotBall extends Render {
 	 * Returns the location of an entity's texture. Doesn't seem to be called
 	 * unless you call Render.bindEntityTexture.
 	 */
-	protected ResourceLocation getEntityTexture(EntitySlingShotBall p_110775_1_) {
+	protected ResourceLocation getEntityTexture(EntitySlingShotBall entity) {
 		return null;
 	}
 
-	/**
-	 * Returns the location of an entity's texture. Doesn't seem to be called
-	 * unless you call Render.bindEntityTexture.
-	 */
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
-		return this.getEntityTexture((EntitySlingShotBall) p_110775_1_);
-	}
-
-	/**
-	 * Actually renders the given argument. This is a synthetic bridge method,
-	 * always casting down its argument and then handing it off to a worker
-	 * function which does the actual work. In all probabilty, the class Render
-	 * is generic (Render<T extends Entity) and this method has signature public
-	 * void func_76986_a(T entity, double d, double d1, double d2, float f,
-	 * float f1). But JAD is pre 1.5 so doesn't do that.
-	 */
-	public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {
-		this.doRender((EntitySlingShotBall) p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-	}
-
-	public static void renderOffsetAABBColored(AxisAlignedBB box, double x, double y, double z, float r, float g, float b, float a)
+    /**
+     * Renders a white box with the bounds of the AABB translated by the offset. Args: aabb, x, y, z
+     */
+    public static void renderOffsetAABBColored(AxisAlignedBB boundingBox, double x, double y, double z, float r, float g, float b, float a)
     {
         GlStateManager.disableTexture2D();
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        GlStateManager.color(r, g, b, a);
-        worldrenderer.startDrawingQuads();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         worldrenderer.setTranslation(x, y, z);
-        worldrenderer.setNormal(0.0F, 0.0F, -1.0F);
-        worldrenderer.addVertex(box.minX, box.maxY, box.minZ);
-        worldrenderer.addVertex(box.maxX, box.maxY, box.minZ);
-        worldrenderer.addVertex(box.maxX, box.minY, box.minZ);
-        worldrenderer.addVertex(box.minX, box.minY, box.minZ);
-        worldrenderer.setNormal(0.0F, 0.0F, 1.0F);
-        worldrenderer.addVertex(box.minX, box.minY, box.maxZ);
-        worldrenderer.addVertex(box.maxX, box.minY, box.maxZ);
-        worldrenderer.addVertex(box.maxX, box.maxY, box.maxZ);
-        worldrenderer.addVertex(box.minX, box.maxY, box.maxZ);
-        worldrenderer.setNormal(0.0F, -1.0F, 0.0F);
-        worldrenderer.addVertex(box.minX, box.minY, box.minZ);
-        worldrenderer.addVertex(box.maxX, box.minY, box.minZ);
-        worldrenderer.addVertex(box.maxX, box.minY, box.maxZ);
-        worldrenderer.addVertex(box.minX, box.minY, box.maxZ);
-        worldrenderer.setNormal(0.0F, 1.0F, 0.0F);
-        worldrenderer.addVertex(box.minX, box.maxY, box.maxZ);
-        worldrenderer.addVertex(box.maxX, box.maxY, box.maxZ);
-        worldrenderer.addVertex(box.maxX, box.maxY, box.minZ);
-        worldrenderer.addVertex(box.minX, box.maxY, box.minZ);
-        worldrenderer.setNormal(-1.0F, 0.0F, 0.0F);
-        worldrenderer.addVertex(box.minX, box.minY, box.maxZ);
-        worldrenderer.addVertex(box.minX, box.maxY, box.maxZ);
-        worldrenderer.addVertex(box.minX, box.maxY, box.minZ);
-        worldrenderer.addVertex(box.minX, box.minY, box.minZ);
-        worldrenderer.setNormal(1.0F, 0.0F, 0.0F);
-        worldrenderer.addVertex(box.maxX, box.minY, box.minZ);
-        worldrenderer.addVertex(box.maxX, box.maxY, box.minZ);
-        worldrenderer.addVertex(box.maxX, box.maxY, box.maxZ);
-        worldrenderer.addVertex(box.maxX, box.minY, box.maxZ);
-        worldrenderer.setTranslation(0.0D, 0.0D, 0.0D);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_NORMAL);
+        worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, -1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).normal(1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).normal(1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).normal(1.0F, 0.0F, 0.0F).endVertex();
+        worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).normal(1.0F, 0.0F, 0.0F).endVertex();
         tessellator.draw();
+        worldrenderer.setTranslation(0.0D, 0.0D, 0.0D);
         GlStateManager.enableTexture2D();
-    }
-	
+    }	
 }

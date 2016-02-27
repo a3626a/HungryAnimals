@@ -10,8 +10,9 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal {
 
@@ -21,13 +22,6 @@ public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal 
 	public void init(Entity entity, World world) {
 		super.init(entity, world);
 		this.entity = (EntityPig) entity;
-
-		acceptProperty(((GeneralProperty)GeneralPropertiesHandler.getInstance().propertyMap.get(entity.getClass())));
-		
-		taming_factor = 0.998;
-		this.hunger = this.hunger_max / 2.0;
-		this.excretion = 0;
-		this.taming = -2;
 	}
 
 	@Override

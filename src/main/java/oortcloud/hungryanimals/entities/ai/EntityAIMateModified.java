@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMateModified extends EntityAIBase
 {
@@ -119,9 +120,9 @@ public class EntityAIMateModified extends EntityAIBase
      */
     private void spawnBaby()
     {
-    	this.property.subHunger(property.child_hunger);
+    	this.property.subHunger(theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
     	ExtendedPropertiesHungryAnimal targetMateProperty = (ExtendedPropertiesHungryAnimal)this.targetMate.getExtendedProperties(Strings.extendedPropertiesKey);
-    	targetMateProperty.subHunger(property.child_hunger);
+    	targetMateProperty.subHunger(theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
         
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
     	
@@ -143,11 +144,11 @@ public class EntityAIMateModified extends EntityAIBase
         	ExtendedPropertiesHungryAnimal childProperty = (ExtendedPropertiesHungryAnimal) entityageable.getExtendedProperties(Strings.extendedPropertiesKey);
             childProperty.taming = ( this.property.taming + targetMateProperty.taming ) / 2.0;
         	
-            EntityPlayer entityplayer = this.theAnimal.func_146083_cb();
+            EntityPlayer entityplayer = this.theAnimal.getPlayerInLove();
 
-            if (entityplayer == null && this.targetMate.func_146083_cb() != null)
+            if (entityplayer == null && this.targetMate.getPlayerInLove() != null)
             {
-                entityplayer = this.targetMate.func_146083_cb();
+                entityplayer = this.targetMate.getPlayerInLove();
             }
 
             if (entityplayer != null)
@@ -176,7 +177,7 @@ public class EntityAIMateModified extends EntityAIBase
                 this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + (double)(random.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, this.theAnimal.posY + 0.5D + (double)(random.nextFloat() * this.theAnimal.height), this.theAnimal.posZ + (double)(random.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, d0, d1, d2);
             }
 
-            if (this.theWorld.getGameRules().getGameRuleBooleanValue("doMobLoot"))
+            if (this.theWorld.getGameRules().getBoolean("doMobLoot"))
             {
                 this.theWorld.spawnEntityInWorld(new EntityXPOrb(this.theWorld, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(7) + 1));
             }

@@ -49,8 +49,9 @@ public class ItemBola extends Item {
 	
 	public ItemBola() {
 		super();
-		this.setCreativeTab(HungryAnimals.tabHungryAnimals);
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.itemBolaName);
+		setUnlocalizedName(Strings.itemBolaName);
+		setCreativeTab(HungryAnimals.tabHungryAnimals);
+
 		ModItems.register(this);
 	}
 

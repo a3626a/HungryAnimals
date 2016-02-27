@@ -1,31 +1,23 @@
 package oortcloud.hungryanimals.tileentities;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import org.omg.PortableServer.IdUniquenessPolicy;
 
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.core.network.PacketTileEntityServer;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
-public class TileEntityTrough extends TileEntity implements IUpdatePlayerListBox {
+public class TileEntityTrough extends TileEntity implements ITickable {
 
 	public ItemStack stack;
 

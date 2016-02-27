@@ -12,8 +12,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralPropertiesHandler;
-import oortcloud.hungryanimals.entities.properties.handler.GeneralProperty;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
+import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAnimal {
 
@@ -23,13 +24,6 @@ public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAni
 	public void init(Entity entity, World world) {
 		super.init(entity, world);
 		this.entity = (EntityChicken) entity;
-
-		acceptProperty(((GeneralProperty)GeneralPropertiesHandler.getInstance().propertyMap.get(entity.getClass())));
-		
-		taming_factor = 0.998;
-		this.hunger = this.hunger_max / 2.0;
-		this.excretion = 0;
-		this.taming = -2;
 	}
 
 	@Override

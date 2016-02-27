@@ -1,51 +1,41 @@
 package oortcloud.hungryanimals;
 
+import org.apache.logging.log4j.Logger;
+
+import mcp.mobius.waila.api.impl.ModuleRegistrar;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.RecipeSorter;
-import oortcloud.hungryanimals.api.nei.NEIHandler;
+import oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
-import oortcloud.hungryanimals.command.CommandTickRate;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
 import oortcloud.hungryanimals.core.network.HandlerGeneralServer;
 import oortcloud.hungryanimals.core.network.HandlerPlayerServer;
-import oortcloud.hungryanimals.core.network.HandlerTileEntityClient;
-import oortcloud.hungryanimals.core.network.HandlerTileEntityServer;
 import oortcloud.hungryanimals.core.network.PacketGeneralClient;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
-import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
-import oortcloud.hungryanimals.core.network.PacketTileEntityServer;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
-import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.recipes.CraftingHandler;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
-import oortcloud.hungryanimals.recipes.RecipeBlender;
-import oortcloud.hungryanimals.recipes.RecipeMillstone;
-import oortcloud.hungryanimals.recipes.RecipeThresher;
-
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid = References.MODID, name = References.MODNAME, version = References.VERSION)
 public class HungryAnimals {
@@ -73,28 +63,24 @@ public class HungryAnimals {
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
-		RecipeThresher.init();
-		RecipeMillstone.init();
-		RecipeBlender.init();
 		RecipeAnimalGlue.init();
 		ConfigurationHandler.init(event);
 		ModBlocks.init();
 		ModItems.init();
 		ModPotions.init();
-		ModFluids.init();
-		proxy.registerEntities();
-		proxy.registerBlockRendering();
 		proxy.registerItemModel();
-		proxy.registerTileEntityRendering();
+		proxy.registerEntities();
+		proxy.registerEntityRendering();
 		proxy.registerTileEntities();
+		proxy.registerTileEntityRendering();
 		proxy.registerKeyBindings();
+		HungryAnimalManager.getInstance().init();
 		ConfigurationHandler.sync();
 	}
 
 	@Mod.EventHandler
 	public static void Init(FMLInitializationEvent event) {
 		proxy.registerItemRendering();
-		proxy.registerEntityRendering();
 
 		CraftingHandler.init();
 		proxy.registerEventHandler();
@@ -102,9 +88,9 @@ public class HungryAnimals {
 		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
 		simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);
 		simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 5, Side.CLIENT);
-		simpleChannel.registerMessage(HandlerTileEntityServer.class, PacketTileEntityServer.class, 2, Side.SERVER);
-		simpleChannel.registerMessage(HandlerTileEntityClient.class, PacketTileEntityClient.class, 3, Side.CLIENT);
 		simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
+		
+		proxy.initWAILA();
 	}
 
 	@Mod.EventHandler
@@ -112,11 +98,6 @@ public class HungryAnimals {
 		ConfigurationHandler.postSync();
 		if (Loader.isModLoaded("NotEnoughItems"))
 			proxy.initNEI();
-	}
-
-	@EventHandler
-	public void serverLoad(FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandTickRate());
 	}
 
 }

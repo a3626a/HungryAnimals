@@ -40,7 +40,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity {
 	private ExtendedPropertiesHungryAnimal property;
 	
 	public EntityAIAvoidPlayer(EntityCreature entity, ExtendedPropertiesHungryAnimal property, float radius, double farspeed, double nearspeed) {
-		super(entity, EntityAIAvoidPlayer.predicate, radius, farspeed, nearspeed);
+		super(entity, EntityPlayer.class, predicate, radius, farspeed, nearspeed);
 		this.property=property;
 	}
 	

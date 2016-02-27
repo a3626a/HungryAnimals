@@ -44,10 +44,11 @@ public class BlockTrough extends BlockContainer {
 
 	protected BlockTrough() {
 		super(Material.wood);
-		this.setUnlocalizedName(References.RESOURCESPREFIX + Strings.blockTroughName);
-		this.setHarvestLevel("axe", 0);
-		this.setHardness(2.0F);
-		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
+		setHarvestLevel("axe", 0);
+		setHardness(2.0F);
+		
+		setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
+		setUnlocalizedName(Strings.blockTroughName);
 		ModBlocks.register(this);
 	}
 
