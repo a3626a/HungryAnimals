@@ -111,15 +111,14 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.ai_moveToFoodbox = new EntityAIMoveToTrough(this.entity, this, 1.0D);
 		
 		HungryAnimalManager.getInstance().registerAttributes(this.entity);
-		HungryAnimalManager.getInstance().applyAttributes(this);
-		acceptProperty();
 	}
 
 	public void postInit() {
+		HungryAnimalManager.getInstance().applyAttributes(this);
+		acceptProperty();
+		
 		this.removeAI(new Class[] { EntityAITempt.class, EntityAIFollowParent.class, EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class, EntityAILookIdle.class });
 
-		
-		
 		//this.entity.tasks.addTask(0, this.ai_crank);
 		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, this, 16.0F, 1.0D, 2.0D));
 		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
