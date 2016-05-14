@@ -10,11 +10,8 @@ import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.api.nei.NEIHandler;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
@@ -113,7 +110,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void initNEI() {
-		NEIHandler.init();
+		//NEIHandler.init();
 	}
 	
 }

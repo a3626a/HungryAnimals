@@ -35,10 +35,8 @@ public class HUDHandlerHungryAnimals implements IWailaEntityProvider {
 		register.registerNBTProvider(instance, EntityAnimal.class);
 		
 		/*
-        register.registerOverrideEntityProvider(instance, EntityAnimal.class);
         register.addConfig(References.MODNAME, "option."+References.MODID+".showHunger");
         register.addConfig(References.MODNAME, "option."+References.MODID+".showTaming");
-        register.addConfig(References.MODNAME, "option."+References.MODID+".showAge");
         register.addConfig(References.MODNAME, "option."+References.MODID+".showExcretion");
         */
     }
@@ -61,6 +59,8 @@ public class HUDHandlerHungryAnimals implements IWailaEntityProvider {
 		tag = tag.getCompoundTag(ExtendedPropertiesHungryAnimal.key);
 		
 		tips.add("Hunger: " + tag.getDouble("hunger")  + " / " + animal.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue());
+		tips.add("Excertion: " + (tag.getDouble("excretion")*100) + "%");
+		tips.add("Taming: " + (tag.getDouble("excretion")>=1.0?"Friendly":tag.getDouble("excretion")>-0.1?"Neutral":"Wild"));
 		
 		return tips;
 	}

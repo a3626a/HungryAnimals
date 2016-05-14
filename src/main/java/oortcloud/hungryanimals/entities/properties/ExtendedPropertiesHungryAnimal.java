@@ -66,30 +66,41 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public double taming;
 	public EntityAIMoveToTrough ai_moveToFoodbox;
 	//public EntityAICrank ai_crank;
-
-	
 	
 	public void acceptProperty() {
-		HungryAnimalManager.getInstance().applyAttributes(this);
 		entity.setHealth(this.entity.getMaxHealth());
+		
+		taming_factor = 0.998;
+		hunger = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue()/2.0;
+		excretion = 0;
+		taming = -2;
 	}
 
+	protected void savePropertyNBTData(NBTTagCompound tag) {
+		tag.setDouble("hunger", this.hunger);
+		tag.setDouble("excretion", this.excretion);
+		tag.setDouble("tamedValue", this.taming);
+	}
+	
+	protected void loadPropertyNBTData(NBTTagCompound tag) {
+		hunger = tag.getDouble("hunger");
+		excretion = tag.getDouble("excretion");
+		taming = tag.getDouble("tamedValue");
+	}
+	
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		NBTTagCompound tag = new NBTTagCompound();
 		compound.setTag(key, tag);
-		tag.setDouble("hunger", this.hunger);
-		tag.setDouble("excretion", this.excretion);
-		tag.setDouble("tamedValue", this.taming);
+		savePropertyNBTData(tag);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound tag = (NBTTagCompound) compound.getTag(key);
+		
 		if (tag != null) {
-			this.hunger = tag.getDouble("hunger");
-			this.excretion = tag.getDouble("excretion");
-			this.taming = tag.getDouble("tamedValue");
+			loadPropertyNBTData(tag);
 		}
 	}
 
@@ -98,11 +109,17 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity = (EntityAnimal) entity;
 		this.worldObj = world;
 		this.ai_moveToFoodbox = new EntityAIMoveToTrough(this.entity, this, 1.0D);
+		
+		HungryAnimalManager.getInstance().registerAttributes(this.entity);
+		HungryAnimalManager.getInstance().applyAttributes(this);
+		acceptProperty();
 	}
 
 	public void postInit() {
 		this.removeAI(new Class[] { EntityAITempt.class, EntityAIFollowParent.class, EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class, EntityAILookIdle.class });
 
+		
+		
 		//this.entity.tasks.addTask(0, this.ai_crank);
 		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, this, 16.0F, 1.0D, 2.0D));
 		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
@@ -113,14 +130,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity.tasks.addTask(8, new EntityAIWander(this.entity, 1.0D));
 		this.entity.tasks.addTask(9, new EntityAIWatchClosest(this.entity, EntityPlayer.class, 6.0F));
 		this.entity.tasks.addTask(10, new EntityAILookIdle(this.entity));
-		
-		HungryAnimalManager.getInstance().registerAttributes(this.entity);
-		acceptProperty();
-		
-		taming_factor = 0.998;
-		this.hunger = this.entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue()/2.0;
-		this.excretion = 0;
-		this.taming = -2;
 	}
 
 	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
@@ -318,7 +327,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 	private void updateExcretion() {
 		if (this.excretion > 1) {
-			this.excretion -= 1;
+			 this.excretion -= 1;
 			int x = (int) this.entity.posX;
 			int y = (int) this.entity.posY;
 			int z = (int) this.entity.posZ;
@@ -337,6 +346,8 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				}
 			} else if (block.isAir(this.worldObj, pos) || block.isReplaceable(this.worldObj, pos)) {
 				this.worldObj.setBlockState(pos, ModBlocks.excreta.getDefaultState().withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(1, 0)), 2);
+			} else {
+				// TODO When there's no place to put block
 			}
 		}
 	}

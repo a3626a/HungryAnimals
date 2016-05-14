@@ -84,6 +84,7 @@ public class ConfigurationHandlerAnimal {
 			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance().isRegistered(entityClass)) {
 				HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
 				HungryAnimalManager.getInstance().registerHungryAnimal(entityClass, null);
+				HungryAnimalManager.getInstance().setAnimalDefaultCharacteristic(entityClass, HungryAnimalManager.getBasicCharacteristic());
 			}
 		}
 

@@ -29,9 +29,8 @@ public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnima
 	}
 	
 	@Override
-	public void postInit() {
-		super.postInit();
-		this.removeAI(new Class[] { EntityAIEatGrass.class });
+	public void acceptProperty() {
+		super.acceptProperty();
 		this.wool = (int) this.entity.getAttributeMap().getAttributeInstance(ModAttributes.wool_delay).getAttributeValue();
 	}
 	
@@ -69,24 +68,15 @@ public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnima
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound compound) {
-		NBTTagCompound tag = new NBTTagCompound();
-		compound.setTag(key, tag);
-		tag.setDouble("hunger", this.hunger);
-		tag.setDouble("excretion", this.excretion);
-		tag.setDouble("tamedValue", this.taming);
-		tag.setInteger("wool", this.wool);
+	protected void loadPropertyNBTData(NBTTagCompound tag) {
+		super.loadPropertyNBTData(tag);
+		wool = tag.getInteger("wool");
 	}
 
 	@Override
-	public void loadNBTData(NBTTagCompound compound) {
-		NBTTagCompound tag = (NBTTagCompound) compound.getTag(key);
-		if (tag != null) {
-			this.hunger = tag.getDouble("hunger");
-			this.excretion = tag.getDouble("excretion");
-			this.taming = tag.getDouble("tamedValue");
-			this.wool = tag.getInteger("wool");
-		}
+	protected void savePropertyNBTData(NBTTagCompound tag) {
+		super.savePropertyNBTData(tag);
+		tag.setInteger("wool", wool);
 	}
 
 }

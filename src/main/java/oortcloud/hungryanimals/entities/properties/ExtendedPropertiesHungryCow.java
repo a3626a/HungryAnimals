@@ -26,10 +26,10 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 		super.init(entity, world);
 		this.entity = (EntityCow) entity;
 	}
-	
+
 	@Override
-	public void postInit() {
-		super.postInit();
+	public void acceptProperty() {
+		super.acceptProperty();
 		this.milk = (int) this.entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_delay).getAttributeValue();
 	}
 
@@ -57,7 +57,7 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 				entity.dropPlayerItemWithRandomChoice(new ItemStack(Items.milk_bucket, 1, 0), false);
 			}
 			this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_hunger).getAttributeValue());
-			this.milk = (int)entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_delay).getAttributeValue();
+			this.milk = (int) entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_delay).getAttributeValue();
 
 			return true;
 		}
@@ -66,7 +66,7 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 			return true;
 		}
 		// to avoid vanilla milk production
-		
+
 		return super.interact(entity);
 	}
 
@@ -83,24 +83,15 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound compound) {
-		NBTTagCompound tag = new NBTTagCompound();
-		compound.setTag(key, tag);
-		tag.setDouble("hunger", this.hunger);
-		tag.setDouble("excretion", this.excretion);
-		tag.setDouble("tamedValue", this.taming);
-		tag.setInteger("milk", this.milk);
+	protected void loadPropertyNBTData(NBTTagCompound tag) {
+		super.loadPropertyNBTData(tag);
+		milk = tag.getInteger("milk");
 	}
 
 	@Override
-	public void loadNBTData(NBTTagCompound compound) {
-		NBTTagCompound tag = (NBTTagCompound) compound.getTag(key);
-		if (tag != null) {
-			this.hunger = tag.getDouble("hunger");
-			this.excretion = tag.getDouble("excretion");
-			this.taming = tag.getDouble("tamedValue");
-			this.milk = tag.getInteger("milk");
-		}
+	protected void savePropertyNBTData(NBTTagCompound tag) {
+		super.savePropertyNBTData(tag);
+		tag.setInteger("milk", milk);
 	}
 
 }

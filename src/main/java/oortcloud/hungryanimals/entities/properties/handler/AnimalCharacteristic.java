@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -24,10 +26,10 @@ public class AnimalCharacteristic {
 	public ArrayList<ValueDropRandom> drop_random;
 	public ArrayList<ValueDropRare> drop_rare;
 
-	public HashMap<IAttribute, Double> attributeMap;
+	public HashMap<IAttribute, Pair<Boolean,Double>> attributeMap;
 
 	public AnimalCharacteristic() {
-		attributeMap = new HashMap<IAttribute, Double>();
+		attributeMap = new HashMap<IAttribute, Pair<Boolean,Double>>();
 		hunger_food = new HashMap<HashItemType, Double>();
 		hunger_block = new HashMap<HashBlockState, Double>();
 		drop_meat = new ArrayList<ValueDropMeat>();
@@ -35,10 +37,14 @@ public class AnimalCharacteristic {
 		drop_rare = new ArrayList<ValueDropRare>();
 	}
 
+	public void putAttribute(IAttribute attribute, double value, boolean shouldRegister) {
+		attributeMap.put(attribute, Pair.of(shouldRegister,value));
+	}
+	
 	public void applyAttributes(ExtendedPropertiesHungryAnimal extendedProperty) {
 		EntityLivingBase entity = extendedProperty.entity;
-		for (Entry<IAttribute, Double> i : attributeMap.entrySet()) {
-			entity.getAttributeMap().getAttributeInstance(i.getKey()).setBaseValue(i.getValue());
+		for (Entry<IAttribute, Pair<Boolean, Double>> i : attributeMap.entrySet()) {
+			entity.getAttributeMap().getAttributeInstance(i.getKey()).setBaseValue(i.getValue().getRight());
 		}
 		extendedProperty.hunger_food = hunger_food;
 		extendedProperty.hunger_block = hunger_block;
@@ -49,7 +55,7 @@ public class AnimalCharacteristic {
 
 	public void registerAttributes(EntityLivingBase entity) {
 		for (IAttribute i : attributeMap.keySet()) {
-			if (entity.getAttributeMap().getAttributeInstance(i) == null) {
+			if (entity.getAttributeMap().getAttributeInstance(i) == null && attributeMap.get(i).getLeft()) {
 				entity.getAttributeMap().registerAttribute(i);
 			}
 		}

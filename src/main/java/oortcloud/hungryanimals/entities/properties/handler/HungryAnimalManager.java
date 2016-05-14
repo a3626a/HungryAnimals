@@ -3,6 +3,9 @@ package oortcloud.hungryanimals.entities.properties.handler;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.entity.EntityLivingBase;
@@ -37,8 +40,8 @@ public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
-	private HashMap<Class<? extends EntityAnimal>, AnimalCharacteristic> defaultCharacteristicMap;
-	private HashMap<Class<? extends EntityAnimal>, AnimalCharacteristic> characteristicMap;
+	private HashMap<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic,AnimalCharacteristic>> cMap;
+	// Left: default, Right: current value
 	private HashMap<Class<? extends EntityAnimal>, PropertyFactory> propertyMap;
 
 	public static HungryAnimalManager getInstance() {
@@ -49,8 +52,7 @@ public class HungryAnimalManager {
 	}
 
 	private HungryAnimalManager() {
-		defaultCharacteristicMap = new HashMap<Class<? extends EntityAnimal>, AnimalCharacteristic>();
-		characteristicMap = new HashMap<Class<? extends EntityAnimal>, AnimalCharacteristic>();
+		cMap = new HashMap<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic,AnimalCharacteristic>>();
 		propertyMap = new HashMap<Class<? extends EntityAnimal>, PropertyFactory>();
 	}
 
@@ -60,31 +62,32 @@ public class HungryAnimalManager {
 		} else {
 			propertyMap.put(animal, (property) -> new ExtendedPropertiesHungryGeneral(property.getClass()));
 		}
+		// TODO need to register default characteristics at the same time
 	}
 
 	public void setAnimalDefaultCharacteristic(Class<? extends EntityAnimal> animal, AnimalCharacteristic characteristic) {
 		if (isRegistered(animal)) {
-			defaultCharacteristicMap.put(animal, characteristic);
+			if (cMap.containsKey(animal)) {
+				cMap.get(animal).setLeft(characteristic);
+			} else {
+				cMap.put(animal, MutablePair.of(characteristic, null));
+			}
 		}
 	}
 
 	public AnimalCharacteristic getAnimalCharacteristic(Class<? extends EntityAnimal> animal) {
 		if (isRegistered(animal)) {
-			if (characteristicMap.containsKey(animal)) {
-				return characteristicMap.get(animal);
-			} else {
-				AnimalCharacteristic characteristic = getBasicCharacteristic();
-				characteristicMap.put(animal, characteristic);
-				return characteristic;
+			if (cMap.containsKey(animal)) {
+				return cMap.get(animal).getRight();
 			}
 		}
 		return null;
 	}
 
 	public void readFromConfig(Configuration config) {
-		for (Entry<Class<? extends EntityAnimal>, AnimalCharacteristic> i : defaultCharacteristicMap.entrySet()) {
+		for (Entry<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic, AnimalCharacteristic>> i : cMap.entrySet()) {
 			String category = ConfigurationHandlerAnimal.categoryGenerator(i.getKey());
-			AnimalCharacteristic iCharacteristic = i.getValue();
+			AnimalCharacteristic iCharacteristic = i.getValue().getLeft();
 			AnimalCharacteristic characteristic = new AnimalCharacteristic();
 
 			ConfigurationHandlerAnimal.readDropMeat(config, iCharacteristic.toStringDropMeat(), category, characteristic);
@@ -93,11 +96,11 @@ public class HungryAnimalManager {
 			ConfigurationHandlerAnimal.ByFoodRate(config, iCharacteristic.toStringHungerFood(), category, characteristic);
 			ConfigurationHandlerAnimal.ByBlockRate(config, iCharacteristic.toStringHungerBlock(), category, characteristic);
 
-			for (Entry<IAttribute, Double> j : iCharacteristic.attributeMap.entrySet()) {
-				characteristic.attributeMap.put(j.getKey(), config.get(category, j.getKey().getAttributeUnlocalizedName(), j.getValue()).getDouble());
+			for (Entry<IAttribute, Pair<Boolean, Double>> j : iCharacteristic.attributeMap.entrySet()) {
+				characteristic.putAttribute(j.getKey(),config.get(category, j.getKey().getAttributeUnlocalizedName(), j.getValue().getRight()).getDouble(), j.getValue().getLeft());
 			}
 			
-			characteristicMap.put(i.getKey(), characteristic);
+			i.getValue().setRight(characteristic);
 		}
 	}
 
@@ -110,17 +113,16 @@ public class HungryAnimalManager {
 	}
 
 	public void applyAttributes(ExtendedPropertiesHungryAnimal extendedProperty) {
-		characteristicMap.get(extendedProperty.entity.getClass()).applyAttributes(extendedProperty);
+		cMap.get(extendedProperty.entity.getClass()).getRight().applyAttributes(extendedProperty);
 	}
 
 	public void registerAttributes(EntityLivingBase entity) {
-		characteristicMap.get(entity.getClass()).registerAttributes(entity);
+		cMap.get(entity.getClass()).getRight().registerAttributes(entity);
 	}
 
 	public void init() {
 		propertyMap.clear();
-		characteristicMap.clear();
-		defaultCharacteristicMap.clear();
+		cMap.clear();
 
 		AnimalCharacteristic characteristic_chicken = new AnimalCharacteristic();
 		AnimalCharacteristic characteristic_cow = new AnimalCharacteristic();
@@ -128,17 +130,17 @@ public class HungryAnimalManager {
 		AnimalCharacteristic characteristic_rabbit = new AnimalCharacteristic();
 		AnimalCharacteristic characteristic_sheep = new AnimalCharacteristic();
 
-		characteristic_cow.attributeMap.put(ModAttributes.hunger_bmr, 0.005);
-		characteristic_cow.attributeMap.put(ModAttributes.hunger_max, 500.0);
-		characteristic_cow.attributeMap.put(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic_cow.attributeMap.put(ModAttributes.courtship_probability, 0.0025);
-		characteristic_cow.attributeMap.put(ModAttributes.courtship_hungerCondition, 0.8);
-		characteristic_cow.attributeMap.put(ModAttributes.excretion_factor, 1 / 50.0);
-		characteristic_cow.attributeMap.put(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 4.0);
-		characteristic_cow.attributeMap.put(ModAttributes.milk_delay, (double) (5 * 60 * 20));
-		characteristic_cow.attributeMap.put(ModAttributes.milk_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic_cow.attributeMap.put(SharedMonsterAttributes.maxHealth, 30.0);
-		characteristic_cow.attributeMap.put(SharedMonsterAttributes.movementSpeed, 0.2);
+		characteristic_cow.putAttribute(ModAttributes.hunger_bmr, 0.005, true);
+		characteristic_cow.putAttribute(ModAttributes.hunger_max, 500.0, true);
+		characteristic_cow.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic_cow.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
+		characteristic_cow.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
+		characteristic_cow.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
+		characteristic_cow.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
+		characteristic_cow.putAttribute(ModAttributes.milk_delay, (double) (5 * 60 * 20), true);
+		characteristic_cow.putAttribute(ModAttributes.milk_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic_cow.putAttribute(SharedMonsterAttributes.maxHealth, 30.0, false);
+		characteristic_cow.putAttribute(SharedMonsterAttributes.movementSpeed, 0.2, false);
 		characteristic_cow.drop_meat.add(new ValueDropMeat(Items.beef, 5, 10));
 		characteristic_cow.drop_random.add(new ValueDropRandom(Items.leather, 5, 10));
 		characteristic_cow.drop_random.add(new ValueDropRandom(ModItems.tendon, 2, 3));
@@ -148,15 +150,15 @@ public class HungryAnimalManager {
 		characteristic_cow.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		characteristic_cow.hunger_block.put(new HashBlockState(Blocks.wheat.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
 
-		characteristic_chicken.attributeMap.put(ModAttributes.hunger_bmr, 0.002);
-		characteristic_chicken.attributeMap.put(ModAttributes.hunger_max, 150.0);
-		characteristic_chicken.attributeMap.put(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic_chicken.attributeMap.put(ModAttributes.courtship_probability, 0.0025);
-		characteristic_chicken.attributeMap.put(ModAttributes.courtship_hungerCondition, 0.8);
-		characteristic_chicken.attributeMap.put(ModAttributes.excretion_factor, 1 / 50.0);
-		characteristic_chicken.attributeMap.put(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 4.0);
-		characteristic_chicken.attributeMap.put(SharedMonsterAttributes.maxHealth, 8.0);
-		characteristic_chicken.attributeMap.put(SharedMonsterAttributes.movementSpeed, 0.15);
+		characteristic_chicken.putAttribute(ModAttributes.hunger_bmr, 0.002, true);
+		characteristic_chicken.putAttribute(ModAttributes.hunger_max, 150.0, true);
+		characteristic_chicken.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic_chicken.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
+		characteristic_chicken.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
+		characteristic_chicken.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
+		characteristic_chicken.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
+		characteristic_chicken.putAttribute(SharedMonsterAttributes.maxHealth, 8.0, false);
+		characteristic_chicken.putAttribute(SharedMonsterAttributes.movementSpeed, 0.15, false);
 		characteristic_chicken.drop_meat.add(new ValueDropMeat(Items.chicken, 2, 4));
 		characteristic_chicken.drop_random.add(new ValueDropRandom(Items.feather, 3, 6));
 		characteristic_chicken.hunger_food.put(new HashItemType(Items.wheat_seeds), 20.0);
@@ -166,15 +168,15 @@ public class HungryAnimalManager {
 		characteristic_chicken.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		characteristic_chicken.hunger_block.put(new HashBlockState(Blocks.wheat.getDefaultState().withProperty(BlockCrops.AGE, 0)), 20.0);
 
-		characteristic_pig.attributeMap.put(ModAttributes.hunger_bmr, 0.004);
-		characteristic_pig.attributeMap.put(ModAttributes.hunger_max, 400.0);
-		characteristic_pig.attributeMap.put(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic_pig.attributeMap.put(ModAttributes.courtship_probability, 0.0025);
-		characteristic_pig.attributeMap.put(ModAttributes.courtship_hungerCondition, 0.8);
-		characteristic_pig.attributeMap.put(ModAttributes.excretion_factor, 1 / 50.0);
-		characteristic_pig.attributeMap.put(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 4.0);
-		characteristic_pig.attributeMap.put(SharedMonsterAttributes.maxHealth, 20.0);
-		characteristic_pig.attributeMap.put(SharedMonsterAttributes.movementSpeed, 0.25);
+		characteristic_pig.putAttribute(ModAttributes.hunger_bmr, 0.004, true);
+		characteristic_pig.putAttribute(ModAttributes.hunger_max, 400.0, true);
+		characteristic_pig.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic_pig.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
+		characteristic_pig.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
+		characteristic_pig.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
+		characteristic_pig.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
+		characteristic_pig.putAttribute(SharedMonsterAttributes.maxHealth, 20.0, false);
+		characteristic_pig.putAttribute(SharedMonsterAttributes.movementSpeed, 0.25, false);
 		characteristic_pig.drop_meat.add(new ValueDropMeat(Items.porkchop, 4, 8));
 		characteristic_pig.drop_random.add(new ValueDropRandom(ModItems.tendon, 1, 2));
 		characteristic_pig.hunger_food.put(new HashItemType(Items.carrot), 40.0);
@@ -183,15 +185,15 @@ public class HungryAnimalManager {
 		characteristic_pig.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		characteristic_pig.hunger_block.put(new HashBlockState(Blocks.carrots.getDefaultState().withProperty(BlockCrops.AGE, 7)), 40.0);
 
-		characteristic_rabbit.attributeMap.put(ModAttributes.hunger_bmr, 0.003);
-		characteristic_rabbit.attributeMap.put(ModAttributes.hunger_max, 250.0);
-		characteristic_rabbit.attributeMap.put(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic_rabbit.attributeMap.put(ModAttributes.courtship_probability, 0.0025);
-		characteristic_rabbit.attributeMap.put(ModAttributes.courtship_hungerCondition, 0.8);
-		characteristic_rabbit.attributeMap.put(ModAttributes.excretion_factor, 1 / 50.0);
-		characteristic_rabbit.attributeMap.put(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 4.0);
-		characteristic_rabbit.attributeMap.put(SharedMonsterAttributes.maxHealth, 10.0);
-		characteristic_rabbit.attributeMap.put(SharedMonsterAttributes.movementSpeed, 0.25);
+		characteristic_rabbit.putAttribute(ModAttributes.hunger_bmr, 0.003, true);
+		characteristic_rabbit.putAttribute(ModAttributes.hunger_max, 250.0, true);
+		characteristic_rabbit.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic_rabbit.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
+		characteristic_rabbit.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
+		characteristic_rabbit.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
+		characteristic_rabbit.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
+		characteristic_rabbit.putAttribute(SharedMonsterAttributes.maxHealth, 10.0, false);
+		characteristic_rabbit.putAttribute(SharedMonsterAttributes.movementSpeed, 0.25, false);
 		characteristic_rabbit.drop_meat.add(new ValueDropMeat(Items.rabbit, 1, 2));
 		characteristic_rabbit.drop_random.add(new ValueDropRandom(Items.rabbit_hide, 1, 2));
 		characteristic_rabbit.drop_rare.add(new ValueDropRare(Items.rabbit_foot, 0.025));
@@ -203,17 +205,17 @@ public class HungryAnimalManager {
 		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.yellow_flower), 20.0);
 		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.carrots.getDefaultState().withProperty(BlockCrops.AGE, 7)), 40.0);
 
-		characteristic_sheep.attributeMap.put(ModAttributes.hunger_bmr, 0.004);
-		characteristic_sheep.attributeMap.put(ModAttributes.hunger_max, 400.0);
-		characteristic_sheep.attributeMap.put(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic_sheep.attributeMap.put(ModAttributes.courtship_probability, 0.0025);
-		characteristic_sheep.attributeMap.put(ModAttributes.courtship_hungerCondition, 0.8);
-		characteristic_sheep.attributeMap.put(ModAttributes.excretion_factor, 1 / 50.0);
-		characteristic_sheep.attributeMap.put(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 4.0);
-		characteristic_sheep.attributeMap.put(SharedMonsterAttributes.maxHealth, 20.0);
-		characteristic_sheep.attributeMap.put(SharedMonsterAttributes.movementSpeed, 0.20);
-		characteristic_sheep.attributeMap.put(ModAttributes.wool_delay, (double) (5 * 60 * 20));
-		characteristic_sheep.attributeMap.put(ModAttributes.wool_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max) / 20.0);
+		characteristic_sheep.putAttribute(ModAttributes.hunger_bmr, 0.004, true);
+		characteristic_sheep.putAttribute(ModAttributes.hunger_max, 400.0, true);
+		characteristic_sheep.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic_sheep.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
+		characteristic_sheep.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
+		characteristic_sheep.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
+		characteristic_sheep.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
+		characteristic_sheep.putAttribute(SharedMonsterAttributes.maxHealth, 20.0, false);
+		characteristic_sheep.putAttribute(SharedMonsterAttributes.movementSpeed, 0.20, false);
+		characteristic_sheep.putAttribute(ModAttributes.wool_delay, (double) (5 * 60 * 20), true);
+		characteristic_sheep.putAttribute(ModAttributes.wool_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
 		characteristic_sheep.drop_meat.add(new ValueDropMeat(Items.mutton, 3, 6));
 		characteristic_sheep.drop_random.add(new ValueDropRandom(ModItems.tendon, 1, 2));
 		characteristic_sheep.hunger_food.put(new HashItemType(Items.wheat), 50.0);
@@ -266,17 +268,17 @@ public class HungryAnimalManager {
 		setAnimalDefaultCharacteristic(EntitySheep.class, characteristic_sheep);
 	}
 
-	public AnimalCharacteristic getBasicCharacteristic() {
+	public static AnimalCharacteristic getBasicCharacteristic() {
 		AnimalCharacteristic characteristic = new AnimalCharacteristic();
-		characteristic.attributeMap.put(ModAttributes.hunger_bmr, 0.005);
-		characteristic.attributeMap.put(ModAttributes.hunger_max, 500.0);
-		characteristic.attributeMap.put(ModAttributes.courtship_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max) / 20.0);
-		characteristic.attributeMap.put(ModAttributes.courtship_probability, 0.0025);
-		characteristic.attributeMap.put(ModAttributes.courtship_hungerCondition, 0.8);
-		characteristic.attributeMap.put(ModAttributes.excretion_factor, 1 / 50.0);
-		characteristic.attributeMap.put(ModAttributes.child_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max) / 4.0);
-		characteristic.attributeMap.put(SharedMonsterAttributes.maxHealth, 30.0);
-		characteristic.attributeMap.put(SharedMonsterAttributes.movementSpeed, 0.2);
+		characteristic.putAttribute(ModAttributes.hunger_bmr, 0.005, true);
+		characteristic.putAttribute(ModAttributes.hunger_max, 500.0, true);
+		characteristic.putAttribute(ModAttributes.courtship_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
+		characteristic.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
+		characteristic.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
+		characteristic.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
+		characteristic.putAttribute(ModAttributes.child_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
+		characteristic.putAttribute(SharedMonsterAttributes.maxHealth, 30.0, false);
+		characteristic.putAttribute(SharedMonsterAttributes.movementSpeed, 0.2, false);
 		characteristic.drop_meat.add(new ValueDropMeat(Items.beef, 5, 10));
 		characteristic.drop_random.add(new ValueDropRandom(Items.leather, 5, 10));
 		characteristic.drop_random.add(new ValueDropRandom(ModItems.tendon, 2, 3));

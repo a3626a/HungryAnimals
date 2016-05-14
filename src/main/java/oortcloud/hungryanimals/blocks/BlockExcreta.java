@@ -150,7 +150,7 @@ public class BlockExcreta extends BlockFalling {
 		}
 		return 0;
 	}
-
+	
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
 		IBlockState meta = worldIn.getBlockState(pos);
@@ -334,7 +334,7 @@ public class BlockExcreta extends BlockFalling {
 			}
 		}
 	}
-
+	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
