@@ -90,7 +90,8 @@ public class HungryAnimals {
 		simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 5, Side.CLIENT);
 		simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
 		
-		proxy.initWAILA();
+		if (Loader.isModLoaded("WAILA"))
+			proxy.initWAILA();
 	}
 
 	@Mod.EventHandler

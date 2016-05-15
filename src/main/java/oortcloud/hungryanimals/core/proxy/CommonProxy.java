@@ -60,7 +60,7 @@ public class CommonProxy {
 	}
 
 	public void initWAILA() {
-		FMLInterModComms.sendMessage("Waila", "register", "oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals.callbackRegister");
+		//FMLInterModComms.sendMessage("Waila", "register", "oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals.callbackRegister");
 	}
 
 }
