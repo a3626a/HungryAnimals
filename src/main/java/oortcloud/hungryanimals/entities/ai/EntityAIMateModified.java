@@ -153,11 +153,11 @@ public class EntityAIMateModified extends EntityAIBase
 
             if (entityplayer != null)
             {
-                entityplayer.triggerAchievement(StatList.animalsBredStat);
+                entityplayer.addStat(StatList.ANIMALS_BRED);
 
                 if (this.theAnimal instanceof EntityCow)
                 {
-                    entityplayer.triggerAchievement(AchievementList.breedCow);
+                    entityplayer.addStat(AchievementList.BREED_COW);
                 }
             }
             this.theAnimal.setGrowingAge(48000);

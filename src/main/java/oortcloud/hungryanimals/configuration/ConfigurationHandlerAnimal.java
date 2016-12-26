@@ -21,8 +21,6 @@ import oortcloud.hungryanimals.configuration.util.StringParser;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
 import oortcloud.hungryanimals.configuration.util.ValueDropRare;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryCow;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungrySheep;
 import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
@@ -66,22 +64,22 @@ public class ConfigurationHandlerAnimal {
 
 		HungryAnimals.logger.info("Configuration: Check compatibility of registered Entity Classes");
 		HungryAnimals.logger.info("Configuration: Compatible entities' name :");
-		for (Object i : EntityList.classToStringMapping.keySet()) {
+		for (Object i : EntityList.CLASS_TO_NAME.keySet()) {
 			if (EntityAnimal.class.isAssignableFrom((Class) i)) {
-				HungryAnimals.logger.info("Configuration: " + (String) EntityList.classToStringMapping.get(i));
+				HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
 			}
 		}
 		HungryAnimals.logger.info("Configuration: Uncompatible entities' name :");
-		for (Object i : EntityList.classToStringMapping.keySet()) {
+		for (Object i : EntityList.CLASS_TO_NAME.keySet()) {
 			if (!EntityAnimal.class.isAssignableFrom((Class) i)) {
-				HungryAnimals.logger.info("Configuration: " + (String) EntityList.classToStringMapping.get(i));
+				HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
 			}
 		}
 
 		HungryAnimals.logger.info("Configuration: Read and Register mod entities' from Animal.cfg to HungryAnimalManager");
 		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
 			HungryAnimals.logger.info("Configuration: Read entity name " + i + " from Animal.cfg");
-			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
+			Class entityClass = (Class) EntityList.NAME_TO_CLASS.get(i);
 			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance().isRegistered(entityClass)) {
 				HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
 				API.registerAnimal(entityClass);
@@ -95,7 +93,7 @@ public class ConfigurationHandlerAnimal {
 	}
 
 	public static String categoryGenerator(Class<? extends EntityAnimal> entityClass) {
-		return (String) EntityList.classToStringMapping.get(entityClass);
+		return (String) EntityList.CLASS_TO_NAME.get(entityClass);
 	}
 
 	public static void readDropMeat(Configuration config, String[] defaultfood, String category, AnimalCharacteristic target) {

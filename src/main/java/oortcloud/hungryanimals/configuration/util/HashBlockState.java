@@ -1,10 +1,10 @@
 package oortcloud.hungryanimals.configuration.util;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-
-import com.google.common.collect.ImmutableSet;
 
 public class HashBlockState {
 	private IBlockState block;
@@ -55,7 +55,7 @@ public class HashBlockState {
 	
 	public String toString() {
 		if (ignoreProperty) {
-			return "("+String.valueOf(Block.blockRegistry.getNameForObject(block.getBlock()))+")";
+			return "("+String.valueOf(Block.REGISTRY.getNameForObject(block.getBlock()))+")";
 		} else {
 			ImmutableSet properties = block.getProperties().keySet();
 			String[] propertyStrings = new String[properties.size()];
@@ -71,7 +71,7 @@ public class HashBlockState {
 				propertyString+=","+propertyStrings[i];
 			}
 			propertyString+=")";
-			return "("+String.valueOf(Block.blockRegistry.getNameForObject(block.getBlock()))+","+propertyString+")";
+			return "("+String.valueOf(Block.REGISTRY.getNameForObject(block.getBlock()))+","+propertyString+")";
 		}
 	}
 }

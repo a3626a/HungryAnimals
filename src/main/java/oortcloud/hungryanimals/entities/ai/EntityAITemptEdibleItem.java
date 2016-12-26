@@ -53,7 +53,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 			if (this.temptingPlayer == null) {
 				return false;
 			} else {
-				ItemStack itemstack = this.temptingPlayer.getCurrentEquippedItem();
+				ItemStack itemstack = this.temptingPlayer.getHeldItemMainhand();
 				return itemstack == null ? false : property.canEatFood(itemstack);
 			}
 		}

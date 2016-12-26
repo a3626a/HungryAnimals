@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -35,7 +36,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 			break;
 		case SyncIndex.ENTITYOVERLAY_EDIT_INT:
 			int id = message.getInt();
-			WorldServer[] aworldserver = MinecraftServer.getServer().worldServers;
+			WorldServer[] aworldserver = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 			for (int j = 0; j < aworldserver.length; ++j) {
 				WorldServer worldserver = aworldserver[j];
 				if (worldserver != null) {
@@ -64,7 +65,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 			break;
 		case SyncIndex.ENTITYOVERLAY_EDIT_DOUBLE:
 			int id2 = message.getInt();
-			WorldServer[] aworldserver2 = MinecraftServer.getServer().worldServers;
+			WorldServer[] aworldserver2 = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 			for (int j = 0; j < aworldserver2.length; ++j) {
 				WorldServer worldserver = aworldserver2[j];
 
@@ -94,7 +95,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 			break;
 		case SyncIndex.ENTITYOVERLAY_SYNC_REQUEST:
 			int id3 = message.getInt();
-			WorldServer[] aworldserver3 = MinecraftServer.getServer().worldServers;
+			WorldServer[] aworldserver3 = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 			for (int j = 0; j < aworldserver3.length; ++j) {
 				WorldServer worldserver = aworldserver3[j];
 

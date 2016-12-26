@@ -1,19 +1,13 @@
 package oortcloud.hungryanimals.entities.ai;
 
-import java.util.List;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
-import oortcloud.hungryanimals.core.network.PacketTileEntityClient;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
@@ -81,7 +75,8 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 						if (trough.stack.stackSize == 0)
 							trough.stack = null;
 						
-						world.markBlockForUpdate(pos);
+						// TODO check valid flag
+						world.notifyBlockUpdate(pos, state, state, 3);
 					}
 				}
 			}

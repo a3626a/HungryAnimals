@@ -27,7 +27,7 @@ public class ConfigurationHandlerRecipe {
 
 		HungryAnimals.logger.info("Configuration: Read and Register Animals Glue Recipe");
 		recipeString = config.get(CATEGORY_AnimalGlue, KEY_AnimalGlueRecipeList,
-				new String[] { "(" + Item.itemRegistry.getNameForObject(Items.leather) + ")=(6)", "(" + Item.itemRegistry.getNameForObject(ModItems.tendon) + ")=(4)", "(" + Item.itemRegistry.getNameForObject(Items.bone) + ")=(2)" })
+				new String[] { "(" + Item.REGISTRY.getNameForObject(Items.LEATHER) + ")=(6)", "(" + Item.REGISTRY.getNameForObject(ModItems.tendon) + ")=(4)", "(" + Item.REGISTRY.getNameForObject(Items.BONE) + ")=(2)" })
 				.getStringList();
 
 		for (String i : recipeString) {

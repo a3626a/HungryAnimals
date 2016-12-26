@@ -1,6 +1,7 @@
 package oortcloud.hungryanimals.blocks.render;
 
-import net.minecraft.block.state.BlockState;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -14,8 +15,6 @@ import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
-
-import org.lwjgl.opengl.GL11;
 
 public class RenderTileEntityTrough extends TileEntitySpecialRenderer {
 

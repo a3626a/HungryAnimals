@@ -41,9 +41,9 @@ public class HashItemType {
 
 	public String toString() {
 		if (ignoreDamage) {
-			return "(" + String.valueOf(Item.itemRegistry.getNameForObject(item)) + ")";
+			return "(" + String.valueOf(Item.REGISTRY.getNameForObject(item)) + ")";
 		} else {
-			return "(" + String.valueOf(Item.itemRegistry.getNameForObject(item)) + "," + damage + ")";
+			return "(" + String.valueOf(Item.REGISTRY.getNameForObject(item)) + "," + damage + ")";
 		}
 	}
 }

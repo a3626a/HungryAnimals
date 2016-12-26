@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
-import oortcloud.hungryanimals.configuration.ConfigurationHandler;
-import oortcloud.hungryanimals.core.lib.References;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.SERVER)
 public class WorldEventHandler {
 
 	public static double grassProbability;
@@ -28,7 +28,7 @@ public class WorldEventHandler {
 			if (world.getWorldTime() % 200 == 0) {
 				ArrayList<BlockPos> list = new ArrayList<BlockPos>();
 				if (!world.isRemote) {
-					for (Object i : ((ChunkProviderServer) world.getChunkProvider()).func_152380_a()) {
+					for (Object i : ((ChunkProviderServer) world.getChunkProvider()).getLoadedChunks()) {
 						if (world.rand.nextDouble() < grassProbability) {
 							Chunk chunk = (Chunk) i;
 							int x = chunk.xPosition << 4;
@@ -44,7 +44,7 @@ public class WorldEventHandler {
 					}
 					for (BlockPos i : list) {
 						if (world.isAirBlock(i))
-							world.setBlockState(i, Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE,
+							world.setBlockState(i, Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE,
 									BlockTallGrass.EnumType.GRASS), 2);
 					}
 				}
@@ -53,14 +53,15 @@ public class WorldEventHandler {
 	}
 
 	public boolean canGrassGrow(World world, BlockPos pos) {
-		boolean flag1 = world.getBlockState(pos.down()) == Blocks.grass.getDefaultState() && world.isAirBlock(pos);
+		boolean flag1 = world.getBlockState(pos.down()) == Blocks.GRASS.getDefaultState() && world.isAirBlock(pos);
 		boolean flag2 = true;
+		ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				if (!world.getChunkProvider().chunkExists((pos.getX() + i) >> 4, (pos.getZ() + j) >> 4)) {
+				if (!provider.chunkExists((pos.getX() + i) >> 4, (pos.getZ() + j) >> 4)) {
 					flag2 = false;
 					break;
-				} else if (world.getBlockState(pos.add(i, 0, j)).getBlock() == Blocks.tallgrass) {
+				} else if (world.getBlockState(pos.add(i, 0, j)).getBlock() == Blocks.TALLGRASS) {
 					flag2 = false;
 				}
 			}

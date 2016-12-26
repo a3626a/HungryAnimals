@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.core.network;
 
-import net.minecraft.util.BlockPos;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.math.BlockPos;
 
 public class PacketTileEntityServer extends PacketBasicServer{
 

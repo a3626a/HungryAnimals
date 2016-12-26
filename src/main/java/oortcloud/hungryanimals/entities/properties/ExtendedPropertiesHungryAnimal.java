@@ -25,8 +25,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
@@ -43,7 +43,6 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
 
@@ -436,7 +435,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			}
 			return true;
 		} else if (this.entity.isPotionActive(ModPotions.potionDisease) && this.taming >= 1) {
-			if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.red_mushroom) || stack.getItem() == ItemBlock.getItemFromBlock(Blocks.brown_mushroom)) {
+			if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || stack.getItem() == ItemBlock.getItemFromBlock(Blocks.brown_mushroom)) {
 				this.entity.removePotionEffect(ModPotions.potionDisease.id);
 				stack.stackSize--;
 				if (stack.stackSize == 0) {

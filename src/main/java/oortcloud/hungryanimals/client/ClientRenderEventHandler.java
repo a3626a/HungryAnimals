@@ -1,27 +1,22 @@
 package oortcloud.hungryanimals.client;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.items.ModItems;
-
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class ClientRenderEventHandler {
@@ -92,15 +87,15 @@ public class ClientRenderEventHandler {
 		float height = 0.7F;
 
 		EntityPlayer entity = (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity();
-		EntityLivingBase animal = event.entity;
-		RendererLivingEntity render = event.renderer;
-		ItemStack stack = entity.getHeldItem();
+		EntityLivingBase animal = event.getEntity();
+		RenderLivingBase render = event.getRenderer();
+		ItemStack stack = entity.getHeldItemMainhand();
 		if (stack != null && stack.getItem() == ModItems.debugGlass) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
 				if (tag.hasKey("target") && tag.getInteger("target") == animal.getEntityId()) {
 					Tessellator tessellator = Tessellator.getInstance();
-					WorldRenderer renderer = tessellator.getWorldRenderer();
+					VertexBuffer renderer = tessellator.getBuffer();
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
 					GL11.glColor4f(1, 0, 0, 1);
@@ -108,8 +103,8 @@ public class ClientRenderEventHandler {
 					float h = animal.height + height + 0.5F;
 					float f = animal.height + 0.5F;
 					GL11.glPushMatrix();
-					GL11.glTranslated(event.x, event.y, event.z);
-					GL11.glRotatef(4 * event.entity.worldObj.getWorldTime(), 0, 1, 0);
+					GL11.glTranslated(event.getX(), event.getY(), event.getZ());
+					GL11.glRotatef(4 * event.getEntity().worldObj.getWorldTime(), 0, 1, 0);
 					renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					renderer.pos(+radius, +h, +radius).endVertex();
 					renderer.pos(+radius, +h, -radius).endVertex();
