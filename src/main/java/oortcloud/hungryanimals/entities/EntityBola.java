@@ -24,13 +24,13 @@ public class EntityBola extends Entity implements IProjectile {
 
 	public EntityBola(World world) {
 		super(world);
-		this.renderDistanceWeight = 10.0D;
+		this.setRenderDistanceWeight(10.0D);
 		this.setSize(1.0F, 0.25F);
 	}
 
 	public EntityBola(World world, double posx, double posy, double posz, double speed, float rotationYaw, float rotationPitch) {
 		super(world);
-		this.renderDistanceWeight = 10.0D;
+		this.setRenderDistanceWeight(10.0D);
 		this.setSize(1.0F, 0.25F);
 		this.setPosition(posx, posy, posz);
 		this.setThrowableHeading(speed, rotationYaw, rotationPitch);
@@ -43,7 +43,7 @@ public class EntityBola extends Entity implements IProjectile {
 
 	public EntityBola(World world, EntityPlayer player, float d) {
 		super(world);
-		this.renderDistanceWeight = 10.0D;
+		this.setRenderDistanceWeight(10.0D);
 		this.shootingEntity = player;
 
 		this.setSize(1.0F, 0.25F);

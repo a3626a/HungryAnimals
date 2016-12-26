@@ -5,19 +5,13 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.blocks.BlockTrough.EnumPartType;
-import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 
@@ -29,7 +23,7 @@ public class BlockNiterBed extends Block {
 	public static final double default_ripeningProbability = 0.1;
 
 	public BlockNiterBed() {
-		super(Material.ground);
+		super(Material.GROUND);
 		setHarvestLevel("shovel", 0);
 		setHardness(0.5F);
 		
@@ -40,8 +34,9 @@ public class BlockNiterBed extends Block {
 		ModBlocks.register(this);
 	}
 
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { AGE });
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { AGE });
 	}
 
 	@Override
@@ -62,10 +57,12 @@ public class BlockNiterBed extends Block {
 		return (Integer) state.getValue(AGE) == 7 ? ModItems.saltpeter : super.getItemDropped(state, rand, fortune);
 	}
 
+	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
 	}
 
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((Integer) state.getValue(AGE)).intValue();
 	}

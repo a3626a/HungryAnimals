@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -19,22 +21,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.materials.ModMaterials;
 import oortcloud.hungryanimals.potion.ModPotions;
-
-import com.google.common.base.Predicate;
 
 public class BlockExcreta extends BlockFalling {
 
@@ -59,8 +62,7 @@ public class BlockExcreta extends BlockFalling {
 	public BlockExcreta() {
 		super(ModMaterials.excreta);
 		setHarvestLevel("shovel", 0);
-
-		setDefaultState(this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0)));
+		setDefaultState(this.blockState.getBaseState().withProperty(CONTENT, EnumType.getValue(1, 0)));
 		setUnlocalizedName(Strings.blockExcretaName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
@@ -68,24 +70,32 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { CONTENT });
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { CONTENT });
 	}
 
-	@Override
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
-	}
 
 	@Override
-	public boolean isFullCube() {
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		// TODO isFullcube based on BlockStates
+		//return super.isFullCube(state);
+		return false;
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		// TODO isFullcube based on BlockStates
+		//return super.isOpaqueCube(state);
 		return false;
 	}
 
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
 
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
@@ -93,8 +103,8 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-		worldIn.addBlockEvent(pos, this, 0, 1);
+	public void onNeighborChange(IBlockAccess worldIn, BlockPos pos, BlockPos neighborBlock) {
+		((World) worldIn).addBlockEvent(pos, this, 0, 1);
 	}
 
 	@Override
@@ -102,8 +112,9 @@ public class BlockExcreta extends BlockFalling {
 		worldIn.addBlockEvent(pos, this, 0, 1);
 	}
 
+	
 	@Override
-	public boolean onBlockEventReceived(World worldIn, BlockPos pos, IBlockState state, int eventID, int eventParam) {
+	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
 		super.updateTick(worldIn, pos, state, null);
 
 		if (worldIn.getBlockState(pos).getBlock() != this)
@@ -141,22 +152,23 @@ public class BlockExcreta extends BlockFalling {
 		ret.add(new ItemStack(ModItems.manure, man));
 		return ret;
 	}
-
+	
 	@Override
-	public float getBlockHardness(World worldIn, BlockPos pos) {
-		IBlockState meta = worldIn.getBlockState(pos);
-		if (meta.getBlock() == this) {
-			return (((EnumType) meta.getValue(CONTENT)).exc + ((EnumType) meta.getValue(CONTENT)).man) * hardnessConstant;
+	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+		if (blockState.getBlock() == this) {
+			return (((EnumType) blockState.getValue(CONTENT)).exc + ((EnumType) blockState.getValue(CONTENT)).man) * hardnessConstant;
 		}
 		return 0;
 	}
 	
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-		IBlockState meta = worldIn.getBlockState(pos);
-		if (meta.getBlock() == this) {
-			this.setBlockBounds(0, 0, 0, 1, 0.25F * (((EnumType) meta.getValue(CONTENT)).exc + ((EnumType) meta.getValue(CONTENT)).man), 1);
-		}
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return new AxisAlignedBB(0, 0, 0, 1, 0.25F * (((EnumType) state.getValue(CONTENT)).exc + ((EnumType) state.getValue(CONTENT)).man), 1);
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		return null;
 	}
 
 	@Override
@@ -178,7 +190,7 @@ public class BlockExcreta extends BlockFalling {
 		int man = ((EnumType) meta.getValue(CONTENT)).man;
 		int exc = ((EnumType) meta.getValue(CONTENT)).exc;
 		Block bottom = world.getBlockState(pos.down()).getBlock();
-		if (bottom == Blocks.dirt || bottom == Blocks.grass || bottom == Blocks.sand) {
+		if (bottom == Blocks.DIRT || bottom == Blocks.GRASS || bottom == Blocks.SAND) {
 			if (random.nextDouble() < this.fertilizationProbability) {
 				if (man > 0) {
 					man--;
@@ -192,10 +204,10 @@ public class BlockExcreta extends BlockFalling {
 					world.setBlockState(pos, meta.withProperty(CONTENT, EnumType.getValue(exc, man)), 3);
 				}
 
-				if (bottom == Blocks.sand) {
-					world.setBlockState(pos.down(), Blocks.dirt.getDefaultState(), 3);
-				} else if (bottom == Blocks.dirt) {
-					world.setBlockState(pos.down(), Blocks.grass.getDefaultState(), 3);
+				if (bottom == Blocks.SAND) {
+					world.setBlockState(pos.down(), Blocks.DIRT.getDefaultState(), 3);
+				} else if (bottom == Blocks.DIRT) {
+					world.setBlockState(pos.down(), Blocks.GRASS.getDefaultState(), 3);
 				}
 			}
 		} else if (bottom == ModBlocks.floorcover_hay) {
@@ -245,7 +257,7 @@ public class BlockExcreta extends BlockFalling {
 			};
 
 			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius), pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
-				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease.id, 24000, 1));
+				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 1));
 			}
 		}
 
@@ -287,17 +299,16 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
-
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;
 		if (exc + man >= 4)
 			return false;
 
-		if (playerIn.getCurrentEquippedItem() != null && playerIn.getCurrentEquippedItem().getItem().equals(ItemBlock.getItemFromBlock(this))) {
+		if (playerIn.getHeldItemMainhand() != null && playerIn.getHeldItemMainhand().getItem().equals(ItemBlock.getItemFromBlock(this))) {
 			if (!playerIn.capabilities.isCreativeMode) {
-				playerIn.getCurrentEquippedItem().stackSize--;
-				if (playerIn.getCurrentEquippedItem().stackSize == 0) {
+				playerIn.getHeldItemMainhand().stackSize--;
+				if (playerIn.getHeldItemMainhand().stackSize == 0) {
 					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
 				}
 			}
@@ -335,11 +346,6 @@ public class BlockExcreta extends BlockFalling {
 		}
 	}
 	
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
-		return null;
-	}
-
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.byMetadata(meta));

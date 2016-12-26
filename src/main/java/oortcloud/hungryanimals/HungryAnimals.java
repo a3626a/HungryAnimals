@@ -54,7 +54,7 @@ public class HungryAnimals {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Items.wheat;
+			return Items.WHEAT;
 		}
 	};
 

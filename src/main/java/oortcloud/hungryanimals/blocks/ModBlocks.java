@@ -25,9 +25,9 @@ public class ModBlocks {
 		niterBed = new BlockNiterBed();
 		trough = new BlockTrough();
 		trapcover = new BlockTrapCover();
-		floorcover_leaf = new BlockFloorCover(Blocks.leaves, Strings.blockFloorCoverLeafName);
-		floorcover_wool = new BlockFloorCover(Blocks.wool, Strings.blockFloorCoverWoolName);
-		floorcover_hay = new BlockFloorCover(Blocks.hay_block, Strings.blockFloorCoverHayName);
+		floorcover_leaf = new BlockFloorCover(Blocks.LEAVES, Strings.blockFloorCoverLeafName);
+		floorcover_wool = new BlockFloorCover(Blocks.WOOL, Strings.blockFloorCoverWoolName);
+		floorcover_hay = new BlockFloorCover(Blocks.HAY_BLOCK, Strings.blockFloorCoverHayName);
 	}
 
 	public static String getName(String unlocalizedName)
@@ -37,6 +37,6 @@ public class ModBlocks {
 	}
 	
 	public static void register(Block block) {
-		GameRegistry.registerBlock(block, getName(block.getUnlocalizedName()));
+		GameRegistry.register(block.setRegistryName(getName(block.getUnlocalizedName())));
 	}
 }

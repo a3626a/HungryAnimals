@@ -1,29 +1,18 @@
 package oortcloud.hungryanimals.blocks;
 
-import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.blocks.BlockExcreta.EnumType;
-import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.items.ItemBlockFloorCover;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraft.world.ColorizerGrass;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.items.ItemBlockFloorCover;
 
 public class BlockFloorCover extends Block {
 	
 	public Block material;
 
 	public BlockFloorCover(Block blockIn, String UnlocalizedName) {
-		super(blockIn.getMaterial());
+		super(blockIn.getMaterial(blockIn.getDefaultState()));
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
 		
@@ -31,38 +20,23 @@ public class BlockFloorCover extends Block {
 		
 		setUnlocalizedName(UnlocalizedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		GameRegistry.registerBlock(this, ItemBlockFloorCover.class, ModBlocks.getName(this.getUnlocalizedName()));
+		GameRegistry.register(this.setRegistryName(ModBlocks.getName(this.getUnlocalizedName())));
+		GameRegistry.register(new ItemBlockFloorCover(blockIn).setRegistryName(ModBlocks.getName(this.getUnlocalizedName())));
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-    public int getBlockColor()
-    {
-		return material.getBlockColor();
-    }
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 	
 	@Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderColor(IBlockState state)
-    {
-        return material.getBlockColor();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess worldIn, BlockPos pos, int renderPass)
-    {
-        return material.colorMultiplier(worldIn, pos);
-    }
-	
-    @Override
-    public EnumWorldBlockLayer getBlockLayer() {
-    	return material.getBlockLayer();
-    }
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
+	}
     
 }

@@ -3,34 +3,34 @@ package oortcloud.hungryanimals.blocks;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
@@ -39,21 +39,33 @@ public class BlockTrough extends BlockContainer {
 
 	public static final PropertyEnum PART = PropertyEnum.create("part", EnumPartType.class);
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-
+	public static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 0.5F, 1F);
+	public static final AxisAlignedBB FLOOR = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
+	public static final AxisAlignedBB EAST = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 0.125F, 0.5F, 1.0F);
+	public static final AxisAlignedBB WEST = new AxisAlignedBB(0.875F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+	public static final AxisAlignedBB NORTH = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 0.125F);
+	public static final AxisAlignedBB SOUTH = new AxisAlignedBB(0.0F, 0.0F, 0.875F, 1.0F, 0.5F, 1.0F);
+	
+	
 	private final Random random = new Random();
 
 	protected BlockTrough() {
-		super(Material.wood);
+		super(Material.WOOD);
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
 		
-		setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		setUnlocalizedName(Strings.blockTroughName);
 		ModBlocks.register(this);
 	}
 
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { FACING, PART });
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, net.minecraft.util.math.BlockPos pos) {
+		return BOUND_BOX;
+	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FACING, PART });
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -62,44 +74,48 @@ public class BlockTrough extends BlockContainer {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
-	public int getMobilityFlag() {
-		return 1;
+	
+	@Override
+	public EnumPushReaction getMobilityFlag(IBlockState state) {
+		return EnumPushReaction.IGNORE;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isNormalCube() {
+	public boolean isNormalCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube() {
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+	@Override
+	public void onNeighborChange(IBlockAccess worldIn, BlockPos pos, BlockPos neighborBlock) {
+		IBlockState state = worldIn.getBlockState(pos);
 		EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
 
 		if (state.getValue(PART) == BlockTrough.EnumPartType.HEAD) {
 			if (worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock() != this) {
-				worldIn.setBlockToAir(pos);
+				((World) worldIn).setBlockToAir(pos);
 			}
 		} else if (worldIn.getBlockState(pos.offset(enumfacing)).getBlock() != this) {
-			worldIn.setBlockToAir(pos);
+			((World) worldIn).setBlockToAir(pos);
 
-			if (!worldIn.isRemote) {
-				this.dropBlockAsItem(worldIn, pos, state, 0);
+			if (!((World) worldIn).isRemote) {
+				this.dropBlockAsItem((World) worldIn, pos, state, 0);
 				TileEntityTrough trough = (TileEntityTrough) worldIn.getTileEntity(pos);
 				if (trough != null)
-					dropStoredItems(worldIn, pos, trough);
+					dropStoredItems((World) worldIn, pos, trough);
 			}
 		}
 	}
@@ -130,39 +146,32 @@ public class BlockTrough extends BlockContainer {
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity) {
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
-		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
-		float f = 0.125F;
-
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, FLOOR);
+		
 		EnumFacing rot = ((EnumFacing) state.getValue(FACING));
 		if (state.getValue(PART) == EnumPartType.HEAD)
 			rot = rot.getOpposite();
 
 		if (rot != EnumFacing.SOUTH) {
-			this.setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 0.5F, 1.0F);
-			super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH);
 		}
 		if (rot != EnumFacing.WEST) {
-			this.setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-			super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST);
 		}
 		if (rot != EnumFacing.NORTH) {
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, f);
-			super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH);
 		}
 		if (rot != EnumFacing.EAST) {
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, f, 0.5F, 1.0F);
-			super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST);
 		}
-
-		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return (getStateFromMeta(meta).getValue(PART) == EnumPartType.FOOT) ? new TileEntityTrough() : null;
 	}
+
 
 	public TileEntity getTileEntity(World world, BlockPos pos) {
 		IBlockState meta = world.getBlockState(pos);
@@ -174,7 +183,7 @@ public class BlockTrough extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity te = this.getTileEntity(worldIn, pos);
 
 		if (!(te instanceof TileEntityTrough)) {
@@ -183,7 +192,7 @@ public class BlockTrough extends BlockContainer {
 
 		TileEntityTrough foodbox = (TileEntityTrough) te;
 		ItemStack stackinfoodbox = foodbox.stack;
-		ItemStack stackinhand = playerIn.getHeldItem();
+		ItemStack stackinhand = playerIn.getHeldItemMainhand();
 
 		if (stackinhand == null) {
 			if (stackinfoodbox != null) {
@@ -266,11 +275,13 @@ public class BlockTrough extends BlockContainer {
 		}
 	}
 
+	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.getHorizontal(meta & 3);
 		return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(PART, (meta >> 2 == 1) ? EnumPartType.HEAD : EnumPartType.FOOT);
 	}
 
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumFacing) state.getValue(FACING)).getHorizontalIndex() + ((state.getValue(PART) == EnumPartType.HEAD ? 1 : 0) << 2);
 	}

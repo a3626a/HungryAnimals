@@ -1,6 +1,8 @@
 package oortcloud.hungryanimals.entities.properties.handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -40,8 +42,9 @@ public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
+	private ArrayList<Class<? extends EntityAnimal>> registedClass;
 	private HashMap<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic,AnimalCharacteristic>> cMap;
-	// Left: default, Right: current value
+	// Left: default, Right: configured value
 	private HashMap<Class<? extends EntityAnimal>, PropertyFactory> propertyMap;
 
 	public static HungryAnimalManager getInstance() {
@@ -52,19 +55,25 @@ public class HungryAnimalManager {
 	}
 
 	private HungryAnimalManager() {
+		registedClass = new ArrayList<Class<? extends EntityAnimal>>();
 		cMap = new HashMap<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic,AnimalCharacteristic>>();
 		propertyMap = new HashMap<Class<? extends EntityAnimal>, PropertyFactory>();
 	}
 
 	public void registerHungryAnimal(Class<? extends EntityAnimal> animal, PropertyFactory propertyFactory) {
+		if (!registedClass.contains(animal)) {
+			registedClass.add(animal);
+		}
+		
 		if (propertyFactory != null) {
 			propertyMap.put(animal, propertyFactory);
 		} else {
 			propertyMap.put(animal, (property) -> new ExtendedPropertiesHungryGeneral(property.getClass()));
 		}
-		// TODO need to register default characteristics at the same time
+		cMap.put(animal, MutablePair.of(new AnimalCharacteristic(), null));
 	}
 
+	/*
 	public void setAnimalDefaultCharacteristic(Class<? extends EntityAnimal> animal, AnimalCharacteristic characteristic) {
 		if (isRegistered(animal)) {
 			if (cMap.containsKey(animal)) {
@@ -74,7 +83,17 @@ public class HungryAnimalManager {
 			}
 		}
 	}
-
+	 */
+	
+	public AnimalCharacteristic getAnimalDefaultCharacteristic(Class<? extends EntityAnimal> animal) {
+		if (isRegistered(animal)) {
+			if (cMap.containsKey(animal)) {
+				return cMap.get(animal).getLeft();
+			}
+		}
+		return null;
+	}
+	
 	public AnimalCharacteristic getAnimalCharacteristic(Class<? extends EntityAnimal> animal) {
 		if (isRegistered(animal)) {
 			if (cMap.containsKey(animal)) {
@@ -84,6 +103,10 @@ public class HungryAnimalManager {
 		return null;
 	}
 
+	public List<Class<? extends EntityAnimal>> getRegisteredAnimal() {
+		return registedClass;
+	}
+	
 	public void readFromConfig(Configuration config) {
 		for (Entry<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic, AnimalCharacteristic>> i : cMap.entrySet()) {
 			String category = ConfigurationHandlerAnimal.categoryGenerator(i.getKey());
@@ -109,7 +132,7 @@ public class HungryAnimalManager {
 	}
 
 	public boolean isRegistered(Class<? extends EntityAnimal> animal) {
-		return propertyMap.containsKey(animal);
+		return registedClass.contains(animal);
 	}
 
 	public void applyAttributes(ExtendedPropertiesHungryAnimal extendedProperty) {
@@ -124,11 +147,17 @@ public class HungryAnimalManager {
 		propertyMap.clear();
 		cMap.clear();
 
-		AnimalCharacteristic characteristic_chicken = new AnimalCharacteristic();
-		AnimalCharacteristic characteristic_cow = new AnimalCharacteristic();
-		AnimalCharacteristic characteristic_pig = new AnimalCharacteristic();
-		AnimalCharacteristic characteristic_rabbit = new AnimalCharacteristic();
-		AnimalCharacteristic characteristic_sheep = new AnimalCharacteristic();
+		registerHungryAnimal(EntityCow.class, (entity) -> new ExtendedPropertiesHungryCow());
+		registerHungryAnimal(EntityChicken.class, (entity) -> new ExtendedPropertiesHungryChicken());
+		registerHungryAnimal(EntityPig.class, (entity) -> new ExtendedPropertiesHungryPig());
+		registerHungryAnimal(EntityRabbit.class, (entity) -> new ExtendedPropertiesHungryRabbit());
+		registerHungryAnimal(EntitySheep.class, (entity) -> new ExtendedPropertiesHungrySheep());
+		
+		AnimalCharacteristic characteristic_chicken = getAnimalDefaultCharacteristic(EntityChicken.class);
+		AnimalCharacteristic characteristic_cow = getAnimalDefaultCharacteristic(EntityCow.class);
+		AnimalCharacteristic characteristic_pig = getAnimalDefaultCharacteristic(EntityPig.class);
+		AnimalCharacteristic characteristic_rabbit = getAnimalDefaultCharacteristic(EntityRabbit.class);
+		AnimalCharacteristic characteristic_sheep = getAnimalDefaultCharacteristic(EntitySheep.class);
 
 		characteristic_cow.putAttribute(ModAttributes.hunger_bmr, 0.005, true);
 		characteristic_cow.putAttribute(ModAttributes.hunger_max, 500.0, true);
@@ -254,22 +283,10 @@ public class HungryAnimalManager {
 		// 2.0;
 		// property_sheep.crank_food_consumption = property_sheep.hunger_bmr *
 		// 2.0;
-
-		registerHungryAnimal(EntityCow.class, (entity) -> new ExtendedPropertiesHungryCow());
-		registerHungryAnimal(EntityChicken.class, (entity) -> new ExtendedPropertiesHungryChicken());
-		registerHungryAnimal(EntityPig.class, (entity) -> new ExtendedPropertiesHungryPig());
-		registerHungryAnimal(EntityRabbit.class, (entity) -> new ExtendedPropertiesHungryRabbit());
-		registerHungryAnimal(EntitySheep.class, (entity) -> new ExtendedPropertiesHungrySheep());
-
-		setAnimalDefaultCharacteristic(EntityCow.class, characteristic_cow);
-		setAnimalDefaultCharacteristic(EntityChicken.class, characteristic_chicken);
-		setAnimalDefaultCharacteristic(EntityPig.class, characteristic_pig);
-		setAnimalDefaultCharacteristic(EntityRabbit.class, characteristic_rabbit);
-		setAnimalDefaultCharacteristic(EntitySheep.class, characteristic_sheep);
 	}
 
-	public static AnimalCharacteristic getBasicCharacteristic() {
-		AnimalCharacteristic characteristic = new AnimalCharacteristic();
+	public static void setBasicCharacteristic(Class<? extends EntityAnimal> animalclass) {
+		AnimalCharacteristic characteristic = getInstance().getAnimalDefaultCharacteristic(animalclass);
 		characteristic.putAttribute(ModAttributes.hunger_bmr, 0.005, true);
 		characteristic.putAttribute(ModAttributes.hunger_max, 500.0, true);
 		characteristic.putAttribute(ModAttributes.courtship_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
@@ -287,7 +304,6 @@ public class HungryAnimalManager {
 		characteristic.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
 		characteristic.hunger_block.put(new HashBlockState(Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		characteristic.hunger_block.put(new HashBlockState(Blocks.wheat.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
-		return characteristic;
 	}
 
 	@FunctionalInterface

@@ -13,6 +13,7 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
 import oortcloud.hungryanimals.configuration.util.HashBlockState;
 import oortcloud.hungryanimals.configuration.util.HashItemType;
@@ -83,8 +84,8 @@ public class ConfigurationHandlerAnimal {
 			Class entityClass = (Class) EntityList.stringToClassMapping.get(i);
 			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance().isRegistered(entityClass)) {
 				HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
-				HungryAnimalManager.getInstance().registerHungryAnimal(entityClass, null);
-				HungryAnimalManager.getInstance().setAnimalDefaultCharacteristic(entityClass, HungryAnimalManager.getBasicCharacteristic());
+				API.registerAnimal(entityClass);
+				HungryAnimalManager.setBasicCharacteristic(entityClass);
 			}
 		}
 

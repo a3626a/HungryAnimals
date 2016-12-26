@@ -184,6 +184,10 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		}
 	}
 
+	/**
+	 * returns how full this animal is. 1.0 is full, 0.0 is death
+	 * @return [0.0~1.0]
+	 */
 	public double getHungry() {
 		return this.hunger/entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
 	}
@@ -202,6 +206,12 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		}
 	}
 
+	/**
+	 * it returns positive number if given food is edible.
+	 * otherwise 0.
+	 * @param food
+	 * @return Food Value of the food
+	 */
 	public double getFoodHunger(ItemStack food) {
 		HashItemType key;
 		if (this.hunger_food.containsKey(key = new HashItemType(food.getItem()))) {
@@ -213,6 +223,12 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		}
 	}
 
+	/**
+	 * it returns positive number if given block is edible.
+	 * otherwise 0.
+	 * @param block
+	 * @return Food Value of the block
+	 */
 	public double getBlockHunger(IBlockState block) {
 		HashBlockState key;
 		if (this.hunger_block.containsKey(key = new HashBlockState(block, true))) {
@@ -368,7 +384,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			}
 		}
 		if (floor.getBlock() == ModBlocks.floorcover_ironbar) {
-			//TODO
+			//TODO fllorcover ironbar
 		}
 	}
 

@@ -20,6 +20,12 @@ import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnima
 
 public class AnimalCharacteristic {
 
+	/***
+	 * Characteristic is a data storage for immutable values.
+	 * For example, edible foods and blocks, drop items, and attributes.
+	 * These properties are not changed during game play. 
+	 */
+	
 	public HashMap<HashItemType, Double> hunger_food;
 	public HashMap<HashBlockState, Double> hunger_block;
 	public ArrayList<ValueDropMeat> drop_meat;
