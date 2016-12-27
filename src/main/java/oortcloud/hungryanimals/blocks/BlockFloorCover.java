@@ -12,7 +12,7 @@ public class BlockFloorCover extends Block {
 	public Block material;
 
 	public BlockFloorCover(Block blockIn, String UnlocalizedName) {
-		super(blockIn.getMaterial(blockIn.getDefaultState()));
+		super(blockIn.getDefaultState().getMaterial());
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
 		

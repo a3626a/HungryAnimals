@@ -3,17 +3,14 @@ package oortcloud.hungryanimals.configuration.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.logging.log4j.Marker;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
-
-import com.google.common.collect.ImmutableSet;
 
 public class ConfigurationHelper {
 

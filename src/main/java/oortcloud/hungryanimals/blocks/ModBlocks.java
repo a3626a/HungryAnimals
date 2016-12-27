@@ -1,12 +1,10 @@
 package oortcloud.hungryanimals.blocks;
 
 
-import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.lib.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import oortcloud.hungryanimals.core.lib.Strings;
 
 public class ModBlocks {
 	public static Block millStone;

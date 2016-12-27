@@ -4,12 +4,10 @@ import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemTransformVec3f;
 import net.minecraftforge.client.model.IFlexibleBakedModel;
-import net.minecraftforge.client.model.TRSRTransformation;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 public class CameraTransformUtil {
 	public static Matrix4f getMatrix4fFromCamearaTransform(Vector3f rot, Vector3f trans, float scale) {

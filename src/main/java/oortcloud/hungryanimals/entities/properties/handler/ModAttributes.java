@@ -1,20 +1,7 @@
 package oortcloud.hungryanimals.entities.properties.handler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.xml.crypto.dsig.Reference;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import oortcloud.hungryanimals.configuration.util.HashBlockState;
-import oortcloud.hungryanimals.configuration.util.HashItemType;
-import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
-import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
-import oortcloud.hungryanimals.configuration.util.ValueDropRare;
 import oortcloud.hungryanimals.core.lib.References;
 
 public class ModAttributes {

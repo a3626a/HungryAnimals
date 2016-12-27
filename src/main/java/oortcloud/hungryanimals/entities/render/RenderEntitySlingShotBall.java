@@ -2,16 +2,13 @@ package oortcloud.hungryanimals.entities.render;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
-
-import org.lwjgl.opengl.GL11;
 
 public class RenderEntitySlingShotBall extends Render<EntitySlingShotBall> {
 
@@ -42,7 +39,7 @@ public class RenderEntitySlingShotBall extends Render<EntitySlingShotBall> {
     {
         GlStateManager.disableTexture2D();
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        VertexBuffer worldrenderer = tessellator.getBuffer();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         worldrenderer.setTranslation(x, y, z);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_NORMAL);

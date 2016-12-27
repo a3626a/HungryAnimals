@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.blocks.BlockTrough;
@@ -16,7 +15,7 @@ import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
-public class RenderTileEntityTrough extends TileEntitySpecialRenderer {
+public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntityTrough> {
 
 	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/ModelTrough.png");
 	private ModelTrough model;
@@ -26,11 +25,10 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
+	public void renderTileEntityAt(TileEntityTrough foodbox, double x, double y,
 			double z, float partialTick, int parInt) {
 		
-		TileEntityTrough foodbox = (TileEntityTrough) tileentity;
-		IBlockState state = tileentity.getWorld().getBlockState(tileentity.getPos());
+		IBlockState state = foodbox.getWorld().getBlockState(foodbox.getPos());
 		if (state.getBlock() != ModBlocks.trough) return;
 		EnumFacing rot = (EnumFacing)state.getValue(BlockTrough.FACING);
 		int rotation = rot.getHorizontalIndex();
@@ -53,7 +51,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer {
 			ItemStack stack = foodbox.stack.copy();
 			int num = stack.stackSize;
 			stack.stackSize = 1;
-			EntityItem item = new EntityItem(tileentity.getWorld(), 0, 0, 0, stack);
+			EntityItem item = new EntityItem(foodbox.getWorld(), 0, 0, 0, stack);
 			item.hoverStart = (float) (rotation * Math.PI / 2);
 			
 			float interval = (float) ((2 - 2*0.25)/16.0F);

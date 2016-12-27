@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import oortcloud.hungryanimals.configuration.util.HashBlockState;
@@ -70,7 +69,7 @@ public class AnimalCharacteristic {
 	public String[] toStringHungerFood() {
 		Set<HashItemType> keys = hunger_food.keySet();
 		String[] ret = new String[keys.size()];
-		Iterator keyIterator = keys.iterator();
+		Iterator<HashItemType> keyIterator = keys.iterator();
 		int next = 0;
 		while (keyIterator.hasNext()) {
 			HashItemType i = (HashItemType) keyIterator.next();

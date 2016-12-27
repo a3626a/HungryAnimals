@@ -1,22 +1,19 @@
 package oortcloud.hungryanimals.entities.render;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GLSync;
 
 @SideOnly(Side.CLIENT)
 public class RenderEntityBola extends Render<EntityBola> {
@@ -43,7 +40,7 @@ public class RenderEntityBola extends Render<EntityBola> {
 		GlStateManager.rotate(((bola.worldObj.getWorldTime() + partial) % 20) * 13, 0.0F, 1.0F, 0.0F);
 		GlStateManager.disableCull();
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
+		VertexBuffer renderer = tessellator.getBuffer();
 
 		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		renderer.pos(1, 0.5, 0).tex(0, 0).endVertex();

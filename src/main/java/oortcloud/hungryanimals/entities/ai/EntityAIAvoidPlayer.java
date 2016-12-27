@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,16 +9,13 @@ import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.items.ModItems;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
-public class EntityAIAvoidPlayer extends EntityAIAvoidEntity {
+public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 	/**
 	 * Wild animals avoid players within certain range.
 	 * 
 	 */
 
-	private static final Predicate predicate = new Predicate() {
+	private static final Predicate<EntityPlayer> predicate = new Predicate<EntityPlayer>() {
 		/**
 		 * Select players
 		 * Players who has "debug glass" in creative mode are ignored.
@@ -32,9 +31,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity {
 			}
 			return true;
 		}
-		public boolean apply(Object obj) {
-			return (obj instanceof EntityPlayer ? this.apply((EntityPlayer) obj) : false);
-		}
+		
 	};
 
 	private ExtendedPropertiesHungryAnimal property;

@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,14 +80,13 @@ public class ClientRenderEventHandler {
 	*/
 	
 	@SubscribeEvent
-	public void renderDebugGlassEntity(RenderLivingEvent.Post event) {
+	public void renderDebugGlassEntity(RenderLivingEvent.Post<EntityPlayer> event) {
 
 		float radius = 0.5F;
 		float height = 0.7F;
 
 		EntityPlayer entity = (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity();
 		EntityLivingBase animal = event.getEntity();
-		RenderLivingBase render = event.getRenderer();
 		ItemStack stack = entity.getHeldItemMainhand();
 		if (stack != null && stack.getItem() == ModItems.debugGlass) {
 			NBTTagCompound tag = stack.getTagCompound();

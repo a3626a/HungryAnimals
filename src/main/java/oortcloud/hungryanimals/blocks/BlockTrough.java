@@ -37,7 +37,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class BlockTrough extends BlockContainer {
 
-	public static final PropertyEnum PART = PropertyEnum.create("part", EnumPartType.class);
+	public static final PropertyEnum<EnumPartType> PART = PropertyEnum.create("part", EnumPartType.class);
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 0.5F, 1F);
 	public static final AxisAlignedBB FLOOR = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);

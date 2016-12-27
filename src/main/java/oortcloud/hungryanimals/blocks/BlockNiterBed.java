@@ -42,7 +42,7 @@ public class BlockNiterBed extends Block {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		int age = (Integer) state.getValue(AGE);
-		if (age < 7 && rand.nextDouble() < this.default_ripeningProbability) {
+		if (age < 7 && rand.nextDouble() < BlockNiterBed.default_ripeningProbability) {
 			worldIn.setBlockState(pos, state.withProperty(AGE, age + 1), 2);
 		}
 	}

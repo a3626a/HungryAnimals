@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -28,13 +29,21 @@ import net.minecraft.world.World;
 
 public class EntitySlingShotBall extends Entity implements IProjectile {
 
-	private static final Predicate<Entity> SLING_TARGETS = Predicates.<Entity>and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
-    {
-        public boolean apply(@Nullable Entity entity)
-        {
-            return entity.canBeCollidedWith();
-        }
-    }});
+	private static final Predicate<Entity> SLING_TARGETS;
+	
+	static {
+		ArrayList<Predicate<Entity>> arg = new ArrayList<Predicate<Entity>>();
+		arg.add(EntitySelectors.NOT_SPECTATING);
+		arg.add(EntitySelectors.IS_ALIVE);
+		arg.add(new Predicate<Entity>()
+	    {
+	        public boolean apply(@Nullable Entity entity)
+	        {
+	            return entity.canBeCollidedWith();
+	        }
+	    });
+		SLING_TARGETS = Predicates.<Entity>and(arg);
+	}
 	
 	private Entity shootingEntity;
 	private int ticksInAir;
