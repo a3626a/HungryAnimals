@@ -1,6 +1,5 @@
 package oortcloud.hungryanimals.recipes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;

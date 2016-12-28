@@ -15,8 +15,8 @@ public class PotionGrowth extends PotionHungryAnimals {
 
 	public static ResourceLocation textureLocation = new ResourceLocation(References.MODID, "textures/potions/potiongrowth.png");
 
-	protected PotionGrowth(int id, boolean effect, int color) {
-		super(id, textureLocation, effect, color);
+	protected PotionGrowth(boolean effect, int color) {
+		super(textureLocation, effect, color);
 		this.setPotionName(Strings.potionGrowthName);
 	}
 

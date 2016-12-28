@@ -16,10 +16,10 @@ public class PotionDisease extends PotionHungryAnimals {
 
 	public static ResourceLocation textureLocation = new ResourceLocation(References.MODID, "textures/potions/potiondisease.png");
 
-	protected PotionDisease(int id, boolean effect, int color) {
-		super(id, textureLocation, effect, color);
+	protected PotionDisease(boolean effect, int color) {
+		super(textureLocation, effect, color);
 		this.setPotionName(Strings.potionDiseaseName);
-		this.registerPotionAttributeModifier(SharedMonsterAttributes.movementSpeed, "7107DE5E-7CE8-4030-940E-514C1F16089D", -0.25, 2);
+		this.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F16089D", -0.25, 2);
 	}
 
 	@Override

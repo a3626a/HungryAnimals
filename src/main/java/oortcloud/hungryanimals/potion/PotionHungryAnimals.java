@@ -12,9 +12,10 @@ public class PotionHungryAnimals extends Potion {
 
 	public ResourceLocation texture;
 	
-	protected PotionHungryAnimals(int potionID, ResourceLocation location, boolean badEffect, int potionColor) {
-		super(potionID, location, badEffect, potionColor);
+	protected PotionHungryAnimals(ResourceLocation location, boolean badEffect, int potionColor) {
+		super(badEffect, potionColor);
 		texture = location;
+		Potion.REGISTRY.putObject(texture, this);
 	}
 
 	@Override

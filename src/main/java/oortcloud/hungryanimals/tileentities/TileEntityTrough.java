@@ -6,11 +6,10 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +39,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.worldObj.getWorldTime() % this.period == 0 && this.stack != null) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.worldObj.getWorldTime() % TileEntityTrough.period == 0 && this.stack != null) {
 			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.worldObj.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (EntityAnimal i : list) {
 				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) ((EntityAnimal) i).getExtendedProperties(Strings.extendedPropertiesKey);
@@ -53,9 +52,10 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		writeSyncableDataToNBT(compound);
+		return compound;
 	}
 
 	@Override
@@ -65,14 +65,14 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound compound = new NBTTagCompound();
 		writeSyncableDataToNBT(compound);
-		return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
+		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound compound = pkt.getNbtCompound();
 		readSyncableDataFromNBT(compound);
 	}
