@@ -19,8 +19,8 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
-import oortcloud.hungryanimals.items.render.CameraTransformModelItemBola;
-import oortcloud.hungryanimals.items.render.SmartModelItemSlingshot;
+import oortcloud.hungryanimals.items.render.ModelItemBola;
+import oortcloud.hungryanimals.items.render.ModelItemSlingshot;
 
 public class ItemSlingShot extends Item {
 

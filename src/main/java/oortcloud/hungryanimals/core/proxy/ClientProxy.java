@@ -25,8 +25,8 @@ import oortcloud.hungryanimals.entities.render.RenderEntityBola;
 import oortcloud.hungryanimals.entities.render.RenderEntitySlingShotBall;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.items.gui.DebugOverlayHandler;
-import oortcloud.hungryanimals.items.render.CameraTransformModelItemBola;
-import oortcloud.hungryanimals.items.render.SmartModelItemSlingshot;
+import oortcloud.hungryanimals.items.render.ModelItemBola;
+import oortcloud.hungryanimals.items.render.ModelItemSlingshot;
 import oortcloud.hungryanimals.keybindings.ModKeyBindings;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
@@ -50,8 +50,8 @@ public class ClientProxy extends CommonProxy {
 		mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverHayName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverHayName, "inventory"));
 		mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockTroughName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTroughName, "inventory"));
 		
-		mesher.register(ModItems.bola, 0, CameraTransformModelItemBola.modelresourcelocation_normal);
-		mesher.register(ModItems.slingshot, 0, SmartModelItemSlingshot.modelresourcelocation_normal);
+		mesher.register(ModItems.bola, 0, ModelItemBola.modelresourcelocation_normal);
+		mesher.register(ModItems.slingshot, 0, ModelItemSlingshot.modelresourcelocation_normal);
 		mesher.register(ModItems.debugGlass, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemDebugGlassName, "inventory"));
 		mesher.register(ModItems.trough, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemTroughBoxName, "inventory"));
 		mesher.register(ModItems.manure, 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.itemManureName, "inventory"));
@@ -68,31 +68,31 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerItemModel() {
-		ModelBakery.registerItemVariants(ModItems.bola, CameraTransformModelItemBola.modelresourcelocation_normal, CameraTransformModelItemBola.modelresourcelocation_spin);
-		ModelBakery.registerItemVariants(ModItems.slingshot, SmartModelItemSlingshot.modelresourcelocation_normal, SmartModelItemSlingshot.modelresourcelocation_shooting);
+		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
+		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal, ModelItemSlingshot.modelresourcelocation_shooting);
 	}
 
 	@Override
 	public void registerCustomBakedModel(ModelBakeEvent event) {
 		Object object;
-		object = event.getModelRegistry().getObject(CameraTransformModelItemBola.modelresourcelocation_normal);
+		object = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
 		if (object instanceof IPerspectiveAwareModel) {
 			IPerspectiveAwareModel existingModel = (IPerspectiveAwareModel) object;
-			CameraTransformModelItemBola customModel = new CameraTransformModelItemBola(existingModel);
-			event.getModelRegistry().putObject(CameraTransformModelItemBola.modelresourcelocation_normal, customModel);
+			ModelItemBola customModel = new ModelItemBola(existingModel);
+			event.getModelRegistry().putObject(ModelItemBola.modelresourcelocation_normal, customModel);
 		}
 
-		object = event.getModelRegistry().getObject(SmartModelItemSlingshot.modelresourcelocation_normal);
+		object = event.getModelRegistry().getObject(ModelItemSlingshot.modelresourcelocation_normal);
 		if (object instanceof IPerspectiveAwareModel) {
 			IPerspectiveAwareModel existingModel = (IPerspectiveAwareModel) object;
-			SmartModelItemSlingshot customModel = new SmartModelItemSlingshot(existingModel);
-			event.getModelRegistry().putObject(SmartModelItemSlingshot.modelresourcelocation_normal, customModel);
+			ModelItemSlingshot customModel = new ModelItemSlingshot(existingModel);
+			event.getModelRegistry().putObject(ModelItemSlingshot.modelresourcelocation_normal, customModel);
 		}
 	}
 
 	@Override
 	public void registerSprite(TextureStitchEvent event) {
-		event.getMap().registerSprite(SmartModelItemSlingshot.textureresourcelocation);
+		event.getMap().registerSprite(ModelItemSlingshot.textureresourcelocation);
 	}
 
 	@Override
