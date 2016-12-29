@@ -28,10 +28,10 @@ public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAni
 
 	@Override
 	public void eatBlockBonus(IBlockState block) {
-		if (block.getBlock() == Blocks.tallgrass) {
-			double prob = getBlockHunger(block) / 2.0 / getFoodHunger(new ItemStack(Items.wheat_seeds));
+		if (block.getBlock() == Blocks.TALLGRASS) {
+			double prob = getBlockHunger(block) / 2.0 / getFoodHunger(new ItemStack(Items.WHEAT_SEEDS));
 			if (this.entity.getRNG().nextDouble() < prob) {
-				ItemStack stack = new ItemStack(Items.wheat_seeds);
+				ItemStack stack = new ItemStack(Items.WHEAT_SEEDS);
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setBoolean("isNatural", true);
 				stack.setTagCompound(tag);
@@ -49,8 +49,8 @@ public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAni
 		super.dropFewItems(isHitByPlayer, looting, drops);
 		if (entity.isBurning()) {
 			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.chicken) {
-					i.setEntityItemStack(new ItemStack(Items.cooked_chicken, i.getEntityItem().stackSize));
+				if (i.getEntityItem().getItem() == Items.CHICKEN) {
+					i.setEntityItemStack(new ItemStack(Items.COOKED_CHICKEN, i.getEntityItem().stackSize));
 				}
 			}
 		}

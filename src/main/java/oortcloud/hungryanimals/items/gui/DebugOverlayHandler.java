@@ -104,12 +104,12 @@ public class DebugOverlayHandler extends Gui {
 		if (!this.isEnabled)
 			return;
 
-		ScaledResolution res = event.resolution;
+		ScaledResolution res = event.getResolution();
 		this.drawGradientRect(0, 0, WIDTH, res.getScaledHeight(), -1072689136, -804253680);
 		
 		Entity entity = mc.theWorld.getEntityByID(targetEntityID.intData);
 		if (entity != null) {
-			String text = (String)EntityList.classToStringMapping.get(entity.getClass());
+			String text = (String)EntityList.CLASS_TO_NAME.get(entity.getClass());
 			if (text != null) {
 				if (entity instanceof EntityAnimal) text+=" (Compatible)";
 				this.drawString(mc.fontRendererObj, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);

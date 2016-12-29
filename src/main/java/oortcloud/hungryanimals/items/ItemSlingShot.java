@@ -44,7 +44,7 @@ public class ItemSlingShot extends Item {
 		}
 		useDuration = event.charge;
 
-		if (player.capabilities.isCreativeMode || player.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.cobblestone))) {
+		if (player.capabilities.isCreativeMode || player.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.COBBLESTONE))) {
 			float f = (float) useDuration / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -62,7 +62,7 @@ public class ItemSlingShot extends Item {
 			world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 			if (!player.capabilities.isCreativeMode) {
-				player.inventory.consumeInventoryItem(ItemBlock.getItemFromBlock(Blocks.cobblestone));
+				player.inventory.consumeInventoryItem(ItemBlock.getItemFromBlock(Blocks.COBBLESTONE));
 			}
 
 			if (!world.isRemote) {
@@ -93,7 +93,7 @@ public class ItemSlingShot extends Item {
 			return event.result;
 		}
 
-		if (p_77659_3_.capabilities.isCreativeMode || p_77659_3_.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.cobblestone))) {
+		if (p_77659_3_.capabilities.isCreativeMode || p_77659_3_.inventory.hasItem(ItemBlock.getItemFromBlock(Blocks.COBBLESTONE))) {
 			p_77659_3_.setItemInUse(p_77659_1_, this.getMaxItemUseDuration(p_77659_1_));
 		}
 

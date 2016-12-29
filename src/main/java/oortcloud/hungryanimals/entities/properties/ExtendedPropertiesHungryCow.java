@@ -50,11 +50,11 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 			return super.interact(entity);
 
 		Item item = stack.getItem();
-		if (stack.getItem() == Items.bucket && this.milk == 0 && this.taming >= 1 && !entity.capabilities.isCreativeMode) {
+		if (stack.getItem() == Items.BUCKET && this.milk == 0 && this.taming >= 1 && !entity.capabilities.isCreativeMode) {
 			if (stack.stackSize-- == 1) {
-				entity.inventory.setInventorySlotContents(entity.inventory.currentItem, new ItemStack(Items.milk_bucket));
-			} else if (!entity.inventory.addItemStackToInventory(new ItemStack(Items.milk_bucket))) {
-				entity.dropPlayerItemWithRandomChoice(new ItemStack(Items.milk_bucket, 1, 0), false);
+				entity.inventory.setInventorySlotContents(entity.inventory.currentItem, new ItemStack(Items.MILK_BUCKET));
+			} else if (!entity.inventory.addItemStackToInventory(new ItemStack(Items.MILK_BUCKET))) {
+				entity.dropPlayerItemWithRandomChoice(new ItemStack(Items.MILK_BUCKET, 1, 0), false);
 			}
 			this.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_hunger).getAttributeValue());
 			this.milk = (int) entity.getAttributeMap().getAttributeInstance(ModAttributes.milk_delay).getAttributeValue();
@@ -62,7 +62,7 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 			return true;
 		}
 
-		if (stack.getItem() == Items.bucket) {
+		if (stack.getItem() == Items.BUCKET) {
 			return true;
 		}
 		// to avoid vanilla milk production
@@ -75,8 +75,8 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 		super.dropFewItems(isHitByPlayer, looting, drops);
 		if (entity.isBurning()) {
 			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.beef) {
-					i.setEntityItemStack(new ItemStack(Items.cooked_beef, i.getEntityItem().stackSize));
+				if (i.getEntityItem().getItem() == Items.BEEF) {
+					i.setEntityItemStack(new ItemStack(Items.COOKED_BEEF, i.getEntityItem().stackSize));
 				}
 			}
 		}

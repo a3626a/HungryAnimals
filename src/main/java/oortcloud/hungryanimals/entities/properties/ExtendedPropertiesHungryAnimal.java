@@ -287,7 +287,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (hunger / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
-				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth.id, duration, 1));
+				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
@@ -358,7 +358,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				} else if (exc + man == 4) {
 
 				}
-			} else if (block.isAir(this.worldObj, pos) || block.isReplaceable(this.worldObj, pos)) {
+			} else if (block.isAir(meta, this.worldObj, pos) || block.isReplaceable(this.worldObj, pos)) {
 				this.worldObj.setBlockState(pos, ModBlocks.excreta.getDefaultState().withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(1, 0)), 2);
 			} else {
 				// TODO When there's no place to put block
@@ -416,7 +416,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public void onAttackedByPlayer(float damage, DamageSource source) {
 		if (!this.entity.isEntityInvulnerable(source)) {
 			if (source.getSourceOfDamage() instanceof EntityPlayer) {
-				this.taming -= 4 / this.entity.getEntityAttribute(SharedMonsterAttributes.maxHealth).getBaseValue() * damage;
+				this.taming -= 4 / this.entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue() * damage;
 			}
 		}
 	}
@@ -435,8 +435,8 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 			}
 			return true;
 		} else if (this.entity.isPotionActive(ModPotions.potionDisease) && this.taming >= 1) {
-			if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || stack.getItem() == ItemBlock.getItemFromBlock(Blocks.brown_mushroom)) {
-				this.entity.removePotionEffect(ModPotions.potionDisease.id);
+			if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || stack.getItem() == ItemBlock.getItemFromBlock(Blocks.BROWN_MUSHROOM)) {
+				this.entity.removePotionEffect(ModPotions.potionDisease);
 				stack.stackSize--;
 				if (stack.stackSize == 0) {
 					entity.inventory.setInventorySlotContents(entity.inventory.currentItem, null);

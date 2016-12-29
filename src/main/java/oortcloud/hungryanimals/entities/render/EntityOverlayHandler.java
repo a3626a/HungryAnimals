@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -36,6 +36,7 @@ public class EntityOverlayHandler extends Gui {
 	private Minecraft mc;
 
 	private EntityAnimal targetAnimal;
+	// TODO what is it... i forgot
 	private ExtendedPropertiesHungryAnimal targetProperty;
 
 	public double bar_health;
@@ -89,25 +90,25 @@ public class EntityOverlayHandler extends Gui {
 
 	@SubscribeEvent
 	public void onDrawOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.type != ElementType.ALL)
+		if (event.getType() != ElementType.ALL)
 			return;
 		if (!this.isEnabled)
 			return;
 
-		ScaledResolution res = event.resolution;
+		ScaledResolution res = event.getResolution();
 		int posX = res.getScaledWidth() / 2;
 		int posY = res.getScaledHeight() / 2;
 		
 		if (potions.length != 0) {
 			int index =  (((int)mc.theWorld.getWorldTime()/flashTick)%potions.length);
 			this.mc.getTextureManager().bindTexture(inventoryBackground);
-			Potion potion = Potion.potionTypes[potions[index]];
+			Potion potion = Potion.REGISTRY.getObjectById(potions[index]);
 			if (potion.hasStatusIcon()) {
 				int l = potion.getStatusIconIndex();
 				drawTexturedModalRect(posX, posY, 0 + (l % 8) * 18, 198 + (l / 8) * 18, 18, 18);
 			}
 			if (potion instanceof PotionHungryAnimals) {
-				((PotionHungryAnimals) potion).renderGuiEffect(posX + 1, posY + 1, new PotionEffect(potion.id, 0), mc, this);
+				((PotionHungryAnimals) potion).renderGuiEffect(posX + 1, posY + 1, new PotionEffect(potion, 0), mc, this);
 			}
 		}
 		
@@ -148,7 +149,7 @@ public class EntityOverlayHandler extends Gui {
 	
 	public static void drawTexturedRect(int left, int up, int width, int height) {
         Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        VertexBuffer worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double)left, (double)(up + height), 0.0D).tex(0.0D, 1.0D).endVertex();
         worldrenderer.pos((double)(left + width), (double)(up + height), 0.0D).tex(1.0D, 1.0D).endVertex();

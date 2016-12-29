@@ -33,8 +33,8 @@ public class ExtendedPropertiesHungryRabbit extends ExtendedPropertiesHungryAnim
 		super.dropFewItems(isHitByPlayer, looting, drops);
 		if (entity.isBurning()) {
 			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.rabbit) {
-					i.setEntityItemStack(new ItemStack(Items.cooked_rabbit, i.getEntityItem().stackSize));
+				if (i.getEntityItem().getItem() == Items.RABBIT) {
+					i.setEntityItemStack(new ItemStack(Items.COOKED_RABBIT, i.getEntityItem().stackSize));
 				}
 			}
 		}

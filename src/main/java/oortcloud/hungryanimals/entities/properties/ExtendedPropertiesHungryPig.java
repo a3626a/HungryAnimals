@@ -27,19 +27,19 @@ public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal 
 	@Override
 	public void postInit() {
 		super.postInit();
-		this.entity.tasks.addTask(4, new EntityAITempt(this.entity,1.5D, Items.carrot_on_a_stick,false));
+		this.entity.tasks.addTask(4, new EntityAITempt(this.entity,1.5D, Items.CARROT_ON_A_STICK,false));
 	}
 
 	@Override
 	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
 		super.dropFewItems(isHitByPlayer, looting, drops);
 		if (this.entity.getSaddled()) {
-			this.entity.dropItem(Items.saddle, 1);
+			this.entity.dropItem(Items.SADDLE, 1);
 		}
 		if (entity.isBurning()) {
 			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.porkchop) {
-					i.setEntityItemStack(new ItemStack(Items.cooked_porkchop, i.getEntityItem().stackSize));
+				if (i.getEntityItem().getItem() == Items.PORKCHOP) {
+					i.setEntityItemStack(new ItemStack(Items.COOKED_PORKCHOP, i.getEntityItem().stackSize));
 				}
 			}
 		}

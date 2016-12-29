@@ -1,12 +1,9 @@
 package oortcloud.hungryanimals.items.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.entity.player.EntityPlayer;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
 import oortcloud.hungryanimals.core.network.SyncIndex;
-import oortcloud.hungryanimals.items.gui.GuiLabelNBT.EnumFormat;
 
 public class GuiLabelNBTEditable extends GuiLabelNBT {
 
