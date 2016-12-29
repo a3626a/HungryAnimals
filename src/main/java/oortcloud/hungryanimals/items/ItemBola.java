@@ -1,17 +1,23 @@
 package oortcloud.hungryanimals.items;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 
 public class ItemBola extends Item {
-	
+
 	public ItemBola() {
 		super();
 		setUnlocalizedName(Strings.itemBolaName);
@@ -26,34 +32,51 @@ public class ItemBola extends Item {
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int tick) {
+	public EnumAction getItemUseAction(ItemStack stack)
+    {
+        return EnumAction.BOW;
+    }
+	
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
 
-		int duration = this.getMaxItemUseDuration(stack) - tick;
-		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, duration);
-		MinecraftForge.EVENT_BUS.post(event);
-		if (event.isCanceled()) {
-			return;
-		}
-		if (duration >= 100)
-			duration = 100;
+		if (entityLiving instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+			boolean flag = entityplayer.capabilities.isCreativeMode;
 
-		if (!world.isRemote) {
-			if (!player.capabilities.isCreativeMode) {
-				player.getCurrentEquippedItem().stackSize--;
-				if (player.getCurrentEquippedItem().stackSize == 0)
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+			int duration = this.getMaxItemUseDuration(stack) - timeLeft;
+
+			if (duration >= 100)
+				duration = 100;
+
+			if (!world.isRemote) {
+				float f = (float) (0.015 * duration);
+				EntityBola bola = new EntityBola(world, entityplayer, f);
+				world.spawnEntityInWorld(bola);
+				
+				// TODO check sound
+				world.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+				
+				if (!flag)
+                {
+                    --stack.stackSize;
+
+                    if (stack.stackSize == 0)
+                    {
+                        entityplayer.inventory.deleteStack(stack);
+                    }
+                }
+
+                entityplayer.addStat(StatList.getObjectUseStats(this));
 			}
-			EntityBola bola = new EntityBola(world, player, (float) (0.015 * duration));
-			world.spawnEntityInWorld(bola);
+
 		}
 	}
 
-	@Override
-	public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
-
-		player.setItemInUse(item, this.getMaxItemUseDuration(item));
-
-		return item;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
+			EnumHand hand) {
+		playerIn.setActiveHand(hand);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
 }

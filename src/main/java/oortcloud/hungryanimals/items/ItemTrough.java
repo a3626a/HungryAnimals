@@ -51,8 +51,9 @@ public class ItemTrough extends Item {
 				boolean flag2 = flag || worldIn.isAirBlock(pos);
 				boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
 
-				if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isFullyOpaque()
-						&& worldIn.getBlockState(blockpos.down()).isFullyOpaque()) {
+				if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)
+						&& worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(),
+								EnumFacing.UP)) {
 					IBlockState iblockstate1 = ModBlocks.trough.getDefaultState()
 							.withProperty(BlockTrough.FACING, enumfacing1)
 							.withProperty(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
