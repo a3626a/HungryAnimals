@@ -1,12 +1,11 @@
 package oortcloud.hungryanimals.potion;
 
-import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
 
 public class PotionHungryAnimals extends Potion {
 
@@ -15,7 +14,6 @@ public class PotionHungryAnimals extends Potion {
 	protected PotionHungryAnimals(ResourceLocation location, boolean badEffect, int potionColor) {
 		super(badEffect, potionColor);
 		texture = location;
-		Potion.REGISTRY.putObject(texture, this);
 	}
 
 	@Override
