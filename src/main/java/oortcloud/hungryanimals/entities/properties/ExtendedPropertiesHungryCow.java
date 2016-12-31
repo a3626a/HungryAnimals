@@ -71,18 +71,6 @@ public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal 
 	}
 
 	@Override
-	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
-		super.dropFewItems(isHitByPlayer, looting, drops);
-		if (entity.isBurning()) {
-			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.BEEF) {
-					i.setEntityItemStack(new ItemStack(Items.COOKED_BEEF, i.getEntityItem().stackSize));
-				}
-			}
-		}
-	}
-
-	@Override
 	protected void loadPropertyNBTData(NBTTagCompound tag) {
 		super.loadPropertyNBTData(tag);
 		milk = tag.getInteger("milk");

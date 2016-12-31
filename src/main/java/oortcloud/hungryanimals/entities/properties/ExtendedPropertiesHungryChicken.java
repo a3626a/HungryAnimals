@@ -44,16 +44,4 @@ public class ExtendedPropertiesHungryChicken extends ExtendedPropertiesHungryAni
 		}
 	}
 
-	@Override
-	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
-		super.dropFewItems(isHitByPlayer, looting, drops);
-		if (entity.isBurning()) {
-			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.CHICKEN) {
-					i.setEntityItemStack(new ItemStack(Items.COOKED_CHICKEN, i.getEntityItem().stackSize));
-				}
-			}
-		}
-	}
-
 }

@@ -28,15 +28,4 @@ public class ExtendedPropertiesHungryRabbit extends ExtendedPropertiesHungryAnim
 		this.removeAI(EntityRabbit.class.getDeclaredClasses());
 	}
 
-	@Override
-	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
-		super.dropFewItems(isHitByPlayer, looting, drops);
-		if (entity.isBurning()) {
-			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.RABBIT) {
-					i.setEntityItemStack(new ItemStack(Items.COOKED_RABBIT, i.getEntityItem().stackSize));
-				}
-			}
-		}
-	}
 }

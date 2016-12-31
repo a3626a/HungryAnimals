@@ -36,13 +36,6 @@ public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal 
 		if (this.entity.getSaddled()) {
 			this.entity.dropItem(Items.SADDLE, 1);
 		}
-		if (entity.isBurning()) {
-			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.PORKCHOP) {
-					i.setEntityItemStack(new ItemStack(Items.COOKED_PORKCHOP, i.getEntityItem().stackSize));
-				}
-			}
-		}
 	}
 
 }

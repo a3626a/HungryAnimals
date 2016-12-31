@@ -52,13 +52,7 @@ public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnima
 	@Override
 	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
 		super.dropFewItems(isHitByPlayer, looting, drops);
-		if (entity.isBurning()) {
-			for (EntityItem i : drops) {
-				if (i.getEntityItem().getItem() == Items.MUTTON) {
-					i.setEntityItemStack(new ItemStack(Items.COOKED_MUTTON, i.getEntityItem().stackSize));
-				}
-			}
-		}
+
 		if (this.entity.getGrowingAge() >= 0) {
 			if (!this.entity.getSheared()) {
 				this.entity.entityDropItem(new ItemStack(Item.getItemFromBlock(Blocks.WOOL), (int)((2 + this.entity.getRNG().nextInt(2))* (1+(entity.getRNG().nextInt(1 + looting)) / 3.0)),
