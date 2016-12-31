@@ -10,7 +10,7 @@ public class ItemBlockFloorCover extends ItemBlock {
 	}
 	
 	/*
-	 * TODO IItemColor
+	 * TODO IItemColor	
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 		return block.getBlockColor();

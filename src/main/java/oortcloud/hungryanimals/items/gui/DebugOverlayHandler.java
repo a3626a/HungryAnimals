@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,8 +75,8 @@ public class DebugOverlayHandler extends Gui {
 			if (!this.isEnabled) {
 				EntityPlayer entity = (EntityPlayer) mc.getRenderViewEntity();
 				if (entity != null) {
-					ItemStack stack = entity.getHeldItem();
-					if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
+					ItemStack stack = getDebugGlass(entity);
+					if (stack != null) {
 						debugGlass = stack;
 						this.setOpened(true);
 					}
@@ -83,9 +84,8 @@ public class DebugOverlayHandler extends Gui {
 			} else {
 				EntityPlayer entity = (EntityPlayer) mc.getRenderViewEntity();
 				if (entity != null) {
-					ItemStack stack = entity.getHeldItem();
-					if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
-					} else {
+					ItemStack stack = getDebugGlass(entity);
+					if (stack == null) {
 						this.setOpened(false);
 						return;
 					}
@@ -99,7 +99,7 @@ public class DebugOverlayHandler extends Gui {
 
 	@SubscribeEvent
 	public void onDrawOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.type != ElementType.ALL)
+		if (event.getType() != ElementType.ALL)
 			return;
 		if (!this.isEnabled)
 			return;
@@ -146,5 +146,17 @@ public class DebugOverlayHandler extends Gui {
 				}
 			}
 		}
+	}
+	
+	private ItemStack getDebugGlass(EntityPlayer player) {
+		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
+			return stack;
+		}
+		stack = player.getHeldItem(EnumHand.OFF_HAND);
+		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
+			return stack;
+		}
+		return null;
 	}
 }
