@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.configuration.util;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 
 public class ValueDropMeat {
 	private HashItemType hashItem;

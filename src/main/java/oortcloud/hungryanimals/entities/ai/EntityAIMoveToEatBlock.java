@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatBlock extends EntityAIBase {
@@ -32,7 +33,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private int delayCounter;
 	private static int delay = 100;
 
-	public EntityAIMoveToEatBlock(EntityLiving entity, ExtendedPropertiesHungryAnimal property, double speed) {
+	public EntityAIMoveToEatBlock(EntityLiving entity, IFoodPreference pref, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		
 		this.entity = entity;

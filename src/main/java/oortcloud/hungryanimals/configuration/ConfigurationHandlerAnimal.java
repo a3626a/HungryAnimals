@@ -15,12 +15,12 @@ import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
-import oortcloud.hungryanimals.configuration.util.HashBlockState;
-import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.configuration.util.StringParser;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
 import oortcloud.hungryanimals.configuration.util.ValueDropRare;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
@@ -86,6 +86,7 @@ public class ConfigurationHandlerAnimal {
 				HungryAnimalManager.setBasicCharacteristic(entityClass);
 			}
 		}
+		
 
 		HungryAnimalManager.getInstance().readFromConfig(config);
 
