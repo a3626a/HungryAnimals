@@ -8,11 +8,11 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	private double hunger;
 	private double excretion;
 	private EntityLiving entity;
-	
+
 	public CapabilityHungryAnimal(EntityLiving entity) {
 		this.entity = entity;
 	}
-	
+
 	@Override
 	public double getHunger() {
 		return hunger;
@@ -30,7 +30,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		}
 		return oldHunger;
 	}
-	
+
 	@Override
 	public double setHunger(double hunger) {
 		double oldHunger = this.hunger;
@@ -41,6 +41,8 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		} else {
 			this.hunger = hunger;
 		}
+		this.excretion += hunger
+				* entity.getAttributeMap().getAttributeInstance(ModAttributes.excretion_factor).getAttributeValue();
 		return oldHunger;
 	}
 
@@ -48,7 +50,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	public double getMaxHunger() {
 		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
 	}
-	
+
 	@Override
 	public double getExcretion() {
 		return excretion;
@@ -60,12 +62,12 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		this.excretion += excretion;
 		return oldExcretion;
 	}
-	
+
 	@Override
 	public double setExcretion(double excretion) {
 		double oldExcretion = this.excretion;
 		this.excretion = excretion;
 		return oldExcretion;
 	}
-	
+
 }

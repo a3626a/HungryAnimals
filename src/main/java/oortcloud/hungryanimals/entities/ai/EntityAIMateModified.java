@@ -2,7 +2,6 @@ package oortcloud.hungryanimals.entities.ai;
 
 
 import java.lang.reflect.Method;
-import java.security.Provider;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +18,9 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
@@ -27,7 +28,6 @@ import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 public class EntityAIMateModified extends EntityAIBase
 {
     private EntityAnimal theAnimal;
-    private ExtendedPropertiesHungryAnimal property;
     World theWorld;
     private EntityAnimal targetMate;
     /** Delay preventing a baby from spawning immediately when two mate-able animals find each other. */
@@ -38,7 +38,6 @@ public class EntityAIMateModified extends EntityAIBase
     public EntityAIMateModified(EntityAnimal animal, ExtendedPropertiesHungryAnimal property , double speed)
     {
         this.theAnimal = animal;
-        this.property = property;
         this.theWorld = animal.worldObj;
         this.moveSpeed = speed;
         this.setMutexBits(3);
@@ -123,9 +122,10 @@ public class EntityAIMateModified extends EntityAIBase
      */
     private void spawnBaby()
     {
-    	this.property.subHunger(theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
-    	ExtendedPropertiesHungryAnimal targetMateProperty = (ExtendedPropertiesHungryAnimal)this.targetMate.getExtendedProperties(Strings.extendedPropertiesKey);
-    	ICapabilityHungryAnimal capHungryAnimal = this.targetMate.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null);
+    	theAnimal.getCapability(ProviderHungryAnimal.CAP, null).addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
+    	ICapabilityTamableAnimal thisTamableAnimal = this.theAnimal.getCapability(ProviderTamableAnimal.CAP, null);
+    	ICapabilityHungryAnimal capHungryAnimal = this.targetMate.getCapability(ProviderHungryAnimal.CAP, null);
+    	ICapabilityTamableAnimal capTamableAnimal = this.targetMate.getCapability(ProviderTamableAnimal.CAP, null);
     	capHungryAnimal.addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
         
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
@@ -145,8 +145,7 @@ public class EntityAIMateModified extends EntityAIBase
     	
         if (entityageable != null)
         {
-        	ExtendedPropertiesHungryAnimal childProperty = (ExtendedPropertiesHungryAnimal) entityageable.getExtendedProperties(Strings.extendedPropertiesKey);
-            childProperty.taming = ( this.property.taming + targetMateProperty.taming ) / 2.0;
+        	entityageable.getCapability(ProviderTamableAnimal.CAP, null).setTaming((thisTamableAnimal.getTaming() + capTamableAnimal.getTaming() ) / 2.0);
         	
             EntityPlayer entityplayer = this.theAnimal.getPlayerInLove();
 

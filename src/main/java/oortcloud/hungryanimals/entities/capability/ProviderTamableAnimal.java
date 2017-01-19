@@ -6,12 +6,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class ProviderHungryAnimal implements ICapabilitySerializable<NBTBase> {
+public class ProviderTamableAnimal implements ICapabilitySerializable<NBTBase> {
 
-	@CapabilityInject(ICapabilityHungryAnimal.class)
-	public static final Capability<ICapabilityHungryAnimal> CAP = null;
+	@CapabilityInject(ICapabilityTamableAnimal.class)
+	public static final Capability<ICapabilityTamableAnimal> CAP = null;
 	
-	private ICapabilityHungryAnimal instance = CAP.getDefaultInstance();
+	private ICapabilityTamableAnimal instance = CAP.getDefaultInstance();
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -32,5 +32,5 @@ public class ProviderHungryAnimal implements ICapabilitySerializable<NBTBase> {
 	public void deserializeNBT(NBTBase nbt) {
 		CAP.getStorage().readNBT(CAP, this.instance, null, nbt);
 	}
-	
+
 }

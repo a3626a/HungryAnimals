@@ -50,8 +50,6 @@ import oortcloud.hungryanimals.potion.ModPotions;
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {
 
 	public static String key = "ExtendedPropertiesHungryAnimal";
-
-	public HashMap<HashItemType, Double> map = new HashMap<HashItemType, Double>();
 	
 	public ArrayList<ValueDropMeat> drop_meat = new ArrayList<ValueDropMeat>();
 	public ArrayList<ValueDropRandom> drop_random = new ArrayList<ValueDropRandom>();
@@ -61,9 +59,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 	public EntityAnimal entity;
 	public World worldObj;
-	public double hunger;
-	public double excretion;
-	public double taming;
 	public EntityAIMoveToTrough ai_moveToFoodbox;
 	// public EntityAICrank ai_crank;
 
@@ -74,34 +69,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		hunger = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / 2.0;
 		excretion = 0;
 		taming = -2;
-	}
-
-	protected void savePropertyNBTData(NBTTagCompound tag) {
-		tag.setDouble("hunger", this.hunger);
-		tag.setDouble("excretion", this.excretion);
-		tag.setDouble("tamedValue", this.taming);
-	}
-
-	protected void loadPropertyNBTData(NBTTagCompound tag) {
-		hunger = tag.getDouble("hunger");
-		excretion = tag.getDouble("excretion");
-		taming = tag.getDouble("tamedValue");
-	}
-
-	@Override
-	public void saveNBTData(NBTTagCompound compound) {
-		NBTTagCompound tag = new NBTTagCompound();
-		compound.setTag(key, tag);
-		savePropertyNBTData(tag);
-	}
-
-	@Override
-	public void loadNBTData(NBTTagCompound compound) {
-		NBTTagCompound tag = (NBTTagCompound) compound.getTag(key);
-
-		if (tag != null) {
-			loadPropertyNBTData(tag);
-		}
 	}
 
 	@Override
@@ -215,15 +182,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		for (Object i : removeEntries) {
 			this.entity.tasks.removeTask(((EntityAIBase) i));
 		}
-	}
-
-	public void subHunger(double value) {
-		this.hunger -= value;
-		if (hunger <= 0) {
-			this.hunger = 0;
-		}
-		this.excretion += value
-				* entity.getAttributeMap().getAttributeInstance(ModAttributes.excretion_factor).getAttributeValue();
 	}
 
 	public void eatFoodBonus(ItemStack item) {

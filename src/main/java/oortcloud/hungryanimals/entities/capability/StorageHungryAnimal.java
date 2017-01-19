@@ -6,7 +6,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
-public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal>{
+public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 
 	@Override
 	public NBTBase writeNBT(Capability<ICapabilityHungryAnimal> capability, ICapabilityHungryAnimal instance, EnumFacing side) {

@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 
@@ -46,7 +47,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 			--this.delayTemptCounter;
 			return false;
 		} else {
-			if (property.taming < 1)
+			if (temptedEntity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < 1)
 				return false;
 
 			this.temptingPlayer = this.temptedEntity.worldObj.getClosestPlayerToEntity(this.temptedEntity, 10.0D);

@@ -48,7 +48,7 @@ public class HUDHandlerHungryAnimals implements IWailaEntityProvider {
 		
 		//Check this entity is supported by Hungry Animals
 		//TODO add checking for Taming
-		if (animal.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null) == null)
+		if (animal.getCapability(ProviderHungryAnimal.CAP, null) == null)
 			return tips;
 		
 		NBTTagCompound tag = accessor.getNBTData();

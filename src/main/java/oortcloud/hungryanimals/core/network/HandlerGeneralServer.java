@@ -107,7 +107,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 					if (entity != null && entity instanceof EntityAnimal) {
 						EntityAnimal animal = (EntityAnimal) entity;
 						ExtendedPropertiesHungryAnimal properties = (ExtendedPropertiesHungryAnimal) animal.getExtendedProperties(Strings.extendedPropertiesKey);
-						ICapabilityHungryAnimal capHungryAnimal = animal.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null);
+						ICapabilityHungryAnimal capHungryAnimal = animal.getCapability(ProviderHungryAnimal.CAP, null);
 						
 						PacketGeneralClient msg = new PacketGeneralClient(SyncIndex.ENTITYOVERLAY_SYNC);
 						msg.setDouble(capHungryAnimal.getHunger() / capHungryAnimal.getMaxHunger());

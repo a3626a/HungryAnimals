@@ -27,7 +27,7 @@ public class PotionGrowth extends PotionHungryAnimals {
 		
 		EntityAgeable entityAgealbe = ((EntityAgeable) entity);
 		
-		if (entity.hasCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null)) {
+		if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
 			int j = entityAgealbe.getGrowingAge();
 			if (j < 0) {
 				j += (level) * entity.getRNG().nextInt(2);

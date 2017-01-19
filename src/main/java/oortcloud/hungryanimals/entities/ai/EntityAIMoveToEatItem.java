@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
@@ -125,8 +126,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	}
 
 	private int executeProbability() {
-		double taming = property.taming;
-		double hunger = entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).getHunger()/entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).getMaxHunger();
+		double taming = entity.getCapability(ProviderTamableAnimal.CAP, null).getTaming();
+		double hunger = entity.getCapability(ProviderHungryAnimal.CAP, null).getHunger()/entity.getCapability(ProviderHungryAnimal.CAP, null).getMaxHunger();
 		if (taming > 1) {
 			taming = 1;
 		}

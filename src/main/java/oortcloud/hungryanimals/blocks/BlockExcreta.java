@@ -248,7 +248,7 @@ public class BlockExcreta extends BlockFalling {
 		if (random.nextDouble() < this.diseaseProbability / 3.0 * Math.max(0, exc - 1)) {
 			Predicate hungryAnimalSelector = new Predicate() {
 				public boolean apply(Entity entityIn) {
-					return (entityIn.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null) != null);
+					return (entityIn.getCapability(ProviderHungryAnimal.CAP, null) != null);
 				}
 
 				public boolean apply(Object p_apply_1_) {

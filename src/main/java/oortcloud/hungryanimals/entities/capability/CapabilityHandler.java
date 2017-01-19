@@ -11,8 +11,9 @@ import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
 public class CapabilityHandler {
-	public static final ResourceLocation CAP_HUNGRYANIMALS = new ResourceLocation(References.MODID, "hungryanimals");
-
+	public static final ResourceLocation CAP_HUNGRYANIMALS = new ResourceLocation(References.MODID, "hungryanimal");
+	public static final ResourceLocation CAP_TAMABLEANIMALS = new ResourceLocation(References.MODID, "tamableanimal");
+	
 	@SubscribeEvent
 	public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
 		if (!(event.getObject() instanceof EntityAnimal))
@@ -22,6 +23,7 @@ public class CapabilityHandler {
 		
 		if (HungryAnimalManager.getInstance().isRegistered(animal.getClass())) {
 			event.addCapability(CAP_HUNGRYANIMALS, new ProviderHungryAnimal());
+			event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal());
 		}
 	}
 }
