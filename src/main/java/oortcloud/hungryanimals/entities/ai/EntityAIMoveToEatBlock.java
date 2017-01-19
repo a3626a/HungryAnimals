@@ -10,6 +10,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
@@ -23,30 +25,30 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	};
 
 	private EntityLiving entity;
-	private ExtendedPropertiesHungryAnimal property;
 	private World worldObj;
 	private BlockPos bestPos;
 	private double speed;
 
 	private double foodCondition = Double.MAX_VALUE;
-
+	private IFoodPreference<IBlockState> pref;
 	private int delayCounter;
 	private static int delay = 100;
 
-	public EntityAIMoveToEatBlock(EntityLiving entity, IFoodPreference pref, double speed) {
+	public EntityAIMoveToEatBlock(EntityLiving entity, IFoodPreference<IBlockState> pref, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
-		
 		this.entity = entity;
-		this.property = property;
 		this.worldObj = this.entity.worldObj;
 		this.speed = speed;
+		this.pref = pref;
 		this.setMutexBits(1);
 	}
 
 	@Override
 	public boolean shouldExecute() {
 		initializeFoodCondition();
-		if (entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() - property.hunger < foodCondition)
+		
+		// (left stomach storage) < (minimum edible food energy) - sleep this AI
+		if (entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() - entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).getHunger() < foodCondition)
 			return false;
 
 		if (this.delayCounter > 0) {
@@ -132,7 +134,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	@Override
 	public boolean continueExecuting() {
 		IBlockState block = this.worldObj.getBlockState(bestPos);
-		if (!this.property.canEatBlock(block)) {
+		if (!this.pref.canEat(block)) {
 			this.entity.getNavigator().clearPathEntity();
 			return false;
 		}
@@ -167,9 +169,9 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	 */
 	private void initializeFoodCondition() {
 		if (foodCondition == Double.MAX_VALUE) {
-			for (double i : property.hunger_block.values()) {
-				if (i < foodCondition)
-					foodCondition = i;
+			for (IBlockState i : this.pref.getFoods()) {
+				if (this.pref.getHunger(i) < foodCondition)
+					foodCondition = this.pref.getHunger(i);
 			}
 		}
 	}

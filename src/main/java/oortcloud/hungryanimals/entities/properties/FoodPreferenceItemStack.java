@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.properties;
 
+import java.util.Iterator;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -17,6 +19,12 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 		return false;
 	}
 
+	@Override
+	public Iterator<ItemStack> getFoods() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public static class HashItemType {
 		private Item item;
 		private int damage;
@@ -61,6 +69,5 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 			}
 		}
 	}
-
 	
 }

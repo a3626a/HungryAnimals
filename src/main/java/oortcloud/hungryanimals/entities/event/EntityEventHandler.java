@@ -1,8 +1,6 @@
 package oortcloud.hungryanimals.entities.event;
 
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -11,22 +9,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
 public class EntityEventHandler {
-
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (!(event.getEntity() instanceof EntityAnimal))
-			return;
-		
-		EntityAnimal animal = (EntityAnimal) event.getEntity();
-		
-		if (HungryAnimalManager.getInstance().isRegistered(animal.getClass())) {
-			event.getEntity().registerExtendedProperties(Strings.extendedPropertiesKey, HungryAnimalManager.getInstance().createProperty(animal));
-		}
-		
-	}
 
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {

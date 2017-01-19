@@ -69,6 +69,7 @@ public class HungryAnimals {
 		proxy.registerTileEntities();
 		proxy.registerTileEntityRendering();
 		proxy.registerKeyBindings();
+		proxy.registerCapabilities();
 		HungryAnimalManager.getInstance().init();
 		ConfigurationHandler.sync();
 	}

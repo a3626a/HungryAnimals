@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.properties;
 
+import java.util.Iterator;
+
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
@@ -20,6 +22,12 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState>{
 		return false;
 	}
 
+	@Override
+	public Iterator<IBlockState> getFoods() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public static class HashBlockState {
 		private IBlockState block;
 		private boolean ignoreProperty;
@@ -89,5 +97,5 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState>{
 			}
 		}
 	}
-	
+
 }

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
-import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.configuration.util.StringParser;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 
 public class RecipeAnimalGlue {
 

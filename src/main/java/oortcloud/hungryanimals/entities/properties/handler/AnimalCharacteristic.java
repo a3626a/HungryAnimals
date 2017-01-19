@@ -10,12 +10,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import oortcloud.hungryanimals.configuration.util.HashBlockState;
-import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
 import oortcloud.hungryanimals.configuration.util.ValueDropRare;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 
 public class AnimalCharacteristic {
 

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
@@ -45,9 +46,9 @@ public class HUDHandlerHungryAnimals implements IWailaEntityProvider {
 		if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))			
 			return tips;
 		
-		ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal)animal.getExtendedProperties(Strings.extendedPropertiesKey);
-		
-		if (property==null)
+		//Check this entity is supported by Hungry Animals
+		//TODO add checking for Taming
+		if (animal.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null) == null)
 			return tips;
 		
 		NBTTagCompound tag = accessor.getNBTData();

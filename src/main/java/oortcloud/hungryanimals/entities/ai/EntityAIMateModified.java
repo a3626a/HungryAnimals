@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.entities.ai;
 
 
 import java.lang.reflect.Method;
+import java.security.Provider;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -17,6 +18,8 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
@@ -122,7 +125,8 @@ public class EntityAIMateModified extends EntityAIBase
     {
     	this.property.subHunger(theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
     	ExtendedPropertiesHungryAnimal targetMateProperty = (ExtendedPropertiesHungryAnimal)this.targetMate.getExtendedProperties(Strings.extendedPropertiesKey);
-    	targetMateProperty.subHunger(theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
+    	ICapabilityHungryAnimal capHungryAnimal = this.targetMate.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null);
+    	capHungryAnimal.addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
         
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
     	

@@ -19,7 +19,7 @@ public class RenderEntitySlingShotBall extends Render<EntitySlingShotBall> {
 	public void doRender(EntitySlingShotBall entity, double x, double y, double z, float p_76986_8_, float p_76986_9_) {
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
-		renderOffsetAABBColored(AxisAlignedBB.fromBounds(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F), x, y, z, 0.25F, 0.2F, 0.2F, 1.0F);
+		renderOffsetAABBColored(new AxisAlignedBB(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F), x, y, z, 0.25F, 0.2F, 0.2F, 1.0F);
 		GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
 	}

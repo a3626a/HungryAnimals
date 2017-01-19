@@ -9,6 +9,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
@@ -24,9 +25,8 @@ public class PotionDisease extends PotionHungryAnimals {
 
 	@Override
 	public void performEffect(EntityLivingBase entity, int level) {
-		ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) entity.getExtendedProperties(Strings.extendedPropertiesKey);
-		if (property != null)
-			property.subHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * 4);
+		if (entity.hasCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null))
+			entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * 4);
 	}
 
 	@Override

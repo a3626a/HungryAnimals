@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.materials.ModMaterials;
 import oortcloud.hungryanimals.potion.ModPotions;
@@ -247,7 +248,7 @@ public class BlockExcreta extends BlockFalling {
 		if (random.nextDouble() < this.diseaseProbability / 3.0 * Math.max(0, exc - 1)) {
 			Predicate hungryAnimalSelector = new Predicate() {
 				public boolean apply(Entity entityIn) {
-					return (entityIn.getExtendedProperties(Strings.extendedPropertiesKey) != null);
+					return (entityIn.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null) != null);
 				}
 
 				public boolean apply(Object p_apply_1_) {
