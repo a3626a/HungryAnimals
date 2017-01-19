@@ -6,14 +6,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 
 public class EntityAITemptEdibleItem extends EntityAIBase {
 	/** The entity using this AI that is tempted by the player. */
 	private EntityCreature temptedEntity;
-	private ExtendedPropertiesHungryAnimal property;
 	private double speed;
 	/** The player that is tempting the entity that is using this AI. */
 	private EntityPlayer temptingPlayer;
+	private IFoodPreference<ItemStack> pref;
 	/**
 	 * A counter that is decremented each time the shouldExecute method is
 	 * called. The shouldExecute method will always return false if
@@ -26,11 +27,11 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	private boolean isRunning;
 	private boolean avoidWater;
 
-	public EntityAITemptEdibleItem(EntityCreature animal, ExtendedPropertiesHungryAnimal propertyIn, double speedIn) {
+	public EntityAITemptEdibleItem(EntityCreature animal, IFoodPreference<ItemStack> pref, double speedIn) {
 		this.delayTemptCounter = animal.getRNG().nextInt(delay);
 		
 		this.temptedEntity = animal;
-		this.property = propertyIn;
+		this.pref = pref;
 		this.speed = speedIn;
 		this.setMutexBits(3);
 
@@ -54,7 +55,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 				return false;
 			} else {
 				ItemStack itemstack = this.temptingPlayer.getHeldItemMainhand();
-				return itemstack == null ? false : property.canEatFood(itemstack);
+				return itemstack == null ? false : pref.canEat(itemstack);
 			}
 		}
 	}

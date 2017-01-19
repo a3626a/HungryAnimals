@@ -1,31 +1,55 @@
 package oortcloud.hungryanimals.entities.properties;
 
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashMap;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
 
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState>{
 	
+	/*
+	 * Map object is created once while reading from configuration.
+	 * In other words, Map object is shared between entities or AI objects
+	 */
+	private HashMap<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
+	private ICapabilityHungryAnimal cap;
+	
+	public FoodPreferenceBlockState(ICapabilityHungryAnimal cap) {
+		this.cap = cap;
+	}
+	
 	@Override
 	public double getHunger(IBlockState food) {
-		// TODO Auto-generated method stub
-		return 0;
+		HashBlockState key;
+		
+		if (this.map.containsKey(key = new HashBlockState(food, true))) {
+			return this.map.get(key);
+		} else if (this.map.containsKey(key = new HashBlockState(food, false))) {
+			return this.map.get(key);
+		} else {
+			return 0;
+		}
 	}
 
 	@Override
 	public boolean canEat(IBlockState food) {
-		// TODO Auto-generated method stub
-		return false;
+		double hunger = getHunger(food);
+		if (hunger == 0)
+			return false;
+		return cap.getHunger() + hunger < cap.getMaxHunger();
 	}
 
 	@Override
-	public Iterator<IBlockState> getFoods() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean shouldEat() {
+		return cap.getHunger() + Collections.min(map.values()) < cap.getMaxHunger();
 	}
 	
 	public static class HashBlockState {

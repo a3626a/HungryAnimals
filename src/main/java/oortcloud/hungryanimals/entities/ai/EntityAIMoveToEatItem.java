@@ -5,31 +5,32 @@ import java.util.ArrayList;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	private EntityLiving entity;
-	private ExtendedPropertiesHungryAnimal property;
 	private World worldObj;
 	private double speed;
 	private EntityItem target;
 
-	private double foodCondition = Double.MAX_VALUE;
-
+	private IFoodPreference<ItemStack> pref;
 	private int delayCounter;
 	private static int delay = 100;
 	
 	private Predicate EAT_EDIBLE = new Predicate() {
 		public boolean apply(EntityItem entityIn) {
-			return property.canEatFood(entityIn.getEntityItem());
+			return pref.canEat(entityIn.getEntityItem());
 		}
 
 		@Override
@@ -53,20 +54,19 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		}
 	};
 
-	public EntityAIMoveToEatItem(EntityLiving entity, ExtendedPropertiesHungryAnimal property, double speed) {
+	public EntityAIMoveToEatItem(EntityLiving entity, IFoodPreference<ItemStack> pref, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		
 		this.entity = entity;
-		this.property = property;
 		this.worldObj = this.entity.worldObj;
 		this.speed = speed;
+		this.pref = pref;
 		this.setMutexBits(1);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		initializeFoodCondition();
-		if (entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() - property.hunger < foodCondition)
+		if (pref.shouldEat())
 			return false;
 
 		if (this.delayCounter > 0) {
@@ -126,7 +126,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	private int executeProbability() {
 		double taming = property.taming;
-		double hunger = property.getHungry();
+		double hunger = entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).getHunger()/entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).getMaxHunger();
 		if (taming > 1) {
 			taming = 1;
 		}
@@ -136,15 +136,4 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		return (int) (200 * (taming - 1) * (taming - 1) * hunger) + 1;
 	}
 
-	/**
-	 * set "foodCondition" to minimum food value of edible foods.
-	 */
-	private void initializeFoodCondition() {
-		if (foodCondition == Double.MAX_VALUE) {
-			for (double i : property.hunger_food.values()) {
-				if (i < foodCondition)
-					foodCondition = i;
-			}
-		}
-	}
 }

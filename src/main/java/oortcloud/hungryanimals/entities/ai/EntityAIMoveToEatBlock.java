@@ -29,7 +29,6 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private BlockPos bestPos;
 	private double speed;
 
-	private double foodCondition = Double.MAX_VALUE;
 	private IFoodPreference<IBlockState> pref;
 	private int delayCounter;
 	private static int delay = 100;
@@ -45,10 +44,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		initializeFoodCondition();
-		
-		// (left stomach storage) < (minimum edible food energy) - sleep this AI
-		if (entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() - entity.getCapability(ProviderHungryAnimal.CAP_HUNGRYANIMAL, null).getHunger() < foodCondition)
+		if (pref.shouldEat())
 			return false;
 
 		if (this.delayCounter > 0) {
@@ -164,15 +160,4 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		return -k * (R - 32) + 1;
 	}
 
-	/**
-	 * set "foodCondition" to minimum food value of edible foods.
-	 */
-	private void initializeFoodCondition() {
-		if (foodCondition == Double.MAX_VALUE) {
-			for (IBlockState i : this.pref.getFoods()) {
-				if (this.pref.getHunger(i) < foodCondition)
-					foodCondition = this.pref.getHunger(i);
-			}
-		}
-	}
 }

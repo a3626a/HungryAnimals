@@ -51,8 +51,8 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 	public static String key = "ExtendedPropertiesHungryAnimal";
 
-	public HashMap<HashItemType, Double> hunger_food = new HashMap<HashItemType, Double>();
-	public HashMap<HashBlockState, Double> hunger_block = new HashMap<HashBlockState, Double>();
+	public HashMap<HashItemType, Double> map = new HashMap<HashItemType, Double>();
+	
 	public ArrayList<ValueDropMeat> drop_meat = new ArrayList<ValueDropMeat>();
 	public ArrayList<ValueDropRandom> drop_random = new ArrayList<ValueDropRandom>();
 	public ArrayList<ValueDropRare> drop_rare = new ArrayList<ValueDropRare>();
@@ -203,16 +203,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		
 	}
 
-	/**
-	 * returns how full this animal is. 1.0 is full, 0.0 is death
-	 * 
-	 * @return [0.0~1.0]
-	 */
-	public double getHungry() {
-		return this.hunger
-				/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
-	}
-
 	protected void removeAI(Class[] target) {
 		List removeEntries = new ArrayList();
 		for (Object i : this.entity.tasks.taskEntries) {
@@ -224,73 +214,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		}
 		for (Object i : removeEntries) {
 			this.entity.tasks.removeTask(((EntityAIBase) i));
-		}
-	}
-
-	/**
-	 * it returns positive number if given food is edible. otherwise 0.
-	 * 
-	 * @param food
-	 * @return Food Value of the food
-	 */
-	public double getFoodHunger(ItemStack food) {
-		HashItemType key;
-		if (this.hunger_food.containsKey(key = new HashItemType(food.getItem()))) {
-			return this.hunger_food.get(key);
-		} else if (this.hunger_food.containsKey(key = new HashItemType(food.getItem(), food.getItemDamage()))) {
-			return this.hunger_food.get(key);
-		} else {
-			return 0;
-		}
-	}
-
-	/**
-	 * it returns positive number if given block is edible. otherwise 0.
-	 * 
-	 * @param block
-	 * @return Food Value of the block
-	 */
-	public double getBlockHunger(IBlockState block) {
-		HashBlockState key;
-		if (this.hunger_block.containsKey(key = new HashBlockState(block, true))) {
-			return this.hunger_block.get(key);
-		} else if (this.hunger_block.containsKey(key = new HashBlockState(block, false))) {
-			return this.hunger_block.get(key);
-		} else {
-			return 0;
-		}
-	}
-
-	public boolean canEatFood(ItemStack food) {
-
-		double saturation = getFoodHunger(food);
-
-		if (saturation == 0) {
-			return false;
-		} else {
-			return saturation + this.hunger < entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max)
-					.getAttributeValue();
-		}
-
-	}
-
-	public boolean canEatBlock(IBlockState block) {
-		double saturation = getBlockHunger(block);
-
-		if (saturation == 0) {
-			return false;
-		} else {
-			return saturation + this.hunger < entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max)
-					.getAttributeValue();
-		}
-	}
-
-	public void addHunger(double value) {
-		this.hunger += value;
-		if (this.hunger > this.entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max)
-				.getAttributeValue()) {
-			this.hunger = this.entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max)
-					.getAttributeValue();
 		}
 	}
 
