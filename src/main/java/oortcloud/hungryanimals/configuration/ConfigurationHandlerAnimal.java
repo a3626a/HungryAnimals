@@ -97,48 +97,6 @@ public class ConfigurationHandlerAnimal {
 		return (String) EntityList.CLASS_TO_NAME.get(entityClass);
 	}
 
-	public static void readDropMeat(Configuration config, String[] defaultfood, String category, AnimalCharacteristic target) {
-		String[] drops;
-		drops = config.get(category, KEY_drop_meat, defaultfood).getStringList();
-		for (String i : drops) {
-			ValueDropMeat j = ConfigurationHelper.instance.getDropMeat(i);
-			if (j == null) {
-				ConfigurationHelper.exceptionInvalidFormat(i);
-				exceptionPrintPosition(category, KEY_drop_meat);
-				continue;
-			}
-			target.drop_meat.add(j);
-		}
-	}
-
-	public static void readDropRandom(Configuration config, String[] defaultfood, String category, AnimalCharacteristic target) {
-		String[] drops;
-		drops = config.get(category, KEY_drop_random, defaultfood).getStringList();
-		for (String i : drops) {
-			ValueDropRandom j = ConfigurationHelper.instance.getDropRandom(i);
-			if (j == null) {
-				ConfigurationHelper.exceptionInvalidFormat(i);
-				exceptionPrintPosition(category, KEY_drop_random);
-				continue;
-			}
-			target.drop_random.add(j);
-		}
-	}
-
-	public static void readDropRare(Configuration config, String[] defaultfood, String category, AnimalCharacteristic target) {
-		String[] drops;
-		drops = config.get(category, KEY_drop_rare, defaultfood).getStringList();
-		for (String i : drops) {
-			ValueDropRare j = ConfigurationHelper.instance.getDropRare(i);
-			if (j == null) {
-				ConfigurationHelper.exceptionInvalidFormat(i);
-				exceptionPrintPosition(category, KEY_drop_rare);
-				continue;
-			}
-			target.drop_rare.add(j);
-		}
-	}
-
 	/**
 	 * 
 	 * @param defaultfood

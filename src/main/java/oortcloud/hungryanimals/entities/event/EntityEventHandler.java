@@ -44,12 +44,4 @@ public class EntityEventHandler {
 		}
 	}
 	
-	@SubscribeEvent
-	public void onEntityDrops(LivingDropsEvent event) {
-		IExtendedEntityProperties property = event.entity.getExtendedProperties(Strings.extendedPropertiesKey);
-		if (property != null) {
-			((ExtendedPropertiesHungryAnimal)property).dropFewItems(event.isRecentlyHit(), event.getLootingLevel(), event.getDrops());
-		}
-	}
-
 }

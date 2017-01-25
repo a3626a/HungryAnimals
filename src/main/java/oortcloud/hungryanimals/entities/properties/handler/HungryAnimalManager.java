@@ -24,11 +24,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
-import oortcloud.hungryanimals.configuration.util.HashBlockState;
-import oortcloud.hungryanimals.configuration.util.HashItemType;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
-import oortcloud.hungryanimals.configuration.util.ValueDropRare;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryChicken;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryCow;
@@ -36,6 +33,8 @@ import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGener
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryPig;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryRabbit;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungrySheep;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.items.ModItems;
 
 public class HungryAnimalManager {
@@ -170,9 +169,6 @@ public class HungryAnimalManager {
 		characteristic_cow.putAttribute(ModAttributes.milk_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
 		characteristic_cow.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 30.0, false);
 		characteristic_cow.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.2, false);
-		characteristic_cow.drop_meat.add(new ValueDropMeat(Items.BEEF, 5, 10));
-		characteristic_cow.drop_random.add(new ValueDropRandom(Items.LEATHER, 5, 10));
-		characteristic_cow.drop_random.add(new ValueDropRandom(ModItems.tendon, 2, 3));
 		characteristic_cow.hunger_food.put(new HashItemType(Items.WHEAT), 50.0);
 		characteristic_cow.hunger_food.put(new HashItemType(Items.REEDS), 20.0);
 		characteristic_cow.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
@@ -188,8 +184,6 @@ public class HungryAnimalManager {
 		characteristic_chicken.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_chicken.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 8.0, false);
 		characteristic_chicken.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.15, false);
-		characteristic_chicken.drop_meat.add(new ValueDropMeat(Items.CHICKEN, 2, 4));
-		characteristic_chicken.drop_random.add(new ValueDropRandom(Items.FEATHER, 3, 6));
 		characteristic_chicken.hunger_food.put(new HashItemType(Items.WHEAT_SEEDS), 20.0);
 		characteristic_chicken.hunger_food.put(new HashItemType(Items.PUMPKIN_SEEDS), 25.0);
 		characteristic_chicken.hunger_food.put(new HashItemType(Items.MELON_SEEDS), 25.0);
@@ -206,8 +200,6 @@ public class HungryAnimalManager {
 		characteristic_pig.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_pig.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 20.0, false);
 		characteristic_pig.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-		characteristic_pig.drop_meat.add(new ValueDropMeat(Items.PORKCHOP, 4, 8));
-		characteristic_pig.drop_random.add(new ValueDropRandom(ModItems.tendon, 1, 2));
 		characteristic_pig.hunger_food.put(new HashItemType(Items.CARROT), 40.0);
 		characteristic_pig.hunger_food.put(new HashItemType(Items.ROTTEN_FLESH), 15.0);
 		characteristic_pig.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
@@ -223,9 +215,6 @@ public class HungryAnimalManager {
 		characteristic_rabbit.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 10.0, false);
 		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-		characteristic_rabbit.drop_meat.add(new ValueDropMeat(Items.RABBIT, 1, 2));
-		characteristic_rabbit.drop_random.add(new ValueDropRandom(Items.RABBIT_HIDE, 1, 2));
-		characteristic_rabbit.drop_rare.add(new ValueDropRare(Items.RABBIT_FOOT, 0.025));
 		characteristic_rabbit.hunger_food.put(new HashItemType(Items.CARROT), 40.0);
 		characteristic_rabbit.hunger_food.put(new HashItemType(Items.GOLDEN_CARROT), 150.0);
 		characteristic_rabbit.hunger_food.put(new HashItemType(Item.getItemFromBlock(Blocks.YELLOW_FLOWER)), 20.0);
@@ -245,8 +234,6 @@ public class HungryAnimalManager {
 		characteristic_sheep.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.20, false);
 		characteristic_sheep.putAttribute(ModAttributes.wool_delay, (double) (5 * 60 * 20), true);
 		characteristic_sheep.putAttribute(ModAttributes.wool_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_sheep.drop_meat.add(new ValueDropMeat(Items.MUTTON, 3, 6));
-		characteristic_sheep.drop_random.add(new ValueDropRandom(ModItems.tendon, 1, 2));
 		characteristic_sheep.hunger_food.put(new HashItemType(Items.WHEAT), 50.0);
 		characteristic_sheep.hunger_food.put(new HashItemType(Items.REEDS), 20.0);
 		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
@@ -296,9 +283,6 @@ public class HungryAnimalManager {
 		characteristic.putAttribute(ModAttributes.child_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 30.0, false);
 		characteristic.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.2, false);
-		characteristic.drop_meat.add(new ValueDropMeat(Items.BEEF, 5, 10));
-		characteristic.drop_random.add(new ValueDropRandom(Items.LEATHER, 5, 10));
-		characteristic.drop_random.add(new ValueDropRandom(ModItems.tendon, 2, 3));
 		characteristic.hunger_food.put(new HashItemType(Items.WHEAT), 50.0);
 		characteristic.hunger_food.put(new HashItemType(Items.REEDS), 20.0);
 		characteristic.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);

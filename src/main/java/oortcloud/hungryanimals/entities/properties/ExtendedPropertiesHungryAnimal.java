@@ -50,10 +50,6 @@ import oortcloud.hungryanimals.potion.ModPotions;
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {
 
 	public static String key = "ExtendedPropertiesHungryAnimal";
-	
-	public ArrayList<ValueDropMeat> drop_meat = new ArrayList<ValueDropMeat>();
-	public ArrayList<ValueDropRandom> drop_random = new ArrayList<ValueDropRandom>();
-	public ArrayList<ValueDropRare> drop_rare = new ArrayList<ValueDropRare>();
 
 	public double taming_factor = 0.998;
 
@@ -97,77 +93,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity.tasks.addTask(8, new EntityAIWander(this.entity, 1.0D));
 		this.entity.tasks.addTask(9, new EntityAIWatchClosest(this.entity, EntityPlayer.class, 6.0F));
 		this.entity.tasks.addTask(10, new EntityAILookIdle(this.entity));
-	}
-
-	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
-		if (this.entity.getGrowingAge() >= 0) {
-			ArrayList<EntityItem> toRemove = new ArrayList<EntityItem>();
-			for (EntityItem i : drops) {
-				for (ValueDropMeat j : drop_meat) {
-					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
-						toRemove.add(i);
-					}
-				}
-				for (ValueDropRandom j : drop_random) {
-					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
-						toRemove.add(i);
-					}
-				}
-				for (ValueDropRare j : drop_rare) {
-					if (i.getEntityItem().isItemEqual(j.getItemStack())) {
-						toRemove.add(i);
-					}
-				}
-			}
-			for (EntityItem i : toRemove) {
-				drops.remove(i);
-			}
-
-			for (ValueDropMeat j : drop_meat) {
-				ItemStack drop = j.getDrop(getHungry());
-				if (drop != null) {
-					drop.stackSize = (int) (drop.stackSize * (1 + entity.getRNG().nextInt(1 + looting) / 3.0));
-					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY,
-							this.entity.posZ, drop);
-					entityitem.setDefaultPickupDelay();
-					drops.add(entityitem);
-				}
-			}
-			for (ValueDropRandom j : drop_random) {
-				ItemStack drop = j.getDrop(entity.getRNG());
-				if (drop != null) {
-					drop.stackSize = (int) (drop.stackSize * (1 + (entity.getRNG().nextInt(1 + looting)) / 3.0));
-					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY,
-							this.entity.posZ, drop);
-					entityitem.setDefaultPickupDelay();
-					drops.add(entityitem);
-				}
-			}
-			for (ValueDropRare j : drop_rare) {
-				ItemStack drop = j.getDrop(entity.getRNG(), looting);
-				if (drop != null) {
-					EntityItem entityitem = new EntityItem(this.worldObj, this.entity.posX, this.entity.posY,
-							this.entity.posZ, drop);
-					entityitem.setDefaultPickupDelay();
-					drops.add(entityitem);
-				}
-			}
-		}
-
-		if (this.entity.isBurning()) {
-			for (EntityItem i : drops) {
-				// TODO Check validity by debugging
-				// TODO Split Item Stack when result's stacksize exceeds 64
-				ItemStack iStack = i.getEntityItem();
-				ItemStack result = FurnaceRecipes.instance().getSmeltingResult(iStack);
-				if (result != null) {
-					result = result.copy();
-					result.stackSize *= iStack.stackSize;
-					i.setEntityItemStack(result);
-				}
-			}
-		}
-		
 	}
 
 	protected void removeAI(Class[] target) {

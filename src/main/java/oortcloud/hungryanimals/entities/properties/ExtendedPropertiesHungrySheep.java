@@ -50,18 +50,6 @@ public class ExtendedPropertiesHungrySheep extends ExtendedPropertiesHungryAnima
 	}
 
 	@Override
-	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
-		super.dropFewItems(isHitByPlayer, looting, drops);
-
-		if (this.entity.getGrowingAge() >= 0) {
-			if (!this.entity.getSheared()) {
-				this.entity.entityDropItem(new ItemStack(Item.getItemFromBlock(Blocks.WOOL), (int)((2 + this.entity.getRNG().nextInt(2))* (1+(entity.getRNG().nextInt(1 + looting)) / 3.0)),
-						this.entity.getFleeceColor().getMetadata()), 0.0F);
-			}
-		}
-	}
-
-	@Override
 	protected void loadPropertyNBTData(NBTTagCompound tag) {
 		super.loadPropertyNBTData(tag);
 		wool = tag.getInteger("wool");
