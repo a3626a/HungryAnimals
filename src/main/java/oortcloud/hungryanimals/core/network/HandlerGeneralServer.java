@@ -14,7 +14,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer, PacketGeneralClient> {
@@ -106,14 +108,14 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 					Entity entity = worldserver.getEntityByID(id3);
 					if (entity != null && entity instanceof EntityAnimal) {
 						EntityAnimal animal = (EntityAnimal) entity;
-						ExtendedPropertiesHungryAnimal properties = (ExtendedPropertiesHungryAnimal) animal.getExtendedProperties(Strings.extendedPropertiesKey);
 						ICapabilityHungryAnimal capHungryAnimal = animal.getCapability(ProviderHungryAnimal.CAP, null);
+						ICapabilityTamableAnimal capTamableAnimal = animal.getCapability(ProviderTamableAnimal.CAP, null);
 						
 						PacketGeneralClient msg = new PacketGeneralClient(SyncIndex.ENTITYOVERLAY_SYNC);
 						msg.setDouble(capHungryAnimal.getHunger() / capHungryAnimal.getMaxHunger());
 						msg.setDouble(animal.getHealth()/animal.getMaxHealth());
 						msg.setDouble(animal.getGrowingAge() / 24000.0);
-						msg.setDouble(properties.taming / 2.0);
+						msg.setDouble(capTamableAnimal.getTaming() / 2.0);
 						int[] potions = new int[animal.getActivePotionEffects().size()];
 						Iterator iterator = animal.getActivePotionEffects().iterator();
 						int potions_index = 0;

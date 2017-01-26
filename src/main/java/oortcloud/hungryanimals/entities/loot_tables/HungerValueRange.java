@@ -47,7 +47,7 @@ public class HungerValueRange
     public int generateInt(ICapabilityHungryAnimal cap)
     {
     	float x = (float) (cap.getHunger()/cap.getMaxHunger());
-        return MathHelper.floor_float((this.max - this.min)*x + this.min);
+        return MathHelper.floor_float((this.max + 1 - this.min)*x + this.min);
     }
 
     public float generateFloat(ICapabilityHungryAnimal cap)
