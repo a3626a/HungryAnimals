@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "feather",
             "rolls": 1,
             "entries": [
                 {
@@ -27,6 +28,7 @@
             ]
         },
         {
+            "name": "meat",
             "rolls": 1,
             "entries": [
                 {

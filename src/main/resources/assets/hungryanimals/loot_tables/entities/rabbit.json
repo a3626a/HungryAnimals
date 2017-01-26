@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "rabbit_hide",
             "rolls": 1,
             "entries": [
                 {
@@ -27,6 +28,7 @@
             ]
         },
         {
+            "name": "meat",
             "rolls": 1,
             "entries": [
                 {
@@ -58,14 +60,15 @@
             ]
         },
         {
+            "name": "rabbit_foot",
             "conditions": [
                 {
                     "condition": "killed_by_player"
                 },
                 {
                     "condition": "random_chance_with_looting",
-                    "chance": 0.1,
-                    "looting_multiplier": 0.03
+                    "chance": 0.2,
+                    "looting_multiplier": 0.06
                 }
             ],
             "rolls": 1,

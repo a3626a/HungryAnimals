@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "meat",
             "rolls": 1,
             "entries": [
                 {
@@ -39,6 +40,7 @@
             ]
         },
         {
+            "name": "tendon",
             "rolls": 1,
             "entries": [
                 {
