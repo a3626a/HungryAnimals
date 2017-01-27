@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 

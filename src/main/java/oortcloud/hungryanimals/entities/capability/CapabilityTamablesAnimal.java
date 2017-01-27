@@ -19,4 +19,11 @@ public class CapabilityTamablesAnimal implements ICapabilityTamableAnimal {
 		return old;
 	}
 
+	@Override
+	public double addTaming(double taming) {
+		double old = this.taming;
+		this.taming += taming;
+		return old;
+	}
+
 }

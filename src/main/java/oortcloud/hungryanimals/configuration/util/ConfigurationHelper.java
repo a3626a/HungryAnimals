@@ -11,8 +11,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 
 public class ConfigurationHelper {
 

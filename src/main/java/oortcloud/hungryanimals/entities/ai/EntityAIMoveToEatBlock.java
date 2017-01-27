@@ -13,8 +13,8 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
-import oortcloud.hungryanimals.entities.food_preference.IFoodPreference;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
@@ -48,7 +48,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (pref.shouldEat())
+		if (pref.shouldEat(capHungry))
 			return false;
 
 		if (this.delayCounter > 0) {
@@ -134,7 +134,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	@Override
 	public boolean continueExecuting() {
 		IBlockState block = this.worldObj.getBlockState(bestPos);
-		if (!this.pref.canEat(block)) {
+		if (!this.pref.canEat(capHungry, block)) {
 			this.entity.getNavigator().clearPathEntity();
 			return false;
 		}
@@ -168,7 +168,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		IBlockState state = this.worldObj.getBlockState(pos);
 		if (state.getBlock() == ModBlocks.excreta) {
 			return -1.0;
-		} else if (pref.canEat(state)) {
+		} else if (pref.canEat(capHungry, state)) {
 			return pref.getHunger(state);
 		} else {
 			return 1.0;

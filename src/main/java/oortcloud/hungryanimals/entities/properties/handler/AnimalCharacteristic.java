@@ -13,8 +13,8 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
 import oortcloud.hungryanimals.configuration.util.ValueDropRare;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class AnimalCharacteristic {

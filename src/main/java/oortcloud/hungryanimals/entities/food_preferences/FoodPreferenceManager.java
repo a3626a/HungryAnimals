@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.food_preference;
+package oortcloud.hungryanimals.entities.food_preferences;
 
 import java.util.HashMap;
 import java.util.Map;

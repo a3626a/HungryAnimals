@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.food_preference;
+package oortcloud.hungryanimals.entities.food_preferences;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 
 public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 	
@@ -16,7 +16,6 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 	 * In other words, Map object is shared between entities or AI objects
 	 */
 	private HashMap<HashItemType, Double> map = new HashMap<HashItemType, Double>();
-	private ICapabilityHungryAnimal cap;
 	
 	@Override
 	public double getHunger(ItemStack food) {
@@ -32,7 +31,7 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 	}
 
 	@Override
-	public boolean canEat(ItemStack food) {
+	public boolean canEat(ICapabilityHungryAnimal cap, ItemStack food) {
 		double hunger = getHunger(food);
 		if (hunger == 0)
 			return false;
@@ -40,7 +39,7 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 	}
 
 	@Override
-	public boolean shouldEat() {
+	public boolean shouldEat(ICapabilityHungryAnimal cap) {
 		return cap.getHunger() + Collections.min(map.values()) < cap.getMaxHunger();
 	}
 	

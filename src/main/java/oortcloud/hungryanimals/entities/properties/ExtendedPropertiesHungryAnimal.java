@@ -41,9 +41,9 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
@@ -106,31 +106,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		for (Object i : removeEntries) {
 			this.entity.tasks.removeTask(((EntityAIBase) i));
 		}
-	}
-
-	public void eatFoodBonus(ItemStack item) {
-		if (item == null)
-			return;
-
-		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);
-		this.addHunger(hunger);
-
-		if (this.entity.getGrowingAge() < 0) {
-			NBTTagCompound tag = item.getTagCompound();
-			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger
-						/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
-				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
-			}
-		}
-
-		NBTTagCompound tag = item.getTagCompound();
-		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.taming += 0.0002
-					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue()
-					* hunger;
-		}
-
 	}
 
 	public void update() {
@@ -250,17 +225,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.entity.attackEntityFrom(DamageSource.starve, 0.5F);
 	}
 
-	public void onAttackedByPlayer(float damage, DamageSource source) {
-		if (!this.entity.isEntityInvulnerable(source)) {
-			if (source.getSourceOfDamage() instanceof EntityPlayer) {
-				this.taming -= 4 / this.entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()
-						* damage;
-			}
-		}
-	}
-
 	public boolean interact(EntityPlayer entity) {
-
 		ItemStack stack = entity.getCurrentEquippedItem();
 		if (stack == null)
 			return false;

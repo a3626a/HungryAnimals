@@ -7,9 +7,11 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
-import oortcloud.hungryanimals.entities.food_preference.IFoodPreference;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class EntityAITemptEdibleItem extends EntityAIBase {
@@ -19,6 +21,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	/** The player that is tempting the entity that is using this AI. */
 	private EntityPlayer temptingPlayer;
 	private IFoodPreference<ItemStack> pref;
+	private ICapabilityHungryAnimal capHungry;
 	/**
 	 * A counter that is decremented each time the shouldExecute method is
 	 * called. The shouldExecute method will always return false if
@@ -37,6 +40,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 		this.temptedEntity = animal;
 		this.speed = speedIn;
 		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(this.temptedEntity.getClass());
+		this.capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 		this.setMutexBits(3);
 
 		if (!(animal.getNavigator() instanceof PathNavigateGround)) {

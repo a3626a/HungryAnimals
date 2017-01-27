@@ -4,6 +4,6 @@ public interface ICapabilityTamableAnimal {
 
 	public double getTaming();
 	public double setTaming(double taming);
-
+	public double addTaming(double taming);
 	
 }
