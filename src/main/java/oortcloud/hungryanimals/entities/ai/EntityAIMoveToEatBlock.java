@@ -15,24 +15,22 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatBlock extends EntityAIBase {
 
-	private Predicate predicate = new Predicate() {
-		public boolean apply(Object obj) {
+	private Predicate<Entity> predicate = new Predicate<Entity>() {
+		public boolean apply(Entity obj) {
 			return obj.getClass() == entity.getClass();
 		}
 	};
 
-	private EntityLiving entity;
-	private World worldObj;
+	protected EntityLiving entity;
+	protected World worldObj;
 	private BlockPos bestPos;
 	private double speed;
 
-	private IFoodPreference<IBlockState> pref;
-	private ICapabilityHungryAnimal capHungry;
+	protected IFoodPreference<IBlockState> pref;
+	protected ICapabilityHungryAnimal capHungry;
 	private int delayCounter;
 	private static int delay = 100;
 
