@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.event;
 
+import net.minecraft.util.ITickable;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -26,6 +28,7 @@ public class EntityEventHandler {
 		if (property != null) {
 			((ExtendedPropertiesHungryAnimal) property).update();
 		}
+		
 	}
 
 	@SubscribeEvent

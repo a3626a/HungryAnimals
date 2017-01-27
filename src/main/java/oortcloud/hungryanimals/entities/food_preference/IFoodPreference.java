@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.properties;
+package oortcloud.hungryanimals.entities.food_preference;
 
 import java.util.Iterator;
 

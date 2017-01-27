@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.items.ModItems;
 
@@ -34,16 +35,13 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		
 	};
 
-	private ExtendedPropertiesHungryAnimal property;
-	
-	public EntityAIAvoidPlayer(EntityCreature entity, ExtendedPropertiesHungryAnimal property, float radius, double farspeed, double nearspeed) {
+	public EntityAIAvoidPlayer(EntityCreature entity, float radius, double farspeed, double nearspeed) {
 		super(entity, EntityPlayer.class, predicate, radius, farspeed, nearspeed);
-		this.property=property;
 	}
 	
 	@Override
 	public boolean shouldExecute() {
-		return property.taming<-1 && super.shouldExecute();
+		return this.theEntity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < -1 && super.shouldExecute();
 	}
 
 }

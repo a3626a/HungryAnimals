@@ -41,15 +41,14 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {
-
-	public static String key = "ExtendedPropertiesHungryAnimal";
 
 	public double taming_factor = 0.998;
 
@@ -84,12 +83,12 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 				EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class, EntityAILookIdle.class });
 
 		// this.entity.tasks.addTask(0, this.ai_crank);
-		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, this, 16.0F, 1.0D, 2.0D));
+		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
 		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
 		this.entity.tasks.addTask(3, this.ai_moveToFoodbox);
-		this.entity.tasks.addTask(4, new EntityAITemptEdibleItem(this.entity, this, 1.5D));
-		this.entity.tasks.addTask(5, new EntityAIMoveToEatItem(this.entity, this, 1.5D));
-		this.entity.tasks.addTask(7, new EntityAIMoveToEatBlock(this.entity, this, 1.0D));
+		this.entity.tasks.addTask(4, new EntityAITemptEdibleItem(this.entity, 1.5D));
+		this.entity.tasks.addTask(5, new EntityAIMoveToEatItem(this.entity, 1.5D));
+		this.entity.tasks.addTask(7, new EntityAIMoveToEatBlock(this.entity, 1.0D));
 		this.entity.tasks.addTask(8, new EntityAIWander(this.entity, 1.0D));
 		this.entity.tasks.addTask(9, new EntityAIWatchClosest(this.entity, EntityPlayer.class, 6.0F));
 		this.entity.tasks.addTask(10, new EntityAILookIdle(this.entity));
@@ -113,7 +112,7 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		if (item == null)
 			return;
 
-		double hunger = getFoodHunger(item);
+		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);
 		this.addHunger(hunger);
 
 		if (this.entity.getGrowingAge() < 0) {
@@ -132,14 +131,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 					* hunger;
 		}
 
-	}
-
-	public void eatBlockBonus(IBlockState block) {
-		if (block == null)
-			return;
-
-		double hunger = getBlockHunger(block);
-		this.addHunger(hunger);
 	}
 
 	public void update() {
@@ -300,16 +291,5 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 		return false;
 	}
-
-	public double getBlockPathWeight(BlockPos pos) {
-		IBlockState state = this.worldObj.getBlockState(pos);
-		if (state.getBlock() == ModBlocks.excreta) {
-			return -1.0;
-		} else if (canEatBlock(state)) {
-			return getBlockHunger(state);
-		} else {
-			return 1.0;
-		}
-	}
-
+	
 }

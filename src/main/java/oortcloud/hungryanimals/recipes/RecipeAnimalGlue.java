@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
 import oortcloud.hungryanimals.configuration.util.StringParser;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
 
 public class RecipeAnimalGlue {
 

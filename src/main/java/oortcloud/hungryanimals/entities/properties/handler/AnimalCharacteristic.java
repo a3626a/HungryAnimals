@@ -13,9 +13,9 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
 import oortcloud.hungryanimals.configuration.util.ValueDropRare;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 
 public class AnimalCharacteristic {
 
@@ -24,12 +24,6 @@ public class AnimalCharacteristic {
 	 * For example, edible foods and blocks, drop items, and attributes.
 	 * These properties are not changed during game play. 
 	 */
-	
-	public HashMap<HashItemType, Double> hunger_food;
-	public HashMap<HashBlockState, Double> hunger_block;
-	public ArrayList<ValueDropMeat> drop_meat;
-	public ArrayList<ValueDropRandom> drop_random;
-	public ArrayList<ValueDropRare> drop_rare;
 
 	public HashMap<IAttribute, Pair<Boolean,Double>> attributeMap;
 
@@ -51,11 +45,6 @@ public class AnimalCharacteristic {
 		for (Entry<IAttribute, Pair<Boolean, Double>> i : attributeMap.entrySet()) {
 			entity.getAttributeMap().getAttributeInstance(i.getKey()).setBaseValue(i.getValue().getRight());
 		}
-		extendedProperty.hunger_food = hunger_food;
-		extendedProperty.hunger_block = hunger_block;
-		extendedProperty.drop_meat = drop_meat;
-		extendedProperty.drop_random = drop_random;
-		extendedProperty.drop_rare = drop_rare;
 	}
 
 	public void registerAttributes(EntityLivingBase entity) {
@@ -90,30 +79,4 @@ public class AnimalCharacteristic {
 		return ret;
 	}
 
-	public String[] toStringDropMeat() {
-		String[] ret = new String[drop_meat.size()];
-		int next = 0;
-		for (ValueDropMeat i : drop_meat) {
-			ret[next++] = i.toString();
-		}
-		return ret;
-	}
-
-	public String[] toStringDropRandom() {
-		String[] ret = new String[drop_random.size()];
-		int next = 0;
-		for (ValueDropRandom i : drop_random) {
-			ret[next++] = i.toString();
-		}
-		return ret;
-	}
-
-	public String[] toStringDropRare() {
-		String[] ret = new String[drop_rare.size()];
-		int next = 0;
-		for (ValueDropRare i : drop_rare) {
-			ret[next++] = i.toString();
-		}
-		return ret;
-	}
 }

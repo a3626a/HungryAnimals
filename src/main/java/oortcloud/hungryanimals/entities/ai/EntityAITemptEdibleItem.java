@@ -1,13 +1,16 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import com.sun.xml.internal.stream.Entity;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preference.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 
 public class EntityAITemptEdibleItem extends EntityAIBase {
 	/** The entity using this AI that is tempted by the player. */
@@ -28,12 +31,12 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 	private boolean isRunning;
 	private boolean avoidWater;
 
-	public EntityAITemptEdibleItem(EntityCreature animal, IFoodPreference<ItemStack> pref, double speedIn) {
+	public EntityAITemptEdibleItem(EntityCreature animal, double speedIn) {
 		this.delayTemptCounter = animal.getRNG().nextInt(delay);
 		
 		this.temptedEntity = animal;
-		this.pref = pref;
 		this.speed = speedIn;
+		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(this.temptedEntity.getClass());
 		this.setMutexBits(3);
 
 		if (!(animal.getNavigator() instanceof PathNavigateGround)) {

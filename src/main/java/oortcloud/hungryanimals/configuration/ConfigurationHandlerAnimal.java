@@ -19,8 +19,8 @@ import oortcloud.hungryanimals.configuration.util.StringParser;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
 import oortcloud.hungryanimals.configuration.util.ValueDropRare;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 

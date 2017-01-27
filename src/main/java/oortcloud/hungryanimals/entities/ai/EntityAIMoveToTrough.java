@@ -8,24 +8,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class EntityAIMoveToTrough extends EntityAIBase {
 
 	private EntityAnimal entity;
-	private ExtendedPropertiesHungryAnimal property;
 	private double speed;
 	private World world;
 	public BlockPos pos;
 	private int delayCounter;
 	private static int delay = 100;
 
-	public EntityAIMoveToTrough(EntityAnimal entity, ExtendedPropertiesHungryAnimal property, double speed) {
+	public EntityAIMoveToTrough(EntityAnimal entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		
 		this.entity = entity;
-		this.property = property;
 		this.world = this.entity.worldObj;
 		this.speed = speed;
 		this.setMutexBits(1);
@@ -43,9 +43,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
-				if (property.taming >= 1 && temp != null && temp instanceof TileEntityTrough) {
+				if (entity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() >= 1 && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
-					return trough.stack != null && this.property.canEatFood(trough.stack);
+					return trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(trough.stack);
 				} else {
 					return false;
 				}
@@ -69,7 +69,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;
-					if (trough.stack != null && this.property.canEatFood(trough.stack)) {
+					if (trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(trough.stack)) {
 						property.eatFoodBonus(trough.stack);
 						trough.stack.stackSize--;
 						if (trough.stack.stackSize == 0)

@@ -10,10 +10,12 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preference.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatBlock extends EntityAIBase {
@@ -30,15 +32,17 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private double speed;
 
 	private IFoodPreference<IBlockState> pref;
+	private ICapabilityHungryAnimal capHungry;
 	private int delayCounter;
 	private static int delay = 100;
 
-	public EntityAIMoveToEatBlock(EntityLiving entity, IFoodPreference<IBlockState> pref, double speed) {
+	public EntityAIMoveToEatBlock(EntityLiving entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.entity = entity;
 		this.worldObj = this.entity.worldObj;
 		this.speed = speed;
-		this.pref = pref;
+		this.pref = FoodPreferenceManager.getInstance().REGISTRY_BLOCK.get(this.entity.getClass());
+		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.setMutexBits(1);
 	}
 
@@ -90,9 +94,9 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 					double value;
 					BlockPos iPos = entity.getPosition().add(i, j, k);
 					if (closestPos == null) {
-						value = this.property.getBlockPathWeight(iPos) * (1 + entity.getRNG().nextDouble()) * centralizationFunction(Math.sqrt(centralPos.distanceSq(iPos)));
+						value = this.getBlockPathWeight(iPos) * (1 + entity.getRNG().nextDouble()) * centralizationFunction(Math.sqrt(centralPos.distanceSq(iPos)));
 					} else {
-						value = this.property.getBlockPathWeight(iPos) * (1 + entity.getRNG().nextDouble()) * centralizationFunction(Math.sqrt(centralPos.distanceSq(iPos)))
+						value = this.getBlockPathWeight(iPos) * (1 + entity.getRNG().nextDouble()) * centralizationFunction(Math.sqrt(centralPos.distanceSq(iPos)))
 								* (0.1 * (Math.sqrt(closestPos.distanceSq(iPos))) + 1);
 					}
 					
@@ -140,7 +144,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 				if (this.worldObj.getGameRules().getBoolean("mobGriefing")) {
 					this.worldObj.setBlockToAir(bestPos);
 				}
-				property.eatBlockBonus(block);
+				eatBlockBonus(block);
 			}
 			return false;
 		}
@@ -159,5 +163,24 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 			return 0;
 		return -k * (R - 32) + 1;
 	}
+	
+	private double getBlockPathWeight(BlockPos pos) {
+		IBlockState state = this.worldObj.getBlockState(pos);
+		if (state.getBlock() == ModBlocks.excreta) {
+			return -1.0;
+		} else if (pref.canEat(state)) {
+			return pref.getHunger(state);
+		} else {
+			return 1.0;
+		}
+	}
+	
+	public void eatBlockBonus(IBlockState block) {
+		if (block == null)
+			return;
+		double hunger = pref.getHunger(block);
+		capHungry.addHunger(hunger);
+	}
+
 
 }

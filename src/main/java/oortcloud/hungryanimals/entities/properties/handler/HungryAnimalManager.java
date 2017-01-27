@@ -26,6 +26,8 @@ import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryChicken;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryCow;
@@ -33,8 +35,6 @@ import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGener
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryPig;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryRabbit;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungrySheep;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.items.ModItems;
 
 public class HungryAnimalManager {
@@ -112,9 +112,6 @@ public class HungryAnimalManager {
 			AnimalCharacteristic iCharacteristic = i.getValue().getLeft();
 			AnimalCharacteristic characteristic = new AnimalCharacteristic();
 
-			ConfigurationHandlerAnimal.readDropMeat(config, iCharacteristic.toStringDropMeat(), category, characteristic);
-			ConfigurationHandlerAnimal.readDropRandom(config, iCharacteristic.toStringDropRandom(), category, characteristic);
-			ConfigurationHandlerAnimal.readDropRare(config, iCharacteristic.toStringDropRare(), category, characteristic);
 			ConfigurationHandlerAnimal.ByFoodRate(config, iCharacteristic.toStringHungerFood(), category, characteristic);
 			ConfigurationHandlerAnimal.ByBlockRate(config, iCharacteristic.toStringHungerBlock(), category, characteristic);
 

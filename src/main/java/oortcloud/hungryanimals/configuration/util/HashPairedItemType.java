@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.configuration.util;
 
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceItemStack.HashItemType;
 
 public class HashPairedItemType {
 

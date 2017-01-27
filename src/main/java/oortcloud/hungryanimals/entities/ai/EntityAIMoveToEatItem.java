@@ -14,8 +14,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preference.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.IFoodPreference;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
@@ -55,13 +56,13 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		}
 	};
 
-	public EntityAIMoveToEatItem(EntityLiving entity, IFoodPreference<ItemStack> pref, double speed) {
+	public EntityAIMoveToEatItem(EntityLiving entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		
 		this.entity = entity;
 		this.worldObj = this.entity.worldObj;
 		this.speed = speed;
-		this.pref = pref;
+		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
 		this.setMutexBits(1);
 	}
 

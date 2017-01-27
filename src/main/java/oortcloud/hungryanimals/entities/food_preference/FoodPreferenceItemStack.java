@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.properties;
+package oortcloud.hungryanimals.entities.food_preference;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preference.FoodPreferenceBlockState.HashBlockState;
 
 public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 	
