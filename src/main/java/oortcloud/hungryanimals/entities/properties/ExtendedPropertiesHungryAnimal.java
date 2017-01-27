@@ -78,34 +78,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public void postInit() {
 		HungryAnimalManager.getInstance().applyAttributes(this);
 		acceptProperty();
-
-		this.removeAI(new Class[] { EntityAITempt.class, EntityAIFollowParent.class, EntityAIWander.class,
-				EntityAIMate.class, EntityAIPanic.class, EntityAIWatchClosest.class, EntityAILookIdle.class });
-
-		// this.entity.tasks.addTask(0, this.ai_crank);
-		this.entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
-		this.entity.tasks.addTask(2, new EntityAIMateModified(this.entity, this, 2.0D));
-		this.entity.tasks.addTask(3, this.ai_moveToFoodbox);
-		this.entity.tasks.addTask(4, new EntityAITemptEdibleItem(this.entity, 1.5D));
-		this.entity.tasks.addTask(5, new EntityAIMoveToEatItem(this.entity, 1.5D));
-		this.entity.tasks.addTask(7, new EntityAIMoveToEatBlock(this.entity, 1.0D));
-		this.entity.tasks.addTask(8, new EntityAIWander(this.entity, 1.0D));
-		this.entity.tasks.addTask(9, new EntityAIWatchClosest(this.entity, EntityPlayer.class, 6.0F));
-		this.entity.tasks.addTask(10, new EntityAILookIdle(this.entity));
-	}
-
-	protected void removeAI(Class[] target) {
-		List removeEntries = new ArrayList();
-		for (Object i : this.entity.tasks.taskEntries) {
-			for (Class j : target) {
-				if (((EntityAITaskEntry) i).action.getClass() == j) {
-					removeEntries.add(((EntityAITaskEntry) i).action);
-				}
-			}
-		}
-		for (Object i : removeEntries) {
-			this.entity.tasks.removeTask(((EntityAIBase) i));
-		}
 	}
 
 	public void update() {

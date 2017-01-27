@@ -29,11 +29,6 @@ public class AnimalCharacteristic {
 
 	public AnimalCharacteristic() {
 		attributeMap = new HashMap<IAttribute, Pair<Boolean,Double>>();
-		hunger_food = new HashMap<HashItemType, Double>();
-		hunger_block = new HashMap<HashBlockState, Double>();
-		drop_meat = new ArrayList<ValueDropMeat>();
-		drop_random = new ArrayList<ValueDropRandom>();
-		drop_rare = new ArrayList<ValueDropRare>();
 	}
 
 	public void putAttribute(IAttribute attribute, double value, boolean shouldRegister) {

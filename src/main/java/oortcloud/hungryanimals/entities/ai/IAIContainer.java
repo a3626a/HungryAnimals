@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
-public interface IAIContainer {
+public interface IAIContainer<T> {
 
-	public void registerAI();
+	public void registerAI(T entity);
 	
 }

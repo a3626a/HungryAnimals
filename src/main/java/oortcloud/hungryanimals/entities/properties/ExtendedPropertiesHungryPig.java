@@ -30,12 +30,4 @@ public class ExtendedPropertiesHungryPig extends ExtendedPropertiesHungryAnimal 
 		this.entity.tasks.addTask(4, new EntityAITempt(this.entity,1.5D, Items.CARROT_ON_A_STICK,false));
 	}
 
-	@Override
-	public void dropFewItems(boolean isHitByPlayer, int looting, List<EntityItem> drops) {
-		super.dropFewItems(isHitByPlayer, looting, drops);
-		if (this.entity.getSaddled()) {
-			this.entity.dropItem(Items.SADDLE, 1);
-		}
-	}
-
 }

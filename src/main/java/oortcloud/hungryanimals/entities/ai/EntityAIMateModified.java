@@ -35,7 +35,7 @@ public class EntityAIMateModified extends EntityAIBase
     /** The speed the creature moves at during mating behavior. */
     double moveSpeed;
 
-    public EntityAIMateModified(EntityAnimal animal, ExtendedPropertiesHungryAnimal property , double speed)
+    public EntityAIMateModified(EntityAnimal animal, double speed)
     {
         this.theAnimal = animal;
         this.theWorld = animal.worldObj;
