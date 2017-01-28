@@ -1,8 +1,9 @@
 package oortcloud.hungryanimals.entities.ai;
 
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -16,18 +17,17 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
 import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMateModified extends EntityAIBase
 {
     private EntityAnimal theAnimal;
+    private ICapabilityHungryAnimal theAnimalCapHungry;
+    private ICapabilityTamableAnimal theAnimalCapTamable;
     World theWorld;
     private EntityAnimal targetMate;
     /** Delay preventing a baby from spawning immediately when two mate-able animals find each other. */
@@ -40,6 +40,8 @@ public class EntityAIMateModified extends EntityAIBase
         this.theAnimal = animal;
         this.theWorld = animal.worldObj;
         this.moveSpeed = speed;
+        this.theAnimalCapHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+        this.theAnimalCapTamable = animal.getCapability(ProviderTamableAnimal.CAP, null);
         this.setMutexBits(3);
     }
 
@@ -91,22 +93,14 @@ public class EntityAIMateModified extends EntityAIBase
         }
     }
 
-    /**
-     * Loops through nearby animals and finds another animal of the same type that can be mated with. Returns the first
-     * valid mate found.
-     */
     private EntityAnimal getNearbyMate()
     {
-        float f = 8.0F;
-        List list = this.theWorld.getEntitiesWithinAABB(this.theAnimal.getClass(), this.theAnimal.getEntityBoundingBox().expand((double)f, (double)f, (double)f));
+        List<EntityAnimal> list = this.theWorld.<EntityAnimal>getEntitiesWithinAABB(this.theAnimal.getClass(), this.theAnimal.getEntityBoundingBox().expandXyz(8.0D));
         double d0 = Double.MAX_VALUE;
         EntityAnimal entityanimal = null;
-        Iterator iterator = list.iterator();
 
-        while (iterator.hasNext())
+        for (EntityAnimal entityanimal1 : list)
         {
-            EntityAnimal entityanimal1 = (EntityAnimal)iterator.next();
-
             if (this.theAnimal.canMateWith(entityanimal1) && this.theAnimal.getDistanceSqToEntity(entityanimal1) < d0)
             {
                 entityanimal = entityanimal1;
@@ -122,14 +116,18 @@ public class EntityAIMateModified extends EntityAIBase
      */
     private void spawnBaby()
     {
-    	theAnimal.getCapability(ProviderHungryAnimal.CAP, null).addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
-    	ICapabilityTamableAnimal thisTamableAnimal = this.theAnimal.getCapability(ProviderTamableAnimal.CAP, null);
-    	ICapabilityHungryAnimal capHungryAnimal = this.targetMate.getCapability(ProviderHungryAnimal.CAP, null);
-    	ICapabilityTamableAnimal capTamableAnimal = this.targetMate.getCapability(ProviderTamableAnimal.CAP, null);
-    	capHungryAnimal.addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
+    	//Get Capability
+    	ICapabilityHungryAnimal targetMateCapHungry = this.targetMate.getCapability(ProviderHungryAnimal.CAP, null);
+    	ICapabilityTamableAnimal targetMateCapTamable = this.targetMate.getCapability(ProviderTamableAnimal.CAP, null);
+    	
+    	//Pay Hunger
+    	theAnimalCapHungry.addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
+    	targetMateCapHungry.addHunger(-theAnimal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
         
+    	//Create Child 1
     	EntityAgeable entityageable = this.theAnimal.createChild(this.targetMate);
     	
+    	//Check Validity
     	boolean createChildDeclared = false;
     	try {
 			Method createChild = theAnimal.getClass().getDeclaredMethod("createChild", EntityAgeable.class);
@@ -138,14 +136,14 @@ public class EntityAIMateModified extends EntityAIBase
 		} catch (SecurityException e) {
 		}
     	
-    	if ((!createChildDeclared||entityageable==null) && property instanceof ExtendedPropertiesHungryGeneral) {
-        	ExtendedPropertiesHungryGeneral generalProperty = (ExtendedPropertiesHungryGeneral)property;
-        	entityageable = generalProperty.createChild(theWorld);
+    	//Create Child 2
+    	if (!createChildDeclared||entityageable==null) {
+        	entityageable = createChild();
         }
     	
         if (entityageable != null)
         {
-        	entityageable.getCapability(ProviderTamableAnimal.CAP, null).setTaming((thisTamableAnimal.getTaming() + capTamableAnimal.getTaming() ) / 2.0);
+        	entityageable.getCapability(ProviderTamableAnimal.CAP, null).setTaming((theAnimalCapTamable.getTaming() + targetMateCapTamable.getTaming() ) / 2.0);
         	
             EntityPlayer entityplayer = this.theAnimal.getPlayerInLove();
 
@@ -174,9 +172,12 @@ public class EntityAIMateModified extends EntityAIBase
 
             for (int i = 0; i < 7; ++i)
             {
-                double d0 = random.nextGaussian() * 0.02D;
+            	double d0 = random.nextGaussian() * 0.02D;
                 double d1 = random.nextGaussian() * 0.02D;
                 double d2 = random.nextGaussian() * 0.02D;
+                double d3 = random.nextDouble() * (double)this.theAnimal.width * 2.0D - (double)this.theAnimal.width;
+                double d4 = 0.5D + random.nextDouble() * (double)this.theAnimal.height;
+                double d5 = random.nextDouble() * (double)this.theAnimal.width * 2.0D - (double)this.theAnimal.width;
                 this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + (double)(random.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, this.theAnimal.posY + 0.5D + (double)(random.nextFloat() * this.theAnimal.height), this.theAnimal.posZ + (double)(random.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, d0, d1, d2);
             }
 
@@ -189,4 +190,30 @@ public class EntityAIMateModified extends EntityAIBase
             this.targetMate.resetInLove();
         }
     }
+    
+    public EntityAnimal createChild() {
+		Constructor<? extends EntityAnimal> constructor;
+		try {
+			constructor = theAnimal.getClass().getConstructor(World.class);
+			EntityAnimal baby;
+			try {
+				baby = (EntityAnimal) constructor.newInstance(theWorld);
+				return baby;
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
