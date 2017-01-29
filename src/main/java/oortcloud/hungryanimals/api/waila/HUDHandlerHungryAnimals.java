@@ -14,10 +14,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 @Optional.Interface(iface = "mcp.mobius.waila.api.IWailaDataProvider", modid = "Waila")
 public class HUDHandlerHungryAnimals implements IWailaEntityProvider {

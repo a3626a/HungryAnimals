@@ -31,25 +31,6 @@ public class AnimalCharacteristic {
 		attributeMap = new HashMap<IAttribute, Pair<Boolean,Double>>();
 	}
 
-	public void putAttribute(IAttribute attribute, double value, boolean shouldRegister) {
-		attributeMap.put(attribute, Pair.of(shouldRegister,value));
-	}
-	
-	public void applyAttributes(ExtendedPropertiesHungryAnimal extendedProperty) {
-		EntityLivingBase entity = extendedProperty.entity;
-		for (Entry<IAttribute, Pair<Boolean, Double>> i : attributeMap.entrySet()) {
-			entity.getAttributeMap().getAttributeInstance(i.getKey()).setBaseValue(i.getValue().getRight());
-		}
-	}
-
-	public void registerAttributes(EntityLivingBase entity) {
-		for (IAttribute i : attributeMap.keySet()) {
-			if (entity.getAttributeMap().getAttributeInstance(i) == null && attributeMap.get(i).getLeft()) {
-				entity.getAttributeMap().registerAttribute(i);
-			}
-		}
-	}
-
 	public String[] toStringHungerFood() {
 		Set<HashItemType> keys = hunger_food.keySet();
 		String[] ret = new String[keys.size()];

@@ -18,10 +18,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityEventHandler {
 

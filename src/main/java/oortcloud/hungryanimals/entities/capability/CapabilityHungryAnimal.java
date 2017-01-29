@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.EntityLiving;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 

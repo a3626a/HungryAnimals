@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.properties.handler;
+package oortcloud.hungryanimals.entities.attributes;
 
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;

@@ -9,9 +9,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class PotionDisease extends PotionHungryAnimals {
 

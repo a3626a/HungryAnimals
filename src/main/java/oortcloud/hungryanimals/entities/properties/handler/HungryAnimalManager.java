@@ -26,6 +26,7 @@ import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
 import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
 import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;

@@ -41,11 +41,11 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties {

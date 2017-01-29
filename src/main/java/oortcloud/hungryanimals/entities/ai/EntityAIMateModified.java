@@ -17,11 +17,11 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class EntityAIMateModified extends EntityAIBase
 {
@@ -143,7 +143,7 @@ public class EntityAIMateModified extends EntityAIBase
     	
         if (entityageable != null)
         {
-        	entityageable.getCapability(ProviderTamableAnimal.CAP, null).setTaming((theAnimalCapTamable.getTaming() + targetMateCapTamable.getTaming() ) / 2.0);
+        	entityageable.getCapability(ProviderTamableAnimal.CAP, null).setTaming((theAnimalCapTamable.getTaming() + targetMateCapTamable.getTaming())/2.0);
         	
             EntityPlayer entityplayer = this.theAnimal.getPlayerInLove();
 
@@ -178,7 +178,7 @@ public class EntityAIMateModified extends EntityAIBase
                 double d3 = random.nextDouble() * (double)this.theAnimal.width * 2.0D - (double)this.theAnimal.width;
                 double d4 = 0.5D + random.nextDouble() * (double)this.theAnimal.height;
                 double d5 = random.nextDouble() * (double)this.theAnimal.width * 2.0D - (double)this.theAnimal.width;
-                this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + (double)(random.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, this.theAnimal.posY + 0.5D + (double)(random.nextFloat() * this.theAnimal.height), this.theAnimal.posZ + (double)(random.nextFloat() * this.theAnimal.width * 2.0F) - (double)this.theAnimal.width, d0, d1, d2);
+                this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.theAnimal.posX + d3, this.theAnimal.posY + d4, this.theAnimal.posZ + d5, d0, d1, d2, new int[0]);
             }
 
             if (this.theWorld.getGameRules().getBoolean("doMobLoot"))

@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 
 public class ExtendedPropertiesHungryCow extends ExtendedPropertiesHungryAnimal {
 

@@ -13,13 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
-import oortcloud.hungryanimals.entities.properties.handler.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
