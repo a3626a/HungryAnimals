@@ -205,9 +205,6 @@ public class HungryAnimalManager {
 		characteristic_rabbit.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 10.0, false);
 		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-		characteristic_rabbit.hunger_food.put(new HashItemType(Items.CARROT), 40.0);
-		characteristic_rabbit.hunger_food.put(new HashItemType(Items.GOLDEN_CARROT), 150.0);
-		characteristic_rabbit.hunger_food.put(new HashItemType(Item.getItemFromBlock(Blocks.YELLOW_FLOWER)), 20.0);
 		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
 		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.YELLOW_FLOWER), 20.0);
@@ -224,8 +221,6 @@ public class HungryAnimalManager {
 		characteristic_sheep.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.20, false);
 		characteristic_sheep.putAttribute(ModAttributes.wool_delay, (double) (5 * 60 * 20), true);
 		characteristic_sheep.putAttribute(ModAttributes.wool_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_sheep.hunger_food.put(new HashItemType(Items.WHEAT), 50.0);
-		characteristic_sheep.hunger_food.put(new HashItemType(Items.REEDS), 20.0);
 		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
 		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
 		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.WHEAT.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);

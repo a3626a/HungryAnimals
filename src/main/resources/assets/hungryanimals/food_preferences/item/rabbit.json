@@ -11,9 +11,12 @@
                 "name" : "minecraft:golden_carrot"
             },
             "hunger" : 150
+        },
+        {
+            "item" : {
+                "name" : "minecraft:yellow_flower"
+            },
+            "hunger" : 20
         }
     ]
 }
-Items.CARROT, 40.0
-Items.GOLDEN_CARROT), 150.0
-Item.getItemFromBlock(Blocks.YELLOW_FLOWER), 20.0
