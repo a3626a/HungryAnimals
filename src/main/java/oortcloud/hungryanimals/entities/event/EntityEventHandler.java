@@ -37,7 +37,7 @@ public class EntityEventHandler {
 	public void onLivingEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 		IExtendedEntityProperties property = event.getEntity().getExtendedProperties(Strings.extendedPropertiesKey);
 		if (property != null) {
-			((ExtendedPropertiesHungryAnimal) property).update();
+			update();
 		}
 	}
 

@@ -1,7 +1,5 @@
 package oortcloud.hungryanimals.entities.ai;
 
-import com.sun.xml.internal.stream.Entity;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +10,6 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class EntityAITemptEdibleItem extends EntityAIBase {
 	/** The entity using this AI that is tempted by the player. */
@@ -63,7 +60,7 @@ public class EntityAITemptEdibleItem extends EntityAIBase {
 				return false;
 			} else {
 				ItemStack itemstack = this.temptingPlayer.getHeldItemMainhand();
-				return itemstack == null ? false : pref.canEat(itemstack);
+				return itemstack == null ? false : pref.canEat(capHungry, itemstack);
 			}
 		}
 	}

@@ -11,6 +11,7 @@ public class ConfigurationHandler {
 		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/Animal.cfg"));
 		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/World.cfg"));
 		ConfigurationHandlerRecipe.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/Recipe.cfg"));
+		ConfigurationHandlerFoodPreference.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/FoodPreferences"));
 	}
 	
 	public static void sync() {
