@@ -3,13 +3,12 @@ package oortcloud.hungryanimals.entities.properties.handler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockTallGrass;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -19,32 +18,19 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
-import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
-import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryChicken;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryCow;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryPig;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryRabbit;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungrySheep;
-import oortcloud.hungryanimals.items.ModItems;
 
 public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
-	private ArrayList<Class<? extends EntityAnimal>> registedClass;
-	private HashMap<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic,AnimalCharacteristic>> cMap;
+	private List<Class<? extends EntityAnimal>> registedClass;
+	private Map<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic,AnimalCharacteristic>> cMap;
 	// Left: default, Right: configured value
-	private HashMap<Class<? extends EntityAnimal>, PropertyFactory> propertyMap;
+	private Map<Class<? extends EntityAnimal>, PropertyFactory> propertyMap;
 
 	public static HungryAnimalManager getInstance() {
 		if (INSTANCE == null) {
@@ -143,11 +129,11 @@ public class HungryAnimalManager {
 		propertyMap.clear();
 		cMap.clear();
 
-		registerHungryAnimal(EntityCow.class, (entity) -> new ExtendedPropertiesHungryCow());
-		registerHungryAnimal(EntityChicken.class, (entity) -> new ExtendedPropertiesHungryChicken());
-		registerHungryAnimal(EntityPig.class, (entity) -> new ExtendedPropertiesHungryPig());
-		registerHungryAnimal(EntityRabbit.class, (entity) -> new ExtendedPropertiesHungryRabbit());
-		registerHungryAnimal(EntitySheep.class, (entity) -> new ExtendedPropertiesHungrySheep());
+		registerHungryAnimal(EntityCow.class);
+		registerHungryAnimal(EntityChicken.class);
+		registerHungryAnimal(EntityPig.class);
+		registerHungryAnimal(EntityRabbit.class);
+		registerHungryAnimal(EntitySheep.class);
 		
 		AnimalCharacteristic characteristic_chicken = getAnimalDefaultCharacteristic(EntityChicken.class);
 		AnimalCharacteristic characteristic_cow = getAnimalDefaultCharacteristic(EntityCow.class);
@@ -166,9 +152,6 @@ public class HungryAnimalManager {
 		characteristic_cow.putAttribute(ModAttributes.milk_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
 		characteristic_cow.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 30.0, false);
 		characteristic_cow.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.2, false);
-		characteristic_cow.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
-		characteristic_cow.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
-		characteristic_cow.hunger_block.put(new HashBlockState(Blocks.WHEAT.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
 
 		characteristic_chicken.putAttribute(ModAttributes.hunger_bmr, 0.002, true);
 		characteristic_chicken.putAttribute(ModAttributes.hunger_max, 150.0, true);
@@ -179,9 +162,6 @@ public class HungryAnimalManager {
 		characteristic_chicken.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_chicken.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 8.0, false);
 		characteristic_chicken.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.15, false);
-		characteristic_chicken.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
-		characteristic_chicken.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
-		characteristic_chicken.hunger_block.put(new HashBlockState(Blocks.WHEAT.getDefaultState().withProperty(BlockCrops.AGE, 0)), 20.0);
 
 		characteristic_pig.putAttribute(ModAttributes.hunger_bmr, 0.004, true);
 		characteristic_pig.putAttribute(ModAttributes.hunger_max, 400.0, true);
@@ -192,9 +172,6 @@ public class HungryAnimalManager {
 		characteristic_pig.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_pig.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 20.0, false);
 		characteristic_pig.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-		characteristic_pig.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
-		characteristic_pig.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
-		characteristic_pig.hunger_block.put(new HashBlockState(Blocks.CARROTS.getDefaultState().withProperty(BlockCrops.AGE, 7)), 40.0);
 
 		characteristic_rabbit.putAttribute(ModAttributes.hunger_bmr, 0.003, true);
 		characteristic_rabbit.putAttribute(ModAttributes.hunger_max, 250.0, true);
@@ -205,10 +182,6 @@ public class HungryAnimalManager {
 		characteristic_rabbit.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 10.0, false);
 		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
-		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
-		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.YELLOW_FLOWER), 20.0);
-		characteristic_rabbit.hunger_block.put(new HashBlockState(Blocks.CARROTS.getDefaultState().withProperty(BlockCrops.AGE, 7)), 40.0);
 
 		characteristic_sheep.putAttribute(ModAttributes.hunger_bmr, 0.004, true);
 		characteristic_sheep.putAttribute(ModAttributes.hunger_max, 400.0, true);
@@ -221,9 +194,6 @@ public class HungryAnimalManager {
 		characteristic_sheep.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.20, false);
 		characteristic_sheep.putAttribute(ModAttributes.wool_delay, (double) (5 * 60 * 20), true);
 		characteristic_sheep.putAttribute(ModAttributes.wool_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
-		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
-		characteristic_sheep.hunger_block.put(new HashBlockState(Blocks.WHEAT.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
 
 		// default_chicken.hunger_food.put(new HashItemType(ModItems.poppyseed),
 		// 20.0);
@@ -268,11 +238,6 @@ public class HungryAnimalManager {
 		characteristic.putAttribute(ModAttributes.child_hunger, characteristic.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
 		characteristic.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 30.0, false);
 		characteristic.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.2, false);
-		characteristic.hunger_food.put(new HashItemType(Items.WHEAT), 50.0);
-		characteristic.hunger_food.put(new HashItemType(Items.REEDS), 20.0);
-		characteristic.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)), 15.0);
-		characteristic.hunger_block.put(new HashBlockState(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN)), 15.0);
-		characteristic.hunger_block.put(new HashBlockState(Blocks.WHEAT.getDefaultState().withProperty(BlockCrops.AGE, 7)), 50.0);
 	}
 
 	@FunctionalInterface
