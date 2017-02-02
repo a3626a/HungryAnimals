@@ -83,7 +83,6 @@ public class ConfigurationHandlerAnimal {
 			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance().isRegistered(entityClass)) {
 				HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
 				API.registerAnimal(entityClass);
-				HungryAnimalManager.setBasicCharacteristic(entityClass);
 			}
 		}
 		
@@ -95,64 +94,6 @@ public class ConfigurationHandlerAnimal {
 
 	public static String categoryGenerator(Class<? extends EntityAnimal> entityClass) {
 		return (String) EntityList.CLASS_TO_NAME.get(entityClass);
-	}
-
-	/**
-	 * 
-	 * @param defaultfood
-	 *            : (item)=(hunger)
-	 * @param category
-	 * @param target
-	 */
-	public static void ByFoodRate(Configuration config, String[] defaultfood, String category, AnimalCharacteristic target) {
-		String[] food;
-		food = config.get(category, KEY_hunger_food, defaultfood).getStringList();
-		for (String i : food) {
-			String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
-			if (split.length == 2) {
-				HashItemType item = ConfigurationHelper.instance.getHashItem(split[0]);
-				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				if (item == null) {
-					ConfigurationHelper.exceptionInvalidFormat(split[0]);
-					exceptionPrintPosition(category, KEY_hunger_food);
-					continue;
-				}
-				target.hunger_food.put(item, hunger);
-			} else {
-				ConfigurationHelper.exceptionInvalidNumberOfArgument(i);
-				exceptionPrintPosition(category, KEY_hunger_food);
-				continue;
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param defaultBlock
-	 *            : (block)=(hunger)
-	 * @param category
-	 * @param target
-	 */
-	public static void ByBlockRate(Configuration config, String[] defaultBlock, String category, AnimalCharacteristic target) {
-		String[] block;
-		block = config.get(category, KEY_hunger_block, defaultBlock).getStringList();
-		for (String i : block) {
-			String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
-			if (split.length == 2) {
-				HashBlockState hashblock = ConfigurationHelper.instance.getHashBlock(split[0]);
-				double hunger = Double.parseDouble(StringParser.reduceLevel(split[1]));
-				if (hashblock == null) {
-					ConfigurationHelper.exceptionInvalidFormat(split[0]);
-					exceptionPrintPosition(category, KEY_hunger_block);
-					continue;
-				}
-				target.hunger_block.put(hashblock, hunger);
-			} else {
-				ConfigurationHelper.exceptionInvalidNumberOfArgument(i);
-				exceptionPrintPosition(category, KEY_hunger_block);
-				continue;
-			}
-		}
 	}
 
 	public static void exceptionPrintPosition(String category, String key) {

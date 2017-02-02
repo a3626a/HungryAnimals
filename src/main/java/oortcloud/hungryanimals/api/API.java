@@ -17,22 +17,9 @@ public class API {
 	 * @return true if registration failed, otherwise false
 	 */
 	public static boolean registerAnimal(Class<? extends EntityAnimal> animalclass) {
-		return registerAnimal(animalclass, null);
+		return registerAnimal(animalclass);
 	}
 	
-	/**
-	 * It registers given animalclass to Hungry Animals.
-	 * This will make the animals have given ExtendedProperty.
-	 * It also enables other registration for attributes and AIs.
-	 * 
-	 * @param animalclass
-	 * @return true if registration failed, otherwise false
-	 */
-	public static boolean registerAnimal(Class<? extends EntityAnimal> animalclass, PropertyFactory propertyFactory) {
-		HungryAnimalManager.getInstance().registerHungryAnimal(animalclass, propertyFactory);
-		return true;
-	}
-
 	/**
 	 * It registers the attribute with val to the animalclass.
 	 * When shouldRegistered is true, the attribute will be registered to the entity,
