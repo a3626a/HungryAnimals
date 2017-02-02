@@ -101,7 +101,7 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 		public static class Serializer implements JsonDeserializer<HashBlockState>, JsonSerializer<HashBlockState> {
 			public HashBlockState deserialize(JsonElement ele, Type type, JsonDeserializationContext context)
 					throws JsonParseException {
-				JsonObject jsonobject = JsonUtils.getJsonObject(ele, "block");
+				JsonObject jsonobject = ele.getAsJsonObject();
 				String name = JsonUtils.getString(jsonobject, "name");
 				Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
 

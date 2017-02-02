@@ -6,8 +6,6 @@ import java.util.Map;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.AttachCapabilitiesEvent.Item;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class FoodPreferenceManager {
 	
@@ -27,5 +25,7 @@ public class FoodPreferenceManager {
 		}
 		return INSTANCE;
 	}
+	
+	
 	
 }
