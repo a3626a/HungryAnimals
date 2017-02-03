@@ -1,9 +1,7 @@
 package oortcloud.hungryanimals.entities.properties.handler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -21,7 +19,6 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryGeneral;
 
 public class HungryAnimalManager {
 

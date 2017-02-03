@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.entities.food_preferences;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,11 +10,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
 public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
 
-	/*
-	 * Map object is created once while reading from configuration. In other
-	 * words, Map object is shared between entities or AI objects
-	 */
-	private HashMap<HashItemType, Double> map = new HashMap<HashItemType, Double>();
+	private Map<HashItemType, Double> map = new HashMap<HashItemType, Double>();
 
 	@Override
 	public double getHunger(ItemStack food) {

@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonDeserializationContext;
@@ -23,7 +24,11 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
-	private HashMap<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
+	private Map<HashBlockState, Double> map;
+
+	public FoodPreferenceBlockState(Map<HashBlockState, Double> map) {
+		this.map = map;
+	}
 
 	@Override
 	public double getHunger(IBlockState food) {
@@ -106,9 +111,9 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 				Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
 
 				if (jsonobject.entrySet().size() == 1) {
-					return new HashBlockState(block); 
+					return new HashBlockState(block);
 				}
-				
+
 				IBlockState state = block.getDefaultState();
 				Collection<IProperty<?>> key = state.getPropertyNames();
 				for (IProperty i : key) {
