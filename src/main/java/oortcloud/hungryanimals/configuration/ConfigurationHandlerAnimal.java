@@ -1,9 +1,11 @@
 package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
@@ -14,21 +16,20 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.API;
-import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
-import oortcloud.hungryanimals.configuration.util.StringParser;
-import oortcloud.hungryanimals.configuration.util.ValueDropMeat;
-import oortcloud.hungryanimals.configuration.util.ValueDropRandom;
-import oortcloud.hungryanimals.configuration.util.ValueDropRare;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
-import oortcloud.hungryanimals.entities.properties.handler.AnimalCharacteristic;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerAnimal {
 
 	public static Configuration config;
 
-	public static final Class[] default_class = { EntityChicken.class, EntityCow.class, EntityPig.class, EntityRabbit.class, EntitySheep.class };
+	public static final ArrayList<Class<? extends EntityAnimal>> default_class = new ArrayList<Class<? extends EntityAnimal>>();
+	{
+		default_class.add(EntityChicken.class);
+		default_class.add(EntityCow.class);
+		default_class.add(EntityPig.class);
+		default_class.add(EntityRabbit.class);
+		default_class.add(EntitySheep.class);
+	}
 
 	public static final String KEY_hunger_bmr = "FoodConsumption: basic rate";
 	public static final String KEY_hunger_max = "Abiltiy: max hunger";
@@ -53,7 +54,7 @@ public class ConfigurationHandlerAnimal {
 
 	public static final String CATEGORY_Generic = "Generic";
 	public static final String KEY_entities = "Added Mod Entities";
-	
+
 	public static void init(File file) {
 		config = new Configuration(file);
 		config.load();
@@ -64,29 +65,32 @@ public class ConfigurationHandlerAnimal {
 
 		HungryAnimals.logger.info("Configuration: Check compatibility of registered Entity Classes");
 		HungryAnimals.logger.info("Configuration: Compatible entities' name :");
-		for (Object i : EntityList.CLASS_TO_NAME.keySet()) {
-			if (EntityAnimal.class.isAssignableFrom((Class) i)) {
+		for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
+			if (EntityAnimal.class.isAssignableFrom(i)) {
 				HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
 			}
 		}
 		HungryAnimals.logger.info("Configuration: Uncompatible entities' name :");
-		for (Object i : EntityList.CLASS_TO_NAME.keySet()) {
-			if (!EntityAnimal.class.isAssignableFrom((Class) i)) {
+		for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
+			if (!EntityAnimal.class.isAssignableFrom(i)) {
 				HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
 			}
 		}
 
-		HungryAnimals.logger.info("Configuration: Read and Register mod entities' from Animal.cfg to HungryAnimalManager");
+		HungryAnimals.logger
+				.info("Configuration: Read and Register mod entities' from Animal.cfg to HungryAnimalManager");
 		for (String i : config.get(CATEGORY_Generic, KEY_entities, ArrayUtils.EMPTY_STRING_ARRAY).getStringList()) {
 			HungryAnimals.logger.info("Configuration: Read entity name " + i + " from Animal.cfg");
-			Class entityClass = (Class) EntityList.NAME_TO_CLASS.get(i);
-			if (entityClass != null && EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance().isRegistered(entityClass)) {
-				HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
-				API.registerAnimal(entityClass);
+			Class<? extends Entity> entityClass = EntityList.NAME_TO_CLASS.get(i);
+			if (entityClass != null) {
+				if (EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance()
+						.isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
+					HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
+					API.registerAnimal(entityClass.asSubclass(EntityAnimal.class));
+				}
 			}
 		}
 		
-
 		HungryAnimalManager.getInstance().readFromConfig(config);
 
 		config.save();
