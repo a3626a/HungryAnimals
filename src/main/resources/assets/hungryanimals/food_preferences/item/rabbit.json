@@ -1,0 +1,20 @@
+[
+	{
+		"item": {
+			"name": "minecraft:carrot"
+		},
+		"hunger": 40
+	},
+	{
+		"item": {
+			"name": "minecraft:golden_carrot"
+		},
+		"hunger": 150
+	},
+	{
+		"item": {
+			"name": "minecraft:yellow_flower"
+		},
+		"hunger": 20
+	}
+]

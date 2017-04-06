@@ -1,0 +1,23 @@
+[
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "tall_grass"
+		},
+		"hunger": 15
+	},
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "fern"
+		},
+		"hunger": 15
+	},
+	{
+		"block": {
+			"name": "minecraft:carrots",
+			"age": 7
+		},
+		"hunger": 40
+	}
+]

@@ -1,0 +1,20 @@
+[
+	{
+		"item": {
+			"name": "minecraft:wheat_seeds"
+		},
+		"hunger": 20
+	},
+	{
+		"item": {
+			"name": "minecraft:pumpkin_seeds"
+		},
+		"hunger": 25
+	},
+	{
+		"item": {
+			"name": "minecraft:melon_seeds"
+		},
+		"hunger": 25
+	}
+]

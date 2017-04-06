@@ -1,30 +1,39 @@
 package oortcloud.hungryanimals.entities.food_preferences;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import com.google.common.collect.ImmutableSet;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 
-public class FoodPreferenceBlockState implements IFoodPreference<IBlockState>{
-	
-	/*
-	 * Map object is created once while reading from configuration.
-	 * In other words, Map object is shared between entities or AI objects
-	 */
-	private HashMap<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
-	
+public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
+
+	private Map<HashBlockState, Double> map;
+
+	public FoodPreferenceBlockState(Map<HashBlockState, Double> map) {
+		this.map = map;
+	}
+
 	@Override
 	public double getHunger(IBlockState food) {
 		HashBlockState key;
-		
+
 		if (this.map.containsKey(key = new HashBlockState(food, true))) {
 			return this.map.get(key);
 		} else if (this.map.containsKey(key = new HashBlockState(food, false))) {
@@ -46,7 +55,7 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState>{
 	public boolean shouldEat(ICapabilityHungryAnimal cap) {
 		return cap.getHunger() + Collections.min(map.values()) < cap.getMaxHunger();
 	}
-	
+
 	public static class HashBlockState {
 		private IBlockState block;
 		private boolean ignoreProperty;
@@ -93,26 +102,47 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState>{
 				return block.hashCode();
 			}
 		}
-		
-		public String toString() {
-			if (ignoreProperty) {
-				return "("+String.valueOf(Block.REGISTRY.getNameForObject(block.getBlock()))+")";
-			} else {
-				ImmutableSet properties = block.getProperties().keySet();
-				String[] propertyStrings = new String[properties.size()];
-				int next = 0;
-				for (Object i : properties) {
-					IProperty property = (IProperty)i;
-					propertyStrings[next++] = "(" + property.getName() + "," + block.getValue(property) + ")";
+
+		public static class Serializer implements JsonDeserializer<HashBlockState>, JsonSerializer<HashBlockState> {
+			public HashBlockState deserialize(JsonElement ele, Type type, JsonDeserializationContext context)
+					throws JsonParseException {
+				JsonObject jsonobject = ele.getAsJsonObject();
+				String name = JsonUtils.getString(jsonobject, "name");
+				Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
+
+				if (jsonobject.entrySet().size() == 1) {
+					return new HashBlockState(block);
 				}
-				
-				String propertyString = new String();
-				propertyString+="("+propertyStrings[0];
-				for (int i = 1; i < propertyStrings.length; i++) {
-					propertyString+=","+propertyStrings[i];
+
+				IBlockState state = block.getDefaultState();
+				Collection<IProperty<?>> key = state.getPropertyNames();
+				for (IProperty i : key) {
+					if (JsonUtils.hasField(jsonobject, i.getName())) {
+						String jsonValue = JsonUtils.getString(jsonobject, i.getName());
+						Comparable comp = (Comparable) i.parseValue(jsonValue).get();
+						if (i.getAllowedValues().contains(comp)) {
+							state = state.withProperty(i, comp);
+						}
+					}
 				}
-				propertyString+=")";
-				return "("+String.valueOf(Block.REGISTRY.getNameForObject(block.getBlock()))+","+propertyString+")";
+
+				return new HashBlockState(state);
+			}
+
+			public JsonElement serialize(HashBlockState block, Type type, JsonSerializationContext context) {
+
+				if (block.ignoreProperty) {
+					JsonObject jsonobject = new JsonObject();
+					jsonobject.addProperty("name", block.block.getBlock().getRegistryName().toString());
+					return new JsonObject();
+				} else {
+					JsonObject jsonobject = new JsonObject();
+					jsonobject.addProperty("name", block.block.getBlock().getRegistryName().toString());
+					for (Entry<IProperty<?>, Comparable<?>> i : block.block.getProperties().entrySet()) {
+						jsonobject.addProperty(i.getKey().getName(), i.getValue().toString());
+					}
+					return jsonobject;
+				}
 			}
 		}
 	}

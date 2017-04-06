@@ -1,17 +1,11 @@
-package oortcloud.hungryanimals.potion;
+	package oortcloud.hungryanimals.potion;
 
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
 
 public class PotionGrowth extends PotionHungryAnimals {
 

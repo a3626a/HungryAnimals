@@ -20,10 +20,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
 import oortcloud.hungryanimals.core.network.SyncIndex;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.potion.PotionHungryAnimals;
 
 @SideOnly(Side.CLIENT)
@@ -36,8 +36,6 @@ public class EntityOverlayHandler extends Gui {
 	private Minecraft mc;
 
 	private EntityAnimal targetAnimal;
-	// TODO what is it... i forgot
-	private ExtendedPropertiesHungryAnimal targetProperty;
 
 	public double bar_health;
 	public double bar_hunger;
@@ -67,17 +65,14 @@ public class EntityOverlayHandler extends Gui {
 			if (entity != null) {
 				if (entity instanceof EntityAnimal) {
 					EntityAnimal animal = (EntityAnimal) entity;
-					ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) animal.getExtendedProperties(Strings.extendedPropertiesKey);
-					if (property != null) {
+					if (animal.hasCapability(ProviderHungryAnimal.CAP, null) || animal.hasCapability(ProviderTamableAnimal.CAP, null)) {
 						targetAnimal = animal;
-						targetProperty = property;
 						isEnabled = true;
 					}
 				}
 			} else {
 				isEnabled = false;
 				targetAnimal = null;
-				targetProperty = null;
 			}
 			
 			if (isEnabled && mc.theWorld != null && mc.theWorld.getWorldTime()%5==0) {
@@ -102,7 +97,7 @@ public class EntityOverlayHandler extends Gui {
 		if (potions.length != 0) {
 			int index =  (((int)mc.theWorld.getWorldTime()/flashTick)%potions.length);
 			this.mc.getTextureManager().bindTexture(inventoryBackground);
-			Potion potion = Potion.REGISTRY.getObjectById(potions[index]);
+			Potion potion = Potion.getPotionById(potions[index]);
 			if (potion.hasStatusIcon()) {
 				int l = potion.getStatusIconIndex();
 				drawTexturedModalRect(posX, posY, 0 + (l % 8) * 18, 198 + (l / 8) * 18, 18, 18);
@@ -111,20 +106,6 @@ public class EntityOverlayHandler extends Gui {
 				((PotionHungryAnimals) potion).renderGuiEffect(posX + 1, posY + 1, new PotionEffect(potion, 0), mc, this);
 			}
 		}
-		
-		/*
-		for (int i = 0 ; i < potions.length; i++) {
-			this.mc.getTextureManager().bindTexture(inventoryBackground);
-			Potion potion = Potion.potionTypes[potions[i]];
-			if (potion.hasStatusIcon()) {
-				int l = potion.getStatusIconIndex();
-				drawTexturedModalRect(posX + 18 * i, posY, 0 + (l % 8) * 18, 198 + (l / 8) * 18, 18, 18);
-			}
-			if (potion instanceof PotionHungryAnimals) {
-				((PotionHungryAnimals) potion).renderGuiEffect(posX + 18 * i + 1, posY + 1, new PotionEffect(potion.id, 0), mc, this);
-			}
-		}
-		*/
 		
 		drawRect(posX - 1, posY + 17, posX + 19, posY + 20, 0xFF000000);
 		drawRect(posX, posY + 18, posX + (int) (18 * bar_hunger), posY + 19, 0xFF0000FF);

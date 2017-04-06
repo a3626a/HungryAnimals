@@ -50,7 +50,7 @@ public class AIManager {
 				entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
 				entity.tasks.addTask(2, new EntityAIMateModified(entity, 2.0D));
 				entity.tasks.addTask(3, this.ai_moveToFoodbox);
-				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D));
+				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D, false));
 				entity.tasks.addTask(5, new EntityAIMoveToEatItem(entity, 1.5D));
 				entity.tasks.addTask(7, new EntityAIMoveToEatBlockChicken(entity, 1.0D));
 				entity.tasks.addTask(8, new EntityAIWander(entity, 1.0D));
@@ -73,7 +73,7 @@ public class AIManager {
 				entity.tasks.addTask(2, new EntityAIMateModified(entity, 2.0D));
 				entity.tasks.addTask(3, this.ai_moveToFoodbox);
 				entity.tasks.addTask(4, new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
-				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D));
+				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D, false));
 				entity.tasks.addTask(5, new EntityAIMoveToEatItem(entity, 1.5D));
 				entity.tasks.addTask(7, new EntityAIMoveToEatBlock(entity, 1.0D));
 				entity.tasks.addTask(8, new EntityAIWander(entity, 1.0D));

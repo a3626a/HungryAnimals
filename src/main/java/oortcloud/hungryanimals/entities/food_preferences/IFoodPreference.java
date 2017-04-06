@@ -1,7 +1,5 @@
 package oortcloud.hungryanimals.entities.food_preferences;
 
-import java.util.Iterator;
-
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
 public interface IFoodPreference<T> {

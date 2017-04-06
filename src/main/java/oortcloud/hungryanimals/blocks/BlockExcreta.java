@@ -41,10 +41,7 @@ import oortcloud.hungryanimals.potion.ModPotions;
 
 public class BlockExcreta extends BlockFalling {
 
-	public static final PropertyEnum CONTENT = PropertyEnum.create("content", BlockExcreta.EnumType.class);
-
-	private static int[] metaToManure = { 1, 2, 3, 4, 0, 1, 2, 3, 0, 1, 2, 0, 1, 0, 0, 0 };
-	private static int[] metaToExcreta = { 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 0, 0 };
+	public static final PropertyEnum<BlockExcreta.EnumType> CONTENT = PropertyEnum.create("content", BlockExcreta.EnumType.class);
 
 	public static final float hardnessConstant = 0.5F;
 	public static final double defualt_fermetationProbability = 0.05;
@@ -191,7 +188,7 @@ public class BlockExcreta extends BlockFalling {
 		int exc = ((EnumType) meta.getValue(CONTENT)).exc;
 		Block bottom = world.getBlockState(pos.down()).getBlock();
 		if (bottom == Blocks.DIRT || bottom == Blocks.GRASS || bottom == Blocks.SAND) {
-			if (random.nextDouble() < this.fertilizationProbability) {
+			if (random.nextDouble() < BlockExcreta.fertilizationProbability) {
 				if (man > 0) {
 					man--;
 				} else if (exc > 0) {
@@ -211,7 +208,7 @@ public class BlockExcreta extends BlockFalling {
 				}
 			}
 		} else if (bottom == ModBlocks.floorcover_hay) {
-			if (random.nextDouble() < this.erosionOnHayProbability) {
+			if (random.nextDouble() < BlockExcreta.erosionOnHayProbability) {
 				if (man > 0) {
 					man--;
 				} else if (exc > 0) {
@@ -225,7 +222,7 @@ public class BlockExcreta extends BlockFalling {
 				}
 			}
 		} else if (world.isAirBlock(pos.up())) {
-			if (random.nextDouble() < this.erosionProbability) {
+			if (random.nextDouble() < BlockExcreta.erosionProbability) {
 				if (exc > 0) {
 					exc--;
 				} else if (man > 0) {
@@ -245,14 +242,10 @@ public class BlockExcreta extends BlockFalling {
 
 		int exc = ((EnumType) world.getBlockState(pos).getValue(CONTENT)).exc;
 
-		if (random.nextDouble() < this.diseaseProbability / 3.0 * Math.max(0, exc - 1)) {
-			Predicate hungryAnimalSelector = new Predicate() {
+		if (random.nextDouble() < BlockExcreta.diseaseProbability / 3.0 * Math.max(0, exc - 1)) {
+			Predicate<Entity> hungryAnimalSelector = new Predicate<Entity>() {
 				public boolean apply(Entity entityIn) {
-					return (entityIn.getCapability(ProviderHungryAnimal.CAP, null) != null);
-				}
-
-				public boolean apply(Object p_apply_1_) {
-					return this.apply((Entity) p_apply_1_);
+					return entityIn.getCapability(ProviderHungryAnimal.CAP, null) != null;
 				}
 			};
 
@@ -271,7 +264,7 @@ public class BlockExcreta extends BlockFalling {
 
 		boolean flag = false;
 		for (int i = 0; i < firstExc; i++) {
-			if (random.nextDouble() < this.fermetationProbability) {
+			if (random.nextDouble() < BlockExcreta.fermetationProbability) {
 				world.setBlockState(pos, meta.withProperty(CONTENT, EnumType.getValue(--exc, ++man)), 3);
 				flag = true;
 			}

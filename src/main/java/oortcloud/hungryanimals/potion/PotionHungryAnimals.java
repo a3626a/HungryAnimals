@@ -16,6 +16,8 @@ public class PotionHungryAnimals extends Potion {
 		texture = location;
 	}
 
+	//TODO Render HUD Effect
+	
 	@Override
 	public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
 		mc.getTextureManager().bindTexture(texture);

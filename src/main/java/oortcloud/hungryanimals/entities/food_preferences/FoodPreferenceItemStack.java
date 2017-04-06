@@ -2,25 +2,20 @@ package oortcloud.hungryanimals.entities.food_preferences;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 
-public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
-	
-	/*
-	 * Map object is created once while reading from configuration.
-	 * In other words, Map object is shared between entities or AI objects
-	 */
-	private HashMap<HashItemType, Double> map = new HashMap<HashItemType, Double>();
-	
+public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
+
+	private Map<HashItemType, Double> map = new HashMap<HashItemType, Double>();
+
 	@Override
 	public double getHunger(ItemStack food) {
 		HashItemType key;
-		
+
 		if (this.map.containsKey(key = new HashItemType(food.getItem()))) {
 			return this.map.get(key);
 		} else if (this.map.containsKey(key = new HashItemType(food.getItem(), food.getItemDamage()))) {
@@ -42,7 +37,7 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 	public boolean shouldEat(ICapabilityHungryAnimal cap) {
 		return cap.getHunger() + Collections.min(map.values()) < cap.getMaxHunger();
 	}
-	
+
 	public static class HashItemType {
 		private Item item;
 		private int damage;
@@ -86,6 +81,8 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack>{
 				return "(" + String.valueOf(Item.REGISTRY.getNameForObject(item)) + "," + damage + ")";
 			}
 		}
+
+		
 	}
 
 }
