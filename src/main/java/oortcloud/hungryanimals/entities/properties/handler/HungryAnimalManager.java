@@ -18,6 +18,8 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
+import oortcloud.hungryanimals.entities.attributes.AttributeManager;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class HungryAnimalManager {
@@ -67,14 +69,6 @@ public class HungryAnimalManager {
 		return registedClass.contains(animal);
 	}
 
-	public void applyAttributes(ExtendedPropertiesHungryAnimal extendedProperty) {
-		cMap.get(extendedProperty.entity.getClass()).getRight().applyAttributes(extendedProperty);
-	}
-
-	public void registerAttributes(EntityLivingBase entity) {
-		cMap.get(entity.getClass()).getRight().registerAttributes(entity);
-	}
-
 	public void init() {
 		registerHungryAnimal(EntityCow.class);
 		registerHungryAnimal(EntityChicken.class);
@@ -82,6 +76,8 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntityRabbit.class);
 		registerHungryAnimal(EntitySheep.class);
 		
+
+		// TODO replace dafault value to resources json file
 		characteristic_cow.putAttribute(ModAttributes.hunger_bmr, 0.005, true);
 		characteristic_cow.putAttribute(ModAttributes.hunger_max, 500.0, true);
 		characteristic_cow.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);

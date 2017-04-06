@@ -13,8 +13,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 
 public class TileEntityTrough extends TileEntity implements ITickable {
 
@@ -42,10 +44,16 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.worldObj.getWorldTime() % TileEntityTrough.period == 0 && this.stack != null) {
 			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.worldObj.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (EntityAnimal i : list) {
-				ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) ((EntityAnimal) i).getExtendedProperties(Strings.extendedPropertiesKey);
-				if (property != null && property.taming >= 1 && property.canEatFood(this.stack)) {
-					property.ai_moveToFoodbox.pos = this.pos;
+				if (i.hasCapability(ProviderHungryAnimal.CAP, null) && i.hasCapability(ProviderTamableAnimal.CAP, null)) {
+					if (i.getCapability(ProviderTamableAnimal.CAP, null).getTaming() >= 1 && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(i.getClass()).canEat(i.getCapability(ProviderHungryAnimal.CAP, null), this.stack)) {
+						i.tasks.taskEntries.forEach(entry -> {
+							if (entry.action instanceof EntityAIMoveToTrough) {
+								((EntityAIMoveToTrough)entry.action).pos = this.pos;
+							}
+						});
+					}
 				}
+				
 			}
 		}
 

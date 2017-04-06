@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFollowParent;
@@ -41,6 +42,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
+import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
@@ -72,11 +74,11 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 		this.worldObj = world;
 		this.ai_moveToFoodbox = new EntityAIMoveToTrough(this.entity, this, 1.0D);
 
-		HungryAnimalManager.getInstance().registerAttributes(this.entity);
+		AttributeManager.getInstance().registerAttributes(this.entity);
 	}
 
 	public void postInit() {
-		HungryAnimalManager.getInstance().applyAttributes(this);
+		AttributeManager.getInstance().applyAttributes(this.entity);
 		acceptProperty();
 	}
 

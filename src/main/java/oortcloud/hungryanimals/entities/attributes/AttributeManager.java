@@ -9,10 +9,19 @@ import net.minecraft.entity.passive.EntityAnimal;
 
 public class AttributeManager {
 	
+	private static AttributeManager INSTANCE;
+	
 	public Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
 	
 	private AttributeManager() {
 		REGISTRY = new HashMap<Class<? extends EntityAnimal>, List<IAttributeEntry>>();
+	}
+	
+	public static AttributeManager getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new AttributeManager();
+		}
+		return INSTANCE;
 	}
 	
 	public void applyAttributes(EntityLivingBase entity) {

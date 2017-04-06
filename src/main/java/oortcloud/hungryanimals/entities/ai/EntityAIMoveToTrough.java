@@ -3,14 +3,22 @@ package oortcloud.hungryanimals.entities.ai;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class EntityAIMoveToTrough extends EntityAIBase {
@@ -21,9 +29,13 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	public BlockPos pos;
 	private int delayCounter;
 	private static int delay = 100;
-
+	private ICapabilityHungryAnimal capHungry;
+	private ICapabilityTamableAnimal capTaming;
+	
 	public EntityAIMoveToTrough(EntityAnimal entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
+		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		
 		this.entity = entity;
 		this.world = this.entity.worldObj;
@@ -43,9 +55,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
-				if (entity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() >= 1 && temp != null && temp instanceof TileEntityTrough) {
+				if (this.capTaming.getTaming() >= 1 && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
-					return trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(trough.stack);
+					return trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack);
 				} else {
 					return false;
 				}
@@ -69,8 +81,8 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;
-					if (trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(trough.stack)) {
-						property.eatFoodBonus(trough.stack);
+					if (trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack)) {
+						eatFoodBonus(trough.stack);
 						trough.stack.stackSize--;
 						if (trough.stack.stackSize == 0)
 							trough.stack = null;
@@ -85,6 +97,31 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		return !entity.getNavigator().noPath();
 	}
 
+	private void eatFoodBonus(ItemStack item) {
+		if (item == null)
+			return;
+
+		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);
+		capHungry.addHunger(hunger);
+
+		if (this.entity.getGrowingAge() < 0) {
+			NBTTagCompound tag = item.getTagCompound();
+			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+				int duration = (int) (hunger
+						/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
+				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
+			}
+		}
+
+		NBTTagCompound tag = item.getTagCompound();
+		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+			this.capTaming.addTaming(0.0002
+					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue()
+					* hunger);
+		}
+
+	}
+	
 	@Override
 	public void resetTask() {
 		delayCounter = delay;
