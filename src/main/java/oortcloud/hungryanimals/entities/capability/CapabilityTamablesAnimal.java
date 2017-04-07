@@ -4,6 +4,9 @@ public class CapabilityTamablesAnimal implements ICapabilityTamableAnimal {
 
 	private double taming;
 	
+	public CapabilityTamablesAnimal() {
+	}
+	
 	@Override
 	public double getTaming() {
 		return taming;

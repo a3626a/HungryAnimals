@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.capability;
 
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -11,7 +12,11 @@ public class ProviderHungryAnimal implements ICapabilitySerializable<NBTBase> {
 	@CapabilityInject(ICapabilityHungryAnimal.class)
 	public static final Capability<ICapabilityHungryAnimal> CAP = null;
 	
-	private ICapabilityHungryAnimal instance = CAP.getDefaultInstance();
+	private ICapabilityHungryAnimal instance;
+	
+	public ProviderHungryAnimal(EntityAnimal entity) {
+		instance = new CapabilityHungryAnimal(entity);
+	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
