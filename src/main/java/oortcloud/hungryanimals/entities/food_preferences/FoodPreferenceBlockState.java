@@ -3,7 +3,6 @@ package oortcloud.hungryanimals.entities.food_preferences;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -82,9 +81,8 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 				if (block.getBlock() != ((HashBlockState) obj).block.getBlock())
 					return false;
 
-				for (Object i : block.getProperties().keySet()) {
-					IProperty property = (IProperty) i;
-					if (!block.getValue(property).equals(((HashBlockState) obj).block.getValue(property)))
+				for (IProperty<?> i : block.getProperties().keySet()) {
+					if (!block.getValue(i).equals(((HashBlockState) obj).block.getValue(i)))
 						return false;
 				}
 
@@ -116,19 +114,21 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
 				IBlockState state = block.getDefaultState();
 				Collection<IProperty<?>> key = state.getPropertyNames();
-				for (IProperty i : key) {
+				for (IProperty<?> i : key) {
 					if (JsonUtils.hasField(jsonobject, i.getName())) {
 						String jsonValue = JsonUtils.getString(jsonobject, i.getName());
-						Comparable comp = (Comparable) i.parseValue(jsonValue).get();
-						if (i.getAllowedValues().contains(comp)) {
-							state = state.withProperty(i, comp);
-						}
+						state = getState(state, i, jsonValue);
 					}
 				}
 
 				return new HashBlockState(state);
 			}
 
+			private static <T extends Comparable<T>> IBlockState getState(IBlockState state, IProperty<T> property, String value)
+		    {
+		        return state.withProperty(property, property.parseValue(value).get());
+		    }
+			
 			public JsonElement serialize(HashBlockState block, Type type, JsonSerializationContext context) {
 
 				if (block.ignoreProperty) {
