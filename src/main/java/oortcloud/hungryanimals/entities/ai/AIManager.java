@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,10 @@ public class AIManager {
 
 	public Map<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>> REGISTRY;
 
+	private AIManager() {
+		REGISTRY = new HashMap<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>();
+	}
+	
 	public static AIManager getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new AIManager();

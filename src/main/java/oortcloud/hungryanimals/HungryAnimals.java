@@ -25,6 +25,7 @@ import oortcloud.hungryanimals.core.network.PacketGeneralClient;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
+import oortcloud.hungryanimals.entities.ai.AIManager;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
@@ -64,7 +65,6 @@ public class HungryAnimals {
 		ModBlocks.init();
 		ModItems.init();
 		ModPotions.init();
-		LootTableModifier.init();
 		proxy.registerItemModel();
 		proxy.registerEntities();
 		proxy.registerEntityRendering();
@@ -72,7 +72,9 @@ public class HungryAnimals {
 		proxy.registerTileEntityRendering();
 		proxy.registerKeyBindings();
 		proxy.registerCapabilities();
+		LootTableModifier.init();
 		HungryAnimalManager.getInstance().init();
+		AIManager.getInstance().init();
 		ConfigurationHandler.sync();
 	}
 
