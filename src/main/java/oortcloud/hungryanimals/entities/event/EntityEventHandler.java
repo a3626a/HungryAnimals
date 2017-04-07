@@ -23,6 +23,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.entities.ai.AIManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
@@ -53,6 +54,8 @@ public class EntityEventHandler {
 				.setHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / 2.0);
 		entity.getCapability(ProviderHungryAnimal.CAP, null).setExcretion(0);
 		entity.getCapability(ProviderTamableAnimal.CAP, null).setTaming(-2);
+
+		AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
 	}
 
 	@SubscribeEvent
@@ -115,7 +118,7 @@ public class EntityEventHandler {
 
 	private void updateExcretion(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		
+
 		if (cap.getExcretion() > 1) {
 			cap.addExcretion(-1);
 			BlockPos pos = entity.getPosition();
@@ -169,11 +172,11 @@ public class EntityEventHandler {
 			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 			if (players.isEmpty()) {
 				if (cap.getTaming() > 0) {
-					cap.setTaming(cap.getTaming()*taming_factor);
+					cap.setTaming(cap.getTaming() * taming_factor);
 				}
 			} else {
 				if (cap.getTaming() < 0) {
-					cap.setTaming(cap.getTaming()*taming_factor);
+					cap.setTaming(cap.getTaming() * taming_factor);
 				}
 			}
 		}
@@ -181,7 +184,7 @@ public class EntityEventHandler {
 
 	private void updateRecovery(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		if (entity.getHealth() < entity.getMaxHealth() && cap.getHunger()/cap.getMaxHunger() > 0.8 && (entity.worldObj.getWorldTime() % 200) == 0) {
+		if (entity.getHealth() < entity.getMaxHealth() && cap.getHunger() / cap.getMaxHunger() > 0.8 && (entity.worldObj.getWorldTime() % 200) == 0) {
 			entity.heal(1.0F);
 			cap.addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / entity.getMaxHealth());
 		}
@@ -216,7 +219,7 @@ public class EntityEventHandler {
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-			event.setCanceled(interact(event, entity));
+		event.setCanceled(interact(event, entity));
 	}
 
 	private boolean interact(EntityInteract event, EntityAnimal entity) {
@@ -232,9 +235,9 @@ public class EntityEventHandler {
 			return true;
 		}
 		return true;
-		
+
 	}
-	
+
 	private boolean interact(EntityInteract event, ItemStack item, EntityAnimal entity) {
 		ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
@@ -242,13 +245,15 @@ public class EntityEventHandler {
 		if (prefItem.canEat(capHungry, item) && capTaming.getTaming() >= 1) {
 			eatFoodBonus(entity, capHungry, capTaming, item);
 			item.stackSize--;
-			// TODO Check automated itemstack removal when its stacksize reaches to 0
+			// TODO Check automated itemstack removal when its stacksize reaches
+			// to 0
 			return true;
 		} else if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTaming() >= 1) {
 			if (item.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || item.getItem() == ItemBlock.getItemFromBlock(Blocks.BROWN_MUSHROOM)) {
 				entity.removePotionEffect(ModPotions.potionDisease);
 				item.stackSize--;
-				// TODO Check automated itemstack removal when its stacksize reaches to 0
+				// TODO Check automated itemstack removal when its stacksize
+				// reaches to 0
 			}
 			return true;
 		}
@@ -256,10 +261,10 @@ public class EntityEventHandler {
 		if (entity.isBreedingItem(item)) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private void eatFoodBonus(EntityAnimal entity, ICapabilityHungryAnimal capHungry, ICapabilityTamableAnimal capTaming, ItemStack item) {
 		// TODO It must merged with AI's eatFoodBonus to increase maintainance
 		if (item == null)
@@ -271,17 +276,14 @@ public class EntityEventHandler {
 		if (entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger
-						/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
+				int duration = (int) (hunger / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			capTaming.addTaming(0.0002
-					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue()
-					* hunger);
+			capTaming.addTaming(0.0002 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * hunger);
 		}
 	}
 }

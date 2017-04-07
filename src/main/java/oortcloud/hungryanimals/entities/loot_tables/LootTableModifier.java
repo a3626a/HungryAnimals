@@ -1,17 +1,12 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 
 /**
