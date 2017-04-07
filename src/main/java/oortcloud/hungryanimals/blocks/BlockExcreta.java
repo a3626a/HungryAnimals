@@ -388,11 +388,11 @@ public class BlockExcreta extends BlockFalling {
 		}
 
 		public String getName() {
-			return "(" + this.exc + "," + this.man + ")";
+			return this.exc + "_" + this.man;
 		}
 
 		public String getUnlocalizedName() {
-			return "(" + this.exc + ", " + this.man + ")";
+			return this.exc + "_ " + this.man;
 		}
 
 		static {
