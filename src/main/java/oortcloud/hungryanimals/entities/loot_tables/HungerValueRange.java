@@ -1,7 +1,6 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
 import java.lang.reflect.Type;
-import java.util.Random;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -14,7 +13,6 @@ import com.google.gson.JsonSerializer;
 
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.MathHelper;
-import oortcloud.hungryanimals.entities.capability.CapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
 public class HungerValueRange

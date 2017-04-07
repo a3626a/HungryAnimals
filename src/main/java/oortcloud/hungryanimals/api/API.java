@@ -4,7 +4,6 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager.PropertyFactory;
 
 public class API {
 	

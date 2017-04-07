@@ -3,7 +3,6 @@ package oortcloud.hungryanimals.items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 
 public class ModItems {
@@ -45,6 +44,7 @@ public class ModItems {
 	}
 
 	public static void register(Item item) {
+		// TODO Item Registration System
 		GameRegistry.registerItem(item, getName(item.getUnlocalizedName()));
 	}
 }

@@ -2,12 +2,10 @@ package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
 public class CapabilityHandler {

@@ -1,11 +1,8 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.EntityLiving;
-
 public class CapabilityTamablesAnimal implements ICapabilityTamableAnimal {
 
 	private double taming;
-	private EntityLiving entity;
 	
 	@Override
 	public double getTaming() {
