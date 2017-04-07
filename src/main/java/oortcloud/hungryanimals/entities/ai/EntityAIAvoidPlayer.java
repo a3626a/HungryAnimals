@@ -7,7 +7,6 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 import oortcloud.hungryanimals.items.ModItems;
 
 public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {

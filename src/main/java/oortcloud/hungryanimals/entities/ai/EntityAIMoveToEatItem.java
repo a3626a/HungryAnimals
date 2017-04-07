@@ -6,7 +6,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -35,17 +34,12 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	private int delayCounter;
 	private static int delay = 100;
 
-	private Predicate EAT_EDIBLE = new Predicate() {
+	private Predicate<EntityItem> EAT_EDIBLE = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
 			return pref.canEat(capHungry, entityIn.getEntityItem());
 		}
-
-		@Override
-		public boolean apply(Object object) {
-			return this.apply((EntityItem) object);
-		}
 	};
-	private Predicate EAT_NATURAL = new Predicate() {
+	private Predicate<EntityItem> EAT_NATURAL = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
 			ItemStack item = entityIn.getEntityItem();
 			NBTTagCompound tag = item.getTagCompound();
@@ -53,11 +47,6 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 				return tag.hasKey("isNatural") && tag.getBoolean("isNatural");
 			}
 			return false;
-		}
-
-		@Override
-		public boolean apply(Object object) {
-			return this.apply((EntityItem) object);
 		}
 	};
 

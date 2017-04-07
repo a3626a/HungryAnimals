@@ -109,26 +109,6 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		entity.getNavigator().tryMoveToXYZ(bestPos.getX(), bestPos.getY(), bestPos.getZ(), this.speed);
 	}
 
-	private class Point {
-		public BlockPos pos;
-		public int distance;
-		
-		public Point(BlockPos pos, int distance) {
-			this.pos = pos;
-			this.distance = distance;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			return pos.equals(((Point)obj).pos);
-		}
-		
-		@Override
-		public int hashCode() {
-			return pos.hashCode();
-		}
-	}
-	
 	@Override
 	public boolean continueExecuting() {
 		IBlockState block = this.worldObj.getBlockState(bestPos);
