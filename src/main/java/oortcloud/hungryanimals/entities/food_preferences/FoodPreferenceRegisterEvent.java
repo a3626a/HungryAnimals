@@ -1,7 +1,5 @@
 package oortcloud.hungryanimals.entities.food_preferences;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -9,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
@@ -47,26 +44,26 @@ public class FoodPreferenceRegisterEvent extends Event {
 
 	public static class FoodPreferenceItemStackRegisterEvent extends FoodPreferenceRegisterEvent {
 
-		private final List<Tuple<HashItemType, Double>> list;
+		private final Map<HashItemType, Double> map;
 				
-		public FoodPreferenceItemStackRegisterEvent(Class<? extends EntityAnimal> entity) {
+		public FoodPreferenceItemStackRegisterEvent(Class<? extends EntityAnimal> entity, Map<HashItemType, Double> map) {
 			super(entity);
-			list = new LinkedList<Tuple<HashItemType, Double>>();
+			this.map = map;
 		}
 		
 		public void put(Item item, double hunger) {
-			list.add(new Tuple<HashItemType, Double>(new HashItemType(item), hunger));
+			map.put(new HashItemType(item), hunger);
 		}
 		
 		public void put(Item item, int damage, double hunger) {
-			list.add(new Tuple<HashItemType, Double>(new HashItemType(item, damage), hunger));
+			map.put(new HashItemType(item, damage), hunger);
 		}
 		
 		public void put(ItemStack itemstack, boolean ignoreDamage, double hunger) {
 			if (ignoreDamage) {
-				list.add(new Tuple<HashItemType, Double>(new HashItemType(itemstack.getItem()), hunger));
+				map.put(new HashItemType(itemstack.getItem()), hunger);
 			} else {
-				list.add(new Tuple<HashItemType, Double>(new HashItemType(itemstack.getItem(), itemstack.getItemDamage()), hunger));
+				map.put(new HashItemType(itemstack.getItem(), itemstack.getItemDamage()), hunger);
 			}
 		}
 		
