@@ -1,0 +1,13 @@
+{
+	"hungryanimals.hunger_bmr" : { "value" : 0.004, "register" : true},
+	"hungryanimals.hunger_max" : { "value" : 400, "register" : true},
+	"hungryanimals.courtship_hunger" : { "value" : 20, "register" : true},
+	"hungryanimals.courtship_probability" : { "value" : 0.0025, "register" : true},
+	"hungryanimals.courtship_hungerCondition" : { "value" : 0.8, "register" : true},
+	"hungryanimals.excretion_factor" : { "value" : 0.02, "register" : true},
+	"hungryanimals.child_hunger" : { "value" : 100, "register" : true},
+	"hungryanimals.wool_hunger" : { "value" : 20, "register" : true},
+	"hungryanimals.wool_delay" : { "value" : 6000, "register" : true},
+	"generic.maxHealth" : { "value" : 20, "register" : false},
+	"generic.movementSpeed" : { "value" : 0.20, "register" : false}
+}

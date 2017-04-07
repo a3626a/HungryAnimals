@@ -75,62 +75,6 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntityPig.class);
 		registerHungryAnimal(EntityRabbit.class);
 		registerHungryAnimal(EntitySheep.class);
-		
-
-		// TODO replace dafault value to resources json file
-		characteristic_cow.putAttribute(ModAttributes.hunger_bmr, 0.005, true);
-		characteristic_cow.putAttribute(ModAttributes.hunger_max, 500.0, true);
-		characteristic_cow.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_cow.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
-		characteristic_cow.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
-		characteristic_cow.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
-		characteristic_cow.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
-		characteristic_cow.putAttribute(ModAttributes.milk_delay, (double) (5 * 60 * 20), true);
-		characteristic_cow.putAttribute(ModAttributes.milk_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_cow.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 30.0, false);
-		characteristic_cow.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.2, false);
-
-		characteristic_chicken.putAttribute(ModAttributes.hunger_bmr, 0.002, true);
-		characteristic_chicken.putAttribute(ModAttributes.hunger_max, 150.0, true);
-		characteristic_chicken.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_chicken.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
-		characteristic_chicken.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
-		characteristic_chicken.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
-		characteristic_chicken.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
-		characteristic_chicken.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 8.0, false);
-		characteristic_chicken.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.15, false);
-
-		characteristic_pig.putAttribute(ModAttributes.hunger_bmr, 0.004, true);
-		characteristic_pig.putAttribute(ModAttributes.hunger_max, 400.0, true);
-		characteristic_pig.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_pig.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
-		characteristic_pig.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
-		characteristic_pig.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
-		characteristic_pig.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
-		characteristic_pig.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 20.0, false);
-		characteristic_pig.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-
-		characteristic_rabbit.putAttribute(ModAttributes.hunger_bmr, 0.003, true);
-		characteristic_rabbit.putAttribute(ModAttributes.hunger_max, 250.0, true);
-		characteristic_rabbit.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_rabbit.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
-		characteristic_rabbit.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
-		characteristic_rabbit.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
-		characteristic_rabbit.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
-		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 10.0, false);
-		characteristic_rabbit.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.25, false);
-
-		characteristic_sheep.putAttribute(ModAttributes.hunger_bmr, 0.004, true);
-		characteristic_sheep.putAttribute(ModAttributes.hunger_max, 400.0, true);
-		characteristic_sheep.putAttribute(ModAttributes.courtship_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
-		characteristic_sheep.putAttribute(ModAttributes.courtship_probability, 0.0025, true);
-		characteristic_sheep.putAttribute(ModAttributes.courtship_hungerCondition, 0.8, true);
-		characteristic_sheep.putAttribute(ModAttributes.excretion_factor, 1 / 50.0, true);
-		characteristic_sheep.putAttribute(ModAttributes.child_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 4.0, true);
-		characteristic_sheep.putAttribute(SharedMonsterAttributes.MAX_HEALTH, 20.0, false);
-		characteristic_sheep.putAttribute(SharedMonsterAttributes.MOVEMENT_SPEED, 0.20, false);
-		characteristic_sheep.putAttribute(ModAttributes.wool_delay, (double) (5 * 60 * 20), true);
-		characteristic_sheep.putAttribute(ModAttributes.wool_hunger, characteristic_cow.attributeMap.get(ModAttributes.hunger_max).getRight() / 20.0, true);
 
 		// default_chicken.hunger_food.put(new HashItemType(ModItems.poppyseed),
 		// 20.0);
