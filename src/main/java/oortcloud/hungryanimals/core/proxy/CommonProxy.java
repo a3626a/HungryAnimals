@@ -4,8 +4,10 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
@@ -59,7 +61,8 @@ public class CommonProxy {
 	}
 
 	public void registerEventHandler() {
-		MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER)
+			MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
 		MinecraftForge.EVENT_BUS.register(new ConfigurationEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHandler());

@@ -40,8 +40,6 @@ public class ClientProxy extends CommonProxy {
 	public void registerItemRendering() {
 		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
-		
-		
 		mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockExcretaName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockExcretaName, "inventory"));
 		mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockNiterBedName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockNiterBedName, "inventory"));
 		mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockTrapCoverName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockTrapCoverName, "inventory"));

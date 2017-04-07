@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
