@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAIEatGrass;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMate;
@@ -141,7 +142,7 @@ public class AIManager {
 				removeAI(entity,
 						Arrays.asList(new Class[] { EntityAITempt.class, EntityAIFollowParent.class,
 								EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class,
-								EntityAIWatchClosest.class, EntityAILookIdle.class }));
+								EntityAIWatchClosest.class, EntityAILookIdle.class, EntityAIEatGrass.class}));
 
 				// this.entity.tasks.addTask(0, this.ai_crank);
 				entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
