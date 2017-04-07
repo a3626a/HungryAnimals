@@ -2,14 +2,7 @@ package oortcloud.hungryanimals.entities.properties.handler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
@@ -17,10 +10,6 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraftforge.common.config.Configuration;
-import oortcloud.hungryanimals.configuration.ConfigurationHandlerAnimal;
-import oortcloud.hungryanimals.entities.attributes.AttributeManager;
-import oortcloud.hungryanimals.entities.attributes.ModAttributes;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class HungryAnimalManager {
 
@@ -50,19 +39,6 @@ public class HungryAnimalManager {
 	}
 	
 	public void readFromConfig(Configuration config) {
-		for (Entry<Class<? extends EntityAnimal>, MutablePair<AnimalCharacteristic, AnimalCharacteristic>> i : cMap.entrySet()) {
-			String category = ConfigurationHandlerAnimal.categoryGenerator(i.getKey());
-			AnimalCharacteristic iCharacteristic = i.getValue().getLeft();
-			AnimalCharacteristic characteristic = new AnimalCharacteristic();
-
-			//TODO READ FOOD PREFERENCES HERE
-
-			for (Entry<IAttribute, Pair<Boolean, Double>> j : iCharacteristic.attributeMap.entrySet()) {
-				characteristic.putAttribute(j.getKey(),config.get(category, j.getKey().getAttributeUnlocalizedName(), j.getValue().getRight()).getDouble(), j.getValue().getLeft());
-			}
-			
-			i.getValue().setRight(characteristic);
-		}
 	}
 
 	public boolean isRegistered(Class<? extends EntityAnimal> animal) {

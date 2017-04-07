@@ -1,17 +1,10 @@
 package oortcloud.hungryanimals.configuration.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-import com.google.common.base.Optional;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 
 public class ConfigurationHelper {
