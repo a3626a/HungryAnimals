@@ -9,7 +9,6 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraftforge.common.config.Configuration;
 
 public class HungryAnimalManager {
 
@@ -36,9 +35,6 @@ public class HungryAnimalManager {
 
 	public List<Class<? extends EntityAnimal>> getRegisteredAnimal() {
 		return registedClass;
-	}
-	
-	public void readFromConfig(Configuration config) {
 	}
 
 	public boolean isRegistered(Class<? extends EntityAnimal> animal) {

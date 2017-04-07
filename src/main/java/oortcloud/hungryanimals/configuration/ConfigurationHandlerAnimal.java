@@ -91,8 +91,6 @@ public class ConfigurationHandlerAnimal {
 			}
 		}
 		
-		HungryAnimalManager.getInstance().readFromConfig(config);
-
 		config.save();
 	}
 
