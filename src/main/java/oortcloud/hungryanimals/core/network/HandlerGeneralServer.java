@@ -1,6 +1,5 @@
 package oortcloud.hungryanimals.core.network;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
@@ -11,12 +10,10 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
 
 public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer, PacketGeneralClient> {
 
@@ -39,6 +36,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 			*/
 			break;
 		case SyncIndex.ENTITYOVERLAY_EDIT_INT:
+			/*
 			int id = message.getInt();
 			WorldServer[] aworldserver = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 			for (int j = 0; j < aworldserver.length; ++j) {
@@ -66,8 +64,10 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 					}
 				}
 			}
+			*/
 			break;
 		case SyncIndex.ENTITYOVERLAY_EDIT_DOUBLE:
+			/*
 			int id2 = message.getInt();
 			WorldServer[] aworldserver2 = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 			for (int j = 0; j < aworldserver2.length; ++j) {
@@ -96,6 +96,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 					}
 				}
 			}
+			*/
 			break;
 		case SyncIndex.ENTITYOVERLAY_SYNC_REQUEST:
 			int id3 = message.getInt();
@@ -116,7 +117,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 						msg.setDouble(animal.getGrowingAge() / 24000.0);
 						msg.setDouble(capTamableAnimal.getTaming() / 2.0);
 						int[] potions = new int[animal.getActivePotionEffects().size()];
-						Iterator iterator = animal.getActivePotionEffects().iterator();
+						Iterator<PotionEffect> iterator = animal.getActivePotionEffects().iterator();
 						int potions_index = 0;
 						while (iterator.hasNext()) {
 							PotionEffect i = (PotionEffect) iterator.next();
