@@ -159,7 +159,5 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue()
 					* hunger);
 		}
-
 	}
-
 }
