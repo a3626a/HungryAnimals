@@ -17,7 +17,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
-public class ConfigurationHandlerJSONLoader {
+public class ConfigurationHandlerJSON {
 	
 	private BiConsumer<File, Class<? extends EntityAnimal>> read;
 	private File directory;
@@ -29,7 +29,7 @@ public class ConfigurationHandlerJSONLoader {
 	 * @param descriptor : relative path, never start with /
 	 * @param read
 	 */
-	public ConfigurationHandlerJSONLoader(FMLPreInitializationEvent event, String descriptor, BiConsumer<File, Class<? extends EntityAnimal>> read) {
+	public ConfigurationHandlerJSON(FMLPreInitializationEvent event, String descriptor, BiConsumer<File, Class<? extends EntityAnimal>> read) {
 		this.descriptor = descriptor;
 		this.directory = new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/" + descriptor);
 		this.read = read;
@@ -54,7 +54,7 @@ public class ConfigurationHandlerJSONLoader {
 				try {
 					this.read.read(iFile, i);
 				} catch (JsonSyntaxException e) {
-					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
+					HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
 				}
 			}
 		}
@@ -62,10 +62,10 @@ public class ConfigurationHandlerJSONLoader {
 	
 	private void createDefaultConfigurationFile(File file) {
 		String resourceName = "/assets/" + References.MODID + "/" + this.descriptor + "/" + file.getName();
-		URL url = ConfigurationHandlerJSONLoader.class.getResource(resourceName);
+		URL url = ConfigurationHandlerJSON.class.getResource(resourceName);
 
 		if (url == null) {
-			HungryAnimals.logger.warn("Couldn\'t load {} {} from assets", new Object[] { this.descriptor, resourceName });
+			HungryAnimals.logger.error("Couldn\'t load {} {} from assets", new Object[] { this.descriptor, resourceName });
 			return;
 		}
 
@@ -78,8 +78,12 @@ public class ConfigurationHandlerJSONLoader {
 			o.write(s);
 			o.close();
 		} catch (IOException e) {
-			HungryAnimals.logger.warn("Couldn\'t load {} {} from {}\n{}", new Object[] { this.descriptor, file, url, e });
+			HungryAnimals.logger.error("Couldn\'t load {} {} from {}\n{}", new Object[] { this.descriptor, file, url, e });
 		}
+	}
+	
+	public String getDescriptor() {
+		return this.descriptor;
 	}
 	
 	@FunctionalInterface
