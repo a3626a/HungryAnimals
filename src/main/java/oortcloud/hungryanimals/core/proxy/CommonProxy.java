@@ -14,8 +14,11 @@ import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.capability.CapabilityHandler;
 import oortcloud.hungryanimals.entities.capability.CapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.CapabilityTamablesAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.StorageHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.StorageTamableAnimal;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.recipes.event.CraftingEventHandler;
@@ -34,6 +37,7 @@ public class CommonProxy {
 	
 	public void registerCapabilities() {
 		CapabilityManager.INSTANCE.register(ICapabilityHungryAnimal.class, new StorageHungryAnimal(), CapabilityHungryAnimal.class);
+		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamablesAnimal.class);
 	}
 
 	public void registerEntityRendering() {
