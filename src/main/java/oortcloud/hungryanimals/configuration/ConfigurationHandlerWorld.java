@@ -7,6 +7,8 @@ import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ConfigurationHandlerWorld {
 	public static Configuration config;
@@ -28,20 +30,23 @@ public class ConfigurationHandlerWorld {
 
 	public static void sync() {
 		HungryAnimals.logger.info("Configuration: World start");
-		
+
 		HungryAnimals.logger.info("Configuration: Read and Register properties of BlockExcreta");
 		BlockExcreta.fermetationProbability = config.get(CATEGORY_Block, KEY_fermetationProbability, BlockExcreta.defualt_fermetationProbability).getDouble();
 		BlockExcreta.erosionProbability = config.get(CATEGORY_Block, KEY_erosionProbability, BlockExcreta.defualt_erosionProbability).getDouble();
-		BlockExcreta.erosionOnHayProbability = config.get(CATEGORY_Block, KEY_erosionOnHayProbability, BlockExcreta.defualt_erosionOnHayProbability).getDouble();
-		BlockExcreta.fertilizationProbability = config.get(CATEGORY_Block, KEY_fertilizationProbability, BlockExcreta.defualt_fertilizationProbability).getDouble();
+		BlockExcreta.erosionOnHayProbability = config.get(CATEGORY_Block, KEY_erosionOnHayProbability, BlockExcreta.defualt_erosionOnHayProbability)
+				.getDouble();
+		BlockExcreta.fertilizationProbability = config.get(CATEGORY_Block, KEY_fertilizationProbability, BlockExcreta.defualt_fertilizationProbability)
+				.getDouble();
 		BlockExcreta.diseaseProbability = config.get(CATEGORY_Block, KEY_diseaseProbability, BlockExcreta.defualt_diseaseProbability).getDouble();
-		
+
 		HungryAnimals.logger.info("Configuration: Read and Register properties of NiterBed");
 		BlockNiterBed.ripeningProbability = config.get(CATEGORY_Block, KEY_ripeningProbability, BlockNiterBed.default_ripeningProbability).getDouble();
-		
-		HungryAnimals.logger.info("Configuration: Read and Register properties of Grass Growth");
-		WorldEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, WorldEventHandler.default_grassProbability).getDouble();
 
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+			HungryAnimals.logger.info("Configuration: Read and Register properties of Grass Growth");
+			WorldEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, WorldEventHandler.default_grassProbability).getDouble();
+		}
 		config.save();
 
 	}
