@@ -31,8 +31,7 @@ import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerFoodPreferenceBlock {
 
-	public static Gson GSON_INSTANCE = new GsonBuilder()
-			.registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer()).create();
+	public static Gson GSON_INSTANCE = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer()).create();
 	public static File directory;
 
 	public static void init(File directory) {
@@ -43,7 +42,7 @@ public class ConfigurationHandlerFoodPreferenceBlock {
 			try {
 				Files.createDirectories(directory.toPath());
 			} catch (IOException e) {
-				HungryAnimals.logger.warn("Couldn\'t create food preference folder {}", new Object[] { directory, e });
+				HungryAnimals.logger.warn("Couldn\'t create food preference folder {}\n{}", new Object[] { directory, e });
 				return;
 			}
 		}
@@ -58,8 +57,7 @@ public class ConfigurationHandlerFoodPreferenceBlock {
 	}
 
 	public static void createDefaultConfigurationFile(File file) {
-		URL url = ConfigurationHandlerFoodPreferenceBlock.class
-				.getResource("/assets/" + References.MODID + "/food_preferences/block/" + file.getName());
+		URL url = ConfigurationHandlerFoodPreferenceBlock.class.getResource("/assets/" + References.MODID + "/food_preferences/block/" + file.getName());
 
 		if (url == null) {
 			HungryAnimals.logger.warn("Couldn\'t load food preference {} from {}", new Object[] { file, url });
@@ -74,9 +72,8 @@ public class ConfigurationHandlerFoodPreferenceBlock {
 			FileWriter o = new FileWriter(file);
 			o.write(s);
 			o.close();
-		} catch (IOException ioexception) {
-			HungryAnimals.logger.warn("Couldn\'t load food preference {} from {}",
-					new Object[] { file, url, ioexception });
+		} catch (IOException e) {
+			HungryAnimals.logger.warn("Couldn\'t load food preference {} from {}\n{}", new Object[] { file, url, e });
 		}
 	}
 
@@ -88,20 +85,17 @@ public class ConfigurationHandlerFoodPreferenceBlock {
 				try {
 					syncFile(iFile, i);
 				} catch (JsonSyntaxException e) {
-					HungryAnimals.logger.warn("Couldn\'t load food preference {} of {}",
-							new Object[] { iFile, i, e });
-					e.printStackTrace();
+					HungryAnimals.logger.warn("Couldn\'t load food preference {} of {}\n{}", new Object[] { iFile, i, e });
 				} catch (IOException e) {
-					HungryAnimals.logger.warn("Couldn\'t load food preference {} of {}",
-							new Object[] { iFile, i, e });
-					e.printStackTrace();
+					HungryAnimals.logger.warn("Couldn\'t load food preference {} of {}\n{}", new Object[] { iFile, i, e });
 				}
+			} else {
+
 			}
 		}
 	}
 
-	public static void syncFile(File file, Class<? extends EntityAnimal> entity)
-			throws JsonSyntaxException, IOException {
+	public static void syncFile(File file, Class<? extends EntityAnimal> entity) throws JsonSyntaxException, IOException {
 		JsonArray arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
 		Map<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
 		for (JsonElement i : arr) {
@@ -110,7 +104,8 @@ public class ConfigurationHandlerFoodPreferenceBlock {
 			double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
 			map.put(state, hunger);
 		}
-		FoodPreferenceRegisterEvent.FoodPreferenceBlockStateRegisterEvent event = new FoodPreferenceRegisterEvent.FoodPreferenceBlockStateRegisterEvent(entity, map);
+		FoodPreferenceRegisterEvent.FoodPreferenceBlockStateRegisterEvent event = new FoodPreferenceRegisterEvent.FoodPreferenceBlockStateRegisterEvent(entity,
+				map);
 		MinecraftForge.EVENT_BUS.post(event);
 		FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(entity, new FoodPreferenceBlockState(map));
 	}
