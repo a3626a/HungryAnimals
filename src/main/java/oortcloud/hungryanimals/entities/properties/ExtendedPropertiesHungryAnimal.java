@@ -56,7 +56,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 
 	public EntityAnimal entity;
 	public World worldObj;
-	public EntityAIMoveToTrough ai_moveToFoodbox;
 	// public EntityAICrank ai_crank;
 
 	public void acceptProperty() {
@@ -72,7 +71,6 @@ public class ExtendedPropertiesHungryAnimal implements IExtendedEntityProperties
 	public void init(Entity entity, World world) {
 		this.entity = (EntityAnimal) entity;
 		this.worldObj = world;
-		this.ai_moveToFoodbox = new EntityAIMoveToTrough(this.entity, this, 1.0D);
 
 		AttributeManager.getInstance().registerAttributes(this.entity);
 	}
