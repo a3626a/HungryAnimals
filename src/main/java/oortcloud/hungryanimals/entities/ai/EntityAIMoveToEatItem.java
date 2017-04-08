@@ -73,8 +73,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		} else {
 			float radius = 16.0F;
 			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
-					entity.getEntityBoundingBox().expand(radius, radius, radius),
-					Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+					entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
@@ -83,8 +82,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 				return false;
 			}
 
-			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
-					entity.getEntityBoundingBox().expand(radius, radius, radius), EAT_EDIBLE);
+			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius),
+					EAT_EDIBLE);
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
@@ -147,17 +146,14 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (this.entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger
-						/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
+				int duration = (int) (hunger / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0002
-					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue()
-					* hunger);
+			this.capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * hunger);
 		}
 	}
 }
