@@ -7,6 +7,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -77,6 +78,10 @@ public class CommonProxy {
 	public void initWAILA() {
 		// FMLInterModComms.sendMessage("Waila", "register",
 		// "oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals.callbackRegister");
+	}
+	
+	public void initTOP() {
+		 TOPCompatibility.register();
 	}
 
 }

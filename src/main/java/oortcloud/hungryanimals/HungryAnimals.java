@@ -76,6 +76,9 @@ public class HungryAnimals {
 		HungryAnimalManager.getInstance().init();
 		AIManager.getInstance().init();
 		ConfigurationHandler.sync();
+		
+		if (Loader.isModLoaded("theoneprobe"))
+			proxy.initTOP();
 	}
 
 	@Mod.EventHandler
@@ -92,8 +95,6 @@ public class HungryAnimals {
 		
 		if (Loader.isModLoaded("WAILA"))
 			proxy.initWAILA();
-		
-		//FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "oortcloud.hungryanimals.api.theoneprobe.APITheOneProbe$theOneProbe");
 	}
 
 	@Mod.EventHandler
