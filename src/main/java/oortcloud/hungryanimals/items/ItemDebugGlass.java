@@ -11,7 +11,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.core.network.SyncIndex;
@@ -21,11 +23,12 @@ public class ItemDebugGlass extends Item {
 
 	public ItemDebugGlass() {
 		super();
-		setUnlocalizedName(Strings.itemDebugGlassName);
+		setUnlocalizedName(References.MODID+"."+Strings.itemDebugGlassName);
+		setRegistryName(Strings.itemDebugGlassName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		
 		setMaxStackSize(1);
-		ModItems.register(this);
+		GameRegistry.register(this);
 	}
 
 	@Override

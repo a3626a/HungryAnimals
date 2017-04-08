@@ -12,7 +12,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 
@@ -20,10 +22,10 @@ public class ItemBola extends Item {
 
 	public ItemBola() {
 		super();
-		setUnlocalizedName(Strings.itemBolaName);
+		setUnlocalizedName(References.MODID+"."+Strings.itemBolaName);
+		setRegistryName(Strings.itemBolaName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-
-		ModItems.register(this);
+		GameRegistry.register(this);
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class ItemBola extends Item {
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.BOW;
+        return EnumAction.NONE;
     }
 	
 	@Override

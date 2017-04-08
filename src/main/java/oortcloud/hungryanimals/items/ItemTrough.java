@@ -11,19 +11,22 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 
 public class ItemTrough extends Item {
 
 	public ItemTrough() {
 		super();
-		setUnlocalizedName(Strings.itemTroughBoxName);
+		setUnlocalizedName(References.MODID+"."+Strings.itemTroughBoxName);
+		setRegistryName(Strings.itemTroughBoxName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 
-		ModItems.register(this);
+		GameRegistry.register(this);
 	}
 
 	@Override
