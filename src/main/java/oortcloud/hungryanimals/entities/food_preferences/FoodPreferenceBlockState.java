@@ -24,9 +24,11 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
 	private Map<HashBlockState, Double> map;
-
+	private final double min;
+	
 	public FoodPreferenceBlockState(Map<HashBlockState, Double> map) {
 		this.map = map;
+		min = Collections.min(map.values());
 	}
 
 	@Override
@@ -52,9 +54,14 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
 	@Override
 	public boolean shouldEat(ICapabilityHungryAnimal cap) {
-		return cap.getHunger() + Collections.min(map.values()) < cap.getMaxHunger();
+		return cap.getHunger() + min < cap.getMaxHunger();
 	}
 
+	@Override
+	public String toString() {
+		return map.toString();
+	}
+	
 	public static class HashBlockState {
 		private IBlockState block;
 		private boolean ignoreProperty;
@@ -99,6 +106,10 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 			} else {
 				return block.hashCode();
 			}
+		}
+		
+		public String toString() {
+			return block.toString();
 		}
 
 		public static class Serializer implements JsonDeserializer<HashBlockState>, JsonSerializer<HashBlockState> {

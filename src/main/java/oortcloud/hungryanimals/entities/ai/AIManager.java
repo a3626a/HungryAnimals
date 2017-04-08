@@ -82,7 +82,7 @@ public class AIManager {
 				entity.tasks.addTask(3, new EntityAIMoveToTrough(entity, 1.0D));
 				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D, false));
 				entity.tasks.addTask(5, new EntityAIMoveToEatItem(entity, 1.5D));
-				entity.tasks.addTask(7, new EntityAIMoveToEatBlockChicken(entity, 1.0D));
+				entity.tasks.addTask(7, new EntityAIMoveToEatBlock(entity, 1.0D));
 				entity.tasks.addTask(8, new EntityAIWander(entity, 1.0D));
 				entity.tasks.addTask(9, new EntityAIWatchClosest(entity, EntityPlayer.class, 6.0F));
 				entity.tasks.addTask(10, new EntityAILookIdle(entity));
@@ -151,7 +151,7 @@ public class AIManager {
 				entity.tasks.addTask(3, new EntityAIMoveToTrough(entity, 1.0D));
 				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D, false));
 				entity.tasks.addTask(5, new EntityAIMoveToEatItem(entity, 1.5D));
-				entity.tasks.addTask(7, new EntityAIMoveToEatBlockChicken(entity, 1.0D));
+				entity.tasks.addTask(7, new EntityAIMoveToEatBlock(entity, 1.0D));
 				entity.tasks.addTask(8, new EntityAIWander(entity, 1.0D));
 				entity.tasks.addTask(9, new EntityAIWatchClosest(entity, EntityPlayer.class, 6.0F));
 				entity.tasks.addTask(10, new EntityAILookIdle(entity));

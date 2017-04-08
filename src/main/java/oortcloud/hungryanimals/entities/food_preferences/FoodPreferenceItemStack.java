@@ -23,9 +23,10 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
 
 	private Map<HashItemType, Double> map = new HashMap<HashItemType, Double>();
-
+	private final double min;
 	public FoodPreferenceItemStack(Map<HashItemType, Double> map) {
 		this.map = map;
+		min = Collections.min(map.values());
 	}
 	
 	@Override
@@ -51,9 +52,14 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
 
 	@Override
 	public boolean shouldEat(ICapabilityHungryAnimal cap) {
-		return cap.getHunger() + Collections.min(map.values()) < cap.getMaxHunger();
+		return cap.getHunger() + min < cap.getMaxHunger();
 	}
 
+	@Override
+	public String toString() {
+		return map.toString();
+	}
+	
 	public static class HashItemType {
 		private Item item;
 		private int damage;
@@ -91,11 +97,7 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
 		}
 
 		public String toString() {
-			if (ignoreDamage) {
-				return "(" + String.valueOf(Item.REGISTRY.getNameForObject(item)) + ")";
-			} else {
-				return "(" + String.valueOf(Item.REGISTRY.getNameForObject(item)) + "," + damage + ")";
-			}
+			return toString();
 		}
 
 		public static class Serializer implements JsonDeserializer<HashItemType>, JsonSerializer<HashItemType> {

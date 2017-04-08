@@ -64,7 +64,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (pref.shouldEat(capHungry))
+		if (!pref.shouldEat(capHungry))
 			return false;
 
 		if (this.delayCounter > 0) {

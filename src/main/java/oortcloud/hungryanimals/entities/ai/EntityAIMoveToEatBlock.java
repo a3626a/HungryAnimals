@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -46,8 +47,9 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (pref.shouldEat(capHungry))
+		if (!pref.shouldEat(capHungry)) {
 			return false;
+		}
 
 		if (this.delayCounter > 0) {
 			--this.delayCounter;
@@ -60,7 +62,6 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		float herdRadius = 32.0F;
-
 		// find central position of the herd
 		// find closest entity in the herd
 
