@@ -73,14 +73,14 @@ public class HungryAnimals {
 		AIManager.getInstance().init();
 		ConfigurationHandler.sync();
 		
+		proxy.registerItemRendering();
+		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
 	}
 
 	@Mod.EventHandler
 	public static void Init(FMLInitializationEvent event) {
-		proxy.registerItemRendering();
-
 		CraftingHandler.init();
 		proxy.registerEventHandler();
 

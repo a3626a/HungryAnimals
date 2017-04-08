@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.utils.CameraTransformUtil;
 
 public class ModelItemBola implements IPerspectiveAwareModel {
@@ -36,16 +37,16 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 
 	public static final ModelResourceLocation modelresourcelocation_spin = new ModelResourceLocation(
 			References.RESOURCESPREFIX + Strings.itemBolaName + "_spin", "inventory");
-	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(
-			References.RESOURCESPREFIX + Strings.itemBolaName, "inventory");
+	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(ModItems.bola.getRegistryName(),
+			"inventory");
 
 	private static final float radiusFirst = (float) (Math.sqrt(2) * 6);
 	private static final float radiusThird = (float) (Math.sqrt(2) * 2.25);
 
 	public ModelItemBola(IPerspectiveAwareModel model) {
 		this.model_normal = model;
-		this.model_spin = (IPerspectiveAwareModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-				.getModelManager().getModel(modelresourcelocation_spin);
+		this.model_spin = (IPerspectiveAwareModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager()
+				.getModel(modelresourcelocation_spin);
 	}
 
 	@Override
@@ -57,8 +58,7 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 	public ItemOverrideList getOverrides() {
 		return new ItemOverrideList(ImmutableList.of()) {
 			@Override
-			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world,
-					EntityLivingBase entity) {
+			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world, EntityLivingBase entity) {
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				if (player.getHeldItemMainhand() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
@@ -90,6 +90,7 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 		return model_spin.isBuiltInRenderer();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
 		return model_spin.getItemCameraTransforms();
@@ -103,16 +104,17 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		if (cameraTransformType == TransformType.FIRST_PERSON_RIGHT_HAND) {
-			Vector3f rotation = new Vector3f(0, -135, angle);
-			Vector3f translation = new Vector3f(0,
-					(float) ((2.5 + radiusFirst * Math.cos(Math.toRadians(angle + 45))) / 16.0F),
-					(float) ((4.5 - radiusFirst * Math.sin(Math.toRadians(angle + 45))) / 16.0F));
-			return Pair.of(this, CameraTransformUtil.getMatrix4fFromCamearaTransform(rotation, translation, 1.7F));
+			//Vector3f rotation = new Vector3f(0, -135, angle);
+			return model_spin.handlePerspective(cameraTransformType);
+			//Vector3f rotation = new Vector3f(0, -135, 25);
+			//Vector3f translation = new Vector3f(0, 4, 2);
+			//Vector3f translation = new Vector3f(0, (float) ((2.5 + radiusFirst * Math.cos(Math.toRadians(angle + 45))) / 16.0F),
+			//		(float) ((4.5 - radiusFirst * Math.sin(Math.toRadians(angle + 45))) / 16.0F));
+			//return Pair.of(this, CameraTransformUtil.getMatrix4fFromCamearaTransform(rotation, translation, 1.7F));
 		}
 		if (cameraTransformType == TransformType.THIRD_PERSON_RIGHT_HAND) {
 			Vector3f rotation = new Vector3f(0, 90, angle);
-			Vector3f translation = new Vector3f(-1.25F / 16.0F,
-					(float) ((1.25 + radiusThird * Math.cos(Math.toRadians(angle + 45))) / 16.0F),
+			Vector3f translation = new Vector3f(-1.25F / 16.0F, (float) ((1.25 + radiusThird * Math.cos(Math.toRadians(angle + 45))) / 16.0F),
 					(float) ((-0.5 + radiusThird * Math.sin(Math.toRadians(angle + 45))) / 16.0F));
 			return Pair.of(this, CameraTransformUtil.getMatrix4fFromCamearaTransform(rotation, translation, 0.55F));
 		}
