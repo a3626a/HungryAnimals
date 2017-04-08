@@ -43,10 +43,8 @@ public class ConfigurationHandlerWorld {
 		HungryAnimals.logger.info("Configuration: Read and Register properties of NiterBed");
 		BlockNiterBed.ripeningProbability = config.get(CATEGORY_Block, KEY_ripeningProbability, BlockNiterBed.default_ripeningProbability).getDouble();
 
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
-			HungryAnimals.logger.info("Configuration: Read and Register properties of Grass Growth");
-			WorldEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, WorldEventHandler.default_grassProbability).getDouble();
-		}
+		HungryAnimals.logger.info("Configuration: Read and Register properties of Grass Growth");
+		WorldEventHandler.grassProbability = config.get(CATEGORY_Block, KEY_grassProbability, WorldEventHandler.default_grassProbability).getDouble();
 		config.save();
 
 	}

@@ -13,9 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import oortcloud.hungryanimals.HungryAnimals;
 
-@SideOnly(Side.SERVER)
 public class WorldEventHandler {
 
 	public static double grassProbability;
@@ -23,6 +22,9 @@ public class WorldEventHandler {
 
 	@SubscribeEvent
 	public void onRandomTick(WorldTickEvent event) {
+		if (event.side == Side.CLIENT)
+			return;
+
 		if (event.phase == Phase.END) {
 			WorldServer world = (WorldServer) event.world;
 			if (world.getWorldTime() % 200 == 0) {
@@ -45,7 +47,8 @@ public class WorldEventHandler {
 					for (BlockPos i : list) {
 						if (world.isAirBlock(i))
 							world.setBlockState(i, Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE,
-									BlockTallGrass.EnumType.GRASS), 2);
+									BlockTallGrass.EnumType.GRASS), 3);
+						HungryAnimals.logger.info("create");
 					}
 				}
 			}
