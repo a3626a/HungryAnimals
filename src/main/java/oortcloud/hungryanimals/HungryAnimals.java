@@ -28,7 +28,6 @@ import oortcloud.hungryanimals.core.proxy.CommonProxy;
 import oortcloud.hungryanimals.entities.ai.AIManager;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.recipes.CraftingHandler;
@@ -43,9 +42,6 @@ public class HungryAnimals {
 	public static CommonProxy proxy;
 
 	public static SimpleNetworkWrapper simpleChannel;
-
-	@SideOnly(Side.CLIENT)
-	public static EntityOverlayHandler entityOverlay;
 
 	public static CreativeTabs tabHungryAnimals = new CreativeTabs("tabHungryAnimals") {
 		@Override

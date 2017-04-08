@@ -12,7 +12,6 @@ import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
@@ -20,7 +19,6 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
-import oortcloud.hungryanimals.entities.render.EntityOverlayHandler;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
 import oortcloud.hungryanimals.entities.render.RenderEntitySlingShotBall;
 import oortcloud.hungryanimals.items.ModItems;
@@ -100,8 +98,6 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ClientRenderEventHandler());
 		DebugOverlayHandler debugOverlay = new DebugOverlayHandler(Minecraft.getMinecraft());
 		MinecraftForge.EVENT_BUS.register(debugOverlay);
-		HungryAnimals.entityOverlay = new EntityOverlayHandler(Minecraft.getMinecraft());
-		MinecraftForge.EVENT_BUS.register(HungryAnimals.entityOverlay);
 	}
 
 	@Override

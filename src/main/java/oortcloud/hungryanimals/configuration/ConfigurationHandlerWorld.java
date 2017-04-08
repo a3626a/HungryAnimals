@@ -2,13 +2,11 @@ package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
 
+import net.minecraftforge.common.config.Configuration;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class ConfigurationHandlerWorld {
 	public static Configuration config;
