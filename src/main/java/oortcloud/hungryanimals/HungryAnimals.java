@@ -92,6 +92,8 @@ public class HungryAnimals {
 		
 		if (Loader.isModLoaded("WAILA"))
 			proxy.initWAILA();
+		
+		//FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "oortcloud.hungryanimals.api.theoneprobe.APITheOneProbe$theOneProbe");
 	}
 
 	@Mod.EventHandler

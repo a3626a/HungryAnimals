@@ -21,6 +21,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.ai.AIManager;
@@ -47,7 +48,7 @@ public class EntityEventHandler {
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-
+		
 		AttributeManager.getInstance().applyAttributes(entity);
 		entity.setHealth(entity.getMaxHealth());
 		entity.getCapability(ProviderHungryAnimal.CAP, null)

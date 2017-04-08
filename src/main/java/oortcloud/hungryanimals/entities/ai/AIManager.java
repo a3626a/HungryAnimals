@@ -24,6 +24,7 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import oortcloud.hungryanimals.HungryAnimals;
 import scala.actors.threadpool.Arrays;
 
 public class AIManager {

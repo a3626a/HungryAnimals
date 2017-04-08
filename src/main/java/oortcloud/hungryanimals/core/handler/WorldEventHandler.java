@@ -48,7 +48,6 @@ public class WorldEventHandler {
 						if (world.isAirBlock(i))
 							world.setBlockState(i, Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE,
 									BlockTallGrass.EnumType.GRASS), 3);
-						HungryAnimals.logger.info("create");
 					}
 				}
 			}
