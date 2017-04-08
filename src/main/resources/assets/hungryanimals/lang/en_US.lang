@@ -21,3 +21,6 @@ item.compositewood.name=Composite Wood
 
 api.nei.hanlder.compositewoodcrafting=Composite Wood Crafting Recipe
 api.nei.hanlder.animalglue=Animal Glue
+
+potion.growth=Fast Growth
+potion.disease=Disease
