@@ -30,9 +30,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.items.ModItems;
@@ -60,10 +62,11 @@ public class BlockExcreta extends BlockFalling {
 		super(ModMaterials.excreta);
 		setHarvestLevel("shovel", 0);
 		setDefaultState(this.blockState.getBaseState().withProperty(CONTENT, EnumType.getValue(1, 0)));
-		setUnlocalizedName(Strings.blockExcretaName);
+		setUnlocalizedName(References.MODID+"."+Strings.blockExcretaName); 
+		setRegistryName(Strings.blockExcretaName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
-		ModBlocks.register(this);
+		GameRegistry.register(this);
 	}
 
 	@Override

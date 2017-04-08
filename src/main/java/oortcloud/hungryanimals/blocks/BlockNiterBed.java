@@ -11,7 +11,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 
@@ -28,10 +30,11 @@ public class BlockNiterBed extends Block {
 		setHardness(0.5F);
 		
 		setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
-		setUnlocalizedName(Strings.blockNiterBedName);
+		setUnlocalizedName(References.MODID+"."+Strings.blockNiterBedName); 
+		setRegistryName(Strings.blockNiterBedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
-		ModBlocks.register(this);
+		GameRegistry.register(this);
 	}
 
 	@Override

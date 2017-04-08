@@ -11,7 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 
 public class BlockTrapCover extends Block {
@@ -21,9 +23,10 @@ public class BlockTrapCover extends Block {
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
 
-		setUnlocalizedName(Strings.blockTrapCoverName);
+		setUnlocalizedName(References.MODID+"."+Strings.blockTrapCoverName); 
+		setRegistryName(Strings.blockTrapCoverName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		ModBlocks.register(this);
+		GameRegistry.register(this);
 	}
 
 	@Override

@@ -28,9 +28,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
@@ -54,8 +56,9 @@ public class BlockTrough extends BlockContainer {
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
 		
-		setUnlocalizedName(Strings.blockTroughName);
-		ModBlocks.register(this);
+		setUnlocalizedName(References.MODID+"."+Strings.blockTroughName); 
+		setRegistryName(Strings.blockTroughName);
+		GameRegistry.register(this);
 	}
 
 	@Override

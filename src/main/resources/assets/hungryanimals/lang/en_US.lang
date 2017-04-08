@@ -1,12 +1,12 @@
 itemGroup.tabHungryAnimals=Hungry Animals
 
-tile.excreta.name=Excreta
-tile.niterbed.name=Niter Beds
-tile.trough.name=Trough
-tile.trapcover.name=Trap Cover
-tile.floorcoverleaf.name=Leaf Floor Cover
-tile.floorcoverwool.name=Wool Floor Cover
-tile.floorcoverhay.name=Hay Floor Cover
+tile.hungryanimals.excreta.name=Excreta
+tile.hungryanimals.niterbed.name=Niter Beds
+tile.hungryanimals.trough.name=Trough
+tile.hungryanimals.trapcover.name=Trap Cover
+tile.hungryanimals.floorcoverleaf.name=Leaf Floor Cover
+tile.hungryanimals.floorcoverwool.name=Wool Floor Cover
+tile.hungryanimals.floorcoverhay.name=Hay Floor Cover
 item.hungryanimals.manure.name=Manure
 item.hungryanimals.woodash.name=Wood Ash
 item.hungryanimals.saltpeter.name=Saltpeter
