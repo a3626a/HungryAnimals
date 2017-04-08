@@ -18,8 +18,9 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 
 	@Override
 	public void readNBT(Capability<ICapabilityHungryAnimal> capability, ICapabilityHungryAnimal instance, EnumFacing side, NBTBase nbt) {
-		instance.setHunger(((NBTTagCompound)nbt).getDouble("hunger"));
-		instance.setExcretion(((NBTTagCompound)nbt).getDouble("excretion"));
+		NBTTagCompound tag = (NBTTagCompound) nbt;
+		instance.setHunger(tag.getDouble("hunger"));
+		instance.setExcretion(tag.getDouble("excretion"));
 	}
 
 }

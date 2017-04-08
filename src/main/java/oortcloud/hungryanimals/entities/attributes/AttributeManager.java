@@ -24,12 +24,20 @@ public class AttributeManager {
 		return INSTANCE;
 	}
 	
+	/**
+	 * called EntityJoinWorldEvent
+	 * @param entity
+	 */
 	public void applyAttributes(EntityLivingBase entity) {
 		for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
 			i.apply(entity);
 		}
 	}
-
+	
+	/**
+	 * called EntityConstructing
+	 * @param entity
+	 */
 	public void registerAttributes(EntityLivingBase entity) {
 		for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
 			i.register(entity);

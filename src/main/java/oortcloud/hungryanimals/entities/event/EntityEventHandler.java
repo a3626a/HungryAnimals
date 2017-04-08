@@ -47,29 +47,24 @@ public class EntityEventHandler {
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-		
-		AttributeManager.getInstance().applyAttributes(entity);
-		entity.setHealth(entity.getMaxHealth());
-		entity.getCapability(ProviderHungryAnimal.CAP, null)
-				.setHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / 2.0);
-		entity.getCapability(ProviderHungryAnimal.CAP, null).setExcretion(0);
-		entity.getCapability(ProviderTamableAnimal.CAP, null).setTaming(-2);
 
+		AttributeManager.getInstance().applyAttributes(entity);		
+		entity.setHealth(entity.getMaxHealth());
 		AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
 	}
 
 	@SubscribeEvent
-	public void onConstructing(EntityConstructing event) {
+	public void onEntityConstructing(EntityConstructing event) {
 		if (!(event.getEntity() instanceof EntityAnimal))
 			return;
 
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-
+		
 		AttributeManager.getInstance().registerAttributes(entity);
 	}
-
+	
 	@SubscribeEvent
 	public void onLivingEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 		if (!(event.getEntity() instanceof EntityAnimal))

@@ -5,6 +5,7 @@ public class CapabilityTamablesAnimal implements ICapabilityTamableAnimal {
 	private double taming;
 	
 	public CapabilityTamablesAnimal() {
+		setTaming(-2);
 	}
 	
 	@Override
@@ -21,9 +22,7 @@ public class CapabilityTamablesAnimal implements ICapabilityTamableAnimal {
 
 	@Override
 	public double addTaming(double taming) {
-		double old = this.taming;
-		this.taming += taming;
-		return old;
+		return setTaming(getTaming()+taming);
 	}
 
 }
