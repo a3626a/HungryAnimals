@@ -21,6 +21,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.ai.AIManager;
@@ -191,17 +192,18 @@ public class EntityEventHandler {
 
 	@SubscribeEvent
 	public void onLivingEntityAttackedByPlayer(LivingAttackEvent event) {
-		ICapabilityTamableAnimal cap = event.getEntity().getCapability(ProviderTamableAnimal.CAP, null);
-
-		if (cap == null)
+		if (!(event.getEntity() instanceof EntityAnimal))
 			return;
 
-		EntityLivingBase entity = (EntityLivingBase) event.getEntity();
+		EntityAnimal entity = (EntityAnimal) event.getEntity();
+		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
+			return;
+		
+		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		DamageSource source = event.getSource();
-
 		if (!entity.isEntityInvulnerable(source)) {
 			if (source.getSourceOfDamage() instanceof EntityPlayer) {
-				cap.addTaming(-4 / entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue() * event.getAmount());
+				cap.addTaming(-4 / entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() * event.getAmount());
 			}
 		}
 	}
