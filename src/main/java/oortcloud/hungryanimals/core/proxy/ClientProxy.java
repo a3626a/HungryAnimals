@@ -1,15 +1,15 @@
 package oortcloud.hungryanimals.core.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
@@ -58,13 +58,13 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerItemModel() {
-		//ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
-		//ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal, ModelItemSlingshot.modelresourcelocation_shooting);
+		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
+		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal, ModelItemSlingshot.modelresourcelocation_shooting);
 	}
 
 	@Override
 	public void registerCustomBakedModel(ModelBakeEvent event) {
-		/*
+		
 		Object object;
 		object = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
 		if (object instanceof IPerspectiveAwareModel) {
@@ -79,12 +79,12 @@ public class ClientProxy extends CommonProxy {
 			ModelItemSlingshot customModel = new ModelItemSlingshot(existingModel);
 			event.getModelRegistry().putObject(ModelItemSlingshot.modelresourcelocation_normal, customModel);
 		}
-		*/
+		
 	}
 
 	@Override
 	public void registerSprite(TextureStitchEvent event) {
-		//event.getMap().registerSprite(ModelItemSlingshot.textureresourcelocation);
+		event.getMap().registerSprite(ModelItemSlingshot.textureresourcelocation);
 	}
 
 	@Override
