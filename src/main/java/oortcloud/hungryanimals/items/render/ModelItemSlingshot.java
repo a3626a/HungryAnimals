@@ -77,7 +77,7 @@ public class ModelItemSlingshot implements IPerspectiveAwareModel {
 		List<BakedQuad> combinedQuadsList = new ArrayList<BakedQuad>(model_shooting.getQuads(state, side, rand));
 		combinedQuadsList.add(leftString);
 		combinedQuadsList.add(rightString);
-		return null;
+		return combinedQuadsList;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class ModelItemSlingshot implements IPerspectiveAwareModel {
 			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world,
 					EntityLivingBase entity) {
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-				if (player.getHeldItemMainhand() == itemStack) {
+				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
 					float length = (float) (inuseTick / 150.0 + 0.9);
 
@@ -137,6 +137,7 @@ public class ModelItemSlingshot implements IPerspectiveAwareModel {
 		return model_shooting.getParticleTexture();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
 		return model_shooting.getItemCameraTransforms();

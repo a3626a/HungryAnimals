@@ -7,11 +7,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -28,6 +26,8 @@ import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 
 public class ItemSlingShot extends Item {
 
+	// TODO Consideration of Enchantment
+	
 	public ItemSlingShot() {
 		super();
 		setUnlocalizedName(References.MODID+"."+Strings.itemSlingShotName);
@@ -87,14 +87,14 @@ public class ItemSlingShot extends Item {
             {
                 if (itemstack == null)
                 {
-                    itemstack = new ItemStack(Items.ARROW);
+                    itemstack = new ItemStack(ItemBlock.getItemFromBlock(Blocks.COBBLESTONE));
                 }
 
                 float f = getArrowVelocity(i);
 
                 if ((double)f >= 0.1D)
                 {
-                    boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow)itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
+                    boolean flag1 = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
                     if (!worldIn.isRemote)
                     {
