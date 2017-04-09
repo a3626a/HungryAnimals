@@ -1,7 +1,11 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -9,7 +13,9 @@ import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 /**
  * Loot Table Modification System Details. 
@@ -36,65 +42,76 @@ public class LootTableModifier {
 
 	private static LootTableManager manager;
 
-	private static final ResourceLocation chicken = new ResourceLocation(References.MODID, "entities/chicken");
-	private static final ResourceLocation cow = new ResourceLocation(References.MODID, "entities/cow");
-	private static final ResourceLocation pig = new ResourceLocation(References.MODID, "entities/pig");
-	private static final ResourceLocation rabbit = new ResourceLocation(References.MODID, "entities/rabbit");
-	private static final ResourceLocation sheep = new ResourceLocation(References.MODID, "entities/sheep");
-
-	private static LootTable loot_table_chicken;
-	private static LootTable loot_table_cow;
-	private static LootTable loot_table_pig;
-	private static LootTable loot_table_rabbit;
-	private static LootTable loot_table_sheep;
+	private static Map<String, LootTable> tables;
 
 	public static void init(File file) {
 		manager = new LootTableManager(file);
 		LootFunctionManager.registerFunction(new SetCountBaseOnHunger.Serializer());
+		tables = new HashMap<String, LootTable>();
 	}
 
 	public static void sync() {
-		loot_table_chicken = manager.getLootTableFromLocation(chicken);
-		loot_table_cow = manager.getLootTableFromLocation(cow);
-		loot_table_pig = manager.getLootTableFromLocation(pig);
-		loot_table_rabbit = manager.getLootTableFromLocation(rabbit);
-		loot_table_sheep = manager.getLootTableFromLocation(sheep);
+		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+			String name = EntityList.getEntityStringFromClass(i);
+			tables.put(name2String(name), manager.getLootTableFromLocation(new ResourceLocation(References.MODID, "entities/" + name)));
+		}
+		HungryAnimals.logger.info(tables);
 	}
-	
+
 	@SubscribeEvent
 	public void LootTableLoadEvent(LootTableLoadEvent event) {
+		LootTable table = tables.get(resourceLocation2String(event.getName()));
+		if (table != null) {
+			HungryAnimals.logger.info(event.getName());
+		}
 		if (event.getName().equals(LootTableList.ENTITIES_CHICKEN)) {
 			event.getTable().getPool("main").removeEntry("minecraft:feather");
-			event.getTable().getPool("main").addEntry(loot_table_chicken.getPool("feather").getEntry("minecraft:feather"));
+			event.getTable().getPool("main").addEntry(table.getPool("feather").getEntry("minecraft:feather"));
 			event.getTable().getPool("pool1").removeEntry("minecraft:chicken");
-			event.getTable().getPool("pool1").addEntry(loot_table_chicken.getPool("meat").getEntry("minecraft:chicken"));
+			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:chicken"));
 		}
+
 		if (event.getName().equals(LootTableList.ENTITIES_COW)) {
 			event.getTable().getPool("main").removeEntry("minecraft:leather");
-			event.getTable().getPool("main").addEntry(loot_table_cow.getPool("leather").getEntry("minecraft:leather"));
+			event.getTable().getPool("main").addEntry(table.getPool("leather").getEntry("minecraft:leather"));
 			event.getTable().getPool("pool1").removeEntry("minecraft:beef");
-			event.getTable().getPool("pool1").addEntry(loot_table_cow.getPool("meat").getEntry("minecraft:beef"));
-			event.getTable().addPool(loot_table_cow.getPool("tendon"));
+			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:beef"));
+			event.getTable().addPool(table.getPool("tendon"));
+		}
+		if (event.getName().equals(LootTableList.ENTITIES_MUSHROOM_COW)) {
+			event.getTable().getPool("main").removeEntry("minecraft:leather");
+			event.getTable().getPool("main").addEntry(table.getPool("leather").getEntry("minecraft:leather"));
+			event.getTable().getPool("pool1").removeEntry("minecraft:beef");
+			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:beef"));
+			event.getTable().addPool(table.getPool("tendon"));
 		}
 		if (event.getName().equals(LootTableList.ENTITIES_PIG)) {
 			event.getTable().getPool("main").removeEntry("minecraft:porkchop");
-			event.getTable().getPool("main").addEntry(loot_table_pig.getPool("meat").getEntry("minecraft:porkchop"));
-			event.getTable().addPool(loot_table_pig.getPool("tendon"));
+			event.getTable().getPool("main").addEntry(table.getPool("meat").getEntry("minecraft:porkchop"));
+			event.getTable().addPool(table.getPool("tendon"));
 		}
 		if (event.getName().equals(LootTableList.ENTITIES_RABBIT)) {
-
 			event.getTable().getPool("main").removeEntry("minecraft:rabbit_hide");
-			event.getTable().getPool("main").addEntry(loot_table_rabbit.getPool("rabbit_hide").getEntry("minecraft:rabbit_hide"));
+			event.getTable().getPool("main").addEntry(table.getPool("rabbit_hide").getEntry("minecraft:rabbit_hide"));
 			event.getTable().getPool("pool1").removeEntry("minecraft:rabbit");
-			event.getTable().getPool("pool1").addEntry(loot_table_rabbit.getPool("meat").getEntry("minecraft:rabbit"));
+			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:rabbit"));
 			event.getTable().getPool("pool2").removeEntry("minecraft:rabbit_foot");
-			event.getTable().getPool("pool2").addEntry(loot_table_rabbit.getPool("rabbit_foot").getEntry("minecraft:rabbit_foot"));
+			event.getTable().getPool("pool2").addEntry(table.getPool("rabbit_foot").getEntry("minecraft:rabbit_foot"));
 		}
 		if (event.getName().equals(LootTableList.ENTITIES_SHEEP)) {
 			event.getTable().getPool("main").removeEntry("minecraft:mutton");
-			event.getTable().getPool("main").addEntry(loot_table_sheep.getPool("meat").getEntry("minecraft:mutton"));
-			event.getTable().addPool(loot_table_sheep.getPool("tendon"));
+			event.getTable().getPool("main").addEntry(table.getPool("meat").getEntry("minecraft:mutton"));
+			event.getTable().addPool(table.getPool("tendon"));
 		}
+	}
+
+	private static String name2String(String name) {
+		return name.toLowerCase();
+	}
+
+	private static String resourceLocation2String(ResourceLocation resourceLocation) {
+		String[] list = resourceLocation.getResourcePath().split("/");
+		return list.length == 2 ? list[1].replaceAll("_", "") : null;
 	}
 
 }
