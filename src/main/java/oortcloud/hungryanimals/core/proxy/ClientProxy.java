@@ -1,8 +1,23 @@
 package oortcloud.hungryanimals.core.proxy;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerFoliage;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
@@ -10,9 +25,12 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
+import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
@@ -32,17 +50,40 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void registerItemRendering() {
-		//mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverLeafName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverLeafName, "inventory"));
-		//mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverWoolName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverWoolName, "inventory"));
-		//mesher.register(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverHayName)), 0, new ModelResourceLocation(References.RESOURCESPREFIX + Strings.blockFloorCoverHayName, "inventory"));
-		
-		//ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.excreta), 0, new ModelResourceLocation(ModBlocks.excreta.getRegistryName(), "inventory"));
-		//ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.niterBed), 0, new ModelResourceLocation(ModBlocks.niterBed.getRegistryName(), "inventory"));
-		//ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.trough), 0, new ModelResourceLocation(ModBlocks.trough.getRegistryName(), "inventory"));
-		
+		// mesher.register(Item.REGISTRY.getObject(new
+		// ResourceLocation(References.MODID, Strings.blockFloorCoverLeafName)),
+		// 0, new ModelResourceLocation(References.RESOURCESPREFIX +
+		// Strings.blockFloorCoverLeafName, "inventory"));
+		// mesher.register(Item.REGISTRY.getObject(new
+		// ResourceLocation(References.MODID, Strings.blockFloorCoverWoolName)),
+		// 0, new ModelResourceLocation(References.RESOURCESPREFIX +
+		// Strings.blockFloorCoverWoolName, "inventory"));
+		// mesher.register(Item.REGISTRY.getObject(new
+		// ResourceLocation(References.MODID, Strings.blockFloorCoverHayName)),
+		// 0, new ModelResourceLocation(References.RESOURCESPREFIX +
+		// Strings.blockFloorCoverHayName, "inventory"));
+
+		ModelLoader.setCustomModelResourceLocation(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverHayName)), 0,
+				new ModelResourceLocation(ModBlocks.floorcover_hay.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverLeafName)), 0,
+				new ModelResourceLocation(ModBlocks.floorcover_leaf.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverWoolName)), 0,
+				new ModelResourceLocation(ModBlocks.floorcover_wool.getRegistryName(), "inventory"));
+
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.excreta), 0,
+				new ModelResourceLocation(ModBlocks.excreta.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.niterBed), 0,
+				new ModelResourceLocation(ModBlocks.niterBed.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.trough), 0,
+				new ModelResourceLocation(ModBlocks.trough.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.trapcover), 0,
+				new ModelResourceLocation(ModBlocks.trapcover.getRegistryName(), "inventory"));
+
 		ModelLoader.setCustomModelResourceLocation(ModItems.bola, 0, ModelItemBola.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.slingshot, 0, ModelItemSlingshot.modelresourcelocation_normal);
-		ModelLoader.setCustomModelResourceLocation(ModItems.debugGlass, 0, new ModelResourceLocation(ModItems.debugGlass.getRegistryName(), "inventory"));
+		// ModelLoader.setCustomModelResourceLocation(ModItems.debugGlass, 0,
+		// new ModelResourceLocation(ModItems.debugGlass.getRegistryName(),
+		// "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.trough, 0, new ModelResourceLocation(ModItems.trough.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.manure, 0, new ModelResourceLocation(ModItems.manure.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.woodash, 0, new ModelResourceLocation(ModItems.woodash.getRegistryName(), "inventory"));
@@ -59,12 +100,13 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerItemModel() {
 		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
-		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal, ModelItemSlingshot.modelresourcelocation_shooting);
+		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal,
+				ModelItemSlingshot.modelresourcelocation_shooting);
 	}
 
 	@Override
 	public void registerCustomBakedModel(ModelBakeEvent event) {
-		
+
 		Object object;
 		object = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
 		if (object instanceof IPerspectiveAwareModel) {
@@ -79,7 +121,7 @@ public class ClientProxy extends CommonProxy {
 			ModelItemSlingshot customModel = new ModelItemSlingshot(existingModel);
 			event.getModelRegistry().putObject(ModelItemSlingshot.modelresourcelocation_normal, customModel);
 		}
-		
+
 	}
 
 	@Override
@@ -100,10 +142,27 @@ public class ClientProxy extends CommonProxy {
 	public void registerKeyBindings() {
 		ModKeyBindings.init();
 	}
-	
+
+	@Override
+	public void registerColors() {
+		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
+			public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+				return ColorizerFoliage.getFoliageColorBasic();
+			}
+		}, ModBlocks.floorcover_leaf);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+
+			@Override
+			public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+				return ColorizerFoliage.getFoliageColorBasic();
+			}
+
+		}, ModBlocks.floorcover_leaf);
+	}
+
 	@Override
 	public void initNEI() {
-		//NEIHandler.init();
+		// NEIHandler.init();
 	}
-	
+
 }

@@ -68,12 +68,13 @@ public class HungryAnimals {
 		proxy.registerTileEntityRendering();
 		proxy.registerKeyBindings();
 		proxy.registerCapabilities();
+		proxy.registerItemRendering();
 		LootTableModifier.init();
 		HungryAnimalManager.getInstance().init();
 		AIManager.getInstance().init();
 		ConfigurationHandler.sync();
 		
-		proxy.registerItemRendering();
+		
 		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
@@ -81,6 +82,8 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void Init(FMLInitializationEvent event) {
+		proxy.registerColors();
+		
 		CraftingHandler.init();
 		proxy.registerEventHandler();
 

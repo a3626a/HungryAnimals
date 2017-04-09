@@ -42,6 +42,9 @@ public class CommonProxy {
 		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamablesAnimal.class);
 	}
 
+	public void registerColors() {
+	}
+	
 	public void registerEntityRendering() {
 	}
 

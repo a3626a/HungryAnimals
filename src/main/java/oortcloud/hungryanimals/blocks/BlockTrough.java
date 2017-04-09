@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +32,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
@@ -59,6 +59,7 @@ public class BlockTrough extends BlockContainer {
 		setUnlocalizedName(References.MODID+"."+Strings.blockTroughName); 
 		setRegistryName(Strings.blockTroughName);
 		GameRegistry.register(this);
+		GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override
@@ -245,9 +246,7 @@ public class BlockTrough extends BlockContainer {
 	private void dropStoredItems(World worldIn, BlockPos pos, TileEntityTrough trough) {
 		if (trough != null) {
 			ItemStack itemstack = trough.stack;
-			HungryAnimals.logger.info("breakBlock1");
 			if (itemstack != null) {
-				HungryAnimals.logger.info("breakBlock2");
 				float f = this.random.nextFloat() * 0.8F + 0.1F;
 				float f1 = this.random.nextFloat() * 0.8F + 0.1F;
 				float f2 = this.random.nextFloat() * 0.8F + 0.1F;

@@ -23,7 +23,7 @@ public class ModItems {
 		trough = new ItemTrough();
 		bola = new ItemBola();
 		slingshot = new ItemSlingShot();
-		debugGlass = new ItemDebugGlass();
+		//debugGlass = new ItemDebugGlass();
 		manure = new Item().setUnlocalizedName(References.MODID+"."+Strings.itemManureName).setRegistryName(Strings.itemManureName).setCreativeTab(HungryAnimals.tabHungryAnimals);
 		GameRegistry.register(manure);
 		woodash = new Item().setUnlocalizedName(References.MODID+"."+Strings.itemWoodashName).setRegistryName(Strings.itemWoodashName).setCreativeTab(HungryAnimals.tabHungryAnimals);

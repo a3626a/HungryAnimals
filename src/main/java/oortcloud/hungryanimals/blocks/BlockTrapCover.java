@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -22,11 +23,12 @@ public class BlockTrapCover extends Block {
 		super(Material.WOOD);
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
-
+		
 		setUnlocalizedName(References.MODID+"."+Strings.blockTrapCoverName); 
 		setRegistryName(Strings.blockTrapCoverName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		GameRegistry.register(this);
+		GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

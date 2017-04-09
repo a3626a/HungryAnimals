@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.blocks;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import oortcloud.hungryanimals.core.lib.Strings;
 
 public class ModBlocks {
 	public static Block millStone;
@@ -20,9 +22,9 @@ public class ModBlocks {
 		niterBed = new BlockNiterBed();
 		trough = new BlockTrough();
 		trapcover = new BlockTrapCover();
-		//floorcover_leaf = new BlockFloorCover(Blocks.LEAVES, Strings.blockFloorCoverLeafName);
-		//floorcover_wool = new BlockFloorCover(Blocks.WOOL, Strings.blockFloorCoverWoolName);
-		//floorcover_hay = new BlockFloorCover(Blocks.HAY_BLOCK, Strings.blockFloorCoverHayName);
+		floorcover_leaf = new BlockFloorCover(Blocks.LEAVES, Strings.blockFloorCoverLeafName);
+		floorcover_wool = new BlockFloorCover(Blocks.WOOL, Strings.blockFloorCoverWoolName);
+		floorcover_hay = new BlockFloorCover(Blocks.HAY_BLOCK, Strings.blockFloorCoverHayName);
 	}
 
 }
