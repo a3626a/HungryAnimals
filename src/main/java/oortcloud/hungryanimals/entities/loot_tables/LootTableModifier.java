@@ -1,19 +1,24 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import oortcloud.hungryanimals.HungryAnimals;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
@@ -44,6 +49,11 @@ public class LootTableModifier {
 
 	private static Map<String, LootTable> tables;
 
+	private static final Field pools = ReflectionHelper.findField(LootTable.class,
+			ObfuscationReflectionHelper.remapFieldNames(LootTable.class.getName(), "pools"));
+	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class,
+			ObfuscationReflectionHelper.remapFieldNames(LootPool.class.getName(), "lootEntries"));
+
 	public static void init(File file) {
 		manager = new LootTableManager(file);
 		LootFunctionManager.registerFunction(new SetCountBaseOnHunger.Serializer());
@@ -53,55 +63,42 @@ public class LootTableModifier {
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			String name = EntityList.getEntityStringFromClass(i);
-			tables.put(name2String(name), manager.getLootTableFromLocation(new ResourceLocation(References.MODID, "entities/" + name)));
+			ResourceLocation resourceLocation = new ResourceLocation(References.MODID, "entities/" + name);
+			tables.put(name2String(name), manager.getLootTableFromLocation(resourceLocation));
 		}
-		HungryAnimals.logger.info(tables);
 	}
 
+	@SuppressWarnings("unchecked")
 	@SubscribeEvent
-	public void LootTableLoadEvent(LootTableLoadEvent event) {
+	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
 		LootTable table = tables.get(resourceLocation2String(event.getName()));
-		if (table != null) {
-			HungryAnimals.logger.info(event.getName());
-		}
-		if (event.getName().equals(LootTableList.ENTITIES_CHICKEN)) {
-			event.getTable().getPool("main").removeEntry("minecraft:feather");
-			event.getTable().getPool("main").addEntry(table.getPool("feather").getEntry("minecraft:feather"));
-			event.getTable().getPool("pool1").removeEntry("minecraft:chicken");
-			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:chicken"));
-		}
+		if (table == null)
+			return;
 
-		if (event.getName().equals(LootTableList.ENTITIES_COW)) {
-			event.getTable().getPool("main").removeEntry("minecraft:leather");
-			event.getTable().getPool("main").addEntry(table.getPool("leather").getEntry("minecraft:leather"));
-			event.getTable().getPool("pool1").removeEntry("minecraft:beef");
-			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:beef"));
-			event.getTable().addPool(table.getPool("tendon"));
-		}
-		if (event.getName().equals(LootTableList.ENTITIES_MUSHROOM_COW)) {
-			event.getTable().getPool("main").removeEntry("minecraft:leather");
-			event.getTable().getPool("main").addEntry(table.getPool("leather").getEntry("minecraft:leather"));
-			event.getTable().getPool("pool1").removeEntry("minecraft:beef");
-			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:beef"));
-			event.getTable().addPool(table.getPool("tendon"));
-		}
-		if (event.getName().equals(LootTableList.ENTITIES_PIG)) {
-			event.getTable().getPool("main").removeEntry("minecraft:porkchop");
-			event.getTable().getPool("main").addEntry(table.getPool("meat").getEntry("minecraft:porkchop"));
-			event.getTable().addPool(table.getPool("tendon"));
-		}
-		if (event.getName().equals(LootTableList.ENTITIES_RABBIT)) {
-			event.getTable().getPool("main").removeEntry("minecraft:rabbit_hide");
-			event.getTable().getPool("main").addEntry(table.getPool("rabbit_hide").getEntry("minecraft:rabbit_hide"));
-			event.getTable().getPool("pool1").removeEntry("minecraft:rabbit");
-			event.getTable().getPool("pool1").addEntry(table.getPool("meat").getEntry("minecraft:rabbit"));
-			event.getTable().getPool("pool2").removeEntry("minecraft:rabbit_foot");
-			event.getTable().getPool("pool2").addEntry(table.getPool("rabbit_foot").getEntry("minecraft:rabbit_foot"));
-		}
-		if (event.getName().equals(LootTableList.ENTITIES_SHEEP)) {
-			event.getTable().getPool("main").removeEntry("minecraft:mutton");
-			event.getTable().getPool("main").addEntry(table.getPool("meat").getEntry("minecraft:mutton"));
-			event.getTable().addPool(table.getPool("tendon"));
+		for (LootPool i : (List<LootPool>) pools.get(table)) {
+			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
+			if (iEntries.size() == 1) {
+				LootEntry iEntry = iEntries.get(0);
+				LootPool toRemove = null;
+				if (iEntry instanceof LootEntryItem) {
+					for (LootPool j : (List<LootPool>) pools.get(event.getTable())) {
+						List<LootEntry> jEntries = (List<LootEntry>) lootEntries.get(j);
+						if (jEntries.size() == 1) {
+							LootEntry jEntry = jEntries.get(0);
+							if (jEntry instanceof LootEntryItem) {
+								if (iEntry.getEntryName().equals(jEntry.getEntryName())) {
+									toRemove = j;
+									break;
+								}
+							}
+						}
+					}
+				}
+				if (toRemove != null) {
+					event.getTable().removePool(toRemove.getName());
+				}
+			}
+			event.getTable().addPool(i);
 		}
 	}
 
