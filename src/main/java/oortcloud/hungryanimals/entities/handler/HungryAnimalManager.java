@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.properties.handler;
+package oortcloud.hungryanimals.entities.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
@@ -47,7 +48,8 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntityPig.class);
 		registerHungryAnimal(EntityRabbit.class);
 		registerHungryAnimal(EntitySheep.class);
-
+		registerHungryAnimal(EntityMooshroom.class);
+		
 		// default_chicken.hunger_food.put(new HashItemType(ModItems.poppyseed),
 		// 20.0);
 		// default_chicken.hunger_food.put(new HashItemType(ModItems.mixedFeed),

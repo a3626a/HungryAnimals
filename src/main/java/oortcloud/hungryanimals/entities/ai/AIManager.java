@@ -19,12 +19,12 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import oortcloud.hungryanimals.HungryAnimals;
 import scala.actors.threadpool.Arrays;
 
 public class AIManager {
@@ -68,6 +68,28 @@ public class AIManager {
 		});
 
 		REGISTRY.put(EntityCow.class, new IAIContainer<EntityAnimal>() {
+
+			@Override
+			public void registerAI(EntityAnimal entity) {
+				removeAI(entity,
+						Arrays.asList(new Class[] { EntityAITempt.class, EntityAIFollowParent.class,
+								EntityAIWander.class, EntityAIMate.class, EntityAIPanic.class,
+								EntityAIWatchClosest.class, EntityAILookIdle.class }));
+
+				// this.entity.tasks.addTask(0, this.ai_crank);
+				entity.tasks.addTask(1, new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
+				entity.tasks.addTask(2, new EntityAIMateModified(entity, 2.0D));
+				entity.tasks.addTask(3, new EntityAIMoveToTrough(entity, 1.0D));
+				entity.tasks.addTask(4, new EntityAITemptEdibleItem(entity, 1.5D, false));
+				entity.tasks.addTask(5, new EntityAIMoveToEatItem(entity, 1.5D));
+				entity.tasks.addTask(7, new EntityAIMoveToEatBlock(entity, 1.0D));
+				entity.tasks.addTask(8, new EntityAIWander(entity, 1.0D));
+				entity.tasks.addTask(9, new EntityAIWatchClosest(entity, EntityPlayer.class, 6.0F));
+				entity.tasks.addTask(10, new EntityAILookIdle(entity));
+			}
+		});
+		
+		REGISTRY.put(EntityMooshroom.class, new IAIContainer<EntityAnimal>() {
 
 			@Override
 			public void registerAI(EntityAnimal entity) {

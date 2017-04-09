@@ -1,0 +1,11 @@
+{
+	"hungryanimals.hunger_bmr" : { "value" : 0.005, "register" : true},
+	"hungryanimals.hunger_max" : { "value" : 500, "register" : true},
+	"hungryanimals.courtship_hunger" : { "value" : 25, "register" : true},
+	"hungryanimals.courtship_probability" : { "value" : 0.0025, "register" : true},
+	"hungryanimals.courtship_hungerCondition" : { "value" : 0.8, "register" : true},
+	"hungryanimals.excretion_factor" : { "value" : 0.02, "register" : true},
+	"hungryanimals.child_hunger" : { "value" : 125, "register" : true},
+	"hungryanimals.milk_delay" : { "value" : 6000, "register" : true},
+	"hungryanimals.milk_hunger" : { "value" : 25, "register" : true}
+}

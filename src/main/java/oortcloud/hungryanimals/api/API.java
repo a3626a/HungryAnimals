@@ -52,32 +52,6 @@ public class API {
 		return false;
 	}
 	
-	/**
-	 * It is similar to registerAI,
-	 * but instances made by aifactory can be retrieved with the key by calling getAI.
-	 * 
-	 * @param animalclass
-	 * @param key
-	 * @param ai
-	 * @return true if registration failed, otherwise false
-	 */
-	public static boolean registerAccessableAI(Class<? extends EntityAnimal> animalclass, String key, AIFactory aifactory) {
-		return false;
-	}
-	
-	/**
-	 * It returns the EntityAIBase that is registered by
-	 * registerAccessableAI with given key.
-	 * 
-	 * @param animalclass
-	 * @param key
-	 * @return EntityAIBase if the key exists, null otherwise
-	 */
-	public static EntityAIBase getAI(EntityAnimal animal, String key) {
-	
-		return null;
-	}
-	
 	@FunctionalInterface
 	public interface AIFactory {
 		public EntityAIBase getAI(EntityAnimal animal);

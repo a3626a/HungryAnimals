@@ -14,7 +14,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerJSON {
 	
