@@ -17,23 +17,26 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.core.network.SyncIndex;
-import oortcloud.hungryanimals.entities.properties.ExtendedPropertiesHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
 
 public class ItemDebugGlass extends Item {
 
 	public ItemDebugGlass() {
 		super();
-		setUnlocalizedName(References.MODID+"."+Strings.itemDebugGlassName);
+		setUnlocalizedName(References.MODID + "." + Strings.itemDebugGlassName);
 		setRegistryName(Strings.itemDebugGlassName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		
+
 		setMaxStackSize(1);
 		GameRegistry.register(this);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
-			EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if (worldIn.isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
@@ -45,7 +48,7 @@ public class ItemDebugGlass extends Item {
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 	}
-	
+
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!worldIn.isRemote) {
@@ -53,18 +56,20 @@ public class ItemDebugGlass extends Item {
 			if (tag != null && tag.hasKey("target")) {
 				Entity target = worldIn.getEntityByID(tag.getInteger("target"));
 				if (target != null) {
-					ExtendedPropertiesHungryAnimal property = (ExtendedPropertiesHungryAnimal) target.getExtendedProperties(Strings.extendedPropertiesKey);
-					if (property != null) {
-						tag.setDouble("hunger", property.hunger);
-						tag.setDouble("excretion", property.excretion);
-						tag.setDouble("taming", property.taming);
-						tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
-						if (property.ai_moveToFoodbox.pos != null) {
-							tag.setInteger("target_X", property.ai_moveToFoodbox.pos.getX());
-							tag.setInteger("target_Y", property.ai_moveToFoodbox.pos.getX());
-							tag.setInteger("target_Z", property.ai_moveToFoodbox.pos.getX());
-						}
-					}
+					if (!(target instanceof EntityAnimal))
+						return;
+
+					EntityAnimal entity = (EntityAnimal) target;
+					if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
+						return;
+
+					ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+					ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+
+					tag.setDouble("hunger", capHungry.getHunger());
+					tag.setDouble("excretion", capHungry.getExcretion());
+					tag.setDouble("taming", capTaming.getTaming());
+					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
 				}
 			}
 		}

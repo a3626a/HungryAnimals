@@ -32,7 +32,7 @@ public class GuiLabelNBT extends Gui {
 		return new GuiLabelNBT(fontRenderer, key, EnumFormat.DOUBLE);
 	}
 
-	public void setPosition(int x, int y) {
+	public void setPosition(int x, int y) {	
 		this.x = x;
 		this.y = y;
 	}
@@ -42,10 +42,10 @@ public class GuiLabelNBT extends Gui {
 		if (player != null) {
 			switch (format) {
 			case INT:
-				intData = player.getHeldItem().getTagCompound().getInteger(key);
+				intData = player.getHeldItemMainhand().getTagCompound().getInteger(key);
 				break;
 			case DOUBLE:
-				doubleData = player.getHeldItem().getTagCompound().getDouble(key);
+				doubleData = player.getHeldItemMainhand().getTagCompound().getDouble(key);
 				break;
 			}
 		}
