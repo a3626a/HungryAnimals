@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
+import java.io.File;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -27,12 +29,12 @@ import oortcloud.hungryanimals.core.lib.References;
  * I removed old(-1.8.9) configurations system for mob-drop.
  * The user also have to make json files for each user registered animals from other mods.
  * 
- * @author LeeChangHwan(a3626a, Oortcloud)
+ * @author Oortcloud
  */
 
 public class LootTableModifier {
 
-	private static final LootTableManager manager = new LootTableManager(null);
+	private static LootTableManager manager;
 
 	private static final ResourceLocation chicken = new ResourceLocation(References.MODID, "entities/chicken");
 	private static final ResourceLocation cow = new ResourceLocation(References.MODID, "entities/cow");
@@ -46,15 +48,19 @@ public class LootTableModifier {
 	private static LootTable loot_table_rabbit;
 	private static LootTable loot_table_sheep;
 
-	public static void init() {
+	public static void init(File file) {
+		manager = new LootTableManager(file);
 		LootFunctionManager.registerFunction(new SetCountBaseOnHunger.Serializer());
+	}
+
+	public static void sync() {
 		loot_table_chicken = manager.getLootTableFromLocation(chicken);
 		loot_table_cow = manager.getLootTableFromLocation(cow);
 		loot_table_pig = manager.getLootTableFromLocation(pig);
 		loot_table_rabbit = manager.getLootTableFromLocation(rabbit);
 		loot_table_sheep = manager.getLootTableFromLocation(sheep);
 	}
-
+	
 	@SubscribeEvent
 	public void LootTableLoadEvent(LootTableLoadEvent event) {
 		if (event.getName().equals(LootTableList.ENTITIES_CHICKEN)) {

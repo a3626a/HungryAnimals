@@ -12,7 +12,6 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.properties.handler.HungryAnimalManager;
@@ -29,9 +28,9 @@ public class ConfigurationHandlerJSON {
 	 * @param descriptor : relative path, never start with /
 	 * @param read
 	 */
-	public ConfigurationHandlerJSON(FMLPreInitializationEvent event, String descriptor, BiConsumer<File, Class<? extends EntityAnimal>> read) {
+	public ConfigurationHandlerJSON(File basefolder, String descriptor, BiConsumer<File, Class<? extends EntityAnimal>> read) {
 		this.descriptor = descriptor;
-		this.directory = new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/" + descriptor);
+		this.directory = new File(basefolder, descriptor);
 		this.read = read;
 	}
 	

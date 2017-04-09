@@ -69,12 +69,9 @@ public class HungryAnimals {
 		proxy.registerKeyBindings();
 		proxy.registerCapabilities();
 		proxy.registerItemRendering();
-		LootTableModifier.init();
 		HungryAnimalManager.getInstance().init();
 		AIManager.getInstance().init();
 		ConfigurationHandler.sync();
-		
-		
 		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
@@ -91,9 +88,6 @@ public class HungryAnimals {
 		simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);
 		simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 5, Side.CLIENT);
 		simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
-		
-		if (Loader.isModLoaded("WAILA"))
-			proxy.initWAILA();
 	}
 
 	@Mod.EventHandler

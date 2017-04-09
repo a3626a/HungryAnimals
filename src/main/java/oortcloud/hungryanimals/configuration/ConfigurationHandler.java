@@ -30,6 +30,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockStat
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceRegisterEvent;
 
@@ -38,13 +39,15 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON foodPreferencesBlock;
 	private static ConfigurationHandlerJSON foodPreferencesItem;
 	private static ConfigurationHandlerJSON attributes;
+	private static ConfigurationHandlerJSON lootTables;
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
 			.create();
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer())
 			.create();
 	
 	public static void init(FMLPreInitializationEvent event) {
-		foodPreferencesBlock = new ConfigurationHandlerJSON(event, "food_preferences/block", (file, animal) -> {
+		File basefodler = new File(event.getModConfigurationDirectory(),References.MODID);
+		foodPreferencesBlock = new ConfigurationHandlerJSON(basefodler, "food_preferences/block", (file, animal) -> {
 			JsonArray arr;
 			try {
 				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
@@ -64,7 +67,7 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
-		foodPreferencesItem = new ConfigurationHandlerJSON(event, "food_preferences/item", (file, animal) -> {
+		foodPreferencesItem = new ConfigurationHandlerJSON(basefodler, "food_preferences/item", (file, animal) -> {
 			JsonArray arr;
 			try {
 				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
@@ -84,7 +87,7 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
 		});
-		attributes = new ConfigurationHandlerJSON(event, "attributes", (file, animal) -> {
+		attributes = new ConfigurationHandlerJSON(basefodler, "attributes", (file, animal) -> {
 			JsonObject arr;
 			try {
 				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
@@ -104,9 +107,12 @@ public class ConfigurationHandler {
 			}
 			AttributeManager.getInstance().REGISTRY.put(animal, list);
 		});
-		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/Animal.cfg"));
-		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/World.cfg"));
-		ConfigurationHandlerRecipe.init(new File(event.getModConfigurationDirectory() + "/" + References.MODNAME + "/Recipe.cfg"));
+		lootTables = new ConfigurationHandlerJSON(basefodler, "loot_tables/entities", (file, animal) -> {
+		});
+		LootTableModifier.init(basefodler);
+		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/Animal.cfg"));
+		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/World.cfg"));
+		ConfigurationHandlerRecipe.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/Recipe.cfg"));
 	}
 
 	public static void sync() {
@@ -115,6 +121,8 @@ public class ConfigurationHandler {
 		foodPreferencesBlock.sync();
 		foodPreferencesItem.sync();
 		attributes.sync();
+		lootTables.sync();
+		LootTableModifier.sync();
 	}
 
 	public static void postSync() {
