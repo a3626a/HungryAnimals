@@ -23,7 +23,6 @@ import oortcloud.hungryanimals.keybindings.ModKeyBindings;
 public class DebugOverlayHandler extends Gui {
 	private boolean isEnabled = false;
 	private Minecraft mc;
-	private ItemStack debugGlass;
 
 	private GuiLabelNBT targetEntityID;
 	private GuiLabelNBTEditable hunger;
@@ -77,7 +76,6 @@ public class DebugOverlayHandler extends Gui {
 				if (entity != null) {
 					ItemStack stack = getDebugGlass(entity);
 					if (stack != null) {
-						debugGlass = stack;
 						this.setOpened(true);
 					}
 				}

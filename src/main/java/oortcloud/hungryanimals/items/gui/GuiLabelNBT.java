@@ -63,13 +63,7 @@ public class GuiLabelNBT extends Gui {
 	}
 
 	protected enum EnumFormat {
-		INT(0), DOUBLE(1);
-
-		private int type;
-
-		private EnumFormat(int type) {
-			this.type = type;
-		}
+		INT, DOUBLE;
 	}
 
 }
