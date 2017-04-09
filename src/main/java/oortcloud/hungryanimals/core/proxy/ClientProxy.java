@@ -2,8 +2,6 @@ package oortcloud.hungryanimals.core.proxy;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -17,7 +15,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
@@ -151,12 +148,10 @@ public class ClientProxy extends CommonProxy {
 			}
 		}, ModBlocks.floorcover_leaf);
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-
 			@Override
 			public int getColorFromItemstack(ItemStack stack, int tintIndex) {
 				return ColorizerFoliage.getFoliageColorBasic();
 			}
-
 		}, ModBlocks.floorcover_leaf);
 	}
 

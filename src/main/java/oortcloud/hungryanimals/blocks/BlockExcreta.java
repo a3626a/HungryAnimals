@@ -62,12 +62,12 @@ public class BlockExcreta extends BlockFalling {
 		super(ModMaterials.excreta);
 		setHarvestLevel("shovel", 0);
 		setDefaultState(this.blockState.getBaseState().withProperty(CONTENT, EnumType.getValue(1, 0)));
-		setUnlocalizedName(References.MODID+"."+Strings.blockExcretaName); 
+		setUnlocalizedName(References.MODID + "." + Strings.blockExcretaName);
 		setRegistryName(Strings.blockExcretaName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
 		GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this), getRegistryName());
+		GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override
@@ -75,28 +75,21 @@ public class BlockExcreta extends BlockFalling {
 		return new BlockStateContainer(this, new IProperty[] { CONTENT });
 	}
 
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		// TODO isFullcube based on BlockStates
-		//return super.isFullCube(state);
-		return false;
-	}
-	
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		// TODO isFullcube based on BlockStates
-		//return super.isOpaqueCube(state);
-		return false;
+		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man == 4;
 	}
 
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return isFullCube(state);
+	}
 
 	@Override
 	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
@@ -104,8 +97,8 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public void onNeighborChange(IBlockAccess worldIn, BlockPos pos, BlockPos neighborBlock) {
-		((World) worldIn).addBlockEvent(pos, this, 0, 1);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+		worldIn.addBlockEvent(pos, this, 0, 1);
 	}
 
 	@Override
@@ -113,31 +106,20 @@ public class BlockExcreta extends BlockFalling {
 		worldIn.addBlockEvent(pos, this, 0, 1);
 	}
 
-	
 	@Override
 	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
 		super.updateTick(worldIn, pos, state, null);
 
-		if (worldIn.getBlockState(pos).getBlock() != this)
-			return false;
-
 		if (!worldIn.isRemote) {
-			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
+			if (worldIn.getBlockState(pos).getBlock() == this && worldIn.getBlockState(pos.down()).getBlock() == this) {
 				IBlockState metaTop = worldIn.getBlockState(pos);
 				IBlockState metaBot = worldIn.getBlockState(pos.down());
-				int manureBot = ((EnumType) metaBot.getValue(CONTENT)).man;
-				int excretaBot = ((EnumType) metaBot.getValue(CONTENT)).exc;
-				if (excretaBot + manureBot < 4) {
-					this.stackBlock(worldIn, pos.down(), metaTop, metaBot, true);
-				}
-			} else if (worldIn.getBlockState(pos.up()).getBlock() == this) {
+				this.stackBlock(worldIn, pos.down(), metaTop, metaBot, true);
+			}
+			if (worldIn.getBlockState(pos).getBlock() == this && worldIn.getBlockState(pos.up()).getBlock() == this) {
 				IBlockState metaTop = worldIn.getBlockState(pos.up());
 				IBlockState metaBot = worldIn.getBlockState(pos);
-				int manureTop = ((EnumType) metaTop.getValue(CONTENT)).man;
-				int manureBot = ((EnumType) metaBot.getValue(CONTENT)).man;
-				if (manureTop > 0 && manureBot < 4) {
-					this.stackBlock(worldIn, pos, metaTop, metaBot, true);
-				}
+				this.stackBlock(worldIn, pos, metaTop, metaBot, true);
 			}
 		}
 
@@ -153,7 +135,7 @@ public class BlockExcreta extends BlockFalling {
 		ret.add(new ItemStack(ModItems.manure, man));
 		return ret;
 	}
-	
+
 	@Override
 	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
 		if (blockState.getBlock() == this) {
@@ -161,12 +143,12 @@ public class BlockExcreta extends BlockFalling {
 		}
 		return 0;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return new AxisAlignedBB(0, 0, 0, 1, 0.25F * (((EnumType) state.getValue(CONTENT)).exc + ((EnumType) state.getValue(CONTENT)).man), 1);
 	}
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return null;
@@ -253,7 +235,8 @@ public class BlockExcreta extends BlockFalling {
 				}
 			};
 
-			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius), pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
+			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
+					pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
 				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 1));
 			}
 		}
@@ -279,12 +262,12 @@ public class BlockExcreta extends BlockFalling {
 					fermentate(world, pos.offset(i), random);
 			}
 		}
-
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (!worldIn.isRemote && entityIn instanceof EntityFallingBlock && ((EntityFallingBlock) entityIn).getBlock().getBlock() == this && ((EntityFallingBlock) entityIn).fallTime > 1 && !entityIn.isDead) {
+		if (!worldIn.isRemote && entityIn instanceof EntityFallingBlock && ((EntityFallingBlock) entityIn).getBlock().getBlock() == this
+				&& ((EntityFallingBlock) entityIn).fallTime > 1 && !entityIn.isDead) {
 
 			entityIn.setDead();
 
@@ -296,7 +279,8 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side,
+			float hitX, float hitY, float hitZ) {
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;
 		if (exc + man >= 4)
@@ -332,17 +316,17 @@ public class BlockExcreta extends BlockFalling {
 		} else {
 			if (botMan + topMan <= 4) {
 				world.setBlockState(pos.up(), metaTop.withProperty(CONTENT, EnumType.getValue(botExc + botMan + topExc + topMan - 4, 0)), 3);
-
 				world.setBlockState(pos, metaBot.withProperty(CONTENT, EnumType.getValue(4 - botMan - topMan, botMan + topMan)), 3);
 
 			} else {
-				world.setBlockState(pos.up(), metaBot.withProperty(CONTENT, EnumType.getValue(botExc + topExc, botMan + topMan - 4)), 3);
-
-				world.setBlockState(pos, metaBot.withProperty(CONTENT, EnumType.getValue(0, 4)), 3);
+				if (botMan != 4) {
+					world.setBlockState(pos.up(), metaBot.withProperty(CONTENT, EnumType.getValue(botExc + topExc, botMan + topMan - 4)), 3);
+					world.setBlockState(pos, metaBot.withProperty(CONTENT, EnumType.getValue(0, 4)), 3);
+				}
 			}
 		}
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.byMetadata(meta));
@@ -354,7 +338,8 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	public static enum EnumType implements IStringSerializable {
-		E1M0(0, 1, 0), E2M0(1, 2, 0), E3M0(2, 3, 0), E4M0(3, 4, 0), E0M1(4, 0, 1), E1M1(5, 1, 1), E2M1(6, 2, 1), E3M1(7, 3, 1), E0M2(8, 0, 2), E1M2(9, 1, 2), E2M2(10, 2, 2), E0M3(11, 0, 3), E1M3(12, 1, 3), E0M4(13, 0, 4);
+		E1M0(0, 1, 0), E2M0(1, 2, 0), E3M0(2, 3, 0), E4M0(3, 4, 0), E0M1(4, 0, 1), E1M1(5, 1, 1), E2M1(6, 2, 1), E3M1(7, 3, 1), E0M2(8, 0, 2), E1M2(9, 1,
+				2), E2M2(10, 2, 2), E0M3(11, 0, 3), E1M3(12, 1, 3), E0M4(13, 0, 4);
 
 		private static final BlockExcreta.EnumType[] META_LOOKUP = new BlockExcreta.EnumType[values().length];
 		private final int meta;
