@@ -17,12 +17,11 @@ targetCompatibility=8
 sourceCompatibility=8
 
 
-version = "2.2"
 group= "com.oortcloud.hungryanimals"
 archivesBaseName = "hungryanimals"
 
 minecraft {
-    version = "1.10.2-12.18.2.2114"
+    version = "1.10.2-12.18.3.2221"
     runDir = "run"
     
     mappings = "snapshot_20160518"
@@ -45,4 +44,15 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+repositories {
+    maven { // TOP
+        name 'tterrag maven'
+        url "http://maven.tterrag.com/"
+    }
+}
+
+dependencies {
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.4-55"
 }
