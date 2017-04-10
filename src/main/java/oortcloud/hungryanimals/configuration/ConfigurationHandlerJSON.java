@@ -17,11 +17,11 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerJSON {
-	
+
 	private BiConsumer<File, Class<? extends EntityAnimal>> read;
 	private File directory;
 	private String descriptor;
-	
+
 	/**
 	 * 
 	 * @param event
@@ -33,7 +33,7 @@ public class ConfigurationHandlerJSON {
 		this.directory = new File(basefolder, descriptor);
 		this.read = read;
 	}
-	
+
 	public void sync() {
 		if (!directory.exists()) {
 			try {
@@ -45,49 +45,47 @@ public class ConfigurationHandlerJSON {
 		}
 
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			File iFile = new File(directory, EntityList.CLASS_TO_NAME.get(i) + ".json");
+			File iFile = new File(directory, EntityList.CLASS_TO_NAME.get(i).toLowerCase() + ".json");
 
 			if (!iFile.exists()) {
 				createDefaultConfigurationFile(iFile);
-			} else {
-				try {
-					this.read.read(iFile, i);
-				} catch (JsonSyntaxException e) {
-					HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
-				}
 			}
+
+			try {
+				this.read.read(iFile, i);
+			} catch (JsonSyntaxException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
+			}
+
 		}
 	}
-	
+
 	private void createDefaultConfigurationFile(File file) {
 		String resourceName = "/assets/" + References.MODID + "/" + this.descriptor + "/" + file.getName();
-		URL url = ConfigurationHandlerJSON.class.getResource(resourceName);
-
+		URL url = getClass().getResource(resourceName);
 		if (url == null) {
 			HungryAnimals.logger.error("Couldn\'t load {} {} from assets", new Object[] { this.descriptor, resourceName });
 			return;
 		}
 
-		String s;
-
 		try {
-			s = Resources.toString(url, Charsets.UTF_8);
 			file.createNewFile();
 			FileWriter o = new FileWriter(file);
-			o.write(s);
+			o.write(Resources.toString(url, Charsets.UTF_8));
 			o.close();
 		} catch (IOException e) {
 			HungryAnimals.logger.error("Couldn\'t load {} {} from {}\n{}", new Object[] { this.descriptor, file, url, e });
 		}
+		
 	}
-	
+
 	public String getDescriptor() {
 		return this.descriptor;
 	}
-	
+
 	@FunctionalInterface
 	public static interface BiConsumer<T, U> {
 		public void read(T file, U entity);
 	}
-	
+
 }

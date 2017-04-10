@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +26,6 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import scala.actors.threadpool.Arrays;
 
 public class AIManager {
 
@@ -181,10 +181,10 @@ public class AIManager {
 		});
 	}
 
-	private static void removeAI(EntityLiving entity, List<Class<? extends EntityAIBase>> target) {
+	private static void removeAI(EntityLiving entity, List<Class<?>> list) {
 		LinkedList<EntityAIBase> removeEntries = new LinkedList<EntityAIBase>();
 		for (EntityAITaskEntry i : entity.tasks.taskEntries) {
-			for (Class<? extends EntityAIBase> j : target) {
+			for (Class<?> j : list) {
 				if (i.action.getClass() == j) {
 					removeEntries.add(i.action);
 				}

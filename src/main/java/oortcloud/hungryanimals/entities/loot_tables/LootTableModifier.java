@@ -16,7 +16,6 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import oortcloud.hungryanimals.core.lib.References;
@@ -49,10 +48,8 @@ public class LootTableModifier {
 
 	private static Map<String, LootTable> tables;
 
-	private static final Field pools = ReflectionHelper.findField(LootTable.class,
-			ObfuscationReflectionHelper.remapFieldNames(LootTable.class.getName(), "pools"));
-	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class,
-			ObfuscationReflectionHelper.remapFieldNames(LootPool.class.getName(), "lootEntries"));
+	private static final Field pools = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c");
+	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class, "lootEntries", "field_186453_a");
 
 	public static void init(File file) {
 		manager = new LootTableManager(file);
@@ -62,7 +59,7 @@ public class LootTableModifier {
 
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			String name = EntityList.getEntityStringFromClass(i);
+			String name = EntityList.getEntityStringFromClass(i).toLowerCase();
 			ResourceLocation resourceLocation = new ResourceLocation(References.MODID, "entities/" + name);
 			tables.put(name2String(name), manager.getLootTableFromLocation(resourceLocation));
 		}
