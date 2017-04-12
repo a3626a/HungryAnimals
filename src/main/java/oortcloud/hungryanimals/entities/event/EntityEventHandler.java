@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -47,7 +48,7 @@ public class EntityEventHandler {
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
-		AttributeManager.getInstance().applyAttributes(entity);		
+		AttributeManager.getInstance().applyAttributes(entity);
 		entity.setHealth(entity.getMaxHealth());
 		AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
 	}
@@ -60,10 +61,10 @@ public class EntityEventHandler {
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-		
+
 		AttributeManager.getInstance().registerAttributes(entity);
 	}
-	
+
 	@SubscribeEvent
 	public void onLivingEntityUpdate(LivingEvent.LivingUpdateEvent event) {
 		if (!(event.getEntity() instanceof EntityAnimal))
@@ -153,7 +154,7 @@ public class EntityEventHandler {
 			}
 		}
 		if (floor.getBlock() == ModBlocks.floorcover_ironbar) {
-			// TODO fllorcover ironbar
+			// TODO floorcover ironbar
 		}
 	}
 
@@ -196,7 +197,7 @@ public class EntityEventHandler {
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-		
+
 		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		DamageSource source = event.getSource();
 		if (!entity.isEntityInvulnerable(source)) {
@@ -208,52 +209,46 @@ public class EntityEventHandler {
 
 	@SubscribeEvent
 	public void onInteract(EntityInteract event) {
-		if (!(event.getEntity() instanceof EntityAnimal))
+		if (!(event.getTarget() instanceof EntityAnimal))
 			return;
 
-		EntityAnimal entity = (EntityAnimal) event.getEntity();
+		EntityAnimal entity = (EntityAnimal) event.getTarget();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
+
 		event.setCanceled(interact(event, entity));
 	}
 
 	private boolean interact(EntityInteract event, EntityAnimal entity) {
-		ItemStack stackMain = event.getEntityPlayer().getHeldItemMainhand();
-		ItemStack stackOff = event.getEntityPlayer().getHeldItemOffhand();
-		if (stackMain == null && stackOff == null)
+		if (event.getItemStack() == null)
 			return false;
-
-		if (!interact(event, stackMain, entity)) {
-			if (!interact(event, stackOff, entity)) {
-				return false;
-			}
-			return true;
-		}
-		return true;
-
+		return interact(event, event.getHand(), event.getItemStack(), entity);
 	}
 
-	private boolean interact(EntityInteract event, ItemStack item, EntityAnimal entity) {
+	private boolean interact(EntityInteract event, EnumHand hand, ItemStack itemstack, EntityAnimal entity) {
 		ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		IFoodPreference<ItemStack> prefItem = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
-		if (prefItem.canEat(capHungry, item) && capTaming.getTaming() >= 1) {
-			eatFoodBonus(entity, capHungry, capTaming, item);
-			item.stackSize--;
-			// TODO Check automated itemstack removal when its stacksize reaches
-			// to 0
+		if (prefItem.canEat(capHungry, itemstack) && capTaming.getTaming() >= 1) {
+			eatFoodBonus(entity, capHungry, capTaming, itemstack);
+			itemstack.stackSize--;
+			if (itemstack.stackSize == 0) {
+				event.getEntityPlayer().inventory.deleteStack(itemstack);
+			}
 			return true;
-		} else if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTaming() >= 1) {
-			if (item.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || item.getItem() == ItemBlock.getItemFromBlock(Blocks.BROWN_MUSHROOM)) {
+		}
+		if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTaming() >= 1) {
+			if (itemstack.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || itemstack.getItem() == ItemBlock.getItemFromBlock(Blocks.BROWN_MUSHROOM)) {
 				entity.removePotionEffect(ModPotions.potionDisease);
-				item.stackSize--;
-				// TODO Check automated itemstack removal when its stacksize
-				// reaches to 0
+				itemstack.stackSize--;
+				if (itemstack.stackSize == 0) {
+					event.getEntityPlayer().inventory.deleteStack(itemstack);
+				}
 			}
 			return true;
 		}
 
-		if (entity.isBreedingItem(item)) {
+		if (entity.isBreedingItem(itemstack)) {
 			return true;
 		}
 
