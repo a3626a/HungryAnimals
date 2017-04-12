@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -67,8 +68,16 @@ public class ItemSlingShot extends Item {
 
     protected boolean isArrow(@Nullable ItemStack stack)
     {
-    	// TODO ore dictionary compatibility with cobblestone
-        return stack != null && stack.getItem() == ItemBlock.getItemFromBlock(Blocks.COBBLESTONE);
+    	if (stack == null)
+    		return false;
+    	
+    	for (ItemStack i : OreDictionary.getOres("cobblestone")) {
+    		if (OreDictionary.itemMatches(stack, i, false)) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
 	
     @Override
