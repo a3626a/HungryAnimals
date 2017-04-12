@@ -295,5 +295,9 @@ public class EntityBola extends Entity implements IProjectile {
         d0 = d0 * 64.0D * getRenderDistanceWeight();
         return distance < d0 * d0;
     }
+
+	@Override
+	protected void entityInit() {
+	}
 	
 }
