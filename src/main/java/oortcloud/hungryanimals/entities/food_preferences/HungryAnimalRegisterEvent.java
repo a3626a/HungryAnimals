@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 
-public class FoodPreferenceRegisterEvent extends Event {
+public class HungryAnimalRegisterEvent extends Event {
 
 	private final Class<? extends EntityAnimal> entity;
 
-	public FoodPreferenceRegisterEvent(Class<? extends EntityAnimal> entity) {
+	public HungryAnimalRegisterEvent(Class<? extends EntityAnimal> entity) {
 		this.entity = entity;
 	}
 
@@ -23,7 +23,7 @@ public class FoodPreferenceRegisterEvent extends Event {
 		return entity;
 	}
 	
-	public static class FoodPreferenceBlockStateRegisterEvent extends FoodPreferenceRegisterEvent {
+	public static class FoodPreferenceBlockStateRegisterEvent extends HungryAnimalRegisterEvent {
 
 		private final Map<HashBlockState, Double> map;
 				
@@ -42,7 +42,7 @@ public class FoodPreferenceRegisterEvent extends Event {
 		
 	}
 
-	public static class FoodPreferenceItemStackRegisterEvent extends FoodPreferenceRegisterEvent {
+	public static class FoodPreferenceItemStackRegisterEvent extends HungryAnimalRegisterEvent {
 
 		private final Map<HashItemType, Double> map;
 				

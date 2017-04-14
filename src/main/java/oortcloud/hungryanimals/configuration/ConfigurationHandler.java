@@ -32,7 +32,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceRegisterEvent;
+import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
 
 public class ConfigurationHandler {
 
@@ -62,7 +62,7 @@ public class ConfigurationHandler {
 				double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
-			FoodPreferenceRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new FoodPreferenceRegisterEvent.FoodPreferenceBlockStateRegisterEvent(
+			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(
 					animal, map);
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
@@ -82,7 +82,7 @@ public class ConfigurationHandler {
 				double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
-			FoodPreferenceRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new FoodPreferenceRegisterEvent.FoodPreferenceItemStackRegisterEvent(
+			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(
 					animal, map);
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
