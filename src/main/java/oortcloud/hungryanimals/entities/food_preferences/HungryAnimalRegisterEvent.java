@@ -40,6 +40,9 @@ public class HungryAnimalRegisterEvent extends Event {
 			map.put(new HashBlockState(block, ignoreProperty), hunger);
 		}
 		
+		public Map<HashBlockState, Double> getMap() {
+			return map;
+		}
 	}
 
 	public static class FoodPreferenceItemStackRegisterEvent extends HungryAnimalRegisterEvent {
@@ -65,6 +68,10 @@ public class HungryAnimalRegisterEvent extends Event {
 			} else {
 				map.put(new HashItemType(itemstack.getItem(), itemstack.getItemDamage()), hunger);
 			}
+		}
+		
+		public Map<HashItemType, Double> getMap() {
+			return map;
 		}
 		
 	}
