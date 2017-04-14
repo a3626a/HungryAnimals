@@ -24,6 +24,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.AttributeManager;
+import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
 import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
@@ -42,11 +43,10 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON lootTables;
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
 			.create();
-	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer())
-			.create();
-	
+	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
+
 	public static void init(FMLPreInitializationEvent event) {
-		File basefodler = new File(event.getModConfigurationDirectory(),References.MODID);
+		File basefodler = new File(event.getModConfigurationDirectory(), References.MODID);
 		foodPreferencesBlock = new ConfigurationHandlerJSON(basefodler, "food_preferences/block", (file, animal) -> {
 			JsonArray arr;
 			try {
@@ -62,8 +62,8 @@ public class ConfigurationHandler {
 				double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
-			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(
-					animal, map);
+			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(animal,
+					map);
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
@@ -82,8 +82,8 @@ public class ConfigurationHandler {
 				double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
-			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(
-					animal, map);
+			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
+					map);
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
 		});
@@ -98,13 +98,15 @@ public class ConfigurationHandler {
 			List<IAttributeEntry> list = new ArrayList<IAttributeEntry>();
 			for (Entry<String, JsonElement> i : arr.entrySet()) {
 				if (!ModAttributes.NAME_MAP.containsKey(i.getKey())) {
-					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal});
+					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal });
 					continue;
 				}
 				IAttribute attribute = ModAttributes.NAME_MAP.get(i.getKey());
 				JsonObject obj = i.getValue().getAsJsonObject();
-				list.add(new AttributeEntry(attribute,  obj.getAsJsonPrimitive("register").getAsBoolean(), obj.getAsJsonPrimitive("value").getAsDouble()));
+				list.add(new AttributeEntry(attribute, obj.getAsJsonPrimitive("register").getAsBoolean(), obj.getAsJsonPrimitive("value").getAsDouble()));
 			}
+			AttributeRegisterEvent event_ = new AttributeRegisterEvent(animal, list);
+			MinecraftForge.EVENT_BUS.post(event_);
 			AttributeManager.getInstance().REGISTRY.put(animal, list);
 		});
 		lootTables = new ConfigurationHandlerJSON(basefodler, "loot_tables/entities", (file, animal) -> {
