@@ -49,7 +49,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		}
 	}
 	
-	public void putFirt(AIFactory target) {
+	public void putFirst(AIFactory target) {
 		ais.add(new AIPlacerFirst(target));
 	}
 	
