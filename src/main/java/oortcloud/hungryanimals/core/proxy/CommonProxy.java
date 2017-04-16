@@ -10,6 +10,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
@@ -28,7 +29,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 public class CommonProxy {
 
 	public void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityTrough.class, Strings.blockTroughName);
+		GameRegistry.registerTileEntity(TileEntityTrough.class, References.MODID+"."+Strings.blockTroughName);
 	}
 
 	public void registerEntities() {
