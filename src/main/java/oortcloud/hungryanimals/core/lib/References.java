@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.core.lib;
 public class References {
 	public static final String MODID = "hungryanimals";
 	public static final String MODNAME = "Hungry Animals";
-	public static final String VERSION = "1.10.2-3.0";
+	public static final String VERSION = "@VERSION@";
 	public static final String NAME = "oortcloud";
 	
 	public static final String CLIENTPROXYLOCATION = NAME + "." + MODID + ".core.proxy.ClientProxy";
