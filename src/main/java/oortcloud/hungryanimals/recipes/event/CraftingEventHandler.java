@@ -20,8 +20,9 @@ public class CraftingEventHandler {
 	public void createHideGlue(RightClickBlock event) {
 		World world = event.getWorld();
 		if (event.getSide() == Side.SERVER) {
+			
 			EntityPlayer player = event.getEntityPlayer();
-			ItemStack item = player.getHeldItemMainhand();
+			ItemStack item = event.getItemStack();
 			BlockPos pos = event.getPos();
 			IBlockState state = world.getBlockState(pos);
 			int level;
@@ -29,7 +30,8 @@ public class CraftingEventHandler {
 				int num = RecipeAnimalGlue.getRecipe(item);
 				if (num != 0) {
 					world.spawnEntityInWorld(new EntityItem(world, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, new ItemStack(ModItems.animalGlue, num)));
-					player.inventory.decrStackSize(player.inventory.currentItem, 1);
+                    if (--item.stackSize == 0)
+                    	player.inventory.deleteStack(item);
 					world.setBlockState(pos, state.withProperty(BlockCauldron.LEVEL, level-1));
 				}
 			}

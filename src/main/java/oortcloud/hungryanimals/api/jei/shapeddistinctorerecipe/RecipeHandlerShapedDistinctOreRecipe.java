@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.api.jei;
+package oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeHandler;
@@ -6,11 +6,11 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 
-public class ShapedDistinctOreRecipeHandler implements IRecipeHandler<ShapedDistinctOreRecipe> {
+public class RecipeHandlerShapedDistinctOreRecipe implements IRecipeHandler<ShapedDistinctOreRecipe> {
 
 	private IJeiHelpers jeiHelpers;
 	
-	public ShapedDistinctOreRecipeHandler(IJeiHelpers jeiHelpers) {
+	public RecipeHandlerShapedDistinctOreRecipe(IJeiHelpers jeiHelpers) {
 		this.jeiHelpers = jeiHelpers;
 	}
 	
@@ -31,7 +31,7 @@ public class ShapedDistinctOreRecipeHandler implements IRecipeHandler<ShapedDist
 
 	@Override
 	public IRecipeWrapper getRecipeWrapper(ShapedDistinctOreRecipe recipe) {
-		return new ShapedDistinctOreRecipeWrapper(jeiHelpers, recipe);
+		return new RecipeWrapperShapedDistinctOreRecipe(jeiHelpers, recipe);
 	}
 
 	@Override

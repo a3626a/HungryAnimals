@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.api.jei;
+package oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,12 +12,12 @@ import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 
 @SuppressWarnings("unchecked")
-public class ShapedDistinctOreRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
+public class RecipeWrapperShapedDistinctOreRecipe extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
 
 	private ShapedDistinctOreRecipe recipe;
 	private IJeiHelpers jeiHelpers;
 	
-	public ShapedDistinctOreRecipeWrapper(IJeiHelpers jeiHelpers, ShapedDistinctOreRecipe recipe) {
+	public RecipeWrapperShapedDistinctOreRecipe(IJeiHelpers jeiHelpers, ShapedDistinctOreRecipe recipe) {
 		this.jeiHelpers = jeiHelpers;
 		this.recipe = recipe;
 	}
