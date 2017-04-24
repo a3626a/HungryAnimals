@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.recipes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -85,6 +86,7 @@ public class ShapedDistinctOreRecipe implements IRecipe {
 
         HashMap<Character, Object> itemMap = new HashMap<Character, Object>();
         HashMap<Character, String> oreMap = new HashMap<Character, String>();
+        HashMap<String, Integer> oreNum = new HashMap<String, Integer>();
         
         for (; idx < recipe.length; idx += 2)
         {
@@ -105,7 +107,29 @@ public class ShapedDistinctOreRecipe implements IRecipe {
             }
             else if (in instanceof String)
             {
-                itemMap.put(chr, OreDictionary.getOres((String)in));
+            	String oreName = (String)in;
+            	if (oreNum.containsKey(oreName)) {
+            		oreNum.put(oreName, oreNum.get(oreName)+1);
+            	} else {
+            		oreNum.put(oreName, 1);
+            	}
+            	
+            	List<ItemStack> ores = OreDictionary.getOres((String)in);
+            	if (oreNum.get(oreName) > ores.size()) {
+            		throw new RuntimeException("Invalid recipe");
+            	}
+            	    
+            	List<ItemStack> ore_clone = new ArrayList<ItemStack>();
+            	
+            	int rotation = oreNum.get(oreName)-1;
+            	
+            	for (int i = rotation; i < ores.size(); i++) {
+            		ore_clone.add(ores.get(i));
+            	}
+            	for (int i = 0; i < rotation; i++) {
+            		ore_clone.add(ores.get(i));
+            	}
+                itemMap.put(chr, ore_clone);
                 oreMap.put(chr, (String)in);
             }
             else

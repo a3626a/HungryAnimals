@@ -14,7 +14,7 @@
     "screenshots": [],
     "parent": "",
     "requiredMods": [ "Forge" ],
-    "dependencies": [theoneprobe],
+    "dependencies": ["theoneprobe"],
     "dependants": [],
     "useDependencyInformation": true
   }]
