@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 
+@SuppressWarnings("unchecked")
 public class ShapedDistinctOreRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
 
 	private ShapedDistinctOreRecipe recipe;
