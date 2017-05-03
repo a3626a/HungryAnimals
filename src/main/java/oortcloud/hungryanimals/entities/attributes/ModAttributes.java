@@ -14,7 +14,7 @@ public class ModAttributes {
 	public static String NAME_hunger_bmr = References.MODID+".hunger_bmr";
 	public static String NAME_courtship_hunger = References.MODID+".courtship_hunger";
 	public static String NAME_courtship_probability = References.MODID+".courtship_probability";
-	public static String NAME_courtship_hungerCondition = References.MODID+".courtship_hungerCondition";
+	public static String NAME_courtship_hungerCondition = References.MODID+".courtship_hunger_condition";
 	public static String NAME_excretion_factor = References.MODID+".excretion_factor";
 	public static String NAME_child_hunger = References.MODID+".child_hunger";
 	public static String NAME_milk_hunger = References.MODID+".milk_hunger";

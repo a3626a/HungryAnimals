@@ -3,7 +3,7 @@
 	"hungryanimals.hunger_max" : 150,
 	"hungryanimals.courtship_hunger" : 7.5,
 	"hungryanimals.courtship_probability" : 0.0025,
-	"hungryanimals.courtship_hungerCondition" : 0.8,
+	"hungryanimals.courtship_hunger_condition" : 0.8,
 	"hungryanimals.excretion_factor" : 0.02,
 	"hungryanimals.child_hunger" : 37.5,
 	"generic.maxHealth" : 8,
