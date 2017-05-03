@@ -18,10 +18,15 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.ai.AIContainer;
+import oortcloud.hungryanimals.entities.ai.AIContainerRegisterEvent;
+import oortcloud.hungryanimals.entities.ai.AIManager;
+import oortcloud.hungryanimals.entities.ai.IAIContainer;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
@@ -31,9 +36,9 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockStat
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
-import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
+import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 
 public class ConfigurationHandler {
 
@@ -41,6 +46,8 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON foodPreferencesItem;
 	private static ConfigurationHandlerJSON attributes;
 	private static ConfigurationHandlerJSON lootTables;
+	private static ConfigurationHandlerJSON ais;
+	
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
 			.create();
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
@@ -111,6 +118,19 @@ public class ConfigurationHandler {
 		});
 		lootTables = new ConfigurationHandlerJSON(basefodler, "loot_tables/entities", (file, animal) -> {
 		});
+		ais = new ConfigurationHandlerJSON(basefodler, "ais", (file, animal) -> {
+			JsonObject arr;
+			try {
+				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { attributes.getDescriptor(), file, animal, e });
+				return;
+			}
+			String ai = arr.get("type").getAsString();
+			IAIContainer<EntityAnimal> aiContainer = AIManager.getInstance().AITYPES.get(ai).apply(animal);
+			MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer)aiContainer));
+			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
+		});
 		LootTableModifier.init(basefodler);
 		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/Animal.cfg"));
 		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/World.cfg"));
@@ -124,6 +144,7 @@ public class ConfigurationHandler {
 		foodPreferencesItem.sync();
 		attributes.sync();
 		lootTables.sync();
+		ais.sync();
 		LootTableModifier.sync();
 	}
 

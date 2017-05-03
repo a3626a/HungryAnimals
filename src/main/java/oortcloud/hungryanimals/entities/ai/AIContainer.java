@@ -19,9 +19,29 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 	private List<Class<? extends EntityAIBase>> prior;
 	private List<Class<? extends EntityAIBase>> posterior;
 
+	public AIContainer() {
+		this(0);
+	}
+
 	public AIContainer(int start) {
+		this(start, null);
+	}
+
+	public AIContainer(AIContainer parent) {
+		this(0, parent);
+	}
+	
+	public AIContainer(int start, AIContainer parent) {
 		this.ais = new LinkedList<IAIPlacer>();
 		this.toRemove = new LinkedList<Class<? extends EntityAIBase>>();
+
+		if (parent != null) {
+			this.start = parent.start;
+			this.removeAll = parent.removeAll;
+			this.ais.addAll(parent.ais);
+			this.toRemove.addAll(parent.toRemove);
+		}
+		
 		this.start = start;
 	}
 
@@ -63,7 +83,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 	}
 
 	public void put(AIFactory target) {
-		ais.add(new AIPlacerPriority(target, prior, posterior));
+		ais.add(new AIPlacerPriority(target, getPrior(), getPosterior()));
 		prior = null;
 		posterior = null;
 	}
@@ -157,7 +177,8 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		public List<Class<? extends EntityAIBase>> prior;
 		public List<Class<? extends EntityAIBase>> posterior;
 
-		public AIPlacerPriority(AIFactory aiFactory, List<Class<? extends EntityAIBase>> prior, List<Class<? extends EntityAIBase>> posterior) {
+		public AIPlacerPriority(AIFactory aiFactory, List<Class<? extends EntityAIBase>> prior,
+				List<Class<? extends EntityAIBase>> posterior) {
 			this.aiFactory = aiFactory;
 			this.prior = prior;
 			this.posterior = posterior;
@@ -179,9 +200,6 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 					maxIndex = Math.min(minIndex, indexOf(list, i));
 				}
 			}
-
-			prior = null;
-			posterior = null;
 
 			if (minIndex < maxIndex) {
 				list.add(maxIndex, aiFactory.apply(entity));
