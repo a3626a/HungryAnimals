@@ -1,11 +1,11 @@
 {
-	"hungryanimals.hunger_bmr" : { "value" : 0.003, "register" : true},
-	"hungryanimals.hunger_max" : { "value" : 250, "register" : true},
-	"hungryanimals.courtship_hunger" : { "value" : 12.5, "register" : true},
-	"hungryanimals.courtship_probability" : { "value" : 0.0025, "register" : true},
-	"hungryanimals.courtship_hungerCondition" : { "value" : 0.8, "register" : true},
-	"hungryanimals.excretion_factor" : { "value" : 0.02, "register" : true},
-	"hungryanimals.child_hunger" : { "value" : 62.5, "register" : true},
-	"generic.maxHealth" : { "value" : 10, "register" : false},
-	"generic.movementSpeed" : { "value" : 0.25, "register" : false}
+	"hungryanimals.hunger_bmr" : 0.003,
+	"hungryanimals.hunger_max" : 250,
+	"hungryanimals.courtship_hunger" : 12.5,
+	"hungryanimals.courtship_probability" : 0.0025,
+	"hungryanimals.courtship_hungerCondition" : 0.8,
+	"hungryanimals.excretion_factor" : 0.02,
+	"hungryanimals.child_hunger" : 62.5,
+	"generic.maxHealth" : 10,
+	"generic.movementSpeed" : 0.25
 }

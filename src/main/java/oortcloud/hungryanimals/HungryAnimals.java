@@ -26,6 +26,7 @@ import oortcloud.hungryanimals.core.network.PacketGeneralServer;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
 import oortcloud.hungryanimals.entities.ai.AIManager;
+import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.ModPotions;
@@ -69,6 +70,7 @@ public class HungryAnimals {
 		proxy.registerCapabilities();
 		proxy.registerItemRendering();
 		HungryAnimalManager.getInstance().init();
+		AttributeManager.getInstance().init();
 		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();

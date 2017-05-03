@@ -31,7 +31,6 @@ import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
 import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
-import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
@@ -95,22 +94,24 @@ public class ConfigurationHandler {
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
 		});
 		attributes = new ConfigurationHandlerJSON(basefodler, "attributes", (file, animal) -> {
-			JsonObject arr;
+			JsonObject jobj;
 			try {
-				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
+				jobj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
 			} catch (JsonSyntaxException | IOException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { attributes.getDescriptor(), file, animal, e });
 				return;
 			}
+			
+			// AUTO FILE FORMAT CHECK AND UPDATE
 			List<IAttributeEntry> list = new ArrayList<IAttributeEntry>();
-			for (Entry<String, JsonElement> i : arr.entrySet()) {
-				if (!ModAttributes.NAME_MAP.containsKey(i.getKey())) {
+			for (Entry<String, JsonElement> i : jobj.entrySet()) {
+				if (!AttributeManager.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
 					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal });
 					continue;
 				}
-				IAttribute attribute = ModAttributes.NAME_MAP.get(i.getKey());
-				JsonObject obj = i.getValue().getAsJsonObject();
-				list.add(new AttributeEntry(attribute, obj.getAsJsonPrimitive("register").getAsBoolean(), obj.getAsJsonPrimitive("value").getAsDouble()));
+				IAttribute attribute = AttributeManager.getInstance().ATTRIBUTES.get(i.getKey()).attribute;
+				boolean shouldRegister = AttributeManager.getInstance().ATTRIBUTES.get(i.getKey()).shouldRegister;
+				list.add(new AttributeEntry(attribute, shouldRegister, i.getValue().getAsDouble()));
 			}
 			AttributeRegisterEvent event_ = new AttributeRegisterEvent(animal, list);
 			MinecraftForge.EVENT_BUS.post(event_);
