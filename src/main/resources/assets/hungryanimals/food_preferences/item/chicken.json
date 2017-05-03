@@ -16,5 +16,11 @@
 			"name": "minecraft:melon_seeds"
 		},
 		"hunger": 25
+	},
+	{
+		"item": {
+			"name": "minecraft:beetroot_seeds"
+		},
+		"hunger": 20
 	}
 ]
