@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,6 +104,20 @@ public class ConfigurationHandler {
 			}
 			
 			// AUTO FILE FORMAT CHECK AND UPDATE
+			if (jobj.entrySet().iterator().next().getValue().isJsonObject()) {
+				JsonObject updatedJobj = new JsonObject();
+				for (Entry<String, JsonElement> i : jobj.entrySet()) {
+					updatedJobj.addProperty(i.getKey(), i.getValue().getAsJsonObject().get("value").getAsDouble());
+				}
+				jobj = updatedJobj;
+				try {
+					Files.delete(file.toPath());
+					Files.write(file.toPath(), jobj.toString().getBytes(), StandardOpenOption.CREATE_NEW);
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t auto-update old formatted {}\n{}", file, e);
+				}
+			}
+			
 			List<IAttributeEntry> list = new ArrayList<IAttributeEntry>();
 			for (Entry<String, JsonElement> i : jobj.entrySet()) {
 				if (!AttributeManager.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
@@ -117,6 +132,7 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			AttributeManager.getInstance().REGISTRY.put(animal, list);
 		});
+		
 		lootTables = new ConfigurationHandlerJSON(basefodler, "loot_tables/entities", (file, animal) -> {
 		});
 		ais = new ConfigurationHandlerJSON(basefodler, "ais", (file, animal) -> {
