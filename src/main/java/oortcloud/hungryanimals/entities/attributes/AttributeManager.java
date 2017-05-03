@@ -3,7 +3,6 @@ package oortcloud.hungryanimals.entities.attributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -35,7 +34,7 @@ public class AttributeManager {
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_hunger, pair(ModAttributes.courtship_hunger, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_probability,
 				pair(ModAttributes.courtship_probability, true));
-		ATTRIBUTES.put(ModAttributes.NAME_courtship_hungerCondition,
+		ATTRIBUTES.put(ModAttributes.NAME_courtship_hunger_condition,
 				pair(ModAttributes.courtship_hungerCondition, true));
 		ATTRIBUTES.put(ModAttributes.NAME_excretion_factor, pair(ModAttributes.excretion_factor, true));
 		ATTRIBUTES.put(ModAttributes.NAME_child_hunger, pair(ModAttributes.child_hunger, true));

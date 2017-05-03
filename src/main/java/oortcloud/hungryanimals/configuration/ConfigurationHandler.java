@@ -32,6 +32,7 @@ import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
 import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
@@ -107,7 +108,11 @@ public class ConfigurationHandler {
 			if (jobj.entrySet().iterator().next().getValue().isJsonObject()) {
 				JsonObject updatedJobj = new JsonObject();
 				for (Entry<String, JsonElement> i : jobj.entrySet()) {
+					if (i.getKey().equals("hungryanimals.courtship_hungerCondition")) {
+						updatedJobj.addProperty(ModAttributes.NAME_courtship_hunger_condition, i.getValue().getAsJsonObject().get("value").getAsDouble());
+					} else {
 					updatedJobj.addProperty(i.getKey(), i.getValue().getAsJsonObject().get("value").getAsDouble());
+					}
 				}
 				jobj = updatedJobj;
 				try {
