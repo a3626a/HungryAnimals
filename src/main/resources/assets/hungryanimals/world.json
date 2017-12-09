@@ -1,0 +1,9 @@
+{
+    "disease_probability" : 0.05,
+    "erosion_probability_on_hay" : 0.5,
+    "erosion_Probability" : 0.025,
+    "fermentation_probability" : 0.05,
+    "fertilization_probability" : 0.2,
+    "grass_probability" : 0.1,
+    "ripening_probability" : 0.1
+}

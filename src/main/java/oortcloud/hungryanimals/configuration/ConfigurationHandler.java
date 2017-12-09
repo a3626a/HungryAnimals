@@ -18,11 +18,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.API;
+import oortcloud.hungryanimals.blocks.BlockExcreta;
+import oortcloud.hungryanimals.blocks.BlockNiterBed;
+import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.AIContainer;
 import oortcloud.hungryanimals.entities.ai.AIContainerRegisterEvent;
@@ -39,6 +45,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
@@ -49,8 +56,10 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSONAnimal attributes;
 	private static ConfigurationHandlerJSONAnimal lootTables;
 	private static ConfigurationHandlerJSONAnimal ais;
-	private static ConfigurationHandlerJSONRecipe recipes;
-
+	private static ConfigurationHandlerJSON recipes;
+	private static ConfigurationHandlerJSON world;
+	private static ConfigurationHandlerJSON animal;
+	
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
 			.create();
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
@@ -159,7 +168,7 @@ public class ConfigurationHandler {
 			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
 		});
 
-		recipes = new ConfigurationHandlerJSONRecipe(basefolder, "recipes", (file) -> {
+		recipes = new ConfigurationHandlerJSON(new File(basefolder, "recipes"), "animalglue", (file) -> {
 			JsonArray jsonArr;
 			try {
 				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
@@ -174,25 +183,74 @@ public class ConfigurationHandler {
 				RecipeAnimalGlue.addRecipe(state, count);
 			}
 		});
+		world = new ConfigurationHandlerJSON(basefolder, "world", (file) -> {
+			JsonObject jsonObj;
+			try {
+				jsonObj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { ais.getDescriptor(), file, e });
+				return;
+			}
+			BlockExcreta.diseaseProbability = jsonObj.getAsJsonPrimitive("disease_probability").getAsDouble();
+			BlockExcreta.erosionProbabilityOnHay = jsonObj.getAsJsonPrimitive("erosion_probability_on_hay").getAsDouble();
+			BlockExcreta.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_Probability").getAsDouble();
+			BlockExcreta.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
+			BlockExcreta.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
+			WorldEventHandler.grassProbability = jsonObj.getAsJsonPrimitive("grass_probability").getAsDouble();
+			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
+		});
+		animal = new ConfigurationHandlerJSON(basefolder, "animal", (file) -> {
+			JsonArray jsonArr;
+			try {
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { recipes.getDescriptor(), file, e });
+				return;
+			}
+			
+			for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
+				if (EntityAnimal.class.isAssignableFrom(i)) {
+					HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
+				}
+			}
+			HungryAnimals.logger.info("Configuration: Uncompatible entities' name :");
+			for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
+				if (!EntityAnimal.class.isAssignableFrom(i)) {
+					HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
+				}
+			}
 
+			
+			for (JsonElement jsonEle : jsonArr) {
+				String i = jsonEle.getAsString();
+				
+				Class<? extends Entity> entityClass = EntityList.NAME_TO_CLASS.get(i);
+				if (entityClass != null) {
+					if (EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance()
+							.isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
+						HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
+						API.registerAnimal(entityClass.asSubclass(EntityAnimal.class));
+					}
+				}
+			}
+		});
+		
 		LootTableModifier.init(basefolder);
-		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/Animal.cfg"));
-		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/World.cfg"));
 	}
 
 	public static void sync() {
-		ConfigurationHandlerWorld.sync();
 		foodPreferencesBlock.sync();
 		foodPreferencesItem.sync();
 		attributes.sync();
 		lootTables.sync();
 		ais.sync();
 		recipes.sync();
+		world.sync();
 		LootTableModifier.sync();
 	}
 
 	public static void postSync() {
-		ConfigurationHandlerAnimal.sync();
+		animal.sync();
 	}
 
 }

@@ -53,7 +53,7 @@ public class BlockExcreta extends BlockFalling {
 	public static final double defualt_fertilizationProbability = 0.2;
 	public static double fertilizationProbability;
 	public static final double defualt_erosionOnHayProbability = 0.5;
-	public static double erosionOnHayProbability;
+	public static double erosionProbabilityOnHay;
 	public static final double defualt_diseaseProbability = 0.05;
 	public static double diseaseProbability;
 	public static final double diseaseRadius = 3;
@@ -194,7 +194,7 @@ public class BlockExcreta extends BlockFalling {
 				}
 			}
 		} else if (bottom == ModBlocks.floorcover_hay) {
-			if (random.nextDouble() < BlockExcreta.erosionOnHayProbability) {
+			if (random.nextDouble() < BlockExcreta.erosionProbabilityOnHay) {
 				if (man > 0) {
 					man--;
 				} else if (exc > 0) {

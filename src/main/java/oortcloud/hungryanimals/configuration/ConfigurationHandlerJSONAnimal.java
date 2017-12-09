@@ -20,8 +20,7 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 	 * @param read
 	 */
 	public ConfigurationHandlerJSONAnimal(File basefolder, String descriptor, BiConsumer<File, Class<? extends EntityAnimal>> read) {
-		this.descriptor = descriptor;
-		this.directory = new File(basefolder, descriptor);
+		super(new File(basefolder, descriptor), descriptor);
 		this.read = read;
 	}
 
