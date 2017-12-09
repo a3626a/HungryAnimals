@@ -44,12 +44,12 @@ import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
 public class ConfigurationHandler {
 
-	private static ConfigurationHandlerJSON foodPreferencesBlock;
-	private static ConfigurationHandlerJSON foodPreferencesItem;
-	private static ConfigurationHandlerJSON attributes;
-	private static ConfigurationHandlerJSON lootTables;
-	private static ConfigurationHandlerJSON ais;
-	private static ConfigurationHandlerRecipe recipes;
+	private static ConfigurationHandlerJSONAnimal foodPreferencesBlock;
+	private static ConfigurationHandlerJSONAnimal foodPreferencesItem;
+	private static ConfigurationHandlerJSONAnimal attributes;
+	private static ConfigurationHandlerJSONAnimal lootTables;
+	private static ConfigurationHandlerJSONAnimal ais;
+	private static ConfigurationHandlerJSONRecipe recipes;
 
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
 			.create();
@@ -60,7 +60,7 @@ public class ConfigurationHandler {
 		
 		System.out.println(basefolder.getAbsolutePath());
 		
-		foodPreferencesBlock = new ConfigurationHandlerJSON(basefolder, "food_preferences/block", (file, animal) -> {
+		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/block", (file, animal) -> {
 			JsonArray jsonArr;
 			try {
 				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
@@ -80,7 +80,7 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
-		foodPreferencesItem = new ConfigurationHandlerJSON(basefolder, "food_preferences/item", (file, animal) -> {
+		foodPreferencesItem = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/item", (file, animal) -> {
 			JsonArray jsonArr;
 			try {
 				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
@@ -100,7 +100,7 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
 		});
-		attributes = new ConfigurationHandlerJSON(basefolder, "attributes", (file, animal) -> {
+		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (file, animal) -> {
 			JsonObject jsonObj;
 			try {
 				jsonObj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
@@ -143,9 +143,9 @@ public class ConfigurationHandler {
 			AttributeManager.getInstance().REGISTRY.put(animal, list);
 		});
 
-		lootTables = new ConfigurationHandlerJSON(basefolder, "loot_tables/entities", (file, animal) -> {
+		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables/entities", (file, animal) -> {
 		});
-		ais = new ConfigurationHandlerJSON(basefolder, "ais", (file, animal) -> {
+		ais = new ConfigurationHandlerJSONAnimal(basefolder, "ais", (file, animal) -> {
 			JsonObject jsonObj;
 			try {
 				jsonObj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
@@ -159,7 +159,7 @@ public class ConfigurationHandler {
 			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
 		});
 
-		recipes = new ConfigurationHandlerRecipe(basefolder, "recipes", (file) -> {
+		recipes = new ConfigurationHandlerJSONRecipe(basefolder, "recipes", (file) -> {
 			JsonArray jsonArr;
 			try {
 				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
