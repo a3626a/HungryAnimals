@@ -97,7 +97,7 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
 		}
 
 		public String toString() {
-			return toString();
+			return this.item.toString();
 		}
 
 		public static class Serializer implements JsonDeserializer<HashItemType>, JsonSerializer<HashItemType> {

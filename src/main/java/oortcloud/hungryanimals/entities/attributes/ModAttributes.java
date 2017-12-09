@@ -1,9 +1,5 @@
 package oortcloud.hungryanimals.entities.attributes;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import oortcloud.hungryanimals.core.lib.References;

@@ -1,0 +1,20 @@
+[
+    {
+        "item" : {
+            "name" : "minecraft:leather"
+        },
+        "count" : 6
+    },
+    {
+        "item" : {
+            "name" : "hungryanimals:tendon"
+        },
+        "count" : 4
+    },
+    {
+        "item" : {
+            "name" : "minecraft:bone"
+        },
+        "count" : 2
+    }
+]

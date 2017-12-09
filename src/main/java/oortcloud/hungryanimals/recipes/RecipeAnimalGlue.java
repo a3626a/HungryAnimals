@@ -3,9 +3,6 @@ package oortcloud.hungryanimals.recipes;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
-import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.configuration.util.ConfigurationHelper;
-import oortcloud.hungryanimals.configuration.util.StringParser;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 
 public class RecipeAnimalGlue {
@@ -32,19 +29,6 @@ public class RecipeAnimalGlue {
 			return recipe.get(new HashItemType(item.getItem(), item.getItemDamage()));
 		} else {
 			return 0;
-		}
-	}
-
-	public static void readConfiguration(String i) {
-		String[] split = StringParser.splitByLevel(i.replaceAll(" ", ""), '=');
-		if (split.length == 2) {
-			HashItemType input = ConfigurationHelper.instance.getHashItem(split[0]);
-			if (input != null) {
-				RecipeAnimalGlue.addRecipe(input, Integer.parseInt(split[1].substring(1, split[1].length() - 1)));
-			}
-		} else {
-			HungryAnimals.logger.warn("\"" + i + "\" is not added. Format error");
-			return;
 		}
 	}
 	

@@ -40,6 +40,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
+import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
 public class ConfigurationHandler {
 
@@ -48,26 +49,30 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON attributes;
 	private static ConfigurationHandlerJSON lootTables;
 	private static ConfigurationHandlerJSON ais;
-	
+	private static ConfigurationHandlerRecipe recipes;
+
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
 			.create();
 	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
-		File basefodler = new File(event.getModConfigurationDirectory(), References.MODID);
-		foodPreferencesBlock = new ConfigurationHandlerJSON(basefodler, "food_preferences/block", (file, animal) -> {
-			JsonArray arr;
+		File basefolder = new File(event.getModConfigurationDirectory(), References.MODID);
+		
+		System.out.println(basefolder.getAbsolutePath());
+		
+		foodPreferencesBlock = new ConfigurationHandlerJSON(basefolder, "food_preferences/block", (file, animal) -> {
+			JsonArray jsonArr;
 			try {
-				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
 			} catch (JsonSyntaxException | IOException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { foodPreferencesBlock.getDescriptor(), file, animal, e });
 				return;
 			}
 			Map<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
-			for (JsonElement i : arr) {
-				JsonObject obj = i.getAsJsonObject();
-				HashBlockState state = GSON_INSTANCE_FOOD_PREFERENCE_BLOCK.fromJson(obj.getAsJsonObject("block"), HashBlockState.class);
-				double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
+			for (JsonElement i : jsonArr) {
+				JsonObject jsonObj = i.getAsJsonObject();
+				HashBlockState state = GSON_INSTANCE_FOOD_PREFERENCE_BLOCK.fromJson(jsonObj.getAsJsonObject("block"), HashBlockState.class);
+				double hunger = jsonObj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
 			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(animal,
@@ -75,19 +80,19 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
-		foodPreferencesItem = new ConfigurationHandlerJSON(basefodler, "food_preferences/item", (file, animal) -> {
-			JsonArray arr;
+		foodPreferencesItem = new ConfigurationHandlerJSON(basefolder, "food_preferences/item", (file, animal) -> {
+			JsonArray jsonArr;
 			try {
-				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
 			} catch (JsonSyntaxException | IOException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { foodPreferencesItem.getDescriptor(), file, animal, e });
 				return;
 			}
 			Map<HashItemType, Double> map = new HashMap<HashItemType, Double>();
-			for (JsonElement i : arr) {
-				JsonObject obj = i.getAsJsonObject();
-				HashItemType state = GSON_INSTANCE_FOOD_PREFERENCE_ITEM.fromJson(obj.getAsJsonObject("item"), HashItemType.class);
-				double hunger = obj.getAsJsonPrimitive("hunger").getAsDouble();
+			for (JsonElement i : jsonArr) {
+				JsonObject jsonObj = i.getAsJsonObject();
+				HashItemType state = GSON_INSTANCE_FOOD_PREFERENCE_ITEM.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
+				double hunger = jsonObj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
 			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
@@ -95,36 +100,36 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
 		});
-		attributes = new ConfigurationHandlerJSON(basefodler, "attributes", (file, animal) -> {
-			JsonObject jobj;
+		attributes = new ConfigurationHandlerJSON(basefolder, "attributes", (file, animal) -> {
+			JsonObject jsonObj;
 			try {
-				jobj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
+				jsonObj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
 			} catch (JsonSyntaxException | IOException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { attributes.getDescriptor(), file, animal, e });
 				return;
 			}
-			
+
 			// AUTO FILE FORMAT CHECK AND UPDATE
-			if (jobj.entrySet().iterator().next().getValue().isJsonObject()) {
-				JsonObject updatedJobj = new JsonObject();
-				for (Entry<String, JsonElement> i : jobj.entrySet()) {
+			if (jsonObj.entrySet().iterator().next().getValue().isJsonObject()) {
+				JsonObject updatedJsonObj = new JsonObject();
+				for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 					if (i.getKey().equals("hungryanimals.courtship_hungerCondition")) {
-						updatedJobj.addProperty(ModAttributes.NAME_courtship_hunger_condition, i.getValue().getAsJsonObject().get("value").getAsDouble());
+						updatedJsonObj.addProperty(ModAttributes.NAME_courtship_hunger_condition, i.getValue().getAsJsonObject().get("value").getAsDouble());
 					} else {
-					updatedJobj.addProperty(i.getKey(), i.getValue().getAsJsonObject().get("value").getAsDouble());
+						updatedJsonObj.addProperty(i.getKey(), i.getValue().getAsJsonObject().get("value").getAsDouble());
 					}
 				}
-				jobj = updatedJobj;
+				jsonObj = updatedJsonObj;
 				try {
 					Files.delete(file.toPath());
-					Files.write(file.toPath(), jobj.toString().getBytes(), StandardOpenOption.CREATE_NEW);
+					Files.write(file.toPath(), jsonObj.toString().getBytes(), StandardOpenOption.CREATE_NEW);
 				} catch (IOException e) {
 					HungryAnimals.logger.error("Couldn\'t auto-update old formatted {}\n{}", file, e);
 				}
 			}
-			
+
 			List<IAttributeEntry> list = new ArrayList<IAttributeEntry>();
-			for (Entry<String, JsonElement> i : jobj.entrySet()) {
+			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 				if (!AttributeManager.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
 					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal });
 					continue;
@@ -137,36 +142,52 @@ public class ConfigurationHandler {
 			MinecraftForge.EVENT_BUS.post(event_);
 			AttributeManager.getInstance().REGISTRY.put(animal, list);
 		});
-		
-		lootTables = new ConfigurationHandlerJSON(basefodler, "loot_tables/entities", (file, animal) -> {
+
+		lootTables = new ConfigurationHandlerJSON(basefolder, "loot_tables/entities", (file, animal) -> {
 		});
-		ais = new ConfigurationHandlerJSON(basefodler, "ais", (file, animal) -> {
-			JsonObject arr;
+		ais = new ConfigurationHandlerJSON(basefolder, "ais", (file, animal) -> {
+			JsonObject jsonObj;
 			try {
-				arr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
+				jsonObj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
 			} catch (JsonSyntaxException | IOException e) {
-				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { attributes.getDescriptor(), file, animal, e });
+				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { ais.getDescriptor(), file, animal, e });
 				return;
 			}
-			String ai = arr.get("type").getAsString();
+			String ai = jsonObj.get("type").getAsString();
 			IAIContainer<EntityAnimal> aiContainer = AIManager.getInstance().AITYPES.get(ai).apply(animal);
-			MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer)aiContainer));
+			MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer) aiContainer));
 			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
 		});
-		LootTableModifier.init(basefodler);
+
+		recipes = new ConfigurationHandlerRecipe(basefolder, "recipes", (file) -> {
+			JsonArray jsonArr;
+			try {
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { recipes.getDescriptor(), file, e });
+				return;
+			}
+			for (JsonElement i : jsonArr) {
+				JsonObject jsonObj = i.getAsJsonObject();
+				HashItemType state = GSON_INSTANCE_FOOD_PREFERENCE_ITEM.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
+				int count = jsonObj.getAsJsonPrimitive("count").getAsInt();
+				RecipeAnimalGlue.addRecipe(state, count);
+			}
+		});
+
+		LootTableModifier.init(basefolder);
 		ConfigurationHandlerAnimal.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/Animal.cfg"));
 		ConfigurationHandlerWorld.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/World.cfg"));
-		ConfigurationHandlerRecipe.init(new File(event.getModConfigurationDirectory() + "/" + References.MODID + "/Recipe.cfg"));
 	}
 
 	public static void sync() {
 		ConfigurationHandlerWorld.sync();
-		ConfigurationHandlerRecipe.sync();
 		foodPreferencesBlock.sync();
 		foodPreferencesItem.sync();
 		attributes.sync();
 		lootTables.sync();
 		ais.sync();
+		recipes.sync();
 		LootTableModifier.sync();
 	}
 
