@@ -60,11 +60,12 @@ public class ConfigurationHandlerJSON {
 	}
 	
 	protected void createDefaultConfigurationFile(File file) {
-		String path_file = file.getAbsolutePath();
+		String path_file = file.getPath();
 		int index_config = path_file.indexOf("config");
 		String path_config = path_file.substring(index_config);
 		int index_hungryanimals = path_config.indexOf(References.MODID);
-		String resourceName = "/assets/" + path_config.substring(index_hungryanimals);
+		String path_hungryanimals = path_config.substring(index_hungryanimals);
+		String resourceName = "/assets/" + path_hungryanimals.replace("\\", "/");
 		
 		URL url = getClass().getResource(resourceName);
 		if (url == null) {
