@@ -16,8 +16,6 @@ public class ConfigurationHandlerAnimal {
 
 	public static Configuration config;
 
-	public static final String KEY_crank_food_consumption = "FoodConsumption: food consumption during working on large crank";
-	public static final String KEY_crank_production = "Abiltiy: Amount of power that this animal produces with large crank";
 	public static final String KEY_milk_hunger = "FoodConsumption: to produce a bucket of milk";
 	public static final String KEY_milk_delay = "Behavior: ticks needed to produce a bucket of milk";
 	public static final String KEY_wool_hunger = "FoodConsumption: Wool";
