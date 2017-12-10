@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -13,8 +14,11 @@ import java.util.Map.Entry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
@@ -22,6 +26,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -59,16 +67,14 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON recipes;
 	private static ConfigurationHandlerJSON world;
 	private static ConfigurationHandlerJSON animal;
-	
-	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_BLOCK = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer())
-			.create();
-	public static Gson GSON_INSTANCE_FOOD_PREFERENCE_ITEM = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
+
+	public static Gson GSON_INSTANCE_HASH_BLOCK_STATE = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer()).create();
+	public static Gson GSON_INSTANCE_HASH_ITEM_TYPE = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
+	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
 		File basefolder = new File(event.getModConfigurationDirectory(), References.MODID);
-		
-		System.out.println(basefolder.getAbsolutePath());
-		
+
 		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/block", (file, animal) -> {
 			JsonArray jsonArr;
 			try {
@@ -80,7 +86,7 @@ public class ConfigurationHandler {
 			Map<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				HashBlockState state = GSON_INSTANCE_FOOD_PREFERENCE_BLOCK.fromJson(jsonObj.getAsJsonObject("block"), HashBlockState.class);
+				HashBlockState state = GSON_INSTANCE_HASH_BLOCK_STATE.fromJson(jsonObj.getAsJsonObject("block"), HashBlockState.class);
 				double hunger = jsonObj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
@@ -100,7 +106,7 @@ public class ConfigurationHandler {
 			Map<HashItemType, Double> map = new HashMap<HashItemType, Double>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				HashItemType state = GSON_INSTANCE_FOOD_PREFERENCE_ITEM.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
+				HashItemType state = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
 				double hunger = jsonObj.getAsJsonPrimitive("hunger").getAsDouble();
 				map.put(state, hunger);
 			}
@@ -178,7 +184,7 @@ public class ConfigurationHandler {
 			}
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				HashItemType state = GSON_INSTANCE_FOOD_PREFERENCE_ITEM.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
+				HashItemType state = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
 				int count = jsonObj.getAsJsonPrimitive("count").getAsInt();
 				RecipeAnimalGlue.addRecipe(state, count);
 			}
@@ -188,12 +194,12 @@ public class ConfigurationHandler {
 			try {
 				jsonObj = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonObject();
 			} catch (JsonSyntaxException | IOException e) {
-				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { ais.getDescriptor(), file, e });
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), file, e });
 				return;
 			}
 			BlockExcreta.diseaseProbability = jsonObj.getAsJsonPrimitive("disease_probability").getAsDouble();
 			BlockExcreta.erosionProbabilityOnHay = jsonObj.getAsJsonPrimitive("erosion_probability_on_hay").getAsDouble();
-			BlockExcreta.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_Probability").getAsDouble();
+			BlockExcreta.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_probability").getAsDouble();
 			BlockExcreta.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
 			BlockExcreta.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
 			WorldEventHandler.grassProbability = jsonObj.getAsJsonPrimitive("grass_probability").getAsDouble();
@@ -204,10 +210,10 @@ public class ConfigurationHandler {
 			try {
 				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
 			} catch (JsonSyntaxException | IOException e) {
-				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { recipes.getDescriptor(), file, e });
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { animal.getDescriptor(), file, e });
 				return;
 			}
-			
+
 			for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
 				if (EntityAnimal.class.isAssignableFrom(i)) {
 					HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
@@ -220,21 +226,20 @@ public class ConfigurationHandler {
 				}
 			}
 
-			
 			for (JsonElement jsonEle : jsonArr) {
 				String i = jsonEle.getAsString();
-				
+
 				Class<? extends Entity> entityClass = EntityList.NAME_TO_CLASS.get(i);
 				if (entityClass != null) {
-					if (EntityAnimal.class.isAssignableFrom(entityClass) && !HungryAnimalManager.getInstance()
-							.isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
+					if (EntityAnimal.class.isAssignableFrom(entityClass)
+							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
 						HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
 						API.registerAnimal(entityClass.asSubclass(EntityAnimal.class));
 					}
 				}
 			}
 		});
-		
+
 		LootTableModifier.init(basefolder);
 	}
 
@@ -251,6 +256,29 @@ public class ConfigurationHandler {
 
 	public static void postSync() {
 		animal.sync();
+	}
+
+	public static class Serializer implements JsonDeserializer<ItemStack> {
+		public ItemStack deserialize(JsonElement ele, Type type, JsonDeserializationContext context) throws JsonParseException {
+			JsonObject jsonobject = ele.getAsJsonObject();
+
+			String name = JsonUtils.getString(jsonobject, "name");
+			Item item = Item.REGISTRY.getObject(new ResourceLocation(name));
+
+			if (item == null) {
+				throw new JsonParseException(String.format("{} has wrong name. It cannot find item {}", ele, name));
+			}
+
+			if (JsonUtils.hasField(jsonobject, "damage") && JsonUtils.hasField(jsonobject, "count")) {
+				return new ItemStack(item, JsonUtils.getInt(jsonobject, "count"), JsonUtils.getInt(jsonobject, "damage"));
+			} else if (JsonUtils.hasField(jsonobject, "damage")) {
+				return new ItemStack(item, 1, JsonUtils.getInt(jsonobject, "damage"));
+			} else if (JsonUtils.hasField(jsonobject, "count")) {
+				return new ItemStack(item, JsonUtils.getInt(jsonobject, "count"));
+			} else {
+				return new ItemStack(item);
+			}
+		}
 	}
 
 }
