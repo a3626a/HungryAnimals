@@ -56,7 +56,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (this.capTaming.getTaming() >= 1 && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
-					return trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack);
+					return !trough.stack.isEmpty() && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack);
 				} else {
 					return false;
 				}
@@ -80,11 +80,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;
-					if (trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack)) {
+					if (!trough.stack.isEmpty() && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack)) {
 						eatFoodBonus(trough.stack);
 						trough.stack.shrink(1);
-						if (trough.stack.getCount() == 0)
-							trough.stack = null;
 						
 						// TODO check valid flag
 						world.notifyBlockUpdate(pos, state, state, 3);
@@ -97,7 +95,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	}
 
 	private void eatFoodBonus(ItemStack item) {
-		if (item == null)
+		if (item.isEmpty())
 			return;
 
 		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);

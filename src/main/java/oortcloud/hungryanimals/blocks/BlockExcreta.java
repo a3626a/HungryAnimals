@@ -285,12 +285,9 @@ public class BlockExcreta extends BlockFalling {
 		if (exc + man >= 4)
 			return false;
 
-		if (playerIn.getHeldItemMainhand() != null && playerIn.getHeldItemMainhand().getItem().equals(ItemBlock.getItemFromBlock(this))) {
+		if (!playerIn.getHeldItemMainhand().isEmpty() && playerIn.getHeldItemMainhand().getItem().equals(ItemBlock.getItemFromBlock(this))) {
 			if (!playerIn.capabilities.isCreativeMode) {
 				playerIn.getHeldItemMainhand().shrink(1);
-				if (playerIn.getHeldItemMainhand().getCount() == 0) {
-					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
-				}
 			}
 			worldIn.setBlockState(pos, state.withProperty(CONTENT, EnumType.getValue(exc + 1, man)), 3);
 

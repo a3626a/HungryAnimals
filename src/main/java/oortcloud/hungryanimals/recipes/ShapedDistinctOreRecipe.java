@@ -21,7 +21,7 @@ public class ShapedDistinctOreRecipe implements IRecipe {
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-    protected ItemStack output = null;
+    protected ItemStack output = ItemStack.EMPTY;
     protected Object[] input = null;
     protected Character[] characters = null;
     protected String[] ores = null;

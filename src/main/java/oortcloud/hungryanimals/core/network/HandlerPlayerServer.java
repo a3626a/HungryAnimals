@@ -17,7 +17,7 @@ public class HandlerPlayerServer implements IMessageHandler<PacketPlayerServer, 
 		ItemStack stack = player.getHeldItemMainhand();
 		switch (message.index) {
 		case SyncIndex.DEBUG_SETTARGET:
-			if (stack != null && stack.getItem() == ModItems.debugGlass) {
+			if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
 				NBTTagCompound tag = stack.getTagCompound();
 				if (tag == null) {
 					stack.setTagCompound(new NBTTagCompound());

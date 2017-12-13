@@ -19,10 +19,8 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
-import scala.tools.nsc.backend.icode.TypeKinds.REFERENCE;
 
 /**
  * Loot Table Modification System Details. 

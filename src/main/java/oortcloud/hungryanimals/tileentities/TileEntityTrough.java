@@ -20,7 +20,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 
 public class TileEntityTrough extends TileEntity implements ITickable {
 
-	public ItemStack stack;
+	public ItemStack stack = ItemStack.EMPTY;
 
 	private static int period = 20 * 5;
 	private static double radius = 8;
@@ -41,7 +41,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getWorld().getWorldTime() % TileEntityTrough.period == 0 && this.stack != null) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getWorld().getWorldTime() % TileEntityTrough.period == 0 && !this.stack.isEmpty()) {
 			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.getWorld().getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (EntityAnimal i : list) {
 				if (i.hasCapability(ProviderHungryAnimal.CAP, null) && i.hasCapability(ProviderTamableAnimal.CAP, null)) {
@@ -86,7 +86,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	}
 	
 	private void writeSyncableDataToNBT(NBTTagCompound compound) {
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			NBTTagCompound tag = new NBTTagCompound();
 			stack.writeToNBT(tag);
 			compound.setTag("foodbox", tag);
@@ -98,7 +98,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 			NBTTagCompound tag = (NBTTagCompound) compound.getTag("foodbox");
 			stack = new ItemStack(tag);
 		} else {
-			stack = null;
+			stack = ItemStack.EMPTY;
 		}
 	}
 

@@ -75,7 +75,7 @@ public class DebugOverlayHandler extends Gui {
 				EntityPlayer entity = (EntityPlayer) mc.getRenderViewEntity();
 				if (entity != null) {
 					ItemStack stack = getDebugGlass(entity);
-					if (stack != null) {
+					if (!stack.isEmpty()) {
 						this.setOpened(true);
 					}
 				}
@@ -83,7 +83,7 @@ public class DebugOverlayHandler extends Gui {
 				EntityPlayer entity = (EntityPlayer) mc.getRenderViewEntity();
 				if (entity != null) {
 					ItemStack stack = getDebugGlass(entity);
-					if (stack == null) {
+					if (stack.isEmpty()) {
 						this.setOpened(false);
 						return;
 					}
@@ -155,6 +155,6 @@ public class DebugOverlayHandler extends Gui {
 		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
 			return stack;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 }

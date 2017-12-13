@@ -17,7 +17,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntityTrough> {
 
-	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/ModelTrough.png");
+	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/modeltrough.png");
 	private ModelTrough model;
 	
 	public RenderTileEntityTrough() {
@@ -47,7 +47,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 			GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		
-		if (foodbox.stack != null) {
+		if (!foodbox.stack.isEmpty()) {
 			ItemStack stack = foodbox.stack.copy();
 			int num = stack.getCount();
 			stack.setCount(1);

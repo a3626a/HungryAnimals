@@ -88,7 +88,7 @@ public class ClientRenderEventHandler {
 		EntityPlayer entity = (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity();
 		EntityLivingBase animal = event.getEntity();
 		ItemStack stack = entity.getHeldItemMainhand();
-		if (stack != null && stack.getItem() == ModItems.debugGlass) {
+		if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
 				if (tag.hasKey("target") && tag.getInteger("target") == animal.getEntityId()) {

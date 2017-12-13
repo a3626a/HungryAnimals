@@ -175,8 +175,7 @@ public class BlockTrough extends BlockContainer {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return (getStateFromMeta(meta).getValue(PART) == EnumPartType.FOOT) ? new TileEntityTrough() : null;
 	}
-
-
+	
 	public TileEntity getTileEntity(World world, BlockPos pos) {
 		IBlockState meta = world.getBlockState(pos);
 		if (meta.getBlock() == this) {
@@ -196,12 +195,12 @@ public class BlockTrough extends BlockContainer {
 
 		TileEntityTrough foodbox = (TileEntityTrough) te;
 		ItemStack stackinfoodbox = foodbox.stack;
-		ItemStack stackinhand = playerIn.getHeldItemMainhand();
+		ItemStack stackinhand = playerIn.getHeldItem(hand);
 
-		if (stackinhand == null) {
-			if (stackinfoodbox != null) {
+		if (stackinhand.isEmpty()) {
+			if (!stackinfoodbox.isEmpty()) {
 				if (playerIn.inventory.addItemStackToInventory(stackinfoodbox)) {
-					foodbox.stack = null;
+					foodbox.stack = ItemStack.EMPTY;
 					return true;
 				} else {
 					return false;
@@ -211,12 +210,12 @@ public class BlockTrough extends BlockContainer {
 			}
 		}
 
-		if (stackinfoodbox == null) {
+		if (stackinfoodbox.isEmpty()) {
 			if (stackinhand.getCount() > 16) {
 				foodbox.stack = stackinhand.splitStack(16);
 			} else {
 				foodbox.stack = stackinhand;
-				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+				playerIn.setHeldItem(hand, ItemStack.EMPTY);
 			}
 		} else if (stackinfoodbox.getItem() == stackinhand.getItem()) {
 			if (stackinhand.getCount() + stackinfoodbox.getCount() > 16) {
@@ -224,7 +223,7 @@ public class BlockTrough extends BlockContainer {
 				stackinhand.grow(stackinfoodbox.getCount() - 16);
 			} else {
 				stackinfoodbox.grow(stackinhand.getCount());
-				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
+				playerIn.setHeldItem(hand, ItemStack.EMPTY);
 			}
 		} else {
 			return false;
@@ -246,7 +245,7 @@ public class BlockTrough extends BlockContainer {
 	private void dropStoredItems(World worldIn, BlockPos pos, TileEntityTrough trough) {
 		if (trough != null) {
 			ItemStack itemstack = trough.stack;
-			if (itemstack != null) {
+			if (!itemstack.isEmpty()) {
 				float f = this.random.nextFloat() * 0.8F + 0.1F;
 				float f1 = this.random.nextFloat() * 0.8F + 0.1F;
 				float f2 = this.random.nextFloat() * 0.8F + 0.1F;

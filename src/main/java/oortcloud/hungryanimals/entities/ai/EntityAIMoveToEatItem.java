@@ -108,7 +108,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
 				ItemStack foodStack = target.getEntityItem();
 				foodStack.shrink(1);
-				if (foodStack.getCount() <= 0)
+				if (foodStack.isEmpty())
 					target.setDead();
 				this.eatFoodBonus(target.getEntityItem());
 			}
@@ -137,7 +137,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	}
 
 	private void eatFoodBonus(ItemStack item) {
-		if (item == null)
+		if (item.isEmpty())
 			return;
 
 		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);

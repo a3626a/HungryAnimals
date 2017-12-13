@@ -232,9 +232,6 @@ public class EntityEventHandler {
 		if (prefItem.canEat(capHungry, itemstack) && capTaming.getTaming() >= 1) {
 			eatFoodBonus(entity, capHungry, capTaming, itemstack);
 			itemstack.shrink(1);
-			if (itemstack.getCount() == 0) {
-				event.getEntityPlayer().inventory.deleteStack(itemstack);
-			}
 			return true;
 		}
 		if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTaming() >= 1) {
@@ -257,7 +254,7 @@ public class EntityEventHandler {
 
 	private void eatFoodBonus(EntityAnimal entity, ICapabilityHungryAnimal capHungry, ICapabilityTamableAnimal capTaming, ItemStack item) {
 		// TODO It must merged with AI's eatFoodBonus to increase maintainance
-		if (item == null)
+		if (item.isEmpty())
 			return;
 
 		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);

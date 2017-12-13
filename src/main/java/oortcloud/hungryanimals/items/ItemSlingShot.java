@@ -1,7 +1,5 @@
 package oortcloud.hungryanimals.items;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,15 +60,12 @@ public class ItemSlingShot extends Item {
                 }
             }
 
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
-    protected boolean isArrow(@Nullable ItemStack stack)
+    protected boolean isArrow(ItemStack stack)
     {
-    	if (stack == null)
-    		return false;
-    	
     	for (ItemStack i : OreDictionary.getOres("cobblestone")) {
     		if (OreDictionary.itemMatches(stack, i, false)) {
     			return true;
@@ -92,9 +87,9 @@ public class ItemSlingShot extends Item {
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
             if (i < 0) return;
 
-            if (itemstack != null || flag)
+            if (!itemstack.isEmpty() || flag)
             {
-                if (itemstack == null)
+                if (itemstack.isEmpty())
                 {
                     itemstack = new ItemStack(ItemBlock.getItemFromBlock(Blocks.COBBLESTONE));
                 }
@@ -104,7 +99,7 @@ public class ItemSlingShot extends Item {
                 if ((double)f >= 0.1D)
                 {
                     boolean flag1 = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-
+                    
                     if (!worldIn.isRemote)
                     {
                     	EntitySlingShotBall entityball = new EntitySlingShotBall(worldIn, entityplayer, f * 2.0F);
@@ -119,8 +114,8 @@ public class ItemSlingShot extends Item {
                     if (!flag1)
                     {
                         itemstack.shrink(1);
-
-                        if (itemstack.getCount() == 0)
+                        
+                        if (itemstack.isEmpty())
                         {
                             entityplayer.inventory.deleteStack(itemstack);
                         }
@@ -145,27 +140,31 @@ public class ItemSlingShot extends Item {
         return f;
     }
 	
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_) {
 		return 72000;
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.NONE;
     }
 	
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-        boolean flag = this.findAmmo(playerIn) != null;
+		ItemStack itemStack = playerIn.getHeldItem(hand);
+        boolean flag = !this.findAmmo(playerIn).isEmpty();
 
         if (!playerIn.capabilities.isCreativeMode && !flag)
         {
-            return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+            return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
         }
         else
         {
             playerIn.setActiveHand(hand);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
         }
     }
 	

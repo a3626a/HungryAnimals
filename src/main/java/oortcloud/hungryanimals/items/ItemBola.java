@@ -62,11 +62,6 @@ public class ItemBola extends Item {
 				if (!flag)
                 {
                     stack.shrink(1);
-
-                    if (stack.getCount() == 0)
-                    {
-                        entityplayer.inventory.deleteStack(stack);
-                    }
                 }
 
                 entityplayer.addStat(StatList.getObjectUseStats(this));

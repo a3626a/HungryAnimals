@@ -1,7 +1,5 @@
 package oortcloud.hungryanimals.entities.ai;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.item.ItemStack;
@@ -31,7 +29,8 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 		return super.shouldExecute() && temptedEntity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < 1;
 	}
 
-	protected boolean isTempting(@Nullable ItemStack stack) {
-		return stack == null ? false : pref.canEat(capHungry, stack);
+	@Override
+	protected boolean isTempting(ItemStack stack) {
+		return stack.isEmpty() ? false : pref.canEat(capHungry, stack);
 	}
 }
