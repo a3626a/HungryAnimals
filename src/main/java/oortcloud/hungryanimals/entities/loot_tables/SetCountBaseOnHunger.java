@@ -26,7 +26,7 @@ public class SetCountBaseOnHunger  extends LootFunction {
 
     public ItemStack apply(ItemStack stack, Random rand, LootContext context)
     {
-        stack.stackSize = this.countRange.generateInt(context.getLootedEntity().getCapability(ProviderHungryAnimal.CAP, null));
+        stack.setCount(this.countRange.generateInt(context.getLootedEntity().getCapability(ProviderHungryAnimal.CAP, null)));
         return stack;
     }
 

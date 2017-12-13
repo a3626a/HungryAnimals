@@ -86,7 +86,7 @@ public class ModelItemSlingshot implements IPerspectiveAwareModel {
 			@Override
 			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world,
 					EntityLivingBase entity) {
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				EntityPlayer player = Minecraft.getMinecraft().player;
 				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
 					float length = (float) (inuseTick / 150.0 + 0.9);

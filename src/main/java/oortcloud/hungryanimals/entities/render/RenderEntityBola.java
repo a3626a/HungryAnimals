@@ -37,7 +37,7 @@ public class RenderEntityBola extends Render<EntityBola> {
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(((bola.worldObj.getWorldTime() + partial) % 20) * 13, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(((bola.getEntityWorld().getWorldTime() + partial) % 20) * 13, 0.0F, 1.0F, 0.0F);
 		GlStateManager.disableCull();
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer renderer = tessellator.getBuffer();

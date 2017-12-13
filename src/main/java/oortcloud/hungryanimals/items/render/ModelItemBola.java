@@ -56,7 +56,7 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 		return new ItemOverrideList(ImmutableList.of()) {
 			@Override
 			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world, EntityLivingBase entity) {
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				EntityPlayer player = Minecraft.getMinecraft().player;
 				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
 					angleMainhand = 0.3f * inuseTick * inuseTick + 10 * inuseTick;

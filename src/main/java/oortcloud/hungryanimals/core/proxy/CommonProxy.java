@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.core.proxy;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,8 +34,8 @@ public class CommonProxy {
 	}
 
 	public void registerEntities() {
-		EntityRegistry.registerModEntity(EntityBola.class, Strings.entityBolaName, Strings.entityBolaID, HungryAnimals.instance, 80, 3, true);
-		EntityRegistry.registerModEntity(EntitySlingShotBall.class, Strings.entitySlingShotBallName, Strings.entitySlingShotBallID, HungryAnimals.instance, 80,
+		EntityRegistry.registerModEntity(new ResourceLocation(References.MODID, Strings.entityBolaName), EntityBola.class, Strings.entityBolaName, Strings.entityBolaID, HungryAnimals.instance, 80, 3, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(References.MODID, Strings.entitySlingShotBallName), EntitySlingShotBall.class, Strings.entitySlingShotBallName, Strings.entitySlingShotBallID, HungryAnimals.instance, 80,
 				3, true);
 	}
 

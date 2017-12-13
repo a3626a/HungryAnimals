@@ -28,7 +28,7 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 		checkDirectory();
 
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			File iFile = new File(directory, EntityList.CLASS_TO_NAME.get(i).toLowerCase() + ".json");
+			File iFile = new File(directory, ConfigurationHandler.resourceLocationToString(EntityList.getKey(i)) + ".json");
 
 			if (!iFile.exists()) {
 				createDefaultConfigurationFile(iFile);

@@ -90,14 +90,14 @@ public class BlockExcreta extends BlockFalling {
 	public boolean isOpaqueCube(IBlockState state) {
 		return isFullCube(state);
 	}
-
+	
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0));
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		worldIn.addBlockEvent(pos, this, 0, 1);
 	}
 
@@ -150,10 +150,10 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
-
+	
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (!worldIn.isRemote) {
@@ -277,10 +277,9 @@ public class BlockExcreta extends BlockFalling {
 			this.stackBlock(worldIn, pos, metaTop, metaBot, false);
 		}
 	}
-
+	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side,
-			float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;
 		if (exc + man >= 4)
@@ -288,8 +287,8 @@ public class BlockExcreta extends BlockFalling {
 
 		if (playerIn.getHeldItemMainhand() != null && playerIn.getHeldItemMainhand().getItem().equals(ItemBlock.getItemFromBlock(this))) {
 			if (!playerIn.capabilities.isCreativeMode) {
-				playerIn.getHeldItemMainhand().stackSize--;
-				if (playerIn.getHeldItemMainhand().stackSize == 0) {
+				playerIn.getHeldItemMainhand().shrink(1);
+				if (playerIn.getHeldItemMainhand().getCount() == 0) {
 					playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
 				}
 			}

@@ -37,7 +37,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	public EntityAIMoveToEatBlock(EntityLiving entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.entity = entity;
-		this.worldObj = this.entity.worldObj;
+		this.worldObj = this.entity.getEntityWorld();
 		this.speed = speed;
 		this.pref = FoodPreferenceManager.getInstance().REGISTRY_BLOCK.get(this.entity.getClass());
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);

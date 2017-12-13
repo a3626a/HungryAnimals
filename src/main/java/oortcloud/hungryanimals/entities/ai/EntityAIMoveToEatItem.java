@@ -54,7 +54,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 
 		this.entity = entity;
-		this.worldObj = this.entity.worldObj;
+		this.worldObj = this.entity.getEntityWorld();
 		this.speed = speed;
 		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
@@ -107,8 +107,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			float distanceSq = 2;
 			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
 				ItemStack foodStack = target.getEntityItem();
-				foodStack.stackSize--;
-				if (foodStack.stackSize <= 0)
+				foodStack.shrink(1);
+				if (foodStack.getCount() <= 0)
 					target.setDead();
 				this.eatFoodBonus(target.getEntityItem());
 			}

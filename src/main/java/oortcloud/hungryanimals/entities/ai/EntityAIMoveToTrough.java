@@ -37,7 +37,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		
 		this.entity = entity;
-		this.world = this.entity.worldObj;
+		this.world = this.entity.getEntityWorld();
 		this.speed = speed;
 		this.setMutexBits(1);
 	}
@@ -82,8 +82,8 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;
 					if (trough.stack != null && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack)) {
 						eatFoodBonus(trough.stack);
-						trough.stack.stackSize--;
-						if (trough.stack.stackSize == 0)
+						trough.stack.shrink(1);
+						if (trough.stack.getCount() == 0)
 							trough.stack = null;
 						
 						// TODO check valid flag

@@ -50,7 +50,8 @@ public class HungerValueRange
         } else {
             x = 1f;
         }
-        return MathHelper.floor_float((this.max + 1 - this.min)*x + this.min);
+
+        return MathHelper.floor((this.max + 1 - this.min)*x + this.min);
     }
 
     public float generateFloat(ICapabilityHungryAnimal cap)

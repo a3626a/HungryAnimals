@@ -18,6 +18,7 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
@@ -59,7 +60,8 @@ public class LootTableModifier {
 
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			String name = EntityList.getEntityStringFromClass(i).toLowerCase();
+			
+			String name = ConfigurationHandler.resourceLocationToString(EntityList.getKey(i));
 			ResourceLocation resourceLocation = new ResourceLocation(References.MODID, "entities/" + name);
 			tables.put(name2String(name), manager.getLootTableFromLocation(resourceLocation));
 		}

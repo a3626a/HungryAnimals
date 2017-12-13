@@ -89,7 +89,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 		++this.ticksInAir;
 		Vec3d vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
 		Vec3d vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-		RayTraceResult raytraceresult = this.worldObj.rayTraceBlocks(vec3d1, vec3d, false, true, false);
+		RayTraceResult raytraceresult = this.getEntityWorld().rayTraceBlocks(vec3d1, vec3d, false, true, false);
 		vec3d1 = new Vec3d(this.posX, this.posY, this.posZ);
 		vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -128,7 +128,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
         {
             for (int i = 0; i < 4; ++i)
             {
-                this.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+                this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
             }
 
             f = 0.6F;
@@ -138,7 +138,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 		this.motionY *= f;
 		this.motionZ *= f;
 
-		if (!this.func_189652_ae())
+		if (!this.hasNoGravity())
         {
             this.motionY -= g;
         }
@@ -170,7 +170,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 	 */
 	public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
-        float f = MathHelper.sqrt_double(x * x + y * y + z * z);
+        float f = MathHelper.sqrt(x * x + y * y + z * z);
         x = x / (double)f;
         y = y / (double)f;
         z = z / (double)f;
@@ -183,7 +183,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
         this.motionX = x;
         this.motionY = y;
         this.motionZ = z;
-        float f1 = MathHelper.sqrt_double(x * x + z * z);
+        float f1 = MathHelper.sqrt(x * x + z * z);
         this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
         this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
         this.prevRotationYaw = this.rotationYaw;
@@ -202,7 +202,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
-        List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D),SLING_TARGETS );
+        List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D),SLING_TARGETS );
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)

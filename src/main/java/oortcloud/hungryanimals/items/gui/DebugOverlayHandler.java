@@ -105,9 +105,9 @@ public class DebugOverlayHandler extends Gui {
 		ScaledResolution res = event.getResolution();
 		this.drawGradientRect(0, 0, WIDTH, res.getScaledHeight(), -1072689136, -804253680);
 		
-		Entity entity = mc.theWorld.getEntityByID(targetEntityID.intData);
+		Entity entity = mc.world.getEntityByID(targetEntityID.intData);
 		if (entity != null) {
-			String text = (String)EntityList.CLASS_TO_NAME.get(entity.getClass());
+			String text = (String)EntityList.getEntityString(entity);
 			if (text != null) {
 				if (entity instanceof EntityAnimal) text+=" (Compatible)";
 				this.drawString(mc.fontRendererObj, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);

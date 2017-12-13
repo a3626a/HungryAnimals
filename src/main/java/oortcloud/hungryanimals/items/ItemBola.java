@@ -54,16 +54,16 @@ public class ItemBola extends Item {
 			if (!world.isRemote) {
 				float f = (float) (0.015 * duration);
 				EntityBola bola = new EntityBola(world, entityplayer, f);
-				world.spawnEntityInWorld(bola);
+				world.spawnEntity(bola);
 				
 				// TODO check sound
 				world.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 				
 				if (!flag)
                 {
-                    --stack.stackSize;
+                    stack.shrink(1);
 
-                    if (stack.stackSize == 0)
+                    if (stack.getCount() == 0)
                     {
                         entityplayer.inventory.deleteStack(stack);
                     }

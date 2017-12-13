@@ -102,7 +102,7 @@ public class ClientRenderEventHandler {
 					float f = animal.height + 0.5F;
 					GL11.glPushMatrix();
 					GL11.glTranslated(event.getX(), event.getY(), event.getZ());
-					GL11.glRotatef(4 * event.getEntity().worldObj.getWorldTime(), 0, 1, 0);
+					GL11.glRotatef(4 * event.getEntity().getEntityWorld().getWorldTime(), 0, 1, 0);
 					renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					renderer.pos(+radius, +h, +radius).endVertex();
 					renderer.pos(+radius, +h, -radius).endVertex();

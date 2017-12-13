@@ -213,23 +213,27 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { animal.getDescriptor(), file, e });
 				return;
 			}
-
-			for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
-				if (EntityAnimal.class.isAssignableFrom(i)) {
-					HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
+			
+			
+			for (ResourceLocation key : EntityList.getEntityNameList()) {
+				Class<? extends Entity> i = EntityList.getClass(key);
+				if (i != null && EntityAnimal.class.isAssignableFrom(i)) {
+					// Lightening bolt is null
+					HungryAnimals.logger.info("Configuration: " + key.toString());
 				}
 			}
 			HungryAnimals.logger.info("Configuration: Uncompatible entities' name :");
-			for (Class<? extends Entity> i : EntityList.CLASS_TO_NAME.keySet()) {
-				if (!EntityAnimal.class.isAssignableFrom(i)) {
-					HungryAnimals.logger.info("Configuration: " + (String) EntityList.CLASS_TO_NAME.get(i));
+			for (ResourceLocation key : EntityList.getEntityNameList()) {
+				Class<? extends Entity> i = EntityList.getClass(key);
+				if (i != null && !EntityAnimal.class.isAssignableFrom(i)) {
+					// Lightening bolt is null
+					HungryAnimals.logger.info("Configuration: " + key.toString());
 				}
 			}
 
 			for (JsonElement jsonEle : jsonArr) {
 				String i = jsonEle.getAsString();
-
-				Class<? extends Entity> entityClass = EntityList.NAME_TO_CLASS.get(i);
+				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(i));
 				if (entityClass != null) {
 					if (EntityAnimal.class.isAssignableFrom(entityClass)
 							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
@@ -279,6 +283,15 @@ public class ConfigurationHandler {
 				return new ItemStack(item);
 			}
 		}
+	}
+	
+	public static String resourceLocationToString(ResourceLocation location) {
+		String stringLocation = location.toString();
+		return stringLocation.replace(':', '#');
+	}
+	
+	public static ResourceLocation stringToResourceLocation(String location) {
+		return new ResourceLocation(location.replace('#', ':'));
 	}
 
 }

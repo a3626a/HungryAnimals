@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -46,8 +46,8 @@ public class HungryAnimals {
 	public static CreativeTabs tabHungryAnimals = new CreativeTabs("tabHungryAnimals") {
 		@Override
 		@SideOnly(Side.CLIENT)
-		public Item getTabIconItem() {
-			return Items.WHEAT;
+		public ItemStack getTabIconItem() {
+			return Items.WHEAT.getDefaultInstance();
 		}
 	};
 

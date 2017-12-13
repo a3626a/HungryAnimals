@@ -29,8 +29,9 @@ public class CraftingEventHandler {
 			if (item != null && state.getBlock() == Blocks.CAULDRON && (level = (Integer)state.getValue(BlockCauldron.LEVEL)) > 0) {
 				int num = RecipeAnimalGlue.getRecipe(item);
 				if (num != 0) {
-					world.spawnEntityInWorld(new EntityItem(world, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, new ItemStack(ModItems.animalGlue, num)));
-                    if (--item.stackSize == 0)
+					world.spawnEntity(new EntityItem(world, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, new ItemStack(ModItems.animalGlue, num)));
+					item.shrink(1);
+					if (item.getCount() == 0)
                     	player.inventory.deleteStack(item);
 					world.setBlockState(pos, state.withProperty(BlockCauldron.LEVEL, level-1));
 				}

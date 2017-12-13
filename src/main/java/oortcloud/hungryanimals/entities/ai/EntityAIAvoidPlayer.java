@@ -25,8 +25,8 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 			if (!player.capabilities.isCreativeMode)
 				return true;
 			for (int i = 0; i < 9; i++) {
-				ItemStack itemStack = player.inventory.mainInventory[i];
-				if (itemStack != null && itemStack.getItem() == ModItems.debugGlass)
+				ItemStack itemStack = player.inventory.mainInventory.get(i);
+				if (itemStack != ItemStack.EMPTY && itemStack.getItem() == ModItems.debugGlass)
 					return false;
 			}
 			return true;

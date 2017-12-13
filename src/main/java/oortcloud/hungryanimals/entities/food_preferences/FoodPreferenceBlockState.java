@@ -124,7 +124,7 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 				}
 
 				IBlockState state = block.getDefaultState();
-				Collection<IProperty<?>> key = state.getPropertyNames();
+				Collection<IProperty<?>> key = state.getPropertyKeys();
 				for (IProperty<?> i : key) {
 					if (JsonUtils.hasField(jsonobject, i.getName())) {
 						String jsonValue = JsonUtils.getString(jsonobject, i.getName());

@@ -74,7 +74,7 @@ public class EntityEventHandler {
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
-		if (!entity.worldObj.isRemote) {
+		if (!entity.getEntityWorld().isRemote) {
 			updateHunger(entity);
 			updateCourtship(entity);
 			updateExcretion(entity);
@@ -117,19 +117,19 @@ public class EntityEventHandler {
 		if (cap.getExcretion() > 1) {
 			cap.addExcretion(-1);
 			BlockPos pos = entity.getPosition();
-			IBlockState meta = entity.worldObj.getBlockState(pos);
+			IBlockState meta = entity.getEntityWorld().getBlockState(pos);
 			Block block = meta.getBlock();
 
 			if (block == ModBlocks.excreta) {
 				int exc = ((BlockExcreta.EnumType) meta.getValue(BlockExcreta.CONTENT)).getExcreta();
 				int man = ((BlockExcreta.EnumType) meta.getValue(BlockExcreta.CONTENT)).getManure();
 				if (exc + man < 4) {
-					entity.worldObj.setBlockState(pos, meta.withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(exc + 1, man)), 2);
+					entity.getEntityWorld().setBlockState(pos, meta.withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(exc + 1, man)), 2);
 				} else if (exc + man == 4) {
 
 				}
-			} else if (block.isAir(meta, entity.worldObj, pos) || block.isReplaceable(entity.worldObj, pos)) {
-				entity.worldObj.setBlockState(pos, ModBlocks.excreta.getDefaultState().withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(1, 0)),
+			} else if (block.isAir(meta, entity.getEntityWorld(), pos) || block.isReplaceable(entity.getEntityWorld(), pos)) {
+				entity.getEntityWorld().setBlockState(pos, ModBlocks.excreta.getDefaultState().withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(1, 0)),
 						2);
 			} else {
 				// TODO When there's no place to put block
@@ -138,7 +138,7 @@ public class EntityEventHandler {
 	}
 
 	private void updateEnvironmentalEffet(EntityAnimal entity) {
-		IBlockState floor = entity.worldObj.getBlockState(entity.getPosition().down());
+		IBlockState floor = entity.getEntityWorld().getBlockState(entity.getPosition().down());
 		if (floor.getBlock() == ModBlocks.floorcover_leaf) {
 			int j = entity.getGrowingAge();
 			if (j < 0) {
@@ -161,8 +161,8 @@ public class EntityEventHandler {
 	private void updateTaming(EntityAnimal entity) {
 		double radius = 16;
 
-		if ((entity.worldObj.getWorldTime() + entity.getEntityId()) % 100 == 0) {
-			ArrayList<EntityPlayer> players = (ArrayList<EntityPlayer>) entity.worldObj.getEntitiesWithinAABB(EntityPlayer.class,
+		if ((entity.getEntityWorld().getWorldTime() + entity.getEntityId()) % 100 == 0) {
+			ArrayList<EntityPlayer> players = (ArrayList<EntityPlayer>) entity.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
 					entity.getEntityBoundingBox().expand(radius, radius, radius));
 			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 			if (players.isEmpty()) {
@@ -179,14 +179,14 @@ public class EntityEventHandler {
 
 	private void updateRecovery(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		if (entity.getHealth() < entity.getMaxHealth() && cap.getHunger() / cap.getMaxHunger() > 0.8 && (entity.worldObj.getWorldTime() % 200) == 0) {
+		if (entity.getHealth() < entity.getMaxHealth() && cap.getHunger() / cap.getMaxHunger() > 0.8 && (entity.getEntityWorld().getWorldTime() % 200) == 0) {
 			entity.heal(1.0F);
 			cap.addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / entity.getMaxHealth());
 		}
 	}
 
 	public void onStarve(EntityAnimal entity) {
-		entity.attackEntityFrom(DamageSource.starve, 0.5F);
+		entity.attackEntityFrom(DamageSource.STARVE, 0.5F);
 	}
 
 	@SubscribeEvent
@@ -231,8 +231,8 @@ public class EntityEventHandler {
 		IFoodPreference<ItemStack> prefItem = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
 		if (prefItem.canEat(capHungry, itemstack) && capTaming.getTaming() >= 1) {
 			eatFoodBonus(entity, capHungry, capTaming, itemstack);
-			itemstack.stackSize--;
-			if (itemstack.stackSize == 0) {
+			itemstack.shrink(1);
+			if (itemstack.getCount() == 0) {
 				event.getEntityPlayer().inventory.deleteStack(itemstack);
 			}
 			return true;
@@ -240,8 +240,8 @@ public class EntityEventHandler {
 		if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTaming() >= 1) {
 			if (itemstack.getItem() == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || itemstack.getItem() == ItemBlock.getItemFromBlock(Blocks.BROWN_MUSHROOM)) {
 				entity.removePotionEffect(ModPotions.potionDisease);
-				itemstack.stackSize--;
-				if (itemstack.stackSize == 0) {
+				itemstack.shrink(1);
+				if (itemstack.getCount() == 0) {
 					event.getEntityPlayer().inventory.deleteStack(itemstack);
 				}
 			}

@@ -41,8 +41,8 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.worldObj.getWorldTime() % TileEntityTrough.period == 0 && this.stack != null) {
-			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.worldObj.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getWorld().getWorldTime() % TileEntityTrough.period == 0 && this.stack != null) {
+			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.getWorld().getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (EntityAnimal i : list) {
 				if (i.hasCapability(ProviderHungryAnimal.CAP, null) && i.hasCapability(ProviderTamableAnimal.CAP, null)) {
 					if (i.getCapability(ProviderTamableAnimal.CAP, null).getTaming() >= 1 && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(i.getClass()).canEat(i.getCapability(ProviderHungryAnimal.CAP, null), this.stack)) {
@@ -96,7 +96,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	private void readSyncableDataFromNBT(NBTTagCompound compound) {
 		if (compound.hasKey("foodbox")) {
 			NBTTagCompound tag = (NBTTagCompound) compound.getTag("foodbox");
-			stack = ItemStack.loadItemStackFromNBT(tag);
+			stack = new ItemStack(tag);
 		} else {
 			stack = null;
 		}

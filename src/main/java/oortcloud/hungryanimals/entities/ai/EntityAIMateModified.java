@@ -38,7 +38,7 @@ public class EntityAIMateModified extends EntityAIBase
     public EntityAIMateModified(EntityAnimal animal, double speed)
     {
         this.theAnimal = animal;
-        this.theWorld = animal.worldObj;
+        this.theWorld = animal.getEntityWorld();
         this.moveSpeed = speed;
         this.theAnimalCapHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
         this.theAnimalCapTamable = animal.getCapability(ProviderTamableAnimal.CAP, null);
@@ -167,7 +167,7 @@ public class EntityAIMateModified extends EntityAIBase
             this.targetMate.resetInLove();
             entityageable.setGrowingAge(-96000);
             entityageable.setLocationAndAngles(this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, 0.0F, 0.0F);
-            this.theWorld.spawnEntityInWorld(entityageable);
+            this.theWorld.spawnEntity(entityageable);
             Random random = this.theAnimal.getRNG();
 
             for (int i = 0; i < 7; ++i)
@@ -183,7 +183,7 @@ public class EntityAIMateModified extends EntityAIBase
 
             if (this.theWorld.getGameRules().getBoolean("doMobLoot"))
             {
-                this.theWorld.spawnEntityInWorld(new EntityXPOrb(this.theWorld, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(7) + 1));
+                this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.theAnimal.posX, this.theAnimal.posY, this.theAnimal.posZ, random.nextInt(7) + 1));
             }
         } else {
         	this.theAnimal.resetInLove();

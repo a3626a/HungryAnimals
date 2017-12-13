@@ -19,13 +19,13 @@ group= "com.oortcloud.hungryanimals"
 archivesBaseName = "hungryanimals"
 
 minecraft {
-    version = "${mc_version}-12.18.3.2221"
+    version = "${mc_version}-13.20.1.2563"
     runDir = "run"
     
 	replace "@VERSION@", project.version
     replaceIn "References.java"
 	
-    mappings = "snapshot_20160518"
+    mappings = "snapshot_20161220"
 }
 
 dependencies {}
@@ -53,10 +53,6 @@ repositories {
     }
 }
 
-dependencies {
-    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.4-55"
-}
-
 repositories {
   maven {
     url = "http://dvs1.progwml6.com/files/maven"
@@ -64,6 +60,9 @@ repositories {
 }
 
 dependencies {
-  deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
-  runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+    //deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.4-55"
+    //deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
+    //runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 }
+
+

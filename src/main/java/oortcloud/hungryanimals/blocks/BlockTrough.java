@@ -150,7 +150,7 @@ public class BlockTrough extends BlockContainer {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, FLOOR);
 		
 		EnumFacing rot = ((EnumFacing) state.getValue(FACING));
@@ -187,7 +187,7 @@ public class BlockTrough extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity te = this.getTileEntity(worldIn, pos);
 
 		if (!(te instanceof TileEntityTrough)) {
@@ -212,18 +212,18 @@ public class BlockTrough extends BlockContainer {
 		}
 
 		if (stackinfoodbox == null) {
-			if (stackinhand.stackSize > 16) {
+			if (stackinhand.getCount() > 16) {
 				foodbox.stack = stackinhand.splitStack(16);
 			} else {
 				foodbox.stack = stackinhand;
 				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
 			}
 		} else if (stackinfoodbox.getItem() == stackinhand.getItem()) {
-			if (stackinhand.stackSize + stackinfoodbox.stackSize > 16) {
-				stackinfoodbox.stackSize = 16;
-				stackinhand.stackSize += stackinfoodbox.stackSize - 16;
+			if (stackinhand.getCount() + stackinfoodbox.getCount() > 16) {
+				stackinfoodbox.setCount(16);
+				stackinhand.grow(stackinfoodbox.getCount() - 16);
 			} else {
-				stackinfoodbox.stackSize += stackinhand.stackSize;
+				stackinfoodbox.grow(stackinhand.getCount());
 				playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
 			}
 		} else {
@@ -251,14 +251,14 @@ public class BlockTrough extends BlockContainer {
 				float f1 = this.random.nextFloat() * 0.8F + 0.1F;
 				float f2 = this.random.nextFloat() * 0.8F + 0.1F;
 
-				while (itemstack.stackSize > 0) {
+				while (itemstack.getCount() > 0) {
 					int j1 = this.random.nextInt(3) + 3;
 
-					if (j1 > itemstack.stackSize) {
-						j1 = itemstack.stackSize;
+					if (j1 > itemstack.getCount()) {
+						j1 = itemstack.getCount();
 					}
 
-					itemstack.stackSize -= j1;
+					itemstack.shrink(j1);
 					EntityItem entityitem = new EntityItem(worldIn, (double) ((float) pos.getX() + f), (double) ((float) pos.getY() + f1), (double) ((float) pos.getZ() + f2),
 							new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
@@ -270,7 +270,7 @@ public class BlockTrough extends BlockContainer {
 					entityitem.motionX = (double) ((float) this.random.nextGaussian() * f3);
 					entityitem.motionY = (double) ((float) this.random.nextGaussian() * f3 + 0.2F);
 					entityitem.motionZ = (double) ((float) this.random.nextGaussian() * f3);
-					worldIn.spawnEntityInWorld(entityitem);
+					worldIn.spawnEntity(entityitem);
 				}
 			}
 

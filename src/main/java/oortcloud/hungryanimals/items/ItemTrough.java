@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -29,9 +28,9 @@ public class ItemTrough extends Item {
 		GameRegistry.register(this);
 	}
 
+
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos,
-			EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			return EnumActionResult.SUCCESS;
 		} else if (side != EnumFacing.UP) {
@@ -45,11 +44,11 @@ public class ItemTrough extends Item {
 				pos = pos.up();
 			}
 
-			int i = MathHelper.floor_double((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int i = MathHelper.floor((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			EnumFacing enumfacing1 = EnumFacing.getHorizontal(i);
 			BlockPos blockpos = pos.offset(enumfacing1);
 
-			if (playerIn.canPlayerEdit(pos, side, stack) && playerIn.canPlayerEdit(blockpos, side, stack)) {
+			if (playerIn.canPlayerEdit(pos, side, playerIn.getHeldItem(hand)) && playerIn.canPlayerEdit(blockpos, side, playerIn.getHeldItem(hand))) {
 				boolean flag1 = worldIn.getBlockState(blockpos).getBlock().isReplaceable(worldIn, blockpos);
 				boolean flag2 = flag || worldIn.isAirBlock(pos);
 				boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
@@ -67,7 +66,7 @@ public class ItemTrough extends Item {
 								BlockTrough.EnumPartType.HEAD);
 						worldIn.setBlockState(blockpos, iblockstate2, 11);
 					}
-					--stack.stackSize;
+					playerIn.getHeldItem(hand).shrink(1);
 					return EnumActionResult.SUCCESS;
 				} else {
 					return EnumActionResult.FAIL;

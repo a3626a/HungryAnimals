@@ -33,7 +33,7 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 			break;
 		case SyncIndex.ENTITYOVERLAY_EDIT_DOUBLE:
 			int id2 = message.getInt();
-			WorldServer[] aworldserver2 = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+			WorldServer[] aworldserver2 = FMLCommonHandler.instance().getMinecraftServerInstance().worlds;
 			for (int j = 0; j < aworldserver2.length; ++j) {
 				WorldServer worldserver = aworldserver2[j];
 

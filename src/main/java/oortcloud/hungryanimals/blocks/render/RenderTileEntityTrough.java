@@ -49,8 +49,8 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 		
 		if (foodbox.stack != null) {
 			ItemStack stack = foodbox.stack.copy();
-			int num = stack.stackSize;
-			stack.stackSize = 1;
+			int num = stack.getCount();
+			stack.setCount(1);
 			EntityItem item = new EntityItem(foodbox.getWorld(), 0, 0, 0, stack);
 			item.hoverStart = (float) (rotation * Math.PI / 2);
 			

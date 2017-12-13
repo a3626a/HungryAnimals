@@ -30,7 +30,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 				stack.setTagCompound(tag);
 				EntityItem entity = new EntityItem(worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, stack);
 				entity.motionY = 0.2;
-				worldObj.spawnEntityInWorld(entity);
+				worldObj.spawnEntity(entity);
 			}
 		} else {
 			super.eatBlockBonus(block);
