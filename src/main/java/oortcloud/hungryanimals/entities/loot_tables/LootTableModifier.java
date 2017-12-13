@@ -18,9 +18,11 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
+import scala.tools.nsc.backend.icode.TypeKinds.REFERENCE;
 
 /**
  * Loot Table Modification System Details. 
@@ -47,7 +49,7 @@ public class LootTableModifier {
 
 	private static LootTableManager manager;
 
-	private static Map<String, LootTable> tables;
+	private static Map<ResourceLocation, LootTable> tables;
 
 	private static final Field pools = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c");
 	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class, "lootEntries", "field_186453_a");
@@ -55,25 +57,28 @@ public class LootTableModifier {
 	public static void init(File file) {
 		manager = new LootTableManager(file);
 		LootFunctionManager.registerFunction(new SetCountBaseOnHunger.Serializer());
-		tables = new HashMap<String, LootTable>();
+		tables = new HashMap<ResourceLocation, LootTable>();
 	}
 
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+			ResourceLocation key = EntityList.getKey(i);
+			String domain = key.getResourceDomain();
+			String name = key.getResourcePath();
 			
-			String name = ConfigurationHandler.resourceLocationToString(EntityList.getKey(i));
-			ResourceLocation resourceLocation = new ResourceLocation(References.MODID, "entities/" + name);
-			tables.put(name2String(name), manager.getLootTableFromLocation(resourceLocation));
+			ResourceLocation keyTable = new ResourceLocation(domain, "entities/"+name);
+			ResourceLocation valueTable = new ResourceLocation(References.MODID, "entities/"+domain+"#"+name);
+			tables.put(keyTable, manager.getLootTableFromLocation(valueTable));
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
-		LootTable table = tables.get(resourceLocation2String(event.getName()));
+		HungryAnimals.logger.info(event.getName().toString());
+		LootTable table = tables.get(event.getName());
 		if (table == null)
 			return;
-
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
 			if (iEntries.size() == 1) {
@@ -99,15 +104,6 @@ public class LootTableModifier {
 			}
 			event.getTable().addPool(i);
 		}
-	}
-
-	private static String name2String(String name) {
-		return name.toLowerCase();
-	}
-
-	private static String resourceLocation2String(ResourceLocation resourceLocation) {
-		String[] list = resourceLocation.getResourcePath().split("/");
-		return list.length == 2 ? list[1].replaceAll("_", "") : null;
 	}
 
 }
