@@ -11,13 +11,15 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeCategoryAnimalGlue;
-import oortcloud.hungryanimals.api.jei.animalglue.RecipeHandlerAnimalGlue;
-import oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe.RecipeHandlerShapedDistinctOreRecipe;
+import oortcloud.hungryanimals.api.jei.animalglue.RecipeWrapperAnimalGlue;
+import oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe.RecipeWrapperShapedDistinctOreRecipe;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
+import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 
 @JEIPlugin
 public class PluginHungryAnimals implements IModPlugin {
@@ -34,8 +36,7 @@ public class PluginHungryAnimals implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
-		// TODO Auto-generated method stub
-		
+		registry.addRecipeCategories(new RecipeCategoryAnimalGlue(registry.getJeiHelpers().getGuiHelper()));
 	}
 	
 	@Override
@@ -44,11 +45,15 @@ public class PluginHungryAnimals implements IModPlugin {
 		for (Entry<HashItemType, Integer> i : RecipeAnimalGlue.getRecipeList().entrySet()) {
 			recipes.add(new oortcloud.hungryanimals.api.jei.animalglue.RecipeAnimalGlue(i));
 		}
-		registry.addRecipes(recipes);
-		registry.addRecipeHandlers(new RecipeHandlerShapedDistinctOreRecipe(registry.getJeiHelpers()));
-		registry.addRecipeHandlers(new RecipeHandlerAnimalGlue());
-		registry.addRecipeCategories(new RecipeCategoryAnimalGlue(registry.getJeiHelpers().getGuiHelper()));
-		registry.addDescription(new ItemStack(ModItems.animalGlue,1,0), "hungryanimals.jei.animalglue.description");
+		
+		registry.addRecipes(recipes, RecipeCategoryAnimalGlue.UID);
+		registry.handleRecipes(oortcloud.hungryanimals.api.jei.animalglue.RecipeAnimalGlue.class, RecipeWrapperAnimalGlue::new, RecipeCategoryAnimalGlue.UID);
+		registry.handleRecipes(ShapedDistinctOreRecipe.class, 
+				(recipe) -> {
+					return new RecipeWrapperShapedDistinctOreRecipe(registry.getJeiHelpers(), recipe);
+				}
+				, VanillaRecipeCategoryUid.CRAFTING);
+		registry.addIngredientInfo(new ItemStack(ModItems.animalGlue,1,0), ItemStack.class, "hungryanimals.jei.animalglue.description");
 	}
 
 	@Override

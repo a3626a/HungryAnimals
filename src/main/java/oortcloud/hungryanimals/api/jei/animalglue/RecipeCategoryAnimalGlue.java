@@ -68,8 +68,7 @@ public class RecipeCategoryAnimalGlue  extends BlankRecipeCategory<RecipeWrapper
 
 	@Override
 	public String getModName() {
-		// TODO Auto-generated method stub
-		return null;
+		return References.MODNAME;
 	}
 	
 }
