@@ -12,7 +12,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	public CapabilityHungryAnimal(EntityLiving entity) {
 		this.entity = entity;
 		setHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue()/2.0);
-		setExcretion(-2);
+		setExcretion(0.0);
 	}
 	
 	@Override
