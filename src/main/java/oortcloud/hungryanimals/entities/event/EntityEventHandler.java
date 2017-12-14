@@ -220,7 +220,7 @@ public class EntityEventHandler {
 	}
 
 	private boolean interact(EntityInteract event, EntityAnimal entity) {
-		if (event.getItemStack() == null)
+		if (event.getItemStack().isEmpty())
 			return false;
 		return interact(event, event.getHand(), event.getItemStack(), entity);
 	}
