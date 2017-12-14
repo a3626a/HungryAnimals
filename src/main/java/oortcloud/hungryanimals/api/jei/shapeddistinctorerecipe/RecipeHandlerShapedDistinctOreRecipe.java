@@ -20,11 +20,6 @@ public class RecipeHandlerShapedDistinctOreRecipe implements IRecipeHandler<Shap
 	}
 
 	@Override
-	public String getRecipeCategoryUid() {
-		return VanillaRecipeCategoryUid.CRAFTING;
-	}
-
-	@Override
 	public String getRecipeCategoryUid(ShapedDistinctOreRecipe recipe) {
 		return VanillaRecipeCategoryUid.CRAFTING;
 	}

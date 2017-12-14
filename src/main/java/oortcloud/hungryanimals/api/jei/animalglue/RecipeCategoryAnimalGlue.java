@@ -65,5 +65,11 @@ public class RecipeCategoryAnimalGlue  extends BlankRecipeCategory<RecipeWrapper
 	public IDrawable getIcon() {
 		return null;
 	}
+
+	@Override
+	public String getModName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

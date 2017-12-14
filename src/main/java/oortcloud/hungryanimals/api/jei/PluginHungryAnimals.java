@@ -10,6 +10,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeCategoryAnimalGlue;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeHandlerAnimalGlue;
@@ -32,6 +33,12 @@ public class PluginHungryAnimals implements IModPlugin {
 	}
 
 	@Override
+	public void registerCategories(IRecipeCategoryRegistration registry) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void register(IModRegistry registry) {
 		List<oortcloud.hungryanimals.api.jei.animalglue.RecipeAnimalGlue> recipes = new ArrayList<oortcloud.hungryanimals.api.jei.animalglue.RecipeAnimalGlue>();
 		for (Entry<HashItemType, Integer> i : RecipeAnimalGlue.getRecipeList().entrySet()) {
@@ -48,5 +55,7 @@ public class PluginHungryAnimals implements IModPlugin {
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
 		
 	}
+
+
 
 }

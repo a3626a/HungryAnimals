@@ -11,11 +11,6 @@ public class RecipeHandlerAnimalGlue implements IRecipeHandler<RecipeAnimalGlue>
 	}
 
 	@Override
-	public String getRecipeCategoryUid() {
-		return RecipeCategoryAnimalGlue.UID;
-	}
-
-	@Override
 	public String getRecipeCategoryUid(RecipeAnimalGlue recipe) {
 		return RecipeCategoryAnimalGlue.UID;
 	}
