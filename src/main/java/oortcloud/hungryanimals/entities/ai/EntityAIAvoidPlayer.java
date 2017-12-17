@@ -40,7 +40,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 	
 	@Override
 	public boolean shouldExecute() {
-		return this.theEntity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < -1 && super.shouldExecute();
+		return this.entity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < -1 && super.shouldExecute();
 	}
 
 }

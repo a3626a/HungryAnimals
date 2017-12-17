@@ -18,7 +18,7 @@ public class Strings {
 	public static final String itemManureName = "manure";
 	public static final String itemWoodashName = "woodash";
 	public static final String itemSaltpeterName = "saltpeter";
-	public static final String itemTroughBoxName = "itemtrough"; // Duplicated name "trough" for block and item registeration. Therefore, I added "item" prefix.
+	public static final String itemTroughBoxName = "trough"; // Duplicated name "trough" for block and item registration. Therefore, I added "item" prefix.
 	public static final String itemBolaName = "bola";
 	public static final String itemSlingShotName = "slingshot";
 	public static final String itemHerbicideName = "herbicide";
@@ -27,8 +27,10 @@ public class Strings {
 	public static final String itemAnimalGlueName = "animalglue";
 	public static final String itemCompositeWoodName = "compositewood";
 	
-	public static final String potionGrowthName = "potion.growth";
-	public static final String potionDiseaseName = "potion.disease";
+	public static final String potionGrowthName = "growth";
+	public static final String potionGrowthUnlocalizedName = "potion.growth";
+	public static final String potionDiseaseName = "disease";
+	public static final String potionDiseaseUnlocalizedName = "potion.disease";
 
 	public static final String extendedPropertiesKey = "extendedPropertiesHungryAnimal";
 }

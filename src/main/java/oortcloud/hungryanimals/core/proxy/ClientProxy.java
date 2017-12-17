@@ -4,30 +4,31 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.Item;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
-import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
@@ -39,6 +40,7 @@ import oortcloud.hungryanimals.items.render.ModelItemSlingshot;
 import oortcloud.hungryanimals.keybindings.ModKeyBindings;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
 	public void registerEntityRendering() {
@@ -46,25 +48,17 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySlingShotBall.class, RenderEntitySlingShotBall::new);
 	}
 
-	public void registerItemRendering() {
-		// mesher.register(Item.REGISTRY.getObject(new
-		// ResourceLocation(References.MODID, Strings.blockFloorCoverLeafName)),
-		// 0, new ModelResourceLocation(References.RESOURCESPREFIX +
-		// Strings.blockFloorCoverLeafName, "inventory"));
-		// mesher.register(Item.REGISTRY.getObject(new
-		// ResourceLocation(References.MODID, Strings.blockFloorCoverWoolName)),
-		// 0, new ModelResourceLocation(References.RESOURCESPREFIX +
-		// Strings.blockFloorCoverWoolName, "inventory"));
-		// mesher.register(Item.REGISTRY.getObject(new
-		// ResourceLocation(References.MODID, Strings.blockFloorCoverHayName)),
-		// 0, new ModelResourceLocation(References.RESOURCESPREFIX +
-		// Strings.blockFloorCoverHayName, "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverHayName)), 0,
+	public void registerTileEntityRendering() {
+		ClientRegistry.<TileEntityTrough>bindTileEntitySpecialRenderer(TileEntityTrough.class, new RenderTileEntityTrough());
+	}
+	
+    @SubscribeEvent
+    public static void registerModels(ModelRegistryEvent event) {
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.floorcover_hay), 0,
 				new ModelResourceLocation(ModBlocks.floorcover_hay.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverLeafName)), 0,
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.floorcover_leaf), 0,
 				new ModelResourceLocation(ModBlocks.floorcover_leaf.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.REGISTRY.getObject(new ResourceLocation(References.MODID, Strings.blockFloorCoverWoolName)), 0,
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.floorcover_wool), 0,
 				new ModelResourceLocation(ModBlocks.floorcover_wool.getRegistryName(), "inventory"));
 
 		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.excreta), 0,
@@ -75,7 +69,7 @@ public class ClientProxy extends CommonProxy {
 				new ModelResourceLocation(ModBlocks.trough.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.trapcover), 0,
 				new ModelResourceLocation(ModBlocks.trapcover.getRegistryName(), "inventory"));
-
+		
 		ModelLoader.setCustomModelResourceLocation(ModItems.bola, 0, ModelItemBola.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.slingshot, 0, ModelItemSlingshot.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.debugGlass, 0, new ModelResourceLocation(ModItems.debugGlass.getRegistryName(), "inventory"));
@@ -86,37 +80,24 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.tendon, 0, new ModelResourceLocation(ModItems.tendon.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.animalGlue, 0, new ModelResourceLocation(ModItems.animalGlue.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.compositeWood, 0, new ModelResourceLocation(ModItems.compositeWood.getRegistryName(), "inventory"));
-	}
-
-	public void registerTileEntityRendering() {
-		ClientRegistry.<TileEntityTrough>bindTileEntitySpecialRenderer(TileEntityTrough.class, new RenderTileEntityTrough());
-	}
-
-	@Override
-	public void registerItemModel() {
+		
 		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
 		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal,
 				ModelItemSlingshot.modelresourcelocation_shooting);
-	}
-
+    }
+	
 	@Override
 	public void registerCustomBakedModel(ModelBakeEvent event) {
+		IBakedModel bola_normal = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
+		IBakedModel bola_spin = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_spin);
+		ModelItemBola bolaModel = new ModelItemBola(bola_normal, bola_spin);
+		event.getModelRegistry().putObject(ModelItemBola.modelresourcelocation_normal, bolaModel);
 
-		Object object;
-		object = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
-		if (object instanceof IPerspectiveAwareModel) {
-			IPerspectiveAwareModel existingModel = (IPerspectiveAwareModel) object;
-			ModelItemBola customModel = new ModelItemBola(existingModel);
-			event.getModelRegistry().putObject(ModelItemBola.modelresourcelocation_normal, customModel);
-		}
-
-		object = event.getModelRegistry().getObject(ModelItemSlingshot.modelresourcelocation_normal);
-		if (object instanceof IPerspectiveAwareModel) {
-			IPerspectiveAwareModel existingModel = (IPerspectiveAwareModel) object;
-			ModelItemSlingshot customModel = new ModelItemSlingshot(existingModel);
-			event.getModelRegistry().putObject(ModelItemSlingshot.modelresourcelocation_normal, customModel);
-		}
-
+		IBakedModel slingshot_normal = event.getModelRegistry().getObject(ModelItemSlingshot.modelresourcelocation_normal);
+		IBakedModel slingshot_shooting = event.getModelRegistry().getObject(ModelItemSlingshot.modelresourcelocation_shooting);
+		TextureAtlasSprite texture = event.getModelManager().getTextureMap().getAtlasSprite(ModelItemSlingshot.textureresourcelocation.toString());
+		ModelItemSlingshot slingshotModel = new ModelItemSlingshot(slingshot_normal, slingshot_shooting, texture);
+		event.getModelRegistry().putObject(ModelItemSlingshot.modelresourcelocation_normal, slingshotModel);
 	}
 
 	@Override
@@ -147,7 +128,7 @@ public class ClientProxy extends CommonProxy {
 		}, ModBlocks.floorcover_leaf);
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
 			@Override
-			public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
 				return ColorizerFoliage.getFoliageColorBasic();
 			}
 		}, ModBlocks.floorcover_leaf);

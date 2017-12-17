@@ -1,0 +1,20 @@
+{
+    "type" : "forge:ore_shaped",
+    "pattern" : [
+        "a a",
+        " b ",
+        "a a"
+    ],
+    "key" : {
+        "a" : {
+            "type": "forge:ore_dict",
+            "ore": "stone"
+        },
+        "b" : {
+            "item" : "hungryanimals:tendon"
+        }
+    },
+    "result" : {
+        "item" : "hungryanimals:bola"
+    }
+}

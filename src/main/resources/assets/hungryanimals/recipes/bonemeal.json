@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "hungryanimals:manure"
+        }
+    ],
+    "result": {
+        "item": "minecraft:dye",
+        "data": 15,
+        "count": 2
+    }
+}

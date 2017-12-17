@@ -12,7 +12,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -22,10 +21,9 @@ public class ItemBola extends Item {
 
 	public ItemBola() {
 		super();
-		setUnlocalizedName(References.MODID+"."+Strings.itemBolaName);
+		setUnlocalizedName(References.MODID + "." + Strings.itemBolaName);
 		setRegistryName(Strings.itemBolaName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		GameRegistry.register(this);
 	}
 
 	@Override
@@ -34,11 +32,10 @@ public class ItemBola extends Item {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
-    {
-        return EnumAction.NONE;
-    }
-	
+	public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.NONE;
+	}
+
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
 
@@ -53,27 +50,28 @@ public class ItemBola extends Item {
 
 			if (!world.isRemote) {
 				float f = (float) (0.015 * duration);
-				EntityBola bola = new EntityBola(world, entityplayer, f);
+				EntityBola bola = new EntityBola(world, entityplayer);
+				bola.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f, 1.0F);
 				world.spawnEntity(bola);
-				
-				// TODO check sound
-				world.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-				
-				if (!flag)
-                {
-                    stack.shrink(1);
-                }
 
-                entityplayer.addStat(StatList.getObjectUseStats(this));
+				// TODO check sound
+				world.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
+						SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+
+				if (!flag) {
+					stack.shrink(1);
+				}
+
+				entityplayer.addStat(StatList.getObjectUseStats(this));
 			}
 
 		}
 	}
 
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn,
-			EnumHand hand) {
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		playerIn.setActiveHand(hand);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 	}
 
 }

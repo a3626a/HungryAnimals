@@ -36,12 +36,12 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	private Predicate<EntityItem> EAT_EDIBLE = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
-			return pref.canEat(capHungry, entityIn.getEntityItem());
+			return pref.canEat(capHungry, entityIn.getItem());
 		}
 	};
 	private Predicate<EntityItem> EAT_NATURAL = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
-			ItemStack item = entityIn.getEntityItem();
+			ItemStack item = entityIn.getItem();
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag != null) {
 				return tag.hasKey("isNatural") && tag.getBoolean("isNatural");
@@ -98,19 +98,19 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		if (target.isDead) {
-			this.entity.getNavigator().clearPathEntity();
+			this.entity.getNavigator().clearPath();
 			return false;
 		}
 		if (entity.getNavigator().noPath()) {
 			float distanceSq = 2;
 			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
-				ItemStack foodStack = target.getEntityItem();
+				ItemStack foodStack = target.getItem();
 				foodStack.shrink(1);
 				if (foodStack.isEmpty())
 					target.setDead();
-				this.eatFoodBonus(target.getEntityItem());
+				this.eatFoodBonus(target.getItem());
 			}
 			return false;
 		}

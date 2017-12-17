@@ -201,7 +201,7 @@ public class EntityEventHandler {
 		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		DamageSource source = event.getSource();
 		if (!entity.isEntityInvulnerable(source)) {
-			if (source.getSourceOfDamage() instanceof EntityPlayer) {
+			if (source.getTrueSource() instanceof EntityPlayer) {
 				cap.addTaming(-4 / entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() * event.getAmount());
 			}
 		}

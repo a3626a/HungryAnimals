@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
@@ -166,11 +167,6 @@ public class ShapedDistinctOreRecipe implements IRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting var1){ return output.copy(); }
 
-    /**
-     * Returns the size of the recipe area
-     */
-    @Override
-    public int getRecipeSize(){ return input.length; }
 
     @Override
     public ItemStack getRecipeOutput(){ return output; }
@@ -342,4 +338,23 @@ public class ShapedDistinctOreRecipe implements IRecipe {
     public String[] getOres() {
     	return ores;
     }
+	@Override
+	public IRecipe setRegistryName(ResourceLocation name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ResourceLocation getRegistryName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Class<IRecipe> getRegistryType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean canFit(int width, int height) {
+		return this.width <= width && this.height <= height;
+	}
 }

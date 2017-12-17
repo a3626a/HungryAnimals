@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -23,15 +22,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 
-public class ModelItemBola implements IPerspectiveAwareModel {
+public class ModelItemBola implements IBakedModel {
 
-	private IPerspectiveAwareModel model_normal;
-	private IPerspectiveAwareModel model_spin;
+	private IBakedModel model_normal;
+	private IBakedModel model_spin;
 	private float angleMainhand;
 
 	public static final ModelResourceLocation modelresourcelocation_spin = new ModelResourceLocation(
@@ -40,10 +38,9 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 
 	private static final float radiusFirst = (float) (Math.sqrt(2) * 6);
 
-	public ModelItemBola(IPerspectiveAwareModel model) {
+	public ModelItemBola(IBakedModel model, IBakedModel spin) {
 		this.model_normal = model;
-		this.model_spin = (IPerspectiveAwareModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager()
-				.getModel(modelresourcelocation_spin);
+		this.model_spin = spin;
 	}
 
 	@Override
@@ -85,12 +82,6 @@ public class ModelItemBola implements IPerspectiveAwareModel {
 	@Override
 	public boolean isBuiltInRenderer() {
 		return model_spin.isBuiltInRenderer();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return model_spin.getItemCameraTransforms();
 	}
 
 	@Override

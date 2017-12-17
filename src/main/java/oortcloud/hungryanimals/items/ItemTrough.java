@@ -10,7 +10,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
@@ -24,8 +23,6 @@ public class ItemTrough extends Item {
 		setUnlocalizedName(References.MODID+"."+Strings.itemTroughBoxName);
 		setRegistryName(Strings.itemTroughBoxName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-
-		GameRegistry.register(this);
 	}
 
 

@@ -46,15 +46,15 @@ public class DebugOverlayHandler extends Gui {
 		index = 0;
 
 		labels = new GuiLabelNBT[5];
-		targetEntityID = GuiLabelNBT.createIntegerNBT(mc.fontRendererObj, "target");
+		targetEntityID = GuiLabelNBT.createIntegerNBT(mc.fontRenderer, "target");
 		labels[0] = targetEntityID;
-		hunger = GuiLabelNBTEditable.createDoubleNBT(mc.fontRendererObj, "hunger", 10, targetEntityID);
+		hunger = GuiLabelNBTEditable.createDoubleNBT(mc.fontRenderer, "hunger", 10, targetEntityID);
 		labels[1] = hunger;
-		excretion = GuiLabelNBT.createDoubleNBT(mc.fontRendererObj, "excretion");
+		excretion = GuiLabelNBT.createDoubleNBT(mc.fontRenderer, "excretion");
 		labels[2] = excretion;
-		taming = GuiLabelNBTEditable.createDoubleNBT(mc.fontRendererObj, "taming", 0.1, targetEntityID);
+		taming = GuiLabelNBTEditable.createDoubleNBT(mc.fontRenderer, "taming", 0.1, targetEntityID);
 		labels[3] = taming;
-		age = GuiLabelNBT.createIntegerNBT(mc.fontRendererObj, "age");
+		age = GuiLabelNBT.createIntegerNBT(mc.fontRenderer, "age");
 		labels[4] = age;
 		for (int i = 0; i < labels.length; i++) {
 			labels[i].setPosition(START_X, START_Y + FONTHEIGHT * i);
@@ -110,7 +110,7 @@ public class DebugOverlayHandler extends Gui {
 			String text = (String)EntityList.getEntityString(entity);
 			if (text != null) {
 				if (entity instanceof EntityAnimal) text+=" (Compatible)";
-				this.drawString(mc.fontRendererObj, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);
+				this.drawString(mc.fontRenderer, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);
 			}
 		}
 		

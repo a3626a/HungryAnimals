@@ -16,7 +16,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
@@ -35,7 +34,6 @@ public class ItemSlingShot extends Item {
 		
 		setMaxStackSize(1);
 		setMaxDamage(64);
-		GameRegistry.register(this);
 	}
 
 	private ItemStack findAmmo(EntityPlayer player)
@@ -102,8 +100,9 @@ public class ItemSlingShot extends Item {
                     
                     if (!worldIn.isRemote)
                     {
-                    	EntitySlingShotBall entityball = new EntitySlingShotBall(worldIn, entityplayer, f * 2.0F);
-
+                    	EntitySlingShotBall entityball = new EntitySlingShotBall(worldIn, entityplayer);
+                    	entityball.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 2.0F, 1.0F);
+                    	
                     	stack.damageItem(1, entityplayer);
 
                         worldIn.spawnEntity(entityball);

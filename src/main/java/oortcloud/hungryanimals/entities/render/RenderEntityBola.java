@@ -2,9 +2,9 @@ package oortcloud.hungryanimals.entities.render;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -40,7 +40,7 @@ public class RenderEntityBola extends Render<EntityBola> {
 		GlStateManager.rotate(((bola.getEntityWorld().getWorldTime() + partial) % 20) * 13, 0.0F, 1.0F, 0.0F);
 		GlStateManager.disableCull();
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer renderer = tessellator.getBuffer();
+		BufferBuilder renderer = tessellator.getBuffer();
 
 		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		renderer.pos(1, 0.5, 0).tex(0, 0).endVertex();

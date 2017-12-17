@@ -32,8 +32,8 @@ public class WorldEventHandler {
 					for (Object i : ((ChunkProviderServer) world.getChunkProvider()).getLoadedChunks()) {
 						if (world.rand.nextDouble() < grassProbability) {
 							Chunk chunk = (Chunk) i;
-							int x = chunk.xPosition << 4;
-							int z = chunk.zPosition << 4;
+							int x = chunk.x << 4;
+							int z = chunk.z << 4;
 							int Randx = world.rand.nextInt(16);
 							int Randz = world.rand.nextInt(16);
 							int h = chunk.getHeightValue(Randx, Randz);

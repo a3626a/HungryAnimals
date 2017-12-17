@@ -3,9 +3,9 @@ package oortcloud.hungryanimals.client;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -93,11 +93,11 @@ public class ClientRenderEventHandler {
 			if (tag != null) {
 				if (tag.hasKey("target") && tag.getInteger("target") == animal.getEntityId()) {
 					Tessellator tessellator = Tessellator.getInstance();
-					VertexBuffer renderer = tessellator.getBuffer();
+					BufferBuilder renderer = tessellator.getBuffer();
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
 					GL11.glColor4f(1, 0, 0, 1);
-					OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+					OpenGlHelper.glBlendFunc(770, 771, 1, 0);	
 					float h = animal.height + height + 0.5F;
 					float f = animal.height + 0.5F;
 					GL11.glPushMatrix();

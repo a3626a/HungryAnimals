@@ -17,7 +17,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +28,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.core.lib.References;
@@ -58,8 +56,8 @@ public class BlockTrough extends BlockContainer {
 		
 		setUnlocalizedName(References.MODID+"."+Strings.blockTroughName); 
 		setRegistryName(Strings.blockTroughName);
-		GameRegistry.register(this);
-		GameRegistry.register(new ItemBlock(this), getRegistryName());
+		//GameRegistry.register(this);
+		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override
@@ -262,7 +260,7 @@ public class BlockTrough extends BlockContainer {
 							new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
 					if (itemstack.hasTagCompound()) {
-						entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+						entityitem.getItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
 					}
 
 					float f3 = 0.05F;

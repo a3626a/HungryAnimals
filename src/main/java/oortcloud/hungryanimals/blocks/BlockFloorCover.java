@@ -2,9 +2,7 @@ package oortcloud.hungryanimals.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 
@@ -21,8 +19,8 @@ public class BlockFloorCover extends Block {
 		setUnlocalizedName(References.MODID+"."+UnlocalizedName); 
 		setRegistryName(UnlocalizedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		GameRegistry.register(this);
-		GameRegistry.register(new ItemBlock(this), getRegistryName());
+		//GameRegistry.register(this);
+		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

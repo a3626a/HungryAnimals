@@ -53,12 +53,6 @@ public class CommonProxy {
 	public void registerTileEntityRendering() {
 	}
 
-	public void registerItemModel() {
-	}
-
-	public void registerItemRendering() {
-	}
-
 	public void registerCustomBakedModel(ModelBakeEvent event) {
 	}
 

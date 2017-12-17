@@ -13,7 +13,8 @@ public class PotionGrowth extends PotionHungryAnimals {
 
 	protected PotionGrowth(boolean effect, int color) {
 		super(textureLocation, effect, color);
-		this.setPotionName(Strings.potionGrowthName);
+		this.setRegistryName(References.MODID, Strings.potionGrowthName);
+		this.setPotionName(Strings.potionGrowthUnlocalizedName);
 	}
 
 	@Override

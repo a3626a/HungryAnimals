@@ -1,0 +1,19 @@
+{
+    "type" : "forge:ore_shaped",
+    "pattern" : [
+        "a",
+        "b"
+    ],
+    "key" : {
+        "a" : {
+            "type": "forge:ore_dict",
+            "ore": "treeLeaves"
+        },
+        "b" : {
+            "item" : "hungryanimals:compositewood"
+        }
+    },
+    "result" : {
+        "item" : "hungryanimals:floorcoverleaf"
+    }
+}

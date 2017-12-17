@@ -1,8 +1,11 @@
 package oortcloud.hungryanimals.potion;
 
 import net.minecraft.potion.Potion;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber
 public class ModPotions {
 
 	public static Potion potionDisease;
@@ -13,8 +16,13 @@ public class ModPotions {
 		potionGrowth = new PotionGrowth(false, (100 << 16) + (200 << 8) + (0));
 		
 		// TODO Check register name naming convention. potion.disease...?
-		GameRegistry.register(potionDisease.setRegistryName(potionDisease.getName()));
-		GameRegistry.register(potionGrowth.setRegistryName(potionGrowth.getName()));
+		//GameRegistry.register(potionDisease.setRegistryName(potionDisease.getName()));
+		//GameRegistry.register(potionGrowth.setRegistryName(potionGrowth.getName()));
+	}
+	
+	@SubscribeEvent
+	public static void registerPotions(RegistryEvent.Register<Potion> event) {
+	    event.getRegistry().registerAll(potionDisease, potionGrowth);
 	}
 
 }

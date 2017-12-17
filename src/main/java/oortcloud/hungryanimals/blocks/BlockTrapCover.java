@@ -7,12 +7,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -27,8 +25,8 @@ public class BlockTrapCover extends Block {
 		setUnlocalizedName(References.MODID+"."+Strings.blockTrapCoverName); 
 		setRegistryName(Strings.blockTrapCoverName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		GameRegistry.register(this);
-		GameRegistry.register(new ItemBlock(this), getRegistryName());
+		//GameRegistry.register(this);
+		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

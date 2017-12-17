@@ -11,7 +11,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -32,7 +31,7 @@ public class ItemDebugGlass extends Item {
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 
 		setMaxStackSize(1);
-		GameRegistry.register(this);
+		//GameRegistry.register(this);
 	}
 	
 	@Override

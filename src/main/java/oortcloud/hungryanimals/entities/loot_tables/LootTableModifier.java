@@ -18,7 +18,6 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
@@ -73,7 +72,6 @@ public class LootTableModifier {
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
-		HungryAnimals.logger.info(event.getName().toString());
 		LootTable table = tables.get(event.getName());
 		if (table == null)
 			return;

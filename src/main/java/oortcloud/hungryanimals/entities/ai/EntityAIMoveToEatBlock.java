@@ -110,10 +110,10 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		IBlockState block = this.worldObj.getBlockState(bestPos);
 		if (!this.pref.canEat(capHungry, block)) {
-			this.entity.getNavigator().clearPathEntity();
+			this.entity.getNavigator().clearPath();
 			return false;
 		}
 		if (entity.getNavigator().noPath()) {

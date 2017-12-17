@@ -1,0 +1,27 @@
+{
+    "type" : "forge:ore_shaped",
+    "pattern" : [
+        "aba",
+        "cdc",
+        "aba"
+    ],
+    "key" : {
+        "a" : {
+            "item" : "minecraft:wheat"
+        },
+        "b" : {
+            "item" : "hungryanimals:manure"
+        },
+        "c" : {
+            "type": "forge:ore_dict",
+            "ore": "dustWoodAsh"
+        },
+        "d" : {
+            "item" : "minecraft:dirt",
+            "data" : 0
+        }
+    },
+    "result" : {
+        "item" : "hungryanimals:niterbed"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type" : "minecraft:crafting_shaped",
+    "pattern" : [
+        "a",
+        "b",
+        "c"
+    ],
+    "key" : {
+        "a" : {
+            "item" : "minecraft:wool",
+            "data" : 32767
+        },
+        "b" : {
+            "item" : "minecraft:feather"
+        },
+        "c" : {
+            "item" : "hungryanimals:compositewood"
+        }
+    },
+    "result" : {
+        "item" : "hungryanimals:floorcoverwool"
+    }
+}

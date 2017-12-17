@@ -1,6 +1,5 @@
 package oortcloud.hungryanimals.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -28,62 +27,120 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityBola extends Entity implements IProjectile {
 	
-	private static final Predicate<Entity> BOLA_TARGETS;
+	@SuppressWarnings("unchecked")
+	private static final Predicate<Entity> BOLA_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
+    {
+        public boolean apply(@Nullable Entity entity)
+        {
+            return entity.canBeCollidedWith();
+        }
+    });
 	
 	private Entity shootingEntity;
 	private int ticksInAir;
-
-	static {
-		ArrayList<Predicate<Entity>> arg = new ArrayList<Predicate<Entity>>();
-		arg.add(EntitySelectors.NOT_SPECTATING);
-		arg.add(EntitySelectors.IS_ALIVE);
-		arg.add(new Predicate<Entity>()
-	    {
-	        public boolean apply(@Nullable Entity entity)
-	        {
-	            return entity.canBeCollidedWith();
-	        }
-	    });
-		BOLA_TARGETS = Predicates.<Entity>and(arg);
-	}
 	
 	public EntityBola(World world) {
 		super(world);
-		this.setSize(1.0F, 0.25F);
+		this.setSize(0.25F, 0.25F);
 	}
 
-	public EntityBola(World world, double posx, double posy, double posz, double speed, float rotationYaw, float rotationPitch) {
-		super(world);
-		this.setSize(1.0F, 0.25F);
+	public EntityBola(World world, double posx, double posy, double posz) {
+		this(world);
 		this.setPosition(posx, posy, posz);
-		this.setThrowableHeading(speed, rotationYaw, rotationPitch);
 	}
 
-	public EntityBola(World world, EntityPlayer player, double d, float rotationYaw, float rotationPitch) {
-		this(world, player.posX, player.posY + player.getEyeHeight(), player.posZ, d, rotationYaw, rotationPitch);
-		this.shootingEntity = player;
+	public EntityBola(World world, EntityLivingBase shooter) {
+		this(world, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - 0.1, shooter.posZ);
+		this.shootingEntity = shooter;
 	}
 
-	public EntityBola(World world, EntityPlayer player, float d) {
-		super(world);
-		this.shootingEntity = player;
+	@SideOnly(Side.CLIENT)
+	@Override
+    public boolean isInRangeToRenderDist(double distance)
+    {
+        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
 
-		this.setSize(1.0F, 0.25F);
-		this.setLocationAndAngles(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ, player.rotationYaw, player.rotationPitch);
-		this.posX -= (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
-		this.posY -= 0.1;
-		this.posZ -= (double) (MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F);
-		this.setPosition(this.posX, this.posY, this.posZ);
+        if (Double.isNaN(d0))
+        {
+            d0 = 1.0D;
+        }
 
-		this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, d * 1.5F, 1.0F);
+        d0 = d0 * 64.0D * getRenderDistanceWeight();
+        return distance < d0 * d0;
+    }
+
+	@Override
+	protected void entityInit() {
 	}
+	
+    public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
+    {
+        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+        float f1 = -MathHelper.sin(pitch * 0.017453292F);
+        float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+        this.shoot((double)f, (double)f1, (double)f2, velocity, inaccuracy);
+        this.motionX += shooter.motionX;
+        this.motionZ += shooter.motionZ;
 
+        if (!shooter.onGround)
+        {
+            this.motionY += shooter.motionY;
+        }
+    }
+	
+    @Override
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy)
+    {
+        float f = MathHelper.sqrt(x * x + y * y + z * z);
+        x = x / (double)f;
+        y = y / (double)f;
+        z = z / (double)f;
+        x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
+        x = x * (double)velocity;
+        y = y * (double)velocity;
+        z = z * (double)velocity;
+        this.motionX = x;
+        this.motionY = y;
+        this.motionZ = z;
+        float f1 = MathHelper.sqrt(x * x + z * z);
+        this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
+        this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
+        this.prevRotationYaw = this.rotationYaw;
+        this.prevRotationPitch = this.rotationPitch;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
+    {
+        this.setPosition(x, y, z);
+        this.setRotation(yaw, pitch);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setVelocity(double x, double y, double z)
+    {
+        this.motionX = x;
+        this.motionY = y;
+        this.motionZ = z;
+
+        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
+        {
+            float f = MathHelper.sqrt(x * x + z * z);
+            this.rotationPitch = (float)(MathHelper.atan2(y, (double)f) * (180D / Math.PI));
+            this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
+            this.prevRotationPitch = this.rotationPitch;
+            this.prevRotationYaw = this.rotationYaw;
+            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+        }
+    }
+    
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -96,7 +153,7 @@ public class EntityBola extends Entity implements IProjectile {
 		vec3d = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
 		if (raytraceresult != null) {
-			vec3d = new Vec3d(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
+			vec3d = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
 		}
 
 		Entity entity = this.findEntityOnPath(vec3d1, vec3d);
@@ -116,7 +173,7 @@ public class EntityBola extends Entity implements IProjectile {
             }
         }
 
-		if (raytraceresult != null) {
+		if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
 			this.onHit(raytraceresult);
 		}
 		
@@ -150,89 +207,6 @@ public class EntityBola extends Entity implements IProjectile {
 		this.doBlockCollisions();
 	}
 
-	public Entity getShootingEntity() {
-		return this.shootingEntity;
-	}
-
-	public void setThrowableHeading(double speed, float rotationYaw, float rotationPitch) {
-		this.prevRotationYaw = this.rotationYaw = rotationYaw;
-		this.prevRotationPitch = this.rotationPitch = rotationPitch;
-
-		this.motionX = (double) (-MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.motionZ = (double) (MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.motionY = (double) (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
-
-		this.motionX *= speed;
-		this.motionY *= speed;
-		this.motionZ *= speed;
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
-
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-	}
-
-	/**
-	 * Similar to setArrowHeading, it's point the throwable entity to a x, y, z
-	 * direction.
-	 */
-	public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
-    {
-        float f = MathHelper.sqrt(x * x + y * y + z * z);
-        x = x / (double)f;
-        y = y / (double)f;
-        z = z / (double)f;
-        x = x + this.rand.nextGaussian() * 0.0075D * (double)inaccuracy;
-        y = y + this.rand.nextGaussian() * 0.0075D * (double)inaccuracy;
-        z = z + this.rand.nextGaussian() * 0.0075D * (double)inaccuracy;
-        x = x * (double)velocity;
-        y = y * (double)velocity;
-        z = z * (double)velocity;
-        this.motionX = x;
-        this.motionY = y;
-        this.motionZ = z;
-        float f1 = MathHelper.sqrt(x * x + z * z);
-        this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
-        this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
-        this.prevRotationYaw = this.rotationYaw;
-        this.prevRotationPitch = this.rotationPitch;
-    }
-	
-	@Nullable
-    protected Entity findEntityOnPath(Vec3d start, Vec3d end)
-    {
-        Entity entity = null;
-        List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D), BOLA_TARGETS);
-        double d0 = 0.0D;
-
-        for (int i = 0; i < list.size(); ++i)
-        {
-            Entity entity1 = list.get(i);
-
-            if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
-            {
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz(0.30000001192092896D);
-                RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
-
-                if (raytraceresult != null)
-                {
-                    double d1 = start.squareDistanceTo(raytraceresult.hitVec);
-
-                    if (d1 < d0 || d0 == 0.0D)
-                    {
-                        entity = entity1;
-                        d0 = d1;
-                    }
-                }
-            }
-        }
-
-        return entity;
-    }
 
 	protected void onHit(RayTraceResult raytraceResultIn)
     {
@@ -279,25 +253,62 @@ public class EntityBola extends Entity implements IProjectile {
 		}
     }
 	
-	 /**
-     * Checks if the entity is in range to render.
-     */
-	@Override
-    public boolean isInRangeToRenderDist(double distance)
+	@Nullable
+    protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
-        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+        Entity entity = null;
+        List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), BOLA_TARGETS);
+        double d0 = 0.0D;
 
-        if (Double.isNaN(d0))
+        for (int i = 0; i < list.size(); ++i)
         {
-            d0 = 1.0D;
+            Entity entity1 = list.get(i);
+
+            if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
+            {
+                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.3);
+                RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
+
+                if (raytraceresult != null)
+                {
+                    double d1 = start.squareDistanceTo(raytraceresult.hitVec);
+
+                    if (d1 < d0 || d0 == 0.0D)
+                    {
+                        entity = entity1;
+                        d0 = d1;
+                    }
+                }
+            }
         }
 
-        d0 = d0 * 64.0D * getRenderDistanceWeight();
-        return distance < d0 * d0;
+        return entity;
     }
 
 	@Override
-	protected void entityInit() {
+	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
+
 	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
+	}
+
+	@Override
+    protected boolean canTriggerWalking()
+    {
+        return false;
+    }
+
+	@Override
+    public boolean canBeAttackedWithItem()
+    {
+        return false;
+    }
 	
+	@Override
+    public float getEyeHeight()
+    {
+        return 0.0F;
+    }
 }

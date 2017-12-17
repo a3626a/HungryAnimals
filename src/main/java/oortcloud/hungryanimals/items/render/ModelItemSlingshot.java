@@ -20,7 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -31,11 +30,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 
-public class ModelItemSlingshot implements IPerspectiveAwareModel {
+public class ModelItemSlingshot implements IBakedModel {
 
 	public static final ModelResourceLocation modelresourcelocation_shooting = new ModelResourceLocation(
 			References.RESOURCESPREFIX + Strings.itemSlingShotName + "_shooting", "inventory");
@@ -44,18 +42,16 @@ public class ModelItemSlingshot implements IPerspectiveAwareModel {
 	public static final ResourceLocation textureresourcelocation = new ResourceLocation(
 			References.RESOURCESPREFIX + "items/" + Strings.itemSlingShotName + "_string");
 
-	private IPerspectiveAwareModel model_normal;
-	private IPerspectiveAwareModel model_shooting;
+	private IBakedModel model_normal;
+	private IBakedModel model_shooting;
 	private BakedQuad leftString;
 	private BakedQuad rightString;
 	private TextureAtlasSprite texture;
 
-	public ModelItemSlingshot(IPerspectiveAwareModel iBakedModel) {
-		this.model_normal = iBakedModel;
-		this.model_shooting = (IPerspectiveAwareModel) Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-				.getModelManager().getModel(modelresourcelocation_shooting);
-		this.texture = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getTextureMap()
-				.getAtlasSprite(ModelItemSlingshot.textureresourcelocation.toString());
+	public ModelItemSlingshot(IBakedModel model_normal, IBakedModel model_shooting, TextureAtlasSprite texture) {
+		this.model_normal = model_normal;
+		this.model_shooting = model_shooting;
+		this.texture = texture;
 		float length = 0.6F;
 		this.leftString = new BakedQuad(
 				Ints.concat(vertexToInts(12.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
@@ -135,12 +131,6 @@ public class ModelItemSlingshot implements IPerspectiveAwareModel {
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		return model_shooting.getParticleTexture();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return model_shooting.getItemCameraTransforms();
 	}
 
 	@Override

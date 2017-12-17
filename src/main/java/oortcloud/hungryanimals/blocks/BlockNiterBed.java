@@ -9,10 +9,8 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -35,8 +33,8 @@ public class BlockNiterBed extends Block {
 		setRegistryName(Strings.blockNiterBedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
-		GameRegistry.register(this);
-		GameRegistry.register(new ItemBlock(this), getRegistryName());
+		//GameRegistry.register(this);
+		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

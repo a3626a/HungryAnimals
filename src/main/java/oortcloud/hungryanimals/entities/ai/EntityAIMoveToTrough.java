@@ -72,7 +72,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		float distSq = 2;
 		if (pos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distSq) {
 			IBlockState state = world.getBlockState(pos);

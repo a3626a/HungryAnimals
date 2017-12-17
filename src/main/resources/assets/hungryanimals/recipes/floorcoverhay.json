@@ -1,0 +1,18 @@
+{
+    "type" : "minecraft:crafting_shaped",
+    "pattern" : [
+        "a",
+        "b"
+    ],
+    "key" : {
+        "a" : {
+            "item" : "minecraft:hay_block"
+        },
+        "b" : {
+            "item" : "hungryanimals:compositewood"
+        }
+    },
+    "result" : {
+        "item" : "hungryanimals:floorcoverhay"
+    }
+}

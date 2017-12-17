@@ -61,14 +61,13 @@ public class HungryAnimals {
 		ModBlocks.init();
 		ModItems.init();
 		ModPotions.init();
-		proxy.registerItemModel();
 		proxy.registerEntities();
 		proxy.registerEntityRendering();
 		proxy.registerTileEntities();
 		proxy.registerTileEntityRendering();
 		proxy.registerKeyBindings();
 		proxy.registerCapabilities();
-		proxy.registerItemRendering();
+		proxy.registerEventHandler();
 		HungryAnimalManager.getInstance().init();
 		AttributeManager.getInstance().init();
 		
@@ -82,9 +81,10 @@ public class HungryAnimals {
 		ConfigurationHandler.sync();
 		
 		proxy.registerColors();
+
 		
 		CraftingHandler.init();
-		proxy.registerEventHandler();
+
 
 		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
 		simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);

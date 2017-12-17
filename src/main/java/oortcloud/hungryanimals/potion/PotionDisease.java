@@ -14,7 +14,8 @@ public class PotionDisease extends PotionHungryAnimals {
 
 	protected PotionDisease(boolean effect, int color) {
 		super(textureLocation, effect, color);
-		this.setPotionName(Strings.potionDiseaseName);
+		this.setRegistryName(References.MODID, Strings.potionDiseaseName);
+		this.setPotionName(Strings.potionDiseaseUnlocalizedName);
 		this.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F16089D", -0.25, 2);
 	}
 
