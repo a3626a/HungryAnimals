@@ -5,7 +5,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -35,7 +35,7 @@ import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
-public class BlockTrough extends BlockContainer {
+public class BlockTrough extends Block {
 
 	public static final PropertyEnum<EnumPartType> PART = PropertyEnum.create("part", EnumPartType.class);
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -168,8 +168,13 @@ public class BlockTrough extends BlockContainer {
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
-		return (getStateFromMeta(meta).getValue(PART) == EnumPartType.FOOT) ? new TileEntityTrough() : null;
+	public boolean hasTileEntity(IBlockState state) {
+		return state.getValue(PART) == EnumPartType.FOOT;
+	}
+	
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return (state.getValue(PART) == EnumPartType.FOOT) ? new TileEntityTrough() : null;
 	}
 	
 	public TileEntity getTileEntity(World world, BlockPos pos) {
