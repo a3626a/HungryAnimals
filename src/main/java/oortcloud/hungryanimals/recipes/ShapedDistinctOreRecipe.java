@@ -15,8 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class ShapedDistinctOreRecipe implements IRecipe {
+public class ShapedDistinctOreRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	//Added in for future ease of change, but hard coded for now.
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
@@ -30,10 +31,12 @@ public class ShapedDistinctOreRecipe implements IRecipe {
     protected int height = 0;
     protected boolean mirrored = true;
 
-    public ShapedDistinctOreRecipe(Block     result, Object... recipe){ this(new ItemStack(result), recipe); }
-    public ShapedDistinctOreRecipe(Item      result, Object... recipe){ this(new ItemStack(result), recipe); }
-    public ShapedDistinctOreRecipe(ItemStack result, Object... recipe)
+    public ShapedDistinctOreRecipe(ResourceLocation name, Block     result, Object... recipe){ this(name, new ItemStack(result), recipe); }
+    public ShapedDistinctOreRecipe(ResourceLocation name, Item      result, Object... recipe){ this(name, new ItemStack(result), recipe); }
+    public ShapedDistinctOreRecipe(ResourceLocation name, ItemStack result, Object... recipe)
     {
+    	setRegistryName(name);
+    	
         output = result.copy();
 
         String shape = "";
@@ -338,21 +341,7 @@ public class ShapedDistinctOreRecipe implements IRecipe {
     public String[] getOres() {
     	return ores;
     }
-	@Override
-	public IRecipe setRegistryName(ResourceLocation name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public ResourceLocation getRegistryName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public Class<IRecipe> getRegistryType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
 	@Override
 	public boolean canFit(int width, int height) {
 		return this.width <= width && this.height <= height;

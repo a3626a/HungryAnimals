@@ -19,8 +19,6 @@ public class BlockFloorCover extends Block {
 		setUnlocalizedName(References.MODID+"."+UnlocalizedName); 
 		setRegistryName(UnlocalizedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		//GameRegistry.register(this);
-		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

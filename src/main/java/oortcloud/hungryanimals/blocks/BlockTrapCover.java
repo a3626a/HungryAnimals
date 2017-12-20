@@ -25,8 +25,6 @@ public class BlockTrapCover extends Block {
 		setUnlocalizedName(References.MODID+"."+Strings.blockTrapCoverName); 
 		setRegistryName(Strings.blockTrapCoverName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
-		//GameRegistry.register(this);
-		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

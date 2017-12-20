@@ -65,8 +65,6 @@ public class BlockExcreta extends BlockFalling {
 		setRegistryName(Strings.blockExcretaName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
-		//GameRegistry.register(this);
-		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

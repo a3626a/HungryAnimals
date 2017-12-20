@@ -33,8 +33,6 @@ public class BlockNiterBed extends Block {
 		setRegistryName(Strings.blockNiterBedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 		setTickRandomly(true);
-		//GameRegistry.register(this);
-		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

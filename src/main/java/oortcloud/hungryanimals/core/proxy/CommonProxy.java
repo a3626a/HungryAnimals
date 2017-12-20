@@ -1,8 +1,6 @@
 package oortcloud.hungryanimals.core.proxy;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -51,12 +49,6 @@ public class CommonProxy {
 	}
 
 	public void registerTileEntityRendering() {
-	}
-
-	public void registerCustomBakedModel(ModelBakeEvent event) {
-	}
-
-	public void registerSprite(TextureStitchEvent event) {
 	}
 
 	public void registerEventHandler() {

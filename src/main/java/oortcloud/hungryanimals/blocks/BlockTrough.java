@@ -56,8 +56,6 @@ public class BlockTrough extends BlockContainer {
 		
 		setUnlocalizedName(References.MODID+"."+Strings.blockTroughName); 
 		setRegistryName(Strings.blockTroughName);
-		//GameRegistry.register(this);
-		//GameRegistry.register(new ItemBlock(this), getRegistryName());
 	}
 
 	@Override

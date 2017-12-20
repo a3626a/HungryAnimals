@@ -26,7 +26,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.blocks.ModBlocks;
-import oortcloud.hungryanimals.blocks.render.BlockRenderEventHandler;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
 import oortcloud.hungryanimals.entities.EntityBola;
@@ -86,8 +85,8 @@ public class ClientProxy extends CommonProxy {
 				ModelItemSlingshot.modelresourcelocation_shooting);
     }
 	
-	@Override
-	public void registerCustomBakedModel(ModelBakeEvent event) {
+    @SubscribeEvent
+	public static void registerCustomBakedModel(ModelBakeEvent event) {
 		IBakedModel bola_normal = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
 		IBakedModel bola_spin = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_spin);
 		ModelItemBola bolaModel = new ModelItemBola(bola_normal, bola_spin);
@@ -100,15 +99,14 @@ public class ClientProxy extends CommonProxy {
 		event.getModelRegistry().putObject(ModelItemSlingshot.modelresourcelocation_normal, slingshotModel);
 	}
 
-	@Override
-	public void registerSprite(TextureStitchEvent event) {
+    @SubscribeEvent
+	public static void registerSprite(TextureStitchEvent event) {
 		event.getMap().registerSprite(ModelItemSlingshot.textureresourcelocation);
 	}
 
 	@Override
 	public void registerEventHandler() {
 		super.registerEventHandler();
-		MinecraftForge.EVENT_BUS.register(new BlockRenderEventHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientRenderEventHandler());
 		DebugOverlayHandler debugOverlay = new DebugOverlayHandler(Minecraft.getMinecraft());
 		MinecraftForge.EVENT_BUS.register(debugOverlay);
@@ -138,5 +136,6 @@ public class ClientProxy extends CommonProxy {
 	public void initNEI() {
 		// NEIHandler.init();
 	}
+
 
 }

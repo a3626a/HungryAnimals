@@ -31,7 +31,6 @@ public class ItemDebugGlass extends Item {
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
 
 		setMaxStackSize(1);
-		//GameRegistry.register(this);
 	}
 	
 	@Override
