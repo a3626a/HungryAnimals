@@ -45,15 +45,10 @@ public class BlockExcreta extends BlockFalling {
 	public static final PropertyEnum<BlockExcreta.EnumType> CONTENT = PropertyEnum.create("content", BlockExcreta.EnumType.class);
 
 	public static final float hardnessConstant = 0.5F;
-	public static final double defualt_fermetationProbability = 0.05;
 	public static double fermetationProbability;
-	public static final double defualt_erosionProbability = 0.025;
 	public static double erosionProbability;
-	public static final double defualt_fertilizationProbability = 0.2;
 	public static double fertilizationProbability;
-	public static final double defualt_erosionOnHayProbability = 0.5;
 	public static double erosionProbabilityOnHay;
-	public static final double defualt_diseaseProbability = 0.05;
 	public static double diseaseProbability;
 	public static final double diseaseRadius = 3;
 
