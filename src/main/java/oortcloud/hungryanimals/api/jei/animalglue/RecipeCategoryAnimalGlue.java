@@ -3,17 +3,17 @@ package oortcloud.hungryanimals.api.jei.animalglue;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
-import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.IDrawableAnimated.StartDirection;
+import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
+import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 
-public class RecipeCategoryAnimalGlue  extends BlankRecipeCategory<RecipeWrapperAnimalGlue> {
+public class RecipeCategoryAnimalGlue implements IRecipeCategory<RecipeWrapperAnimalGlue>  {
 
 	public static final String UID = "hungryanimals.animalglue";
 

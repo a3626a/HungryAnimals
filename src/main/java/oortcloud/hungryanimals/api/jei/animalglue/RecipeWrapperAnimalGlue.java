@@ -1,11 +1,11 @@
 package oortcloud.hungryanimals.api.jei.animalglue;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.items.ModItems;
 
-public class RecipeWrapperAnimalGlue extends BlankRecipeWrapper	{
+public class RecipeWrapperAnimalGlue implements IRecipeWrapper {
 
 	private RecipeAnimalGlue recipe;
 	

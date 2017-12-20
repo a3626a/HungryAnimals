@@ -5,13 +5,12 @@ import java.util.List;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
 
-public class RecipeWrapperShapedDistinctOreRecipe extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
+public class RecipeWrapperShapedDistinctOreRecipe implements IShapedCraftingRecipeWrapper {
 
 	private ShapedDistinctOreRecipe recipe;
 	private IJeiHelpers jeiHelpers;
