@@ -31,6 +31,7 @@ public class Strings {
 	public static final String potionGrowthUnlocalizedName = "potion.growth";
 	public static final String potionDiseaseName = "disease";
 	public static final String potionDiseaseUnlocalizedName = "potion.disease";
-
-	public static final String extendedPropertiesKey = "extendedPropertiesHungryAnimal";
+	public static final String potionInheatName = "inheat";
+	public static final String potionInheatUnlocalizedName = "potion.inheat";
+	
 }

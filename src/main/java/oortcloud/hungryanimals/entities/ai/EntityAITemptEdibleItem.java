@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
@@ -26,7 +27,7 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && temptedEntity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < 1;
+		return super.shouldExecute() && temptedEntity.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.TAMED;
 	}
 
 	@Override

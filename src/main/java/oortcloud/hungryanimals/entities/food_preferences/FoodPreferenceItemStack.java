@@ -26,7 +26,11 @@ public class FoodPreferenceItemStack implements IFoodPreference<ItemStack> {
 	private final double min;
 	public FoodPreferenceItemStack(Map<HashItemType, Double> map) {
 		this.map = map;
-		min = Collections.min(map.values());
+		if (!map.isEmpty()) {
+			min = Collections.min(map.values());
+		} else {
+			min = Double.MAX_VALUE;
+		}
 	}
 	
 	@Override

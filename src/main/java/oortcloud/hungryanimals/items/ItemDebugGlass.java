@@ -2,13 +2,12 @@ package oortcloud.hungryanimals.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -32,20 +31,20 @@ public class ItemDebugGlass extends Item {
 
 		setMaxStackSize(1);
 	}
-	
+
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		if (worldIn.isRemote) {
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+		if (playerIn.getEntityWorld().isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
 				PacketPlayerServer msg = new PacketPlayerServer(SyncIndex.DEBUG_SETTARGET, playerIn.getName());
 				msg.setInt(entity.getEntityId());
 				HungryAnimals.simpleChannel.sendToServer(msg);
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
+				return true;
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(hand));
-	}
+		return false;
+    }
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {

@@ -7,6 +7,7 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.items.ModItems;
 
 public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
@@ -40,7 +41,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 	
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getCapability(ProviderTamableAnimal.CAP, null).getTaming() < -1 && super.shouldExecute();
+		return this.entity.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.WILD && super.shouldExecute();
 	}
 
 }

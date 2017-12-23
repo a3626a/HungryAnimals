@@ -12,22 +12,22 @@ public class HandlerPlayerServer implements IMessageHandler<PacketPlayerServer, 
 
 	@Override
 	public PacketPlayerClient onMessage(PacketPlayerServer message, MessageContext ctx) {
-		
-		EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(message.name);
-		ItemStack stack = player.getHeldItemMainhand();
-		switch (message.index) {
-		case SyncIndex.DEBUG_SETTARGET:
-			if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
-				NBTTagCompound tag = stack.getTagCompound();
-				if (tag == null) {
-					stack.setTagCompound(new NBTTagCompound());
-					tag = stack.getTagCompound();
+		FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+			EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(message.name);
+			ItemStack stack = player.getHeldItemMainhand();
+			switch (message.index) {
+			case SyncIndex.DEBUG_SETTARGET:
+				if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
+					NBTTagCompound tag = stack.getTagCompound();
+					if (tag == null) {
+						stack.setTagCompound(new NBTTagCompound());
+						tag = stack.getTagCompound();
+					}
+					tag.setInteger("target", message.getInt());
 				}
-				tag.setInteger("target", message.getInt());
+				break;
 			}
-			break;
-		}
-
+		});
 		return null;
 	}
 

@@ -25,10 +25,14 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
 	private Map<HashBlockState, Double> map;
 	private final double min;
-	
+
 	public FoodPreferenceBlockState(Map<HashBlockState, Double> map) {
 		this.map = map;
-		min = Collections.min(map.values());
+		if (!map.isEmpty()) {
+			min = Collections.min(map.values());
+		} else {
+			min = Double.MAX_VALUE;
+		}
 	}
 
 	@Override
@@ -61,7 +65,7 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 	public String toString() {
 		return map.toString();
 	}
-	
+
 	public static class HashBlockState {
 		private IBlockState block;
 		private boolean ignoreProperty;
@@ -107,14 +111,13 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 				return block.hashCode();
 			}
 		}
-		
+
 		public String toString() {
 			return block.toString();
 		}
 
 		public static class Serializer implements JsonDeserializer<HashBlockState>, JsonSerializer<HashBlockState> {
-			public HashBlockState deserialize(JsonElement ele, Type type, JsonDeserializationContext context)
-					throws JsonParseException {
+			public HashBlockState deserialize(JsonElement ele, Type type, JsonDeserializationContext context) throws JsonParseException {
 				JsonObject jsonobject = ele.getAsJsonObject();
 				String name = JsonUtils.getString(jsonobject, "name");
 				Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
@@ -135,11 +138,10 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 				return new HashBlockState(state);
 			}
 
-			private static <T extends Comparable<T>> IBlockState getState(IBlockState state, IProperty<T> property, String value)
-		    {
-		        return state.withProperty(property, property.parseValue(value).get());
-		    }
-			
+			private static <T extends Comparable<T>> IBlockState getState(IBlockState state, IProperty<T> property, String value) {
+				return state.withProperty(property, property.parseValue(value).get());
+			}
+
 			public JsonElement serialize(HashBlockState block, Type type, JsonSerializationContext context) {
 
 				if (block.ignoreProperty) {

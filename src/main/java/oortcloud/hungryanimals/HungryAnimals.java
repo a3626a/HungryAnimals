@@ -18,9 +18,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.core.network.HandlerEntityClient;
 import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
 import oortcloud.hungryanimals.core.network.HandlerGeneralServer;
 import oortcloud.hungryanimals.core.network.HandlerPlayerServer;
+import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.core.network.PacketGeneralClient;
 import oortcloud.hungryanimals.core.network.PacketGeneralServer;
 import oortcloud.hungryanimals.core.network.PacketPlayerServer;
@@ -90,6 +92,7 @@ public class HungryAnimals {
 		simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);
 		simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 5, Side.CLIENT);
 		simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
+		simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 6, Side.CLIENT);
 	}
 
 	@Mod.EventHandler

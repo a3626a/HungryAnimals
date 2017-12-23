@@ -5,10 +5,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -52,6 +54,11 @@ public class AIManager {
 			AIContainer aiContainer = new AIContainer(1, (AIContainer) AITYPES.get("herbivore").apply(animal));
 			aiContainer.priorTo(EntityAITemptEdibleItem.class)
 					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
+			return aiContainer;
+		});
+		AITYPES.put("horse", (animal) -> {
+			AIContainer aiContainer = new AIContainer(1, (AIContainer) AITYPES.get("herbivore").apply(animal));
+			aiContainer.priorTo(EntityAIMateModified.class).put((entity) -> new EntityAIRunAroundLikeCrazy((AbstractHorse)entity, 1.2D));
 			return aiContainer;
 		});
 	}

@@ -13,9 +13,8 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
-import oortcloud.hungryanimals.entities.capability.CapabilityHandler;
 import oortcloud.hungryanimals.entities.capability.CapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.capability.CapabilityTamablesAnimal;
+import oortcloud.hungryanimals.entities.capability.CapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.StorageHungryAnimal;
@@ -39,7 +38,7 @@ public class CommonProxy {
 
 	public void registerCapabilities() {
 		CapabilityManager.INSTANCE.register(ICapabilityHungryAnimal.class, new StorageHungryAnimal(), CapabilityHungryAnimal.class);
-		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamablesAnimal.class);
+		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamableAnimal.class);
 	}
 
 	public void registerColors() {
@@ -56,7 +55,6 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ConfigurationEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHandler());
-		MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
 		MinecraftForge.EVENT_BUS.register(new LootTableModifier());
 	}
 

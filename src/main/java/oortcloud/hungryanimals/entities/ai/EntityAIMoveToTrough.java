@@ -16,6 +16,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
@@ -54,7 +55,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
-				if (this.capTaming.getTaming() >= 1 && temp != null && temp instanceof TileEntityTrough) {
+				if (this.capTaming.getTamingLevel() == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
 					return !trough.stack.isEmpty() && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack);
 				} else {

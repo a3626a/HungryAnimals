@@ -1,0 +1,32 @@
+[
+	{
+		"item": {
+			"name": "minecraft:sugar"
+		},
+		"hunger": 25
+	},
+	{
+		"item": {
+			"name": "minecraft:wheat"
+		},
+		"hunger": 50
+	},
+	{
+		"item": {
+			"name": "minecraft:apple"
+		},
+		"hunger": 75
+	},
+	{
+		"item": {
+			"name": "minecraft:golden_carrot"
+		},
+		"hunger": 100
+	},
+	{
+		"item": {
+			"name": "minecraft:golden_apple"
+		},
+		"hunger": 250
+	}
+]

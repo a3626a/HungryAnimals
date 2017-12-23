@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.capability;
 
+import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -10,9 +12,18 @@ public class ProviderTamableAnimal implements ICapabilitySerializable<NBTBase> {
 
 	@CapabilityInject(ICapabilityTamableAnimal.class)
 	public static final Capability<ICapabilityTamableAnimal> CAP = null;
-	
-	private ICapabilityTamableAnimal instance = CAP.getDefaultInstance();
-	
+
+	// Allocating Defuault Instance Here, is it important?
+	protected ICapabilityTamableAnimal instance;
+
+	public ProviderTamableAnimal(EntityAnimal entity) {
+		instance = new CapabilityTamableAnimal(entity);
+	}
+
+	public ProviderTamableAnimal(AbstractHorse entity) {
+		instance = new CapabilityTamableHorse(entity);
+	}
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CAP;
@@ -20,7 +31,7 @@ public class ProviderTamableAnimal implements ICapabilitySerializable<NBTBase> {
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return  capability == CAP ? CAP.<T> cast(this.instance) : null;
+		return capability == CAP ? CAP.<T>cast(this.instance) : null;
 	}
 
 	@Override

@@ -1,0 +1,9 @@
+{
+	"hungryanimals.hunger_bmr" : 0.004,
+	"hungryanimals.hunger_max" : 400,
+	"hungryanimals.courtship_hunger" : 20,
+	"hungryanimals.courtship_probability" : 0.0,
+	"hungryanimals.courtship_hunger_condition" : 0.8,
+	"hungryanimals.excretion_factor" : 0.02,
+	"hungryanimals.child_hunger" : 100
+}

@@ -13,16 +13,14 @@ public class PotionGrowth extends PotionHungryAnimals {
 
 	protected PotionGrowth(boolean effect, int color) {
 		super(textureLocation, effect, color);
-		this.setRegistryName(References.MODID, Strings.potionGrowthName);
-		this.setPotionName(Strings.potionGrowthUnlocalizedName);
+		setRegistryName(References.MODID, Strings.potionGrowthName);
+		setPotionName(Strings.potionGrowthUnlocalizedName);
 	}
 
 	@Override
 	public void performEffect(EntityLivingBase entity, int level) {
-		
-		EntityAgeable entityAgealbe = ((EntityAgeable) entity);
-		
 		if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
+			EntityAgeable entityAgealbe = ((EntityAgeable) entity);
 			int j = entityAgealbe.getGrowingAge();
 			if (j < 0) {
 				j += (level) * entity.getRNG().nextInt(2);
