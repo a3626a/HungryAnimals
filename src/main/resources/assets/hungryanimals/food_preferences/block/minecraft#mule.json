@@ -22,8 +22,7 @@
 	},
 	{
 		"block": {
-			"name": "minecraft:hay_block",
-			"age": 0
+			"name": "minecraft:hay_block"
 		},
 		"hunger": 450
 	}
