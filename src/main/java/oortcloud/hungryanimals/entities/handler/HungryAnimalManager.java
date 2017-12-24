@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityDonkey;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityMule;
 import net.minecraft.entity.passive.EntityPig;
@@ -59,6 +60,7 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntityDonkey.class);
 		registerHungryAnimal(EntitySkeletonHorse.class);
 		registerHungryAnimal(EntityZombieHorse.class);
+		registerHungryAnimal(EntityLlama.class);
 	}
 
 }

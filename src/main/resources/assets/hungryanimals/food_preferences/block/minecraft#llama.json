@@ -1,0 +1,29 @@
+[
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "tall_grass"
+		},
+		"hunger": 15
+	},
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "fern"
+		},
+		"hunger": 15
+	},
+	{
+		"block": {
+			"name": "minecraft:wheat",
+			"age": 7
+		},
+		"hunger": 50
+	},
+	{
+		"block": {
+			"name": "minecraft:hay_block"
+		},
+		"hunger": 450
+	}
+]
