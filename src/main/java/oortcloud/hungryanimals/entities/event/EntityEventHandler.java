@@ -211,6 +211,11 @@ public class EntityEventHandler {
 		}
 	}
 
+	/**
+	 * Synchronization btw Client and Server is CRITICAL here.
+	 * 
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void onInteract(EntityInteract event) {
 		if (!(event.getTarget() instanceof EntityAnimal))
@@ -268,6 +273,9 @@ public class EntityEventHandler {
 		}
 		if (flagEat||flagCure||heat>0) {
 			itemstack.shrink(1);
+			
+			// Play Animation
+
 			return new Pair<Boolean,EnumActionResult>(true, EnumActionResult.SUCCESS);
 		}
 		
