@@ -126,7 +126,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	private int executeProbability() {
 		double taming = capTaming.getTaming();
-		double hunger = capHungry.getHunger() / capHungry.getMaxHunger();
+		double hunger = capHungry.getStomach() / capHungry.getMaxStomach();
 		if (taming > 1) {
 			taming = 1;
 		}
@@ -140,20 +140,25 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (item.isEmpty())
 			return;
 
-		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);
-		capHungry.addHunger(hunger);
+		IFoodPreference<ItemStack> pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
+		double nutrient = pref.getNutrient(item);
+		capHungry.addNutrient(nutrient);
+		
+		double stomach = pref.getStomach(item);
+		capHungry.addStomach(stomach);
+		
 		if (this.entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
+				int duration = (int) (nutrient / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * hunger);
+			this.capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * nutrient);
 		}
 	}
 }

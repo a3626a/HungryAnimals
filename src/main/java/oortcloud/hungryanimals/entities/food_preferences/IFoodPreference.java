@@ -5,7 +5,8 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 public interface IFoodPreference<T> {
 
 	public boolean canEat(ICapabilityHungryAnimal cap, T food);
-	public double getHunger(T food);
+	public double getNutrient(T food);
+	public double getStomach(T food);
 	
 	/**
 	 * this method is for optimization.

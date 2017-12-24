@@ -147,7 +147,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		if (state.getBlock() == ModBlocks.excreta) {
 			return -1.0;
 		} else if (pref.canEat(capHungry, state)) {
-			return pref.getHunger(state);
+			return pref.getNutrient(state);
 		} else {
 			return 1.0;
 		}
@@ -156,8 +156,11 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	public void eatBlockBonus(IBlockState block) {
 		if (block == null)
 			return;
-		double hunger = pref.getHunger(block);
-		capHungry.addHunger(hunger);
+		double nutrient = pref.getNutrient(block);
+		capHungry.addNutrient(nutrient);
+		
+		double stomach = pref.getStomach(block);
+		capHungry.addStomach(stomach);
 	}
 
 

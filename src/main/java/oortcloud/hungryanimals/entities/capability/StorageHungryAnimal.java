@@ -11,7 +11,8 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 	@Override
 	public NBTBase writeNBT(Capability<ICapabilityHungryAnimal> capability, ICapabilityHungryAnimal instance, EnumFacing side) {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setDouble("hunger", instance.getHunger());
+		tag.setDouble("nutrient", instance.getNutrient());
+		tag.setDouble("stomach", instance.getStomach());
 		tag.setDouble("excretion", instance.getExcretion());
 		return tag;
 	}
@@ -19,7 +20,8 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 	@Override
 	public void readNBT(Capability<ICapabilityHungryAnimal> capability, ICapabilityHungryAnimal instance, EnumFacing side, NBTBase nbt) {
 		NBTTagCompound tag = (NBTTagCompound) nbt;
-		instance.setHunger(tag.getDouble("hunger"));
+		instance.setNutrient(tag.getDouble("nutrient"));
+		instance.setStomach(tag.getDouble("stomach"));
 		instance.setExcretion(tag.getDouble("excretion"));
 	}
 

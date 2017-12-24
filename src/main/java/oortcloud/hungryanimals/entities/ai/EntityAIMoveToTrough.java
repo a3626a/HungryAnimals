@@ -18,6 +18,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
@@ -99,13 +100,18 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		if (item.isEmpty())
 			return;
 
-		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);
-		capHungry.addHunger(hunger);
+		IFoodPreference<ItemStack> pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
+		double nutrient = pref.getNutrient(item);
+		capHungry.addNutrient(nutrient);
+		
+		double stomach = pref.getStomach(item);
+		capHungry.addStomach(stomach);
+		
 		if (this.entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger
+				int duration = (int) (nutrient
 						/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
@@ -115,7 +121,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			this.capTaming.addTaming(0.0002
 					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue()
-					* hunger);
+					* nutrient);
 		}
 
 	}
