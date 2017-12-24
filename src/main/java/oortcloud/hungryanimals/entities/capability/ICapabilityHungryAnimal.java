@@ -10,6 +10,11 @@ public interface ICapabilityHungryAnimal {
 	public double setStomach(double stomach);
 	public double getMaxStomach();
 	
+	public double getWeight();
+	public double addWeight(double weight);
+	public double setWeight(double weight);
+	public double getMaxWeight();	
+	
 	public double getExcretion();
 	public double addExcretion(double excretion);
 	public double setExcretion(double excretion);

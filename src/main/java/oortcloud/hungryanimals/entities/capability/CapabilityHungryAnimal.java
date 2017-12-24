@@ -6,8 +6,10 @@ import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	private double excretion;
-	private double stomach;
+	private double stomach; 
 	private double nutrient;
+	private double weight; 
+	
 	private EntityLiving entity;
 
 	public CapabilityHungryAnimal(EntityLiving entity) {
@@ -75,22 +77,35 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_stomach_max).getAttributeValue();
 	}
 	
-	/*
 	@Override
-	public double addHunger(double hunger) {
-		double oldHunger =getHunger();
-		setHunger(getHunger()+hunger);
-		if (hunger < 0) {
-			addExcretion(-hunger * entity.getAttributeMap().getAttributeInstance(ModAttributes.excretion_factor).getAttributeValue());
-		}
-		return oldHunger;
+	public double getWeight() {
+		return weight;
 	}
 
 	@Override
-	public double getMaxHunger() {
-		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue();
+	public double addWeight(double weight) {
+		double oldWeight = getWeight();
+		setStomach(getWeight() + weight);
+		return oldWeight;
 	}
-    */
+
+	@Override
+	public double setWeight(double weight) {
+		double oldWeight = this.weight;
+		if (weight > getMaxWeight()) {
+			this.weight = getMaxWeight();
+		} else if (weight < 0) {
+			this.weight = 0;
+		} else {
+			this.weight = weight;
+		}
+		return oldWeight;
+	}
+
+	@Override
+	public double getMaxWeight() {
+		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_max).getAttributeValue();
+	}
 
 	@Override
 	public double getExcretion() {

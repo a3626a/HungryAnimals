@@ -13,6 +13,7 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setDouble("nutrient", instance.getNutrient());
 		tag.setDouble("stomach", instance.getStomach());
+		tag.setDouble("weight", instance.getWeight());
 		tag.setDouble("excretion", instance.getExcretion());
 		return tag;
 	}
@@ -22,6 +23,7 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 		NBTTagCompound tag = (NBTTagCompound) nbt;
 		instance.setNutrient(tag.getDouble("nutrient"));
 		instance.setStomach(tag.getDouble("stomach"));
+		instance.setWeight(tag.getDouble("weight"));
 		instance.setExcretion(tag.getDouble("excretion"));
 	}
 
