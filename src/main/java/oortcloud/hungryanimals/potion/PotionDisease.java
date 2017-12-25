@@ -22,7 +22,7 @@ public class PotionDisease extends PotionHungryAnimals {
 	@Override
 	public void performEffect(EntityLivingBase entity, int level) {
 		if (entity.hasCapability(ProviderHungryAnimal.CAP, null))
-			entity.getCapability(ProviderHungryAnimal.CAP, null).addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * 4);
+			entity.getCapability(ProviderHungryAnimal.CAP, null).addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue() * 4);
 	}
 
 	@Override

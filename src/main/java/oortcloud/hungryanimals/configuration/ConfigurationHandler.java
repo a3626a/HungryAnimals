@@ -47,6 +47,7 @@ import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
 import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
@@ -83,12 +84,13 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { foodPreferencesBlock.getDescriptor(), file, animal, e });
 				return;
 			}
-			Map<HashBlockState, Double> map = new HashMap<HashBlockState, Double>();
+			Map<HashBlockState, Pair<Double, Double>> map = new HashMap<HashBlockState, Pair<Double, Double>>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
 				HashBlockState state = GSON_INSTANCE_HASH_BLOCK_STATE.fromJson(jsonObj.getAsJsonObject("block"), HashBlockState.class);
-				double hunger = jsonObj.getAsJsonPrimitive("hunger").getAsDouble();
-				map.put(state, hunger);
+				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
+				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
+				map.put(state, new Pair<Double, Double>(nutrient, stomach));
 			}
 			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(animal,
 					map);
@@ -103,12 +105,13 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { foodPreferencesItem.getDescriptor(), file, animal, e });
 				return;
 			}
-			Map<HashItemType, Double> map = new HashMap<HashItemType, Double>();
+			Map<HashItemType, Pair<Double, Double>> map = new HashMap<HashItemType, Pair<Double, Double>>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
 				HashItemType state = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
-				double hunger = jsonObj.getAsJsonPrimitive("hunger").getAsDouble();
-				map.put(state, hunger);
+				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
+				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
+				map.put(state, new Pair<Double, Double>(nutrient, stomach));
 			}
 			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
 					map);
@@ -129,7 +132,7 @@ public class ConfigurationHandler {
 				JsonObject updatedJsonObj = new JsonObject();
 				for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 					if (i.getKey().equals("hungryanimals.courtship_hungerCondition")) {
-						updatedJsonObj.addProperty(ModAttributes.NAME_courtship_hunger_condition, i.getValue().getAsJsonObject().get("value").getAsDouble());
+						updatedJsonObj.addProperty(ModAttributes.NAME_courtship_stomach_condition, i.getValue().getAsJsonObject().get("value").getAsDouble());
 					} else {
 						updatedJsonObj.addProperty(i.getKey(), i.getValue().getAsJsonObject().get("value").getAsDouble());
 					}
@@ -213,8 +216,7 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { animal.getDescriptor(), file, e });
 				return;
 			}
-			
-			
+
 			for (ResourceLocation key : EntityList.getEntityNameList()) {
 				Class<? extends Entity> i = EntityList.getClass(key);
 				if (i != null && EntityAnimal.class.isAssignableFrom(i)) {
@@ -284,12 +286,12 @@ public class ConfigurationHandler {
 			}
 		}
 	}
-	
+
 	public static String resourceLocationToString(ResourceLocation location) {
 		String stringLocation = location.toString();
 		return stringLocation.replace(':', '#');
 	}
-	
+
 	public static ResourceLocation stringToResourceLocation(String location) {
 		return new ResourceLocation(location.replace('#', ':'));
 	}

@@ -16,7 +16,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		this.entity = entity;
 		setStomach(0.0);
 		setNutrient(0.0);
-		// setHunger(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue()/2.0);
+		setWeight(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_max).getAttributeValue()/2.0);
 		setExcretion(0.0);
 	}
 	

@@ -16,9 +16,9 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 
 public class SetCountBaseOnHunger  extends LootFunction {
 
-	private final HungerValueRange countRange;
+	private final WeightValueRange countRange;
 
-    public SetCountBaseOnHunger(LootCondition[] conditionsIn, HungerValueRange countRangeIn)
+    public SetCountBaseOnHunger(LootCondition[] conditionsIn, WeightValueRange countRangeIn)
     {
         super(conditionsIn);
         this.countRange = countRangeIn;
@@ -44,7 +44,7 @@ public class SetCountBaseOnHunger  extends LootFunction {
 
             public SetCountBaseOnHunger deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootCondition[] conditionsIn)
             {
-                return new SetCountBaseOnHunger(conditionsIn, (HungerValueRange)JsonUtils.deserializeClass(object, "count", deserializationContext, HungerValueRange.class));
+                return new SetCountBaseOnHunger(conditionsIn, (WeightValueRange)JsonUtils.deserializeClass(object, "count", deserializationContext, WeightValueRange.class));
             }
         }
 	

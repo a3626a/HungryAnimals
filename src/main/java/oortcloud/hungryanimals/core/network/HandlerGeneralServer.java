@@ -46,9 +46,9 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 								break;
 
 							switch (message.getString()) {
-							case "hunger":
+							case "weight":
 								ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
-								capHungry.setHunger(message.getDouble());
+								capHungry.setWeight(message.getDouble());
 								break;
 							case "taming":
 								ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);

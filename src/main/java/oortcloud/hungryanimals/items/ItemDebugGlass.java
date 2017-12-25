@@ -63,7 +63,7 @@ public class ItemDebugGlass extends Item {
 					ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 					ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
 
-					tag.setDouble("stomach", capHungry.getStomach());
+					tag.setDouble("weight", capHungry.getWeight());
 					tag.setDouble("excretion", capHungry.getExcretion());
 					tag.setDouble("taming", capTaming.getTaming());
 					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());

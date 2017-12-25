@@ -15,18 +15,18 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.MathHelper;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
-public class HungerValueRange
+public class WeightValueRange
 {
     private final float min;
     private final float max;
 
-    public HungerValueRange(float minIn, float maxIn)
+    public WeightValueRange(float minIn, float maxIn)
     {
         this.min = minIn;
         this.max = maxIn;
     }
 
-    public HungerValueRange(float value)
+    public WeightValueRange(float value)
     {
         this.min = value;
         this.max = value;
@@ -46,7 +46,7 @@ public class HungerValueRange
     {
     	float x;
         if (cap != null) {
-            x = (float) (cap.getHunger()/cap.getMaxHunger());
+            x = (float) (cap.getWeight()/cap.getMaxWeight());
         } else {
             x = 1f;
         }
@@ -58,7 +58,7 @@ public class HungerValueRange
     {
     	float x;
         if (cap != null) {
-            x = (float) (cap.getHunger()/cap.getMaxHunger());
+            x = (float) (cap.getWeight()/cap.getMaxWeight());
         } else {
             x = 1f;
         }
@@ -70,24 +70,24 @@ public class HungerValueRange
         return (float)value <= this.max && (float)value >= this.min;
     }
 
-    public static class Serializer implements JsonDeserializer<HungerValueRange>, JsonSerializer<HungerValueRange>
+    public static class Serializer implements JsonDeserializer<WeightValueRange>, JsonSerializer<WeightValueRange>
         {
-            public HungerValueRange deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_) throws JsonParseException
+            public WeightValueRange deserialize(JsonElement p_deserialize_1_, Type p_deserialize_2_, JsonDeserializationContext p_deserialize_3_) throws JsonParseException
             {
                 if (JsonUtils.isNumber(p_deserialize_1_))
                 {
-                    return new HungerValueRange(JsonUtils.getFloat(p_deserialize_1_, "value"));
+                    return new WeightValueRange(JsonUtils.getFloat(p_deserialize_1_, "value"));
                 }
                 else
                 {
                     JsonObject jsonobject = JsonUtils.getJsonObject(p_deserialize_1_, "value");
                     float f = JsonUtils.getFloat(jsonobject, "min");
                     float f1 = JsonUtils.getFloat(jsonobject, "max");
-                    return new HungerValueRange(f, f1);
+                    return new WeightValueRange(f, f1);
                 }
             }
 
-            public JsonElement serialize(HungerValueRange p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
+            public JsonElement serialize(WeightValueRange p_serialize_1_, Type p_serialize_2_, JsonSerializationContext p_serialize_3_)
             {
                 if (p_serialize_1_.min == p_serialize_1_.max)
                 {

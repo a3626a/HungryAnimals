@@ -119,8 +119,8 @@ public class EntityAIMateModified extends EntityAIBase
     	ICapabilityTamableAnimal targetMateCapTamable = this.targetMate.getCapability(ProviderTamableAnimal.CAP, null);
     	
     	//Pay Hunger
-    	theAnimalCapHungry.addHunger(-animal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
-    	targetMateCapHungry.addHunger(-animal.getAttributeMap().getAttributeInstance(ModAttributes.child_hunger).getAttributeValue());
+    	theAnimalCapHungry.addWeight(-animal.getAttributeMap().getAttributeInstance(ModAttributes.child_weight).getAttributeValue());
+    	targetMateCapHungry.addWeight(-animal.getAttributeMap().getAttributeInstance(ModAttributes.child_weight).getAttributeValue());
         
     	//Create Child 1
     	EntityAgeable entityageable = this.animal.createChild(this.targetMate);

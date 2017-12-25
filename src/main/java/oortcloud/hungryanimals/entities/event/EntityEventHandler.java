@@ -86,7 +86,7 @@ public class EntityEventHandler {
 			updateEnvironmentalEffet(entity);
 			updateRecovery(entity);
 
-			if (entity.getCapability(ProviderHungryAnimal.CAP, null).getHunger() == 0) {
+			if (entity.getCapability(ProviderHungryAnimal.CAP, null).getWeight() == 0) {
 				onStarve(entity);
 			}
 		}
@@ -99,19 +99,33 @@ public class EntityEventHandler {
 		 * this.entity.motionZ this.entity.motionZ : 0; vel = 20 *
 		 * Math.sqrt(vel); this.subHunger(this.hunger_bmr * (1 + vel / 2.0));
 		 */
-		entity.getCapability(ProviderHungryAnimal.CAP, null)
-				.addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
+		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		double nutrient = cap.getNutrient();
+		double stomach = cap.getStomach();
+		double digest = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_stomach_digest).getAttributeValue();
+		
+		if (digest > stomach) {
+			digest = stomach;
+		}
+		
+		double nutrient_digest = nutrient/stomach*digest;
+		
+		cap.addNutrient(-nutrient_digest);
+		cap.addWeight(nutrient_digest);
+		cap.addStomach(-digest);
+		
+		cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue());
 	}
 
 	private void updateCourtship(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
 		if (entity.getGrowingAge() == 0 && !entity.isInLove()
-				&& cap.getHunger() / cap.getMaxHunger() > entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_hungerCondition)
+				&& cap.getStomach() / cap.getMaxStomach() > entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_stomach_condition)
 						.getAttributeValue()
 				&& entity.getRNG().nextDouble() < entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_probability).getAttributeValue()) {
 			entity.setInLove(null);
-			cap.addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_hunger).getAttributeValue());
+			cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_weight).getAttributeValue());
 		}
 	}
 
@@ -183,9 +197,9 @@ public class EntityEventHandler {
 
 	private void updateRecovery(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		if (entity.getHealth() < entity.getMaxHealth() && cap.getHunger() / cap.getMaxHunger() > 0.8 && (entity.getEntityWorld().getWorldTime() % 200) == 0) {
+		if (entity.getHealth() < entity.getMaxHealth() && cap.getStomach() / cap.getMaxStomach() > 0.8 && (entity.getEntityWorld().getWorldTime() % 200) == 0) {
 			entity.heal(1.0F);
-			cap.addHunger(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_max).getAttributeValue() / entity.getMaxHealth());
+			cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_max).getAttributeValue() / entity.getMaxHealth());
 		}
 	}
 
@@ -308,18 +322,18 @@ public class EntityEventHandler {
 		if (entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (nutrient / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
+				int duration = (int) (nutrient / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * nutrient);
+			capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
 	}
 	
-	public class Pair<A, B>  {
+	public static class Pair<A, B>  {
 		
 		public A left;
 		public B right;
