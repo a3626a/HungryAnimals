@@ -10,14 +10,14 @@
 		"item": {
 			"name": "minecraft:pumpkin_seeds"
 		},
-		"nutrient": 0.15,
+		"nutrient": 0.2,
 		"stomach": 0.25
 	},
 	{
 		"item": {
 			"name": "minecraft:melon_seeds"
 		},
-		"nutrient": 0.15,
+		"nutrient": 0.2,
 		"stomach": 0.25
 	},
 	{
