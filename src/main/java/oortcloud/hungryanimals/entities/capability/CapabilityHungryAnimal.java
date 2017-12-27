@@ -101,6 +101,11 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	}
 	
 	@Override
+	public double getNormalWeight() {
+		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue();
+	}
+	
+	@Override
 	public double getMaxWeight() {
 		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue()*2;
 	}

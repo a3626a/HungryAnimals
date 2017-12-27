@@ -12,8 +12,8 @@
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 5,
-                                "max": 10
+                                "min": 8,
+                                "max": 12
                             }
                         },
                         {
@@ -39,8 +39,8 @@
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 3
+                                "min": 4,
+                                "max": 6
                             }
                         },
                         {
@@ -64,11 +64,8 @@
                     "weight": 1,
                     "functions": [
                         {
-                            "function": "set_count_based_on_hunger",
-                            "count": {
-                                "min": 5,
-                                "max": 10
-                            }
+                            "function": "set_count_based_on_weight",
+                            "weight_per_meat" : 15
                         },
                         {
                             "function": "furnace_smelt",

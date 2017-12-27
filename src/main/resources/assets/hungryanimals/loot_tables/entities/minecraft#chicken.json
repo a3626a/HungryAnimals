@@ -49,11 +49,8 @@
                             ]
                         },
                         {
-                            "function": "set_count_based_on_hunger",
-                            "count": {
-                                "min": 2,
-                                "max": 4
-                            }
+                            "function": "set_count_based_on_weight",
+                            "weight_per_meat" : 5
                         },
                         {
                             "function": "looting_enchant",

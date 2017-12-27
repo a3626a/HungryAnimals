@@ -53,7 +53,7 @@ public class LootTableModifier {
 
 	public static void init(File file) {
 		manager = new LootTableManager(file);
-		LootFunctionManager.registerFunction(new SetCountBaseOnHunger.Serializer());
+		LootFunctionManager.registerFunction(new SetCountBaseOnWeight.Serializer());
 		tables = new HashMap<ResourceLocation, LootTable>();
 	}
 
