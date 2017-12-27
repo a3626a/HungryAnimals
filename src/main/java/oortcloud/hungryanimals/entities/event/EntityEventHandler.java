@@ -116,7 +116,11 @@ public class EntityEventHandler {
 			cap.addWeight(nutrient_digest);
 			cap.addStomach(-digest);
 		}
-		cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue());
+		
+		double default_bmr = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue();
+		double weight_factor = cap.getWeight()/entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue();
+		
+		cap.addWeight(-weight_factor*default_bmr);
 	}
 
 	private void updateCourtship(EntityAnimal entity) {
