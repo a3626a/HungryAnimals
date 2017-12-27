@@ -149,7 +149,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		} else if (pref.canEat(capHungry, state)) {
 			return pref.getNutrient(state);
 		} else {
-			return 1.0;
+			return 0.01;
 		}
 	}
 	

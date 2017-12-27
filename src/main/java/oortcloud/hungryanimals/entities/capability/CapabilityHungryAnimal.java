@@ -16,7 +16,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		this.entity = entity;
 		setStomach(0.0);
 		setNutrient(0.0);
-		setWeight(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_max).getAttributeValue()/2.0);
+		setWeight(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue());
 		setExcretion(0.0);
 	}
 	
@@ -62,9 +62,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	@Override
 	public double setStomach(double stomach) {
 		double oldStomach = this.stomach;
-		if (stomach > getMaxStomach()) {
-			this.stomach = getMaxStomach();
-		} else if (stomach < 0) {
+		if (stomach < 0) {
 			this.stomach = 0;
 		} else {
 			this.stomach = stomach;
@@ -85,7 +83,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	@Override
 	public double addWeight(double weight) {
 		double oldWeight = getWeight();
-		setStomach(getWeight() + weight);
+		setWeight(getWeight() + weight);
 		return oldWeight;
 	}
 
@@ -101,10 +99,10 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		}
 		return oldWeight;
 	}
-
+	
 	@Override
 	public double getMaxWeight() {
-		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_max).getAttributeValue();
+		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue()*2;
 	}
 
 	@Override

@@ -3,30 +3,35 @@
 		"item": {
 			"name": "minecraft:sugar"
 		},
-		"hunger": 25
+		"nutrient": 0.15,
+		"stomach": 0.25
 	},
 	{
 		"item": {
 			"name": "minecraft:wheat"
 		},
-		"hunger": 50
+		"nutrient": 0.57,
+		"stomach": 0.95
 	},
 	{
 		"item": {
 			"name": "minecraft:apple"
 		},
-		"hunger": 75
+		"nutrient": 0.36,
+		"stomach": 0.6
 	},
 	{
 		"item": {
 			"name": "minecraft:golden_carrot"
 		},
-		"hunger": 100
+		"nutrient": 1.6,
+		"stomach": 2
 	},
 	{
 		"item": {
 			"name": "minecraft:golden_apple"
 		},
-		"hunger": 250
+		"nutrient": 5,
+		"stomach": 5
 	}
 ]

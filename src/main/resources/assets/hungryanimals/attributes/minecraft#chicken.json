@@ -1,11 +1,13 @@
 {
-	"hungryanimals.hunger_bmr" : 0.002,
-	"hungryanimals.hunger_max" : 150,
-	"hungryanimals.courtship_hunger" : 7.5,
-	"hungryanimals.courtship_probability" : 0.0025,
-	"hungryanimals.courtship_hunger_condition" : 0.8,
+	"hungryanimals.hunger_weight_bmr" : 0.000354553,
+	"hungryanimals.hunger_weight_normal" : 10,
+	"hungryanimals.hunger_stomach_digest" : 0.00106366,
+	"hungryanimals.hunger_stomach_max" : 1.0,
+	"hungryanimals.courtship_weight" : 0.0,
+	"hungryanimals.courtship_probability" : 0.05,
+	"hungryanimals.courtship_stomach_condition" : 0.8,
 	"hungryanimals.excretion_factor" : 0.02,
-	"hungryanimals.child_hunger" : 37.5,
+	"hungryanimals.child_weight" : 2.5,
 	"generic.maxHealth" : 8,
 	"generic.movementSpeed" : 0.15
 }

@@ -1,9 +1,11 @@
 {
-	"hungryanimals.hunger_bmr" : 0.0,
-	"hungryanimals.hunger_max" : 500,
-	"hungryanimals.courtship_hunger" : 0,
+	"hungryanimals.hunger_weight_bmr" : 0.0,
+	"hungryanimals.hunger_weight_normal" : 500,
+	"hungryanimals.hunger_stomach_digest" : 0,
+	"hungryanimals.hunger_stomach_max" : 50.0,
+	"hungryanimals.courtship_weight" : 0,
 	"hungryanimals.courtship_probability" : 0,
-	"hungryanimals.courtship_hunger_condition" : 1,
+	"hungryanimals.courtship_stomach_condition" : 1,
 	"hungryanimals.excretion_factor" : 0,
-	"hungryanimals.child_hunger" : 0
+	"hungryanimals.child_weight" : 0
 }

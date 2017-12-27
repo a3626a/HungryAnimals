@@ -3,12 +3,14 @@
 		"item": {
 			"name": "minecraft:wheat"
 		},
-		"hunger": 50
+		"nutrient": 0.57,
+		"stomach": 0.95
 	},
 	{
 		"item": {
 			"name": "minecraft:reeds"
 		},
-		"hunger": 20
+		"nutrient": 0.2,
+		"stomach": 0.5
 	}
 ]

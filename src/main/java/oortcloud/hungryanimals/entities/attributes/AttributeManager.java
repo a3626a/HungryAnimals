@@ -32,7 +32,7 @@ public class AttributeManager {
 		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_bmr, pair(ModAttributes.hunger_weight_bmr, true));
 		ATTRIBUTES.put(ModAttributes.NAME_hunger_stomach_digest, pair(ModAttributes.hunger_stomach_digest, true));
 		ATTRIBUTES.put(ModAttributes.NAME_hunger_stomach_max, pair(ModAttributes.hunger_stomach_max, true));
-		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_max, pair(ModAttributes.hunger_weight_max, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_normal, pair(ModAttributes.hunger_weight_normal, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_weight, pair(ModAttributes.courtship_weight, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_probability, pair(ModAttributes.courtship_probability, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_stomach_condition, pair(ModAttributes.courtship_stomach_condition, true));

@@ -9,7 +9,7 @@ public class ModAttributes {
 	public static String NAME_hunger_weight_bmr = References.MODID+".hunger_weight_bmr";
 	public static String NAME_hunger_stomach_max = References.MODID+".hunger_stomach_max";
 	public static String NAME_hunger_stomach_digest = References.MODID+".hunger_stomach_digest";
-	public static String NAME_hunger_weight_max = References.MODID+".hunger_weight_max";
+	public static String NAME_hunger_weight_normal = References.MODID+".hunger_weight_normal";
 	public static String NAME_courtship_weight = References.MODID+".courtship_weight";
 	public static String NAME_courtship_probability = References.MODID+".courtship_probability";
 	public static String NAME_courtship_stomach_condition = References.MODID+".courtship_stomach_condition";
@@ -24,7 +24,7 @@ public class ModAttributes {
 	public static IAttribute hunger_weight_bmr = new RangedAttribute((IAttribute)null, NAME_hunger_weight_bmr, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute hunger_stomach_max = new RangedAttribute((IAttribute)null, NAME_hunger_stomach_max, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(true);
 	public static IAttribute hunger_stomach_digest = new RangedAttribute((IAttribute)null, NAME_hunger_stomach_digest, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
-	public static IAttribute hunger_weight_max = new RangedAttribute((IAttribute)null, NAME_hunger_weight_max, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
+	public static IAttribute hunger_weight_normal = new RangedAttribute((IAttribute)null, NAME_hunger_weight_normal, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute courtship_weight = new RangedAttribute((IAttribute)null, NAME_courtship_weight, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute courtship_probability = new RangedAttribute((IAttribute)null, NAME_courtship_probability, 0.0, 0.0, 1.0).setShouldWatch(false);
 	public static IAttribute courtship_stomach_condition = new RangedAttribute((IAttribute)null, NAME_courtship_stomach_condition, 0.0, 0.0, 1.0).setShouldWatch(false);
