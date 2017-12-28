@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -24,35 +32,50 @@ public class ShapedDistinctOreRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
     protected ItemStack output = ItemStack.EMPTY;
-    protected Object[] input = null;
-    protected Character[] characters = null;
-    protected String[] ores = null;
+    protected NonNullList<Ingredient> input = null;
+    protected List<Character> characters = null;
     protected int width = 0;
     protected int height = 0;
     protected boolean mirrored = true;
 
-    public ShapedDistinctOreRecipe(ResourceLocation name, Block     result, Object... recipe){ this(name, new ItemStack(result), recipe); }
-    public ShapedDistinctOreRecipe(ResourceLocation name, Item      result, Object... recipe){ this(name, new ItemStack(result), recipe); }
-    public ShapedDistinctOreRecipe(ResourceLocation name, ItemStack result, Object... recipe)
-    {
+    public static class ShapedPrimerDistinct {
+        public int height, width;
+        public boolean mirrored = true;
+        public NonNullList<Ingredient> input;
+        public List<Character> characters;
+    }
+    
+    public ShapedDistinctOreRecipe(ResourceLocation name, Block     result, Object... recipe){ this(name, new ItemStack(result), parse(recipe)); }
+    public ShapedDistinctOreRecipe(ResourceLocation name, Item      result, Object... recipe){ this(name, new ItemStack(result), parse(recipe)); }
+    public ShapedDistinctOreRecipe(ResourceLocation name, ItemStack result, ShapedPrimerDistinct primer){
     	setRegistryName(name);
     	
         output = result.copy();
-
+        this.width = primer.width;
+        this.height = primer.height;
+        this.input = primer.input;
+        this.mirrored = primer.mirrored;
+        this.characters = primer.characters;
+    }
+    
+    /**
+     * This code is based on net.minecraftforge.common.crafting.CraftingHelper.parseShaped
+     * @param recipe
+     * @return
+     */
+    public static ShapedPrimerDistinct parse(Object... recipe)
+    {
+    	ShapedPrimerDistinct ret = new ShapedPrimerDistinct();
         String shape = "";
         int idx = 0;
 
         if (recipe[idx] instanceof Boolean)
         {
-            mirrored = (Boolean)recipe[idx];
+            ret.mirrored = (Boolean)recipe[idx];
             if (recipe[idx+1] instanceof Object[])
-            {
                 recipe = (Object[])recipe[idx+1];
-            }
             else
-            {
                 idx = 1;
-            }
         }
 
         if (recipe[idx] instanceof String[])
@@ -61,11 +84,11 @@ public class ShapedDistinctOreRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
 
             for (String s : parts)
             {
-                width = s.length();
+                ret.width = s.length();
                 shape += s;
             }
 
-            height = parts.length;
+            ret.height = parts.length;
         }
         else
         {
@@ -73,95 +96,68 @@ public class ShapedDistinctOreRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
             {
                 String s = (String)recipe[idx++];
                 shape += s;
-                width = s.length();
-                height++;
+                ret.width = s.length();
+                ret.height++;
             }
         }
 
-        if (width * height != shape.length())
+        if (ret.width * ret.height != shape.length() || shape.length() == 0)
         {
-            String ret = "Invalid shaped ore recipe: ";
+            String err = "Invalid shaped ore recipe: ";
             for (Object tmp :  recipe)
             {
-                ret += tmp + ", ";
+                err += tmp + ", ";
             }
-            ret += output;
-            throw new RuntimeException(ret);
+            throw new RuntimeException(err);
         }
 
-        HashMap<Character, Object> itemMap = new HashMap<Character, Object>();
-        HashMap<Character, String> oreMap = new HashMap<Character, String>();
+        HashMap<Character, Ingredient> itemMap = Maps.newHashMap();
+        itemMap.put(' ', Ingredient.EMPTY);
         HashMap<String, Integer> oreNum = new HashMap<String, Integer>();
         
         for (; idx < recipe.length; idx += 2)
         {
             Character chr = (Character)recipe[idx];
             Object in = recipe[idx + 1];
+            Ingredient ing = CraftingHelper.getIngredient(in);
+            
+            if (' ' == chr.charValue())
+                throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
 
-            if (in instanceof ItemStack)
+            if (ing != null)
             {
-                itemMap.put(chr, ((ItemStack)in).copy());
-            }
-            else if (in instanceof Item)
-            {
-                itemMap.put(chr, new ItemStack((Item)in));
-            }
-            else if (in instanceof Block)
-            {
-                itemMap.put(chr, new ItemStack((Block)in, 1, OreDictionary.WILDCARD_VALUE));
-            }
-            else if (in instanceof String)
-            {
-            	String oreName = (String)in;
-            	if (oreNum.containsKey(oreName)) {
-            		oreNum.put(oreName, oreNum.get(oreName)+1);
-            	} else {
-            		oreNum.put(oreName, 1);
-            	}
-            	
-            	List<ItemStack> ores = OreDictionary.getOres((String)in);
-            	if (oreNum.get(oreName) > ores.size()) {
-            		throw new RuntimeException("Invalid recipe");
-            	}
-            	    
-            	List<ItemStack> ore_clone = new ArrayList<ItemStack>();
-            	
-            	int rotation = oreNum.get(oreName)-1;
-            	
-            	for (int i = rotation; i < ores.size(); i++) {
-            		ore_clone.add(ores.get(i));
-            	}
-            	for (int i = 0; i < rotation; i++) {
-            		ore_clone.add(ores.get(i));
-            	}
-                itemMap.put(chr, ore_clone);
-                oreMap.put(chr, (String)in);
+                itemMap.put(chr, ing);
             }
             else
             {
-                String ret = "Invalid shaped ore recipe: ";
+                String err = "Invalid shaped ore recipe: ";
                 for (Object tmp :  recipe)
                 {
-                    ret += tmp + ", ";
+                    err += tmp + ", ";
                 }
-                ret += output;
-                throw new RuntimeException(ret);
+                throw new RuntimeException(err);
             }
         }
 
-        input = new Object[width * height];
-        characters = new Character[width * height];
-        ores = new String[width * height];
+        ret.input = NonNullList.withSize(ret.width * ret.height, Ingredient.EMPTY);
+
+        Set<Character> keys = Sets.newHashSet(itemMap.keySet());
+        keys.remove(' ');
+
         int x = 0;
         for (char chr : shape.toCharArray())
         {
-            input[x] = itemMap.get(chr);
-            if (input[x] instanceof List) {
-                characters[x] = chr;
-                ores[x] = oreMap.get(chr);
-            }
-            x++;
+            Ingredient ing = itemMap.get(chr);
+            if (ing == null)
+                throw new IllegalArgumentException("Pattern references symbol '" + chr + "' but it's not defined in the key");
+            ret.input.set(x++, ing);
+            keys.remove(chr);
         }
+
+        if (!keys.isEmpty())
+            throw new IllegalArgumentException("Key defines symbols that aren't used in pattern: " + keys);
+
+        return ret;
     }
 
     /**
