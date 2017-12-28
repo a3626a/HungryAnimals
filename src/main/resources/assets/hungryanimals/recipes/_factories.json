@@ -1,0 +1,5 @@
+{
+  "recipes": {
+    "distinct_ore_shaped": "oortcloud.hungryanimals.recipes.RecipeFactoryShapedDistinctOreRecipe"
+  }
+}
