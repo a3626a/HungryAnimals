@@ -32,6 +32,6 @@ public class CraftingHandler {
 	
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-	    event.getRegistry().registerAll(new ShapedDistinctOreRecipe(new ResourceLocation(References.MODID, "compositewood"), new ItemStack(ModItems.compositeWood), "abc", "abc", "abc", 'a', "logWood", 'b', new ItemStack(ModItems.animalGlue), 'c', "logWood"));
+	    //event.getRegistry().registerAll(new ShapedDistinctOreRecipe(new ResourceLocation(References.MODID, "compositewood"), new ItemStack(ModItems.compositeWood), "abc", "abc", "abc", 'a', "logWood", 'b', new ItemStack(ModItems.animalGlue), 'c', "logWood"));
 	}
 }
