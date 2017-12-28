@@ -12,6 +12,8 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	
 	private EntityLiving entity;
 
+	public CapabilityHungryAnimal() {}
+	
 	public CapabilityHungryAnimal(EntityLiving entity) {
 		this.entity = entity;
 		setStomach(0.0);

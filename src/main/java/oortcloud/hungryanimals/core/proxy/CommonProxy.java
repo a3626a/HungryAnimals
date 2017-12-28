@@ -5,12 +5,17 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.core.network.HandlerGeneralServer;
+import oortcloud.hungryanimals.core.network.HandlerPlayerServer;
+import oortcloud.hungryanimals.core.network.PacketGeneralServer;
+import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.capability.CapabilityHungryAnimal;
@@ -37,8 +42,8 @@ public class CommonProxy {
 	}
 
 	public void registerCapabilities() {
-		CapabilityManager.INSTANCE.register(ICapabilityHungryAnimal.class, new StorageHungryAnimal(), CapabilityHungryAnimal.class);
-		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamableAnimal.class);
+		CapabilityManager.INSTANCE.register(ICapabilityHungryAnimal.class, new StorageHungryAnimal(), CapabilityHungryAnimal::new);
+		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamableAnimal::new);
 	}
 
 	public void registerColors() {
@@ -71,6 +76,12 @@ public class CommonProxy {
 	
 	public void initTOP() {
 		 TOPCompatibility.register();
+	}
+
+	public void registerPacketHandler() {
+		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
+
 	}
 
 }
