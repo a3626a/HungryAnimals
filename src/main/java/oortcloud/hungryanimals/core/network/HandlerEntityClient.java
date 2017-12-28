@@ -6,7 +6,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 
 public class HandlerEntityClient implements IMessageHandler<PacketEntityClient, PacketEntityServer> {
@@ -27,6 +29,12 @@ public class HandlerEntityClient implements IMessageHandler<PacketEntityClient, 
 				if (entity.hasCapability(ProviderTamableAnimal.CAP, null)) {
 					ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 					cap.setTaming(message.getDouble());
+				}
+				break;
+			case SyncIndex.STOMACH_SYNC:
+				if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
+					ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+					cap.setStomach(message.getDouble());
 				}
 				break;
 			}

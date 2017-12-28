@@ -1,6 +1,14 @@
 package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.PacketEntityClient;
+import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
@@ -9,6 +17,8 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	private double stomach; 
 	private double nutrient;
 	private double weight; 
+	
+	private boolean prevIsFull;
 	
 	private EntityLiving entity;
 
@@ -69,6 +79,11 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		} else {
 			this.stomach = stomach;
 		}
+		boolean currIsFull = getStomach() >= getMaxStomach();
+		if (currIsFull != prevIsFull) {
+			sync();
+		}
+		prevIsFull = currIsFull;
 		return oldStomach;
 	}
 
@@ -129,4 +144,23 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		return oldExcretion;
 	}
 
+	public void sync() {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			WorldServer world = (WorldServer) entity.getEntityWorld();
+			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(entity)) {
+				PacketEntityClient packet = new PacketEntityClient(SyncIndex.STOMACH_SYNC, entity);
+				packet.setDouble(getStomach());
+				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
+			}
+		}
+	}
+
+	public void syncTo(EntityPlayerMP target) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			PacketEntityClient packet = new PacketEntityClient(SyncIndex.STOMACH_SYNC, entity);
+			packet.setDouble(getStomach());
+			HungryAnimals.simpleChannel.sendTo(packet, target);
+		}
+	}
+	
 }

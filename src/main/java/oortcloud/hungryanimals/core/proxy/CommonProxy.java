@@ -79,8 +79,8 @@ public class CommonProxy {
 	}
 
 	public void registerPacketHandler() {
-		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);
-		HungryAnimals.simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 0, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 1, Side.SERVER);
 
 	}
 

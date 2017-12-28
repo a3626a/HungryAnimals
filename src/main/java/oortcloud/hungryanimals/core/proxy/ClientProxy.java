@@ -145,8 +145,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerPacketHandler() {
 		super.registerPacketHandler();
-		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 5, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 6, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 2, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 3, Side.CLIENT);
 	}
 
 }

@@ -40,6 +40,10 @@ public class CapabilityHandler {
 			CapabilityTamableAnimal cap = (CapabilityTamableAnimal) target.getCapability(ProviderTamableAnimal.CAP, null);
 			cap.syncTo((EntityPlayerMP)event.getEntityPlayer());
 		}
+		if (target.hasCapability(ProviderHungryAnimal.CAP, null)) {
+			CapabilityHungryAnimal cap = (CapabilityHungryAnimal) target.getCapability(ProviderHungryAnimal.CAP, null);
+			cap.syncTo((EntityPlayerMP)event.getEntityPlayer());
+		}
 	}
 
 }
