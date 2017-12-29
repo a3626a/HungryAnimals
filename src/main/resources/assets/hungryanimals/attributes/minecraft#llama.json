@@ -2,7 +2,7 @@
 	"hungryanimals.hunger_weight_bmr" : 0.00335316,
 	"hungryanimals.hunger_weight_normal" : 200,
 	"hungryanimals.hunger_stomach_digest" : 0.0100595,
-	"hungryanimals.hunger_stomach_max" : 20.0,
+	"hungryanimals.hunger_stomach_max" : 12.0714,
 	"hungryanimals.courtship_weight" : 0.0,
 	"hungryanimals.courtship_probability" : 0.05,
 	"hungryanimals.courtship_stomach_condition" : 0.8,
