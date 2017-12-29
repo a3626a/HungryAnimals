@@ -33,5 +33,6 @@ public class Strings {
 	public static final String potionDiseaseUnlocalizedName = "potion.disease";
 	public static final String potionInheatName = "inheat";
 	public static final String potionInheatUnlocalizedName = "potion.inheat";
-	
+	public static final String potionYoungName = "young";
+	public static final String potionYoungUnlocalizedName = "potion.young";
 }
