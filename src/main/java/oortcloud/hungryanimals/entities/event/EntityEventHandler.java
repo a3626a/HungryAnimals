@@ -42,8 +42,6 @@ import oortcloud.hungryanimals.potion.ModPotions;
 
 public class EntityEventHandler {
 
-	private static final double taming_factor = 0.998;
-
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if (!(event.getEntity() instanceof EntityAnimal))
@@ -202,13 +200,14 @@ public class EntityEventHandler {
 			ArrayList<EntityPlayer> players = (ArrayList<EntityPlayer>) entity.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
 					entity.getEntityBoundingBox().expand(radius, radius, radius));
 			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
+			double tamingFactor = entity.getEntityAttribute(ModAttributes.taming_factor_near).getAttributeValue();
 			if (players.isEmpty()) {
 				if (cap.getTaming() > 0) {
-					cap.setTaming(cap.getTaming() * taming_factor);
+					cap.setTaming(cap.getTaming() * tamingFactor);
 				}
 			} else {
 				if (cap.getTaming() < 0) {
-					cap.setTaming(cap.getTaming() * taming_factor);
+					cap.setTaming(cap.getTaming() * tamingFactor);
 				}
 			}
 		}
@@ -340,7 +339,8 @@ public class EntityEventHandler {
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			capTaming.addTaming(0.0001 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
+			capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
 	}
 

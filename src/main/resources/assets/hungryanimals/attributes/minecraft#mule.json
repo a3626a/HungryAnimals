@@ -9,5 +9,7 @@
 	"hungryanimals.courtship_stomach_condition" : 0.8,
 	"hungryanimals.excretion_factor" : 0.1,
 	"hungryanimals.child_delay" : 121958,
-	"hungryanimals.child_growing_length" : 411611
+	"hungryanimals.child_growing_length" : 411611,
+	"hungryanimals.taming_factor_near" : 0.96,
+    "hungryanimals.taming_factor_food" : 0.002
 }

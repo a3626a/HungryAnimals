@@ -40,6 +40,8 @@ public class AttributeManager {
 		ATTRIBUTES.put(ModAttributes.NAME_excretion_factor, pair(ModAttributes.excretion_factor, true));
 		ATTRIBUTES.put(ModAttributes.NAME_child_delay, pair(ModAttributes.child_delay, true));
 		ATTRIBUTES.put(ModAttributes.NAME_child_growing_length, pair(ModAttributes.child_growing_length, true));
+		ATTRIBUTES.put(ModAttributes.NAME_taming_factor_food, pair(ModAttributes.taming_factor_food, true));
+		ATTRIBUTES.put(ModAttributes.NAME_taming_factor_near, pair(ModAttributes.taming_factor_near, true));
 		ATTRIBUTES.put(ModAttributes.NAME_milk_hunger, pair(ModAttributes.milk_hunger, true));
 		ATTRIBUTES.put(ModAttributes.NAME_milk_delay, pair(ModAttributes.milk_delay, true));
 		ATTRIBUTES.put(ModAttributes.NAME_wool_hunger, pair(ModAttributes.wool_hunger, true));
