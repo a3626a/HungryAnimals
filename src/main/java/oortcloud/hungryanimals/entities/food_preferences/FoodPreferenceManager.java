@@ -26,6 +26,4 @@ public class FoodPreferenceManager {
 		return INSTANCE;
 	}
 	
-	
-	
 }

@@ -10,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -36,7 +35,9 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
+import oortcloud.hungryanimals.entities.handler.CureManager;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.handler.InHeatManager;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class EntityEventHandler {
@@ -268,17 +269,10 @@ public class EntityEventHandler {
 			flagEat = true;
 		}
 		if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTamingLevel() == TamingLevel.TAMED) {
-			if (item == ItemBlock.getItemFromBlock(Blocks.RED_MUSHROOM) || item == ItemBlock.getItemFromBlock(Blocks.BROWN_MUSHROOM)) {
-				flagCure = true;
-			}
+			flagCure = CureManager.getInstance().isCure(itemstack);
 		}
 		if (!entity.isPotionActive(ModPotions.potionInheat) && capTaming.getTamingLevel() == TamingLevel.TAMED) {
-			if (item == Items.GOLDEN_APPLE) {
-				heat = 1200;
-			}
-			if (item == Items.GOLDEN_CARROT) {
-				heat = 600;
-			}
+			heat = InHeatManager.getInstance().getDuration(itemstack);
 		}
 
 		if (flagEat) {

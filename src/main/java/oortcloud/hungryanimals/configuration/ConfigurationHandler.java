@@ -54,7 +54,9 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
+import oortcloud.hungryanimals.entities.handler.CureManager;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.handler.InHeatManager;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
@@ -68,7 +70,9 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON recipes;
 	private static ConfigurationHandlerJSON world;
 	private static ConfigurationHandlerJSON animal;
-
+	private static ConfigurationHandlerJSON cures;
+	private static ConfigurationHandlerJSON inheat;
+	
 	public static Gson GSON_INSTANCE_HASH_BLOCK_STATE = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer()).create();
 	public static Gson GSON_INSTANCE_HASH_ITEM_TYPE = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
@@ -208,6 +212,36 @@ public class ConfigurationHandler {
 			WorldEventHandler.grassProbability = jsonObj.getAsJsonPrimitive("grass_probability").getAsDouble();
 			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
+		cures = new ConfigurationHandlerJSON(basefolder, "cures", (file) -> {
+			JsonArray jsonArr;
+			try {
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), file, e });
+				return;
+			}
+			
+			for (JsonElement jsonEle : jsonArr) {
+				HashItemType cure = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonEle.getAsJsonObject(), HashItemType.class);
+				CureManager.getInstance().add(cure);
+			}
+		});
+		inheat = new ConfigurationHandlerJSON(basefolder, "inheat", (file) -> {
+			JsonArray jsonArr;
+			try {
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), file, e });
+				return;
+			}
+			
+			for (JsonElement jsonEle : jsonArr) {
+				JsonElement item = jsonEle.getAsJsonObject().get("item");
+				HashItemType inheatItem = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(item.getAsJsonObject(), HashItemType.class);
+				int inheatDuration = JsonUtils.getInt(jsonEle.getAsJsonObject(), "duration");
+				InHeatManager.getInstance().add(inheatItem, inheatDuration);
+			}
+		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (file) -> {
 			JsonArray jsonArr;
 			try {
@@ -257,6 +291,8 @@ public class ConfigurationHandler {
 		ais.sync();
 		recipes.sync();
 		world.sync();
+		cures.sync();
+		inheat.sync();
 		LootTableModifier.sync();
 	}
 
