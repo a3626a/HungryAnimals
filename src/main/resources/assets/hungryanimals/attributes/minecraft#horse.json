@@ -7,5 +7,7 @@
 	"hungryanimals.courtship_probability" : 0.05,
 	"hungryanimals.courtship_stomach_condition" : 0.8,
 	"hungryanimals.excretion_factor" : 0.02,
-	"hungryanimals.child_weight" : 125
+	"hungryanimals.child_weight" : 125,
+	"hungryanimals.child_delay" : 48000,
+	"hungryanimals.child_growing_length" : 96000
 }

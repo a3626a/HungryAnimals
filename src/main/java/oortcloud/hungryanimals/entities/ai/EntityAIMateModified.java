@@ -156,11 +156,14 @@ public class EntityAIMateModified extends EntityAIBase
                 CriteriaTriggers.BRED_ANIMALS.trigger(entityplayermp, this.animal, this.targetMate, entityageable);
             }
             
-            this.animal.setGrowingAge(48000);
-            this.targetMate.setGrowingAge(48000);
+            int animalDelay = (int)animal.getEntityAttribute(ModAttributes.child_delay).getAttributeValue();
+            int targetMateDelay = (int)targetMate.getEntityAttribute(ModAttributes.child_delay).getAttributeValue();
+            int childGrowingLength = (int)entityageable.getEntityAttribute(ModAttributes.child_growing_length).getAttributeValue();
+            this.animal.setGrowingAge(animalDelay);
+            this.targetMate.setGrowingAge(targetMateDelay);
             this.animal.resetInLove();
             this.targetMate.resetInLove();
-            entityageable.setGrowingAge(-96000);
+            entityageable.setGrowingAge(-childGrowingLength);
             entityageable.setLocationAndAngles(this.animal.posX, this.animal.posY, this.animal.posZ, 0.0F, 0.0F);
             this.theWorld.spawnEntity(entityageable);
             Random random = this.animal.getRNG();

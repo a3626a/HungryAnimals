@@ -8,6 +8,8 @@
 	"hungryanimals.courtship_stomach_condition" : 0.8,
 	"hungryanimals.excretion_factor" : 0.02,
 	"hungryanimals.child_weight" : 25,
+	"hungryanimals.child_delay" : 48000,
+	"hungryanimals.child_growing_length" : 96000,
 	"generic.maxHealth" : 20,
 	"generic.movementSpeed" : 0.25
 }
