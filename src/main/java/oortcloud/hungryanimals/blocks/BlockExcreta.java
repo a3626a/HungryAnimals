@@ -229,7 +229,7 @@ public class BlockExcreta extends BlockFalling {
 
 			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
 					pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
-				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 1));
+				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 0));
 			}
 		}
 
