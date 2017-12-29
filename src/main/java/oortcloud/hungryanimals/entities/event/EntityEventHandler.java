@@ -117,20 +117,22 @@ public class EntityEventHandler {
 			cap.addWeight(nutrient_digest);
 			cap.addStomach(-digest);
 		}
-		
+
 		double default_bmr = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue();
-		double weight_factor = cap.getWeight()/entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue();
-		
-		cap.addWeight(-weight_factor*default_bmr);
+		double weight_factor = cap.getWeight() / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue();
+
+		cap.addWeight(-weight_factor * default_bmr);
 	}
 
 	private void updateCourtship(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
-		if (entity.getGrowingAge() == 0 && !entity.isInLove()
-				&& cap.getStomach() / cap.getMaxStomach() > entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_stomach_condition)
-						.getAttributeValue()
-				&& entity.getRNG().nextDouble() < entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_probability).getAttributeValue()) {
+		double courtship_stomach_condition = entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_stomach_condition).getAttributeValue();
+		double courtship_probability = entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_probability).getAttributeValue();
+		double child_weight = entity.getAttributeMap().getAttributeInstance(ModAttributes.child_weight).getAttributeValue();
+		
+		if (entity.getGrowingAge() == 0 && !entity.isInLove() && cap.getStomach() / cap.getMaxStomach() > courtship_stomach_condition
+				&& cap.getWeight() - child_weight > 0.5 * cap.getNormalWeight() && entity.getRNG().nextDouble() < courtship_probability) {
 			entity.setInLove(null);
 			cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_weight).getAttributeValue());
 		}
