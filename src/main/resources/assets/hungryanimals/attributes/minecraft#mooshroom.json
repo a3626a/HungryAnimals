@@ -1,6 +1,7 @@
 {
 	"hungryanimals.hunger_weight_bmr" : 0.00666667,
 	"hungryanimals.hunger_weight_normal" : 500,
+	"hungryanimals.hunger_weight_normal_child" : 50,
 	"hungryanimals.hunger_stomach_digest" : 0.02,
 	"hungryanimals.hunger_stomach_max" : 24.0,
 	"hungryanimals.courtship_weight" : 0.0,

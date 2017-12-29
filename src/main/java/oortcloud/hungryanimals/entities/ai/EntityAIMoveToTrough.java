@@ -112,7 +112,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
-						/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue());
+						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
@@ -120,7 +120,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			this.capTaming.addTaming(0.0002
-					/ entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue()
+					/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue()
 					* nutrient);
 		}
 

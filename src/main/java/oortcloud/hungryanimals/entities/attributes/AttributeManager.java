@@ -33,11 +33,11 @@ public class AttributeManager {
 		ATTRIBUTES.put(ModAttributes.NAME_hunger_stomach_digest, pair(ModAttributes.hunger_stomach_digest, true));
 		ATTRIBUTES.put(ModAttributes.NAME_hunger_stomach_max, pair(ModAttributes.hunger_stomach_max, true));
 		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_normal, pair(ModAttributes.hunger_weight_normal, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_normal_child, pair(ModAttributes.hunger_weight_normal_child, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_weight, pair(ModAttributes.courtship_weight, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_probability, pair(ModAttributes.courtship_probability, true));
 		ATTRIBUTES.put(ModAttributes.NAME_courtship_stomach_condition, pair(ModAttributes.courtship_stomach_condition, true));
 		ATTRIBUTES.put(ModAttributes.NAME_excretion_factor, pair(ModAttributes.excretion_factor, true));
-		ATTRIBUTES.put(ModAttributes.NAME_child_weight, pair(ModAttributes.child_weight, true));
 		ATTRIBUTES.put(ModAttributes.NAME_child_delay, pair(ModAttributes.child_delay, true));
 		ATTRIBUTES.put(ModAttributes.NAME_child_growing_length, pair(ModAttributes.child_growing_length, true));
 		ATTRIBUTES.put(ModAttributes.NAME_milk_hunger, pair(ModAttributes.milk_hunger, true));

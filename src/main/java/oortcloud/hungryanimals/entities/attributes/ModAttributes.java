@@ -9,11 +9,11 @@ public class ModAttributes {
 	public static String NAME_hunger_stomach_max = References.MODID+".hunger_stomach_max";
 	public static String NAME_hunger_stomach_digest = References.MODID+".hunger_stomach_digest";
 	public static String NAME_hunger_weight_normal = References.MODID+".hunger_weight_normal";
+	public static String NAME_hunger_weight_normal_child = References.MODID+".hunger_weight_normal_child";
 	public static String NAME_courtship_weight = References.MODID+".courtship_weight";
 	public static String NAME_courtship_probability = References.MODID+".courtship_probability";
 	public static String NAME_courtship_stomach_condition = References.MODID+".courtship_stomach_condition";
 	public static String NAME_excretion_factor = References.MODID+".excretion_factor";
-	public static String NAME_child_weight = References.MODID+".child_weight";
 	public static String NAME_child_delay = References.MODID+".child_delay";
 	public static String NAME_child_growing_length = References.MODID+".child_growing_length";
 	public static String NAME_milk_hunger = References.MODID+".milk_hunger";
@@ -26,11 +26,11 @@ public class ModAttributes {
 	public static IAttribute hunger_stomach_max = new RangedAttribute((IAttribute)null, NAME_hunger_stomach_max, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(true);
 	public static IAttribute hunger_stomach_digest = new RangedAttribute((IAttribute)null, NAME_hunger_stomach_digest, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute hunger_weight_normal = new RangedAttribute((IAttribute)null, NAME_hunger_weight_normal, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
+	public static IAttribute hunger_weight_normal_child = new RangedAttribute((IAttribute)null, NAME_hunger_weight_normal_child, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute courtship_weight = new RangedAttribute((IAttribute)null, NAME_courtship_weight, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute courtship_probability = new RangedAttribute((IAttribute)null, NAME_courtship_probability, 0.0, 0.0, 1.0).setShouldWatch(false);
 	public static IAttribute courtship_stomach_condition = new RangedAttribute((IAttribute)null, NAME_courtship_stomach_condition, 0.0, 0.0, 1.0).setShouldWatch(false);
 	public static IAttribute excretion_factor = new RangedAttribute((IAttribute)null, NAME_excretion_factor, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
-	public static IAttribute child_weight = new RangedAttribute((IAttribute)null, NAME_child_weight, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute child_delay = new RangedAttribute((IAttribute)null, NAME_child_delay, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute child_growing_length = new RangedAttribute((IAttribute)null, NAME_child_growing_length, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);
 	public static IAttribute milk_hunger = new RangedAttribute((IAttribute)null, NAME_milk_hunger, 0.0, 0.0, Double.MAX_VALUE).setShouldWatch(false);

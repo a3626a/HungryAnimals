@@ -87,8 +87,9 @@ public class EntityEventHandler {
 			updateEnvironmentalEffet(entity);
 			updateRecovery(entity);
 
-			if (entity.getCapability(ProviderHungryAnimal.CAP, null).getWeight() < 0.5
-					* entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue()) {
+			ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+			
+			if (cap.getWeight() < cap.getStarvinglWeight()) {
 				onStarve(entity);
 			}
 		}
@@ -104,8 +105,16 @@ public class EntityEventHandler {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		double nutrient = cap.getNutrient();
 		double stomach = cap.getStomach();
-		double digest = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_stomach_digest).getAttributeValue();
-
+		double digest = entity.getEntityAttribute(ModAttributes.hunger_stomach_digest).getAttributeValue();
+		
+		if (entity.getGrowingAge() < 0) {
+			// Child
+			// Childhood growth acceleration
+			if (cap.getWeight() < cap.getNormalWeight()) {
+				digest *= 2.0;
+			}
+		}
+		
 		if (stomach > 0) {
 			if (digest > stomach) {
 				digest = stomach;
@@ -118,23 +127,24 @@ public class EntityEventHandler {
 			cap.addStomach(-digest);
 		}
 
-		double default_bmr = entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue();
-		double weight_factor = cap.getWeight() / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue();
+		double default_bmr = entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue();
+		double default_weight = entity.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
+		double bmr = default_bmr*Math.pow(cap.getWeight()/default_weight, 3.0/4.0);
 
-		cap.addWeight(-weight_factor * default_bmr);
+		cap.addWeight(-bmr);
 	}
 
 	private void updateCourtship(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
-		double courtship_stomach_condition = entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_stomach_condition).getAttributeValue();
-		double courtship_probability = entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_probability).getAttributeValue();
-		double child_weight = entity.getAttributeMap().getAttributeInstance(ModAttributes.child_weight).getAttributeValue();
+		double courtship_stomach_condition = entity.getEntityAttribute(ModAttributes.courtship_stomach_condition).getAttributeValue();
+		double courtship_probability = entity.getEntityAttribute(ModAttributes.courtship_probability).getAttributeValue();
+		double child_weight = entity.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue()/2.0;
 		
 		if (entity.getGrowingAge() == 0 && !entity.isInLove() && cap.getStomach() / cap.getMaxStomach() > courtship_stomach_condition
-				&& cap.getWeight() - child_weight > 0.5 * cap.getNormalWeight() && entity.getRNG().nextDouble() < courtship_probability) {
+				&& cap.getWeight() - child_weight > cap.getStarvinglWeight() && entity.getRNG().nextDouble() < courtship_probability) {
 			entity.setInLove(null);
-			cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.courtship_weight).getAttributeValue());
+			cap.addWeight(-entity.getEntityAttribute(ModAttributes.courtship_weight).getAttributeValue());
 		}
 	}
 
@@ -208,7 +218,7 @@ public class EntityEventHandler {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		if (entity.getHealth() < entity.getMaxHealth() && cap.getStomach() / cap.getMaxStomach() > 0.8 && (entity.getEntityWorld().getWorldTime() % 200) == 0) {
 			entity.heal(1.0F);
-			cap.addWeight(-entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue() / entity.getMaxHealth());
+			cap.addWeight(-cap.getNormalWeight() / entity.getMaxHealth());
 		}
 	}
 
@@ -323,14 +333,14 @@ public class EntityEventHandler {
 		if (entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (nutrient / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue());
+				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			capTaming.addTaming(0.0001 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
 	}
 

@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
@@ -20,15 +20,15 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	
 	private boolean prevIsFull;
 	
-	private EntityLiving entity;
+	private EntityAnimal entity;
 
 	public CapabilityHungryAnimal() {}
 	
-	public CapabilityHungryAnimal(EntityLiving entity) {
+	public CapabilityHungryAnimal(EntityAnimal entity) {
 		this.entity = entity;
 		setStomach(0.0);
 		setNutrient(0.0);
-		setWeight(entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue());
+		setWeight(getNormalWeight());
 		setExcretion(0.0);
 	}
 	
@@ -66,7 +66,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		double oldStomach = getStomach();
 		setStomach(getStomach() + stomach);
 		if (stomach < 0) {
-			addExcretion(-stomach * entity.getAttributeMap().getAttributeInstance(ModAttributes.excretion_factor).getAttributeValue());
+			addExcretion(-stomach * entity.getEntityAttribute(ModAttributes.excretion_factor).getAttributeValue());
 		}
 		return oldStomach;
 	}
@@ -89,7 +89,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	@Override
 	public double getMaxStomach() {
-		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_stomach_max).getAttributeValue();
+		return entity.getEntityAttribute(ModAttributes.hunger_stomach_max).getAttributeValue();
 	}
 	
 	@Override
@@ -118,13 +118,28 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	}
 	
 	@Override
+	public double getStarvinglWeight() {
+		return getNormalWeight()*0.5;
+	}
+	
+	@Override
 	public double getNormalWeight() {
-		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue();
+		int age = entity.getGrowingAge();
+		double hungerWeightNormal = entity.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
+		if (age < 0) {
+			age = -age;
+			double growingLength = entity.getEntityAttribute(ModAttributes.child_growing_length).getAttributeValue();
+			double a = age/growingLength;
+			double hungerWeightNormalChild = entity.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
+			return a*hungerWeightNormalChild+(1-a)*hungerWeightNormal;
+		} else {
+			return hungerWeightNormal;
+		}
 	}
 	
 	@Override
 	public double getMaxWeight() {
-		return entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_weight_normal).getAttributeValue()*2;
+		return getNormalWeight()*2;
 	}
 
 	@Override

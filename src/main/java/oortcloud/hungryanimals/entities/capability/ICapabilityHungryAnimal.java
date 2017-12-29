@@ -13,6 +13,7 @@ public interface ICapabilityHungryAnimal {
 	public double getWeight();
 	public double addWeight(double weight);
 	public double setWeight(double weight);
+	public double getStarvinglWeight();
 	public double getNormalWeight();	
 	public double getMaxWeight();	
 	

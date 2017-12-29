@@ -11,7 +11,7 @@
                     "functions": [
                         {
                             "function": "set_count_based_on_weight",
-                            "weight_per_meat" : 10
+                            "weight_per_meat" : 5
                         },
                         {
                             "function": "furnace_smelt",
