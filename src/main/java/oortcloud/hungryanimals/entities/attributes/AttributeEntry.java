@@ -15,7 +15,6 @@ public class AttributeEntry implements IAttributeEntry {
 		this.shouldRegister = shouldRegister;
 		this.value = value;
 	}
-
 	
 	@Override
 	public void apply(EntityLivingBase entity) {
