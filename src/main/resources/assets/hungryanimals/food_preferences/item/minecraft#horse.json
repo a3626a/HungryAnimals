@@ -15,6 +15,13 @@
 	},
 	{
 		"item": {
+			"name": "minecraft:hay_block"
+		},
+		"nutrient": 5.13,
+		"stomach": 8.55
+	},
+	{
+		"item": {
 			"name": "minecraft:apple"
 		},
 		"nutrient": 0.36,
