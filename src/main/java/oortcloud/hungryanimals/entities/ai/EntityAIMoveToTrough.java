@@ -29,7 +29,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	private World world;
 	public BlockPos pos;
 	private int delayCounter;
-	private static int delay = 100;
+	private static int delay = 20;
 	private ICapabilityHungryAnimal capHungry;
 	private ICapabilityTamableAnimal capTaming;
 	
