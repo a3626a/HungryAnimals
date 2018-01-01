@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -20,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,7 +57,9 @@ public class EntityEventHandler {
 
 		AttributeManager.getInstance().applyAttributes(entity);
 		entity.setHealth(entity.getMaxHealth());
-		AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
+		
+		if (!entity.getEntityWorld().isRemote)
+			AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
 	}
 
 	@SubscribeEvent
@@ -198,7 +204,7 @@ public class EntityEventHandler {
 
 		if ((entity.getEntityWorld().getWorldTime() + entity.getEntityId()) % 100 == 0) {
 			ArrayList<EntityPlayer> players = (ArrayList<EntityPlayer>) entity.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
-					entity.getEntityBoundingBox().expand(radius, radius, radius));
+					entity.getEntityBoundingBox().grow(radius));
 			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 			double tamingFactor = entity.getEntityAttribute(ModAttributes.taming_factor_near).getAttributeValue();
 			if (players.isEmpty()) {
@@ -344,6 +350,24 @@ public class EntityEventHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void onLivingDrops(LivingDropsEvent event) {
+		Entity attacker = event.getSource().getTrueSource();
+		
+		if (attacker instanceof EntityWolf) {
+			EntityWolf wolf = (EntityWolf)attacker;
+			if (!wolf.isTamed()) {
+				for (EntityItem i : event.getDrops()) {
+					if (!i.getItem().hasTagCompound()) {
+						i.getItem().setTagCompound(new NBTTagCompound());
+					}
+					NBTTagCompound tag = i.getItem().getTagCompound();
+					tag.setBoolean("isNatural", true);
+				}
+			}
+		}
+	}
+	
 	public static class Pair<A, B> {
 
 		public A left;

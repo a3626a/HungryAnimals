@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
@@ -32,7 +33,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	private ICapabilityHungryAnimal capHungry;
 	private ICapabilityTamableAnimal capTaming;
 	private int delayCounter;
-	private static int delay = 100;
+	private static int delay = 20;
 
 	private Predicate<EntityItem> EAT_EDIBLE = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
@@ -41,6 +42,9 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	};
 	private Predicate<EntityItem> EAT_NATURAL = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
+			
+			HungryAnimals.logger.info(entityIn.getItem() + " : " + entityIn.getItem().getTagCompound());
+			
 			ItemStack item = entityIn.getItem();
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag != null) {
@@ -72,8 +76,9 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			return false;
 		} else {
 			float radius = 16.0F;
+			
 			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
-					entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+					entity.getEntityBoundingBox().grow(radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
@@ -82,7 +87,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 				return false;
 			}
 
-			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius),
+			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().grow(radius),
 					EAT_EDIBLE);
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
