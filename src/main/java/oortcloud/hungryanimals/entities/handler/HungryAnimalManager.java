@@ -49,6 +49,7 @@ public class HungryAnimalManager {
 	}
 
 	public void init() {
+		/*
 		registerHungryAnimal(EntityCow.class);
 		registerHungryAnimal(EntityChicken.class);
 		registerHungryAnimal(EntityPig.class);
@@ -61,6 +62,7 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntitySkeletonHorse.class);
 		registerHungryAnimal(EntityZombieHorse.class);
 		registerHungryAnimal(EntityLlama.class);
+		*/
 	}
 
 }
