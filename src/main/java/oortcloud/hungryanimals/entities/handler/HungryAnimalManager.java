@@ -15,6 +15,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.passive.EntityZombieHorse;
 
 public class HungryAnimalManager {
@@ -61,6 +62,7 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntitySkeletonHorse.class);
 		registerHungryAnimal(EntityZombieHorse.class);
 		registerHungryAnimal(EntityLlama.class);
+		registerHungryAnimal(EntityWolf.class);
 	}
 
 }

@@ -5,17 +5,24 @@ import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
+import net.minecraft.entity.ai.EntityAIBeg;
+import net.minecraft.entity.ai.EntityAIFollowOwner;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILlamaFollowCaravan;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 
@@ -73,6 +80,31 @@ public class AIManager {
 			return aiContainer;
 		});
 
+		AITYPES.put("wolf", (animal)->{
+			AIContainerDuplex aiContainer = new AIContainerDuplex();
+			aiContainer.getTask().putLast((entity) -> new EntityAISwimming(entity));
+			aiContainer.getTask().putLast((entity) -> ((EntityTameable)entity).getAISit());
+			aiContainer.getTask().putLast((entity) -> new EntityAIAvoidEntityWolf<EntityLlama>((EntityWolf) entity, EntityLlama.class, 24.0F, 1.5D, 1.5D));
+			aiContainer.getTask().putLast((entity) -> new EntityAILeapAtTarget(entity, 0.4F));
+			aiContainer.getTask().putLast((entity) -> new EntityAIAttackMelee(entity, 1.0D, true));
+			aiContainer.getTask().putLast((entity) -> new EntityAIFollowOwner((EntityTameable) entity, 1.0D, 10.0F, 2.0F));
+			aiContainer.getTask().putLast((entity) -> new EntityAIMateModified(entity, 2.0D));
+			aiContainer.getTask().putLast((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
+			aiContainer.getTask().putLast((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
+			aiContainer.getTask().putLast((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
+			aiContainer.getTask().putLast((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
+			aiContainer.getTask().putLast((entity) -> new EntityAIWanderAvoidWater(entity, 1.0D));
+			aiContainer.getTask().putLast((entity) -> new EntityAIBeg((EntityWolf) entity, 8.0F));
+			aiContainer.getTask().putLast((entity) -> new EntityAIWatchClosest(entity, EntityPlayer.class, 8.0F));
+			aiContainer.getTask().putLast((entity) -> new EntityAILookIdle(entity));
+			aiContainer.getTask().removeAll();
+			
+			aiContainer.getTarget().start = 4;
+			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false));
+			aiContainer.getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
+			
+			return aiContainer;
+	    });
 	}
 
 }

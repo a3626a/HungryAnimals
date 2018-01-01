@@ -1,0 +1,15 @@
+{
+	"hungryanimals.hunger_weight_bmr" : 0.00088914,
+	"hungryanimals.hunger_weight_normal" : 50,
+	"hungryanimals.hunger_weight_normal_child" : 5,
+	"hungryanimals.hunger_stomach_digest" : 0.004445699,
+	"hungryanimals.hunger_stomach_max" : 16.00451469,
+	"hungryanimals.courtship_weight" : 0.0,
+	"hungryanimals.courtship_probability" : 0.05,
+	"hungryanimals.courtship_stomach_condition" : 0.8,
+	"hungryanimals.excretion_factor" : 0.1,
+	"hungryanimals.child_delay" : 74978,
+	"hungryanimals.child_growing_length" : 253053,
+	"hungryanimals.taming_factor_near" : 0.96,
+    "hungryanimals.taming_factor_food" : 0.002
+}
