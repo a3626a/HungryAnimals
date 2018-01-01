@@ -41,8 +41,6 @@ import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.entities.ai.AIContainer;
-import oortcloud.hungryanimals.entities.ai.AIContainerRegisterEvent;
 import oortcloud.hungryanimals.entities.ai.AIManager;
 import oortcloud.hungryanimals.entities.ai.IAIContainer;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
@@ -198,7 +196,7 @@ public class ConfigurationHandler {
 			}
 			String ai = jsonObj.get("type").getAsString();
 			IAIContainer<EntityAnimal> aiContainer = AIManager.getInstance().AITYPES.get(ai).apply(animal);
-			MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer) aiContainer));
+			//MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer) aiContainer));
 			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
 		});
 

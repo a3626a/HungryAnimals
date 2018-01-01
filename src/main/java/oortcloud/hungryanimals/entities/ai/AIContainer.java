@@ -10,14 +10,14 @@ import net.minecraft.entity.passive.EntityAnimal;
 
 public class AIContainer implements IAIContainer<EntityAnimal> {
 
-	private LinkedList<IAIPlacer> ais;
-	private int start;
+	protected LinkedList<IAIPlacer> ais;
+	protected int start;
 
-	private List<Class<? extends EntityAIBase>> toRemove;
-	private boolean removeAll;
+	protected List<Class<? extends EntityAIBase>> toRemove;
+	protected boolean removeAll;
 
-	private List<Class<? extends EntityAIBase>> prior;
-	private List<Class<? extends EntityAIBase>> posterior;
+	protected List<Class<? extends EntityAIBase>> prior;
+	protected List<Class<? extends EntityAIBase>> posterior;
 
 	public AIContainer() {
 		this(0);
@@ -137,11 +137,11 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		public EntityAIBase apply(EntityAnimal entity);
 	}
 
-	private static interface IAIPlacer {
+	protected static interface IAIPlacer {
 		public boolean add(List<EntityAIBase> list, EntityAnimal entity);
 	}
 
-	private static class AIPlacerFirst implements IAIPlacer {
+	protected static class AIPlacerFirst implements IAIPlacer {
 		public AIFactory aiFactory;
 
 		public AIPlacerFirst(AIFactory aiFactory) {
@@ -156,7 +156,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 
 	}
 
-	private static class AIPlacerLast implements IAIPlacer {
+	protected static class AIPlacerLast implements IAIPlacer {
 		public AIFactory aiFactory;
 
 		public AIPlacerLast(AIFactory aiFactory) {
@@ -171,7 +171,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 
 	}
 
-	private static class AIPlacerPriority implements IAIPlacer {
+	protected static class AIPlacerPriority implements IAIPlacer {
 
 		public AIFactory aiFactory;
 		public List<Class<? extends EntityAIBase>> prior;
