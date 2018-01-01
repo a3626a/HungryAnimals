@@ -14,7 +14,7 @@ public class FoodPreferenceEntity implements IFoodPreferenceSimple<EntityLiving>
 	}
 	
 	public boolean canEat(ICapabilityHungryAnimal cap, EntityLiving food) {
-		return shouldEat(cap) && entities.contains(food);
+		return shouldEat(cap) && entities.contains(food.getClass());
 	}
 	
 	/**
