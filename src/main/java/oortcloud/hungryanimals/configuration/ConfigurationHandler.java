@@ -7,9 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,6 +26,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.Item;
@@ -50,6 +53,7 @@ import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
@@ -64,6 +68,7 @@ public class ConfigurationHandler {
 
 	private static ConfigurationHandlerJSONAnimal foodPreferencesBlock;
 	private static ConfigurationHandlerJSONAnimal foodPreferencesItem;
+	private static ConfigurationHandlerJSONAnimal foodPreferencesEntity;
 	private static ConfigurationHandlerJSONAnimal attributes;
 	private static ConfigurationHandlerJSONAnimal lootTables;
 	private static ConfigurationHandlerJSONAnimal ais;
@@ -121,6 +126,22 @@ public class ConfigurationHandler {
 					map);
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
+		});
+		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/entity", (file, animal) -> {
+			JsonArray jsonArr;
+			try {
+				jsonArr = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath()))).getAsJsonArray();
+			} catch (JsonSyntaxException | IOException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { foodPreferencesItem.getDescriptor(), file, animal, e });
+				return;
+			}
+			Set<Class<? extends EntityLiving>> set = new HashSet<Class<? extends EntityLiving>>();
+			for (JsonElement i : jsonArr) {
+				String resourceLocation = i.getAsString();
+				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(resourceLocation));
+				set.add(entityClass.asSubclass(EntityLiving.class));
+			}
+			FoodPreferenceManager.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
 		});
 		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (file, animal) -> {
 			JsonObject jsonObj;
@@ -286,6 +307,7 @@ public class ConfigurationHandler {
 	public static void sync() {
 		foodPreferencesBlock.sync();
 		foodPreferencesItem.sync();
+		foodPreferencesEntity.sync();
 		attributes.sync();
 		lootTables.sync();
 		ais.sync();
