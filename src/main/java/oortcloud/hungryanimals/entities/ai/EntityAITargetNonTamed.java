@@ -6,8 +6,8 @@ public class EntityAITargetNonTamed extends EntityAITarget {
 
 	private EntityTameable tameable;
 
-	public EntityAITargetNonTamed(EntityTameable tameable, boolean checkSight) {
-		super(tameable, 10, checkSight, false);
+	public EntityAITargetNonTamed(EntityTameable tameable, boolean checkSight, boolean herding) {
+		super(tameable, 10, checkSight, false, herding);
 		this.tameable = tameable;
 	}
 

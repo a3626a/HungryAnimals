@@ -100,7 +100,7 @@ public class AIManager {
 			aiContainer.getTask().removeAll();
 			
 			aiContainer.getTarget().start = 4;
-			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false));
+			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, true));
 			aiContainer.getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
 			
 			return aiContainer;
