@@ -1,8 +1,11 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
@@ -11,7 +14,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 public class AIContainer implements IAIContainer<EntityAnimal> {
 
 	protected LinkedList<IAIPlacer> ais;
-	protected int start;
 
 	protected List<Class<? extends EntityAIBase>> toRemove;
 	protected boolean removeAll;
@@ -20,29 +22,18 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 	protected List<Class<? extends EntityAIBase>> posterior;
 
 	public AIContainer() {
-		this(0);
-	}
-
-	public AIContainer(int start) {
-		this(start, null);
+		this(null);
 	}
 
 	public AIContainer(AIContainer parent) {
-		this(0, parent);
-	}
-	
-	public AIContainer(int start, AIContainer parent) {
 		this.ais = new LinkedList<IAIPlacer>();
 		this.toRemove = new LinkedList<Class<? extends EntityAIBase>>();
 
 		if (parent != null) {
-			this.start = parent.start;
 			this.removeAll = parent.removeAll;
 			this.ais.addAll(parent.ais);
 			this.toRemove.addAll(parent.toRemove);
 		}
-		
-		this.start = start;
 	}
 
 	@Override
@@ -64,11 +55,26 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		}
 
 		List<EntityAIBase> aibases = new ArrayList<EntityAIBase>();
+		
+		// Construct aibases from entity's tasks
+		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.tasks.taskEntries);
+		aitaskentries.sort(new Comparator<EntityAITaskEntry>() {
+			@Override
+			public int compare(EntityAITaskEntry o1, EntityAITaskEntry o2) {
+				return o1.priority - o2.priority;
+			}
+		});
+		for (EntityAITaskEntry i : aitaskentries) {
+			aibases.add(i.action);
+		}
+		entity.tasks.taskEntries.clear();
+		
+		
 		for (IAIPlacer i : ais) {
 			i.add(aibases, entity);
 		}
 
-		int cnt = start;
+		int cnt = 0;
 		for (EntityAIBase i : aibases) {
 			entity.tasks.addTask(cnt++, i);
 		}

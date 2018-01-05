@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAIBeg;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
+import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILlamaFollowCaravan;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -62,18 +63,18 @@ public class AIManager {
 			return aiContainer;
 		});
 		AITYPES.put("pig", (animal) -> {
-			AIContainer aiContainer = new AIContainer(1, (AIContainer) AITYPES.get("herbivore").apply(animal));
+			AIContainer aiContainer = new AIContainer((AIContainer) AITYPES.get("herbivore").apply(animal));
 			aiContainer.priorTo(EntityAITemptEdibleItem.class)
 					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
 			return aiContainer;
 		});
 		AITYPES.put("horse", (animal) -> {
-			AIContainer aiContainer = new AIContainer(1, (AIContainer) AITYPES.get("herbivore").apply(animal));
+			AIContainer aiContainer = new AIContainer((AIContainer) AITYPES.get("herbivore").apply(animal));
 			aiContainer.priorTo(EntityAIMateModified.class).put((entity) -> new EntityAIRunAroundLikeCrazy((AbstractHorse)entity, 1.2D));
 			return aiContainer;
 		});
 		AITYPES.put("llama", (animal) -> {
-			AIContainer aiContainer = new AIContainer(1, (AIContainer) AITYPES.get("herbivore").apply(animal));
+			AIContainer aiContainer = new AIContainer((AIContainer) AITYPES.get("herbivore").apply(animal));
 			aiContainer.priorTo(EntityAIAvoidPlayer.class).put((entity) -> new EntityAIRunAroundLikeCrazy((AbstractHorse)entity, 1.2D));
 			aiContainer.priorTo(EntityAIAvoidPlayer.class).put((entity) -> new EntityAILlamaFollowCaravan((EntityLlama) entity, 2.1D));
 			aiContainer.priorTo(EntityAIAvoidPlayer.class).put((entity) -> new EntityAIAttackRanged((IRangedAttackMob) entity, 1.25D, 40, 20.0F));
@@ -99,12 +100,26 @@ public class AIManager {
 			aiContainer.getTask().putLast((entity) -> new EntityAILookIdle(entity));
 			aiContainer.getTask().removeAll();
 			
-			aiContainer.getTarget().start = 4;
 			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, true));
 			aiContainer.getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
 			
 			return aiContainer;
 	    });
+		
+		AITYPES.put("polar_bear", (animal)->{
+			AIContainerDuplex aiContainer = new AIContainerDuplex();
+
+			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
+			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
+			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
+			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
+			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
+			
+			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, false));
+			
+			return aiContainer;
+	    });
+
 	}
 
 }

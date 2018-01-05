@@ -1,8 +1,11 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
@@ -29,11 +32,25 @@ public class AIContainerTarget extends AIContainer {
 		}
 
 		List<EntityAIBase> aibases = new ArrayList<EntityAIBase>();
+		
+		// Construct aibases from entity's tasks
+		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.targetTasks.taskEntries);
+		aitaskentries.sort(new Comparator<EntityAITaskEntry>() {
+			@Override
+			public int compare(EntityAITaskEntry o1, EntityAITaskEntry o2) {
+				return o1.priority - o2.priority;
+			}
+		});
+		for (EntityAITaskEntry i : aitaskentries) {
+			aibases.add(i.action);
+		}
+		entity.targetTasks.taskEntries.clear();
+		
 		for (IAIPlacer i : ais) {
 			i.add(aibases, entity);
 		}
 
-		int cnt = start;
+		int cnt = 0;
 		for (EntityAIBase i : aibases) {
 			entity.targetTasks.addTask(cnt++, i);
 		}
