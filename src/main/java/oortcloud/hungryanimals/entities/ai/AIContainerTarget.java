@@ -20,8 +20,8 @@ public class AIContainerTarget extends AIContainer {
 		} else {
 			LinkedList<EntityAIBase> removeEntries = new LinkedList<EntityAIBase>();
 			for (EntityAITaskEntry i : entity.targetTasks.taskEntries) {
-				for (Class<? extends EntityAIBase> j : toRemove) {
-					if (i.action.getClass() == j) {
+				for (IAIRemover j : toRemove) {
+					if (j.matches(i)) {
 						removeEntries.add(i.action);
 					}
 				}
