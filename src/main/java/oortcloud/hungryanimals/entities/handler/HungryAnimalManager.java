@@ -3,21 +3,7 @@ package oortcloud.hungryanimals.entities.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityDonkey;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityLlama;
-import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityMule;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySkeletonHorse;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.passive.EntityZombieHorse;
 
 public class HungryAnimalManager {
 
@@ -51,20 +37,7 @@ public class HungryAnimalManager {
 	}
 
 	public void init() {
-		registerHungryAnimal(EntityCow.class);
-		registerHungryAnimal(EntityChicken.class);
-		registerHungryAnimal(EntityPig.class);
-		registerHungryAnimal(EntityRabbit.class);
-		registerHungryAnimal(EntitySheep.class);
-		registerHungryAnimal(EntityMooshroom.class);
-		registerHungryAnimal(EntityHorse.class);
-		registerHungryAnimal(EntityMule.class);
-		registerHungryAnimal(EntityDonkey.class);
-		registerHungryAnimal(EntitySkeletonHorse.class);
-		registerHungryAnimal(EntityZombieHorse.class);
-		registerHungryAnimal(EntityLlama.class);
-		registerHungryAnimal(EntityWolf.class);
-		registerHungryAnimal(EntityPolarBear.class);
+
 	}
 
 }

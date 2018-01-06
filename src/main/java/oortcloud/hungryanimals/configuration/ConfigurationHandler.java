@@ -293,7 +293,7 @@ public class ConfigurationHandler {
 					if (EntityAnimal.class.isAssignableFrom(entityClass)
 							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
 						HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
-						API.registerAnimal(entityClass.asSubclass(EntityAnimal.class));
+						HungryAnimalManager.getInstance().registerHungryAnimal(entityClass.asSubclass(EntityAnimal.class));
 					}
 				}
 			}
@@ -303,6 +303,7 @@ public class ConfigurationHandler {
 	}
 
 	public static void sync() {
+		animal.sync();
 		foodPreferencesBlock.sync();
 		foodPreferencesItem.sync();
 		foodPreferencesEntity.sync();
@@ -317,7 +318,6 @@ public class ConfigurationHandler {
 	}
 
 	public static void postSync() {
-		animal.sync();
 	}
 
 	public static class Serializer implements JsonDeserializer<ItemStack> {
