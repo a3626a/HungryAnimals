@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
@@ -42,9 +41,6 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	};
 	private Predicate<EntityItem> EAT_NATURAL = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
-			
-			HungryAnimals.logger.info(entityIn.getItem() + " : " + entityIn.getItem().getTagCompound());
-			
 			ItemStack item = entityIn.getItem();
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag != null) {
@@ -112,10 +108,10 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			float distanceSq = 2;
 			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
 				ItemStack foodStack = target.getItem();
+				this.eatFoodBonus(target.getItem());
 				foodStack.shrink(1);
 				if (foodStack.isEmpty())
 					target.setDead();
-				this.eatFoodBonus(target.getItem());
 			}
 			return false;
 		}
@@ -145,25 +141,24 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (item.isEmpty())
 			return;
 
-		IFoodPreference<ItemStack> pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
-
 		double nutrient = pref.getNutrient(item);
 		capHungry.addNutrient(nutrient);
 		
 		double stomach = pref.getStomach(item);
 		capHungry.addStomach(stomach);
 		
-		if (this.entity.getGrowingAge() < 0) {
+		if (entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
-				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
+				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0001 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
+			capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
 	}
 }
