@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +58,7 @@ public class EntityEventHandler {
 
 		AttributeManager.getInstance().applyAttributes(entity);
 		entity.setHealth(entity.getMaxHealth());
-		
+
 		if (!entity.getEntityWorld().isRemote)
 			AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
 	}
@@ -92,7 +93,7 @@ public class EntityEventHandler {
 			updateRecovery(entity);
 
 			ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-			
+
 			if (cap.getWeight() < cap.getStarvinglWeight()) {
 				onStarve(entity);
 			}
@@ -110,7 +111,7 @@ public class EntityEventHandler {
 		double nutrient = cap.getNutrient();
 		double stomach = cap.getStomach();
 		double digest = entity.getEntityAttribute(ModAttributes.hunger_stomach_digest).getAttributeValue();
-		
+
 		if (entity.getGrowingAge() < 0) {
 			// Child
 			// Childhood growth acceleration
@@ -118,7 +119,7 @@ public class EntityEventHandler {
 				digest *= 2.0;
 			}
 		}
-		
+
 		if (stomach > 0) {
 			if (digest > stomach) {
 				digest = stomach;
@@ -133,7 +134,7 @@ public class EntityEventHandler {
 
 		double default_bmr = entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue();
 		double default_weight = entity.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
-		double bmr = default_bmr*Math.pow(cap.getWeight()/default_weight, 3.0/4.0);
+		double bmr = default_bmr * Math.pow(cap.getWeight() / default_weight, 3.0 / 4.0);
 
 		cap.addWeight(-bmr);
 	}
@@ -143,8 +144,8 @@ public class EntityEventHandler {
 
 		double courtship_stomach_condition = entity.getEntityAttribute(ModAttributes.courtship_stomach_condition).getAttributeValue();
 		double courtship_probability = entity.getEntityAttribute(ModAttributes.courtship_probability).getAttributeValue();
-		double child_weight = entity.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue()/2.0;
-		
+		double child_weight = entity.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue() / 2.0;
+
 		if (entity.getGrowingAge() == 0 && !entity.isInLove() && cap.getStomach() / cap.getMaxStomach() > courtship_stomach_condition
 				&& cap.getWeight() - child_weight > cap.getStarvinglWeight() && entity.getRNG().nextDouble() < courtship_probability) {
 			entity.setInLove(null);
@@ -314,10 +315,18 @@ public class EntityEventHandler {
 			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 		}
 		// For horses, they do not implement isBreedingItem properly
-		if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK) || item == Items.APPLE || item == Items.GOLDEN_CARROT
-				|| item == Items.GOLDEN_APPLE) {
-			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+		if (entity instanceof AbstractHorse) {
+			if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK) || item == Items.APPLE
+					|| item == Items.GOLDEN_CARROT || item == Items.GOLDEN_APPLE) {
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
 		}
+		if (entity instanceof EntityWolf && capTaming.getTamingLevel() != TamingLevel.TAMED) {
+			if (item == Items.BONE) {
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
+		}
+		// For wolves, to disable feed bones before tamed
 
 		return new Pair<Boolean, EnumActionResult>(false, null);
 	}
@@ -353,9 +362,9 @@ public class EntityEventHandler {
 	@SubscribeEvent
 	public void onLivingDrops(LivingDropsEvent event) {
 		Entity attacker = event.getSource().getTrueSource();
-		
+
 		if (attacker instanceof EntityWolf) {
-			EntityWolf wolf = (EntityWolf)attacker;
+			EntityWolf wolf = (EntityWolf) attacker;
 			if (!wolf.isTamed()) {
 				for (EntityItem i : event.getDrops()) {
 					if (!i.getItem().hasTagCompound()) {
@@ -367,7 +376,7 @@ public class EntityEventHandler {
 			}
 		}
 	}
-	
+
 	public static class Pair<A, B> {
 
 		public A left;

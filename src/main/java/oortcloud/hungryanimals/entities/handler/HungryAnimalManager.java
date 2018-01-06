@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.entities.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
@@ -63,6 +64,7 @@ public class HungryAnimalManager {
 		registerHungryAnimal(EntityZombieHorse.class);
 		registerHungryAnimal(EntityLlama.class);
 		registerHungryAnimal(EntityWolf.class);
+		registerHungryAnimal(EntityPolarBear.class);
 	}
 
 }

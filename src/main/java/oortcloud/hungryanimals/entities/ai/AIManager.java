@@ -75,15 +75,6 @@ public class AIManager {
 					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
 			return aiContainer;
 		});
-		AITYPES.put("horse", (animal) -> {
-			AIContainer aiContainer = new AIContainer((AIContainer) AITYPES.get("herbivore").apply(animal));
-			return aiContainer;
-		});
-
-		AITYPES.put("llama", (animal) -> {
-			AIContainer aiContainer = new AIContainer((AIContainer) AITYPES.get("herbivore").apply(animal));
-			return aiContainer;
-		});
 		
 		AITYPES.put("wolf", (animal)->{
 			AIContainerDuplex aiContainer = new AIContainerDuplex();
@@ -108,7 +99,7 @@ public class AIManager {
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
 			
-			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, false));
+			aiContainer.getTarget().putLast((entity) -> new EntityAITarget(entity, 1, false, false, false));
 			
 			return aiContainer;
 	    });
