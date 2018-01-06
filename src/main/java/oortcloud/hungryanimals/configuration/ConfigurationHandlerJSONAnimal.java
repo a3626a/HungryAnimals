@@ -1,6 +1,8 @@
 package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -11,7 +13,7 @@ import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 
-	private BiConsumer<File, Class<? extends EntityAnimal>> read;
+	private BiConsumer<String, Class<? extends EntityAnimal>> read;
 
 	/**
 	 * 
@@ -19,7 +21,7 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 	 * @param descriptor : relative path, never start with /
 	 * @param read
 	 */
-	public ConfigurationHandlerJSONAnimal(File basefolder, String descriptor, BiConsumer<File, Class<? extends EntityAnimal>> read) {
+	public ConfigurationHandlerJSONAnimal(File basefolder, String descriptor, BiConsumer<String, Class<? extends EntityAnimal>> read) {
 		super(new File(basefolder, descriptor), descriptor);
 		this.read = read;
 	}
@@ -30,17 +32,19 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			File iFile = new File(directory, ConfigurationHandler.resourceLocationToString(EntityList.getKey(i)) + ".json");
 
-			if (!iFile.exists()) {
-				createDefaultConfigurationFile(iFile);
-			}
-
 			try {
-				this.read.read(iFile, i);
-			} catch (JsonSyntaxException e) {
+				String text = null;
+				if (!iFile.exists()) {
+					text = getDefaultConfigurationText(iFile);
+				} else {
+					text = new String(Files.readAllBytes(iFile.toPath()));
+				}
+				this.read.read(text, i);
+			} catch (JsonSyntaxException | IOException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
 			}
-
 		}
+
 	}
 
 	@FunctionalInterface

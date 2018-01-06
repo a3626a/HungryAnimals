@@ -1,0 +1,7 @@
+"disease_probability" : probability(chance) to occur disease from excreta
+"erosion_probability" : probability(chance) to erode excreta
+"erosion_probability_on_hay" : probability(chance) to erode excreta on hay floor cover
+"fermentation_probability" : probability(chance) to ferment excreta to manure
+"fertilization_probability" : probability(chance) excreta to fertilize block underneath
+"grass_probability" : probability(chance) to grow tall grass
+"ripening_probability" : probability(chance) to ripen niter bed

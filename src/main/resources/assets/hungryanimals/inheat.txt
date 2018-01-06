@@ -1,0 +1,8 @@
+'inheat.json' contains list of 'Item-Types' which can give 'In Heat' effect to animals.
+
+* Item Type
+  Item Type distinguishes item stacks.
+  {
+    "name" : name_of_item
+    "damage" : damage_of_item
+  }
