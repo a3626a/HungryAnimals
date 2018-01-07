@@ -24,8 +24,6 @@ import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 
 public class ItemSlingShot extends Item {
 
-	// TODO Consideration of Enchantment
-	
 	public ItemSlingShot() {
 		super();
 		setUnlocalizedName(References.MODID+"."+Strings.itemSlingShotName);

@@ -1,7 +1,6 @@
 package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -15,39 +14,39 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 
 public class ConfigurationHandlerJSON {
-	
+
 	protected File directory;
 	protected String descriptor;
-	
-	private Consumer<File> read;
-	
+
+	private Consumer<String> read;
+
 	public ConfigurationHandlerJSON(File basefolder, String descriptor) {
 		this.descriptor = descriptor;
 		this.directory = basefolder;
 	}
-	
-	public ConfigurationHandlerJSON(File basefolder, String descriptor, Consumer<File> read) {
+
+	public ConfigurationHandlerJSON(File basefolder, String descriptor, Consumer<String> read) {
 		this.descriptor = descriptor;
 		this.directory = basefolder;
 		this.read = read;
 	}
-	
+
 	public void sync() {
 		checkDirectory();
-		
 		File file = new File(directory, descriptor + ".json");
-		
-		if (!file.exists()) {
-			createDefaultConfigurationFile(file);
-		}
-		
 		try {
-			this.read.accept(file);
-		} catch (JsonSyntaxException e) {
+			String text = null;
+			if (!file.exists()) {
+				text = getDefaultConfigurationText(file);
+			} else {
+				text = new String(Files.readAllBytes(file.toPath()));
+			}
+			this.read.accept(text);
+		} catch (JsonSyntaxException | IOException e) {
 			HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { this.descriptor, file, e });
 		}
 	}
-	
+
 	protected void checkDirectory() {
 		if (!directory.exists()) {
 			try {
@@ -58,29 +57,27 @@ public class ConfigurationHandlerJSON {
 			}
 		}
 	}
-	
-	protected void createDefaultConfigurationFile(File file) {
+
+	protected String getDefaultConfigurationText(File file) {
 		String path_file = file.getPath();
 		int index_config = path_file.indexOf("config");
 		String path_config = path_file.substring(index_config);
 		int index_hungryanimals = path_config.indexOf(References.MODID);
 		String path_hungryanimals = path_config.substring(index_hungryanimals);
 		String resourceName = "/assets/" + path_hungryanimals.replace("\\", "/");
-		
+
 		URL url = getClass().getResource(resourceName);
 		if (url == null) {
 			HungryAnimals.logger.error("Couldn\'t load {} {} from assets", new Object[] { this.descriptor, resourceName });
-			return;
+			return null;
 		}
 
 		try {
-			file.createNewFile();
-			FileWriter o = new FileWriter(file);
-			o.write(Resources.toString(url, Charsets.UTF_8));
-			o.close();
+			return Resources.toString(url, Charsets.UTF_8);
 		} catch (IOException e) {
 			HungryAnimals.logger.error("Couldn\'t load {} {} from {}\n{}", new Object[] { this.descriptor, file, url, e });
 		}
+		return null;
 	}
 
 	public String getDescriptor() {

@@ -1,0 +1,1 @@
+Each 'modid#name.json' contains list of entity names which the animal hunt.
