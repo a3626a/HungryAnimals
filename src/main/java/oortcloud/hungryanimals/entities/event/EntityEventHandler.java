@@ -9,6 +9,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -322,11 +323,17 @@ public class EntityEventHandler {
 			}
 		}
 		if (entity instanceof EntityWolf && capTaming.getTamingLevel() != TamingLevel.TAMED) {
+			// For wolves, to disable feed bones before tamed
 			if (item == Items.BONE) {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
 		}
-		// For wolves, to disable feed bones before tamed
+		if (entity instanceof EntityOcelot && capTaming.getTamingLevel() != TamingLevel.TAMED) {
+			// For ocelots, to disable feed fish before tamed
+			if (item == Items.FISH) {
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
+		}
 
 		return new Pair<Boolean, EnumActionResult>(false, null);
 	}

@@ -9,7 +9,6 @@ import net.minecraft.entity.ai.EntityAIEatGrass;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
@@ -85,7 +84,7 @@ public class AIManager {
 			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
 			aiContainer.getTask().remove(EntityAIMate.class);
 			
-			aiContainer.getTarget().priorTo(EntityAINearestAttackableTarget.class).put((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, true));
+			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, true));
 			aiContainer.getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
 			
 			return aiContainer;
@@ -103,7 +102,6 @@ public class AIManager {
 			
 			return aiContainer;
 	    });
-
 	}
 
 }
