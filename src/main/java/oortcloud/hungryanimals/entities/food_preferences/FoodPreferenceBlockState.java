@@ -2,7 +2,6 @@ package oortcloud.hungryanimals.entities.food_preferences;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,29 +19,37 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
-	private Map<HashBlockState, Double> map;
-	private final double min;
+	private Map<HashBlockState, Pair<Double, Double>> map;
 
-	public FoodPreferenceBlockState(Map<HashBlockState, Double> map) {
+	public FoodPreferenceBlockState(Map<HashBlockState, Pair<Double, Double>> map) {
 		this.map = map;
-		if (!map.isEmpty()) {
-			min = Collections.min(map.values());
+	}
+
+	@Override
+	public double getNutrient(IBlockState food) {
+		HashBlockState key;
+
+		if (this.map.containsKey(key = new HashBlockState(food, true))) {
+			return this.map.get(key).left;
+		} else if (this.map.containsKey(key = new HashBlockState(food, false))) {
+			return this.map.get(key).left;
 		} else {
-			min = Double.MAX_VALUE;
+			return 0;
 		}
 	}
 
 	@Override
-	public double getHunger(IBlockState food) {
+	public double getStomach(IBlockState food) {
 		HashBlockState key;
 
 		if (this.map.containsKey(key = new HashBlockState(food, true))) {
-			return this.map.get(key);
+			return this.map.get(key).right;
 		} else if (this.map.containsKey(key = new HashBlockState(food, false))) {
-			return this.map.get(key);
+			return this.map.get(key).right;
 		} else {
 			return 0;
 		}
@@ -50,16 +57,15 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
 	@Override
 	public boolean canEat(ICapabilityHungryAnimal cap, IBlockState food) {
-		double hunger = getHunger(food);
-		if (hunger == 0)
-			return false;
-		return cap.getHunger() + hunger < cap.getMaxHunger();
+		double stomach = getStomach(food);
+		return stomach > 0 && shouldEat(cap);
 	}
 
 	@Override
 	public boolean shouldEat(ICapabilityHungryAnimal cap) {
-		return cap.getHunger() + min < cap.getMaxHunger();
+		return cap.getStomach() < cap.getMaxStomach();
 	}
+
 
 	@Override
 	public String toString() {

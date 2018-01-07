@@ -223,13 +223,13 @@ public class BlockExcreta extends BlockFalling {
 		if (random.nextDouble() < BlockExcreta.diseaseProbability / 3.0 * Math.max(0, exc - 1)) {
 			Predicate<Entity> hungryAnimalSelector = new Predicate<Entity>() {
 				public boolean apply(Entity entityIn) {
-					return entityIn.getCapability(ProviderHungryAnimal.CAP, null) != null;
+					return entityIn.hasCapability(ProviderHungryAnimal.CAP, null);
 				}
 			};
 
 			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
 					pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
-				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 1));
+				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 0));
 			}
 		}
 

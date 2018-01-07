@@ -58,7 +58,8 @@ public class TOPCompatibility {
 					
 					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
-					probeInfo.horizontal().text("HUNGER").progress((int)capHungry.getHunger(), (int)capHungry.getMaxHunger(), probeInfo.defaultProgressStyle().filledColor(0xFF0000FF).alternateFilledColor(0xFF0000FF).borderColor(0));
+					probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float)capHungry.getWeight()));
+					probeInfo.horizontal().text("STOMACH").progress((int)capHungry.getStomach(), (int)capHungry.getMaxStomach(), probeInfo.defaultProgressStyle().filledColor(0xFF0000FF).alternateFilledColor(0xFF0000FF).borderColor(0));
 					if (capTaming.getTaming() >= 0) {
 						probeInfo.horizontal().text("TAMING").progress((int)(Math.min(capTaming.getTaming(), 2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFF00FF00).alternateFilledColor(0xFF00FF00).borderColor(0).showText(false));
 					} else {

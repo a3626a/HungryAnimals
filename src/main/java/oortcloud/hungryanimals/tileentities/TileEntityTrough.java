@@ -37,7 +37,6 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 				random[i][1] = (float) (0.05 * Math.random());
 			}
 		}
-
 	}
 
 	@Override
@@ -72,7 +71,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 		super.readFromNBT(compound);
 		readSyncableDataFromNBT(compound);
 	}
-
+	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound compound = new NBTTagCompound();
@@ -84,6 +83,13 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound compound = pkt.getNbtCompound();
 		readSyncableDataFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound tag = super.getUpdateTag();
+		writeSyncableDataToNBT(tag);
+		return tag;
 	}
 	
 	private void writeSyncableDataToNBT(NBTTagCompound compound) {

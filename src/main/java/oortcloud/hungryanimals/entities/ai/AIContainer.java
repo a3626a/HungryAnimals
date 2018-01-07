@@ -1,8 +1,11 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
@@ -10,39 +13,27 @@ import net.minecraft.entity.passive.EntityAnimal;
 
 public class AIContainer implements IAIContainer<EntityAnimal> {
 
-	private LinkedList<IAIPlacer> ais;
-	private int start;
+	protected LinkedList<IAIPlacer> ais;
 
-	private List<Class<? extends EntityAIBase>> toRemove;
-	private boolean removeAll;
+	protected List<IAIRemover> toRemove;
+	protected boolean removeAll;
 
-	private List<Class<? extends EntityAIBase>> prior;
-	private List<Class<? extends EntityAIBase>> posterior;
+	protected List<Class<? extends EntityAIBase>> prior;
+	protected List<Class<? extends EntityAIBase>> posterior;
 
 	public AIContainer() {
-		this(0);
-	}
-
-	public AIContainer(int start) {
-		this(start, null);
+		this(null);
 	}
 
 	public AIContainer(AIContainer parent) {
-		this(0, parent);
-	}
-	
-	public AIContainer(int start, AIContainer parent) {
 		this.ais = new LinkedList<IAIPlacer>();
-		this.toRemove = new LinkedList<Class<? extends EntityAIBase>>();
+		this.toRemove = new LinkedList<IAIRemover>();
 
 		if (parent != null) {
-			this.start = parent.start;
 			this.removeAll = parent.removeAll;
 			this.ais.addAll(parent.ais);
 			this.toRemove.addAll(parent.toRemove);
 		}
-		
-		this.start = start;
 	}
 
 	@Override
@@ -52,8 +43,8 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		} else {
 			LinkedList<EntityAIBase> removeEntries = new LinkedList<EntityAIBase>();
 			for (EntityAITaskEntry i : entity.tasks.taskEntries) {
-				for (Class<? extends EntityAIBase> j : toRemove) {
-					if (i.action.getClass() == j) {
+				for (IAIRemover j : toRemove) {
+					if (j.matches(i)) {
 						removeEntries.add(i.action);
 					}
 				}
@@ -64,11 +55,26 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		}
 
 		List<EntityAIBase> aibases = new ArrayList<EntityAIBase>();
+		
+		// Construct aibases from entity's tasks
+		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.tasks.taskEntries);
+		aitaskentries.sort(new Comparator<EntityAITaskEntry>() {
+			@Override
+			public int compare(EntityAITaskEntry o1, EntityAITaskEntry o2) {
+				return o1.priority - o2.priority;
+			}
+		});
+		for (EntityAITaskEntry i : aitaskentries) {
+			aibases.add(i.action);
+		}
+		entity.tasks.taskEntries.clear();
+		
+		
 		for (IAIPlacer i : ais) {
 			i.add(aibases, entity);
 		}
 
-		int cnt = start;
+		int cnt = 0;
 		for (EntityAIBase i : aibases) {
 			entity.tasks.addTask(cnt++, i);
 		}
@@ -121,11 +127,15 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 	}
 
 	public void remove(Class<? extends EntityAIBase> target) {
-		toRemove.add(target);
+		toRemove.add(new AIRemoverByClass(target));
 	}
 
+	public void remove(IAIRemover remover) {
+		toRemove.add(remover);
+	}
+	
 	public void remove(List<Class<? extends EntityAIBase>> target) {
-		toRemove.addAll(target);
+		toRemove.addAll(Lists.transform(target, (i) -> new AIRemoverByClass(i)));
 	}
 
 	public void removeAll() {
@@ -137,11 +147,41 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		public EntityAIBase apply(EntityAnimal entity);
 	}
 
-	private static interface IAIPlacer {
+	public static interface IAIRemover {
+		public boolean matches(EntityAITaskEntry entry);
+	}
+	
+	public static class AIRemoverByClass implements IAIRemover {
+		private Class<? extends EntityAIBase> target;
+		
+		public AIRemoverByClass(Class<? extends EntityAIBase> target) {
+			this.target = target;
+		}
+		
+		@Override
+		public boolean matches(EntityAITaskEntry entry) {
+			return entry.action.getClass() == target;
+		}
+	}
+	
+	public static class AIRemoverIsInstance implements IAIRemover {
+		private Class<? extends EntityAIBase> target;
+		
+		public AIRemoverIsInstance(Class<? extends EntityAIBase> target) {
+			this.target = target;
+		}
+		
+		@Override
+		public boolean matches(EntityAITaskEntry entry) {
+			return target.isInstance(entry.action);
+		}
+	}
+	
+	protected static interface IAIPlacer {
 		public boolean add(List<EntityAIBase> list, EntityAnimal entity);
 	}
 
-	private static class AIPlacerFirst implements IAIPlacer {
+	protected static class AIPlacerFirst implements IAIPlacer {
 		public AIFactory aiFactory;
 
 		public AIPlacerFirst(AIFactory aiFactory) {
@@ -156,7 +196,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 
 	}
 
-	private static class AIPlacerLast implements IAIPlacer {
+	protected static class AIPlacerLast implements IAIPlacer {
 		public AIFactory aiFactory;
 
 		public AIPlacerLast(AIFactory aiFactory) {
@@ -171,7 +211,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 
 	}
 
-	private static class AIPlacerPriority implements IAIPlacer {
+	protected static class AIPlacerPriority implements IAIPlacer {
 
 		public AIFactory aiFactory;
 		public List<Class<? extends EntityAIBase>> prior;

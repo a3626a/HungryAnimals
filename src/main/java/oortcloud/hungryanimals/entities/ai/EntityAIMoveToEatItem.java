@@ -32,7 +32,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	private ICapabilityHungryAnimal capHungry;
 	private ICapabilityTamableAnimal capTaming;
 	private int delayCounter;
-	private static int delay = 100;
+	private static int delay = 20;
 
 	private Predicate<EntityItem> EAT_EDIBLE = new Predicate<EntityItem>() {
 		public boolean apply(EntityItem entityIn) {
@@ -72,8 +72,9 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			return false;
 		} else {
 			float radius = 16.0F;
+			
 			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
-					entity.getEntityBoundingBox().expand(radius, radius, radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+					entity.getEntityBoundingBox().grow(radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
@@ -82,7 +83,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 				return false;
 			}
 
-			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().expand(radius, radius, radius),
+			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().grow(radius),
 					EAT_EDIBLE);
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
@@ -107,10 +108,10 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			float distanceSq = 2;
 			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
 				ItemStack foodStack = target.getItem();
+				this.eatFoodBonus(target.getItem());
 				foodStack.shrink(1);
 				if (foodStack.isEmpty())
 					target.setDead();
-				this.eatFoodBonus(target.getItem());
 			}
 			return false;
 		}
@@ -126,7 +127,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	private int executeProbability() {
 		double taming = capTaming.getTaming();
-		double hunger = capHungry.getHunger() / capHungry.getMaxHunger();
+		double hunger = capHungry.getStomach() / capHungry.getMaxStomach();
 		if (taming > 1) {
 			taming = 1;
 		}
@@ -140,20 +141,24 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (item.isEmpty())
 			return;
 
-		double hunger = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).getHunger(item);
-		capHungry.addHunger(hunger);
-
-		if (this.entity.getGrowingAge() < 0) {
+		double nutrient = pref.getNutrient(item);
+		capHungry.addNutrient(nutrient);
+		
+		double stomach = pref.getStomach(item);
+		capHungry.addStomach(stomach);
+		
+		if (entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (hunger / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue());
-				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
+				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
+				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0001 / entity.getAttributeMap().getAttributeInstance(ModAttributes.hunger_bmr).getAttributeValue() * hunger);
+			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
+			capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
 	}
 }

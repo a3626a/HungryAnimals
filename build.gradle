@@ -19,7 +19,7 @@ group= "com.oortcloud.hungryanimals"
 archivesBaseName = "hungryanimals"
 
 minecraft {
-    version = "${mc_version}-14.23.1.2566"
+    version = "${mc_version}-14.23.1.2582"
     runDir = "run"
     
 	replace "@VERSION@", project.version

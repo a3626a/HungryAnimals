@@ -14,4 +14,5 @@ public class SyncIndex {
 	public static final int DEBUG_SETTARGET = 0;
 	
 	public static final int TAMING_LEVEL_SYNC = 0;
+	public static final int STOMACH_SYNC = 1;
 }

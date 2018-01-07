@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.entities.attributes;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 
 public class AttributeEntry implements IAttributeEntry {
 
@@ -14,19 +15,18 @@ public class AttributeEntry implements IAttributeEntry {
 		this.shouldRegister = shouldRegister;
 		this.value = value;
 	}
-
 	
 	@Override
 	public void apply(EntityLivingBase entity) {
-		if (!shouldRegister)
-			entity.getAttributeMap().getAttributeInstance(attribute).setBaseValue(value);
+		entity.getEntityAttribute(attribute).setBaseValue(value);
 	}
 
 	@Override
 	public void register(EntityLivingBase entity) {
-		if (entity.getAttributeMap().getAttributeInstance(attribute) == null && shouldRegister) {
+		IAttributeInstance attributeInstance = entity.getEntityAttribute(attribute);
+		if (attributeInstance == null && shouldRegister) {
 			entity.getAttributeMap().registerAttribute(attribute);
-			entity.getAttributeMap().getAttributeInstance(attribute).setBaseValue(value);
+			entity.getEntityAttribute(attribute).setBaseValue(value);
 		}
 	}
 

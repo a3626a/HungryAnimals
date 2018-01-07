@@ -52,7 +52,7 @@ public class DebugOverlayHandler extends Gui {
 		labels[1] = hunger;
 		excretion = GuiLabelNBT.createDoubleNBT(mc.fontRenderer, "excretion");
 		labels[2] = excretion;
-		taming = GuiLabelNBTEditable.createDoubleNBT(mc.fontRenderer, "taming", 0.1, targetEntityID);
+		taming = GuiLabelNBTEditable.createDoubleNBT(mc.fontRenderer, "taming", 0.5, targetEntityID);
 		labels[3] = taming;
 		age = GuiLabelNBT.createIntegerNBT(mc.fontRenderer, "age");
 		labels[4] = age;

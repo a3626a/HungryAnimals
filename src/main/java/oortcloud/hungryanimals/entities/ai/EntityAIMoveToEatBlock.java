@@ -68,7 +68,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		BlockPos closestPos = null;
 		double minimumDistanceSq = Double.MAX_VALUE;
 
-		ArrayList<Entity> list = (ArrayList<Entity>) this.worldObj.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(herdRadius, herdRadius, herdRadius), predicate);
+		ArrayList<Entity> list = (ArrayList<Entity>) this.worldObj.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().grow(herdRadius), predicate);
 		for (Entity e : list) {
 			centralPos = centralPos.add(e.getPosition());
 
@@ -147,17 +147,20 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		if (state.getBlock() == ModBlocks.excreta) {
 			return -1.0;
 		} else if (pref.canEat(capHungry, state)) {
-			return pref.getHunger(state);
+			return pref.getNutrient(state);
 		} else {
-			return 1.0;
+			return 0.01;
 		}
 	}
 	
 	public void eatBlockBonus(IBlockState block) {
 		if (block == null)
 			return;
-		double hunger = pref.getHunger(block);
-		capHungry.addHunger(hunger);
+		double nutrient = pref.getNutrient(block);
+		capHungry.addNutrient(nutrient);
+		
+		double stomach = pref.getStomach(block);
+		capHungry.addStomach(stomach);
 	}
 
 

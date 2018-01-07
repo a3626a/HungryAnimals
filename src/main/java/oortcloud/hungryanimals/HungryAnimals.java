@@ -18,14 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.network.HandlerEntityClient;
-import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
-import oortcloud.hungryanimals.core.network.HandlerGeneralServer;
-import oortcloud.hungryanimals.core.network.HandlerPlayerServer;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.PacketGeneralClient;
-import oortcloud.hungryanimals.core.network.PacketGeneralServer;
-import oortcloud.hungryanimals.core.network.PacketPlayerServer;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
 import oortcloud.hungryanimals.entities.ai.AIManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeManager;
@@ -57,6 +49,7 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
+		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
 		logger = event.getModLog();
 		RecipeAnimalGlue.init();
 		ConfigurationHandler.init(event);
@@ -70,6 +63,7 @@ public class HungryAnimals {
 		proxy.registerKeyBindings();
 		proxy.registerCapabilities();
 		proxy.registerEventHandler();
+		proxy.registerPacketHandler();
 		HungryAnimalManager.getInstance().init();
 		AttributeManager.getInstance().init();
 		
@@ -83,16 +77,10 @@ public class HungryAnimals {
 		ConfigurationHandler.sync();
 		
 		proxy.registerColors();
-
 		
 		CraftingHandler.init();
 
 
-		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
-		simpleChannel.registerMessage(HandlerGeneralServer.class, PacketGeneralServer.class, 1, Side.SERVER);
-		simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 5, Side.CLIENT);
-		simpleChannel.registerMessage(HandlerPlayerServer.class, PacketPlayerServer.class, 4, Side.SERVER);
-		simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 6, Side.CLIENT);
 	}
 
 	@Mod.EventHandler

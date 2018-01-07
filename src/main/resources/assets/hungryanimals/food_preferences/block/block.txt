@@ -1,0 +1,10 @@
+Each 'modid#name.json' contains list of 'Block-Types' and nutrient/stomach value it gives.
+
+* Block Type
+  Block Type distinguishes block states.
+  {
+    "name" : name_of_block
+    "name_of_property1" : value_of_property1,
+    "name_of_property2" : value_of_property2,
+    ...
+  }

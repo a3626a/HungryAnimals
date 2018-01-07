@@ -1,0 +1,14 @@
+[
+    {
+        "item": {
+			"name": "minecraft:golden_apple"
+        },
+        "duration":1200
+    },
+    {
+        "item": {
+			"name": "minecraft:golden_carrot"
+        },
+        "duration":600
+    }
+]

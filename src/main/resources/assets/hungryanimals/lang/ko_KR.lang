@@ -1,0 +1,28 @@
+itemGroup.tabHungryAnimals=배고픈 동물
+
+tile.hungryanimals.excreta.name=배설물
+tile.hungryanimals.niterbed.name=초석밭
+tile.hungryanimals.trough.name=여물통
+tile.hungryanimals.trapcover.name=함정 덮개
+tile.hungryanimals.floorcoverleaf.name=나뭇잎 바닥재
+tile.hungryanimals.floorcoverwool.name=양털 바닥재
+tile.hungryanimals.floorcoverhay.name=짚 바닥재 
+item.hungryanimals.manure.name=거름
+item.hungryanimals.woodash.name=재
+item.hungryanimals.saltpeter.name=초석
+item.hungryanimals.trough.name=여물통
+item.hungryanimals.slingshot.name=새총
+item.hungryanimals.bola.name=사냥추
+item.hungryanimals.herbicide.name=제초제
+item.hungryanimals.tendon.name=힘줄
+item.hungryanimals.debugglass.name=디버그 돋보기
+item.hungryanimals.animalglue.name=아교
+item.hungryanimals.compositewood.name=합성 목재
+
+hungryanimals.jei.animalglue=아교 제작
+hungryanimals.jei.animalglue.description=아교는 도가니를 특정 아이템을 든 상태로 우클릭하여 얻을 수 있습니다. 이 과정에서 도가니에 담긴 물 1/3이 사용됩니다.
+
+potion.growth=성장 촉진
+potion.disease=감염
+potion.inheat=발정기
+potion.young=성장기

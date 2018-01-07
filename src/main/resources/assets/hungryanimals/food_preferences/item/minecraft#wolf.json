@@ -1,0 +1,72 @@
+[
+	{
+		"item": {
+			"name": "minecraft:chicken"
+		},
+		"nutrient": 3.5,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:cooked_chicken"
+		},
+		"nutrient": 4,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:rabbit"
+		},
+		"nutrient": 3.5,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:cooked_rabbit"
+		},
+		"nutrient": 4,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:mutton"
+		},
+		"nutrient": 3.5,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:cooked_mutton"
+		},
+		"nutrient": 4,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:porkchop"
+		},
+		"nutrient": 3.5,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:cooked_porkchop"
+		},
+		"nutrient": 4,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:beef"
+		},
+		"nutrient": 3.5,
+		"stomach": 5
+	},
+	{
+		"item": {
+			"name": "minecraft:cooked_beef"
+		},
+		"nutrient": 4,
+		"stomach": 5
+	}
+]

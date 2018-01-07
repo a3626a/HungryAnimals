@@ -1,0 +1,18 @@
+"herbivore"
+    removes : Panic, Vanilla Mate, Vanilla Tempt, Vanilla Eat Grass
+    adds : Avoid Player, HA Mate, Eat Food In Trough, HA Tempt, Eat Item, Eat Block
+    
+"rabbit"
+    removes : Panic, Vanilla Mate, Vanilla Tempt, Raid Farm, Avoid Entity(Player, Wolf, Mob)
+    adds : Avoid Player, HA Mate, Eat food in trough, HA Tempt, Eat item, Eat block
+    
+"pig"
+    parent : "herbivore"
+    adds : Tempt Carrot On A Stick
+    
+"wolf"
+    removes : Vanilla Mate, Vanilla Target Sheep
+    adds : HA Mate, Eat Food In Trough, HA Tempt, Eat Item, Eat Block, HA Target Animals
+
+"polar_bear"
+    adds : HA Mate, Eat Food In Trough, HA Tempt, Eat Item, Eat Block, HA Target Animals

@@ -3,12 +3,35 @@
 		"item": {
 			"name": "minecraft:wheat"
 		},
-		"hunger": 50
+		"nutrient": 0.57,
+		"stomach": 0.95
+	},
+	{
+		"item": {
+			"name": "minecraft:hay_block"
+		},
+		"nutrient": 5.13,
+		"stomach": 8.55
 	},
 	{
 		"item": {
 			"name": "minecraft:reeds"
 		},
-		"hunger": 20
+		"nutrient": 0.2,
+		"stomach": 0.5
+	},
+	{
+		"item": {
+			"name": "minecraft:brown_mushroom"
+		},
+		"nutrient": 0.18,
+		"stomach": 0.3
+	},
+	{
+		"item": {
+			"name": "minecraft:red_mushroom"
+		},
+		"nutrient": 0.18,
+		"stomach": 0.3
 	}
 ]

@@ -29,16 +29,19 @@ public class AttributeManager {
 	}
 
 	public void init() {
-		ATTRIBUTES.put(ModAttributes.NAME_hunger_max, pair(ModAttributes.hunger_max, true));
-		ATTRIBUTES.put(ModAttributes.NAME_hunger_bmr, pair(ModAttributes.hunger_bmr, true));
-		ATTRIBUTES.put(ModAttributes.NAME_courtship_hunger, pair(ModAttributes.courtship_hunger, true));
-		ATTRIBUTES.put(ModAttributes.NAME_courtship_probability,
-				pair(ModAttributes.courtship_probability, true));
-		ATTRIBUTES.put(ModAttributes.NAME_courtship_hunger_condition,
-				pair(ModAttributes.courtship_hungerCondition, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_bmr, pair(ModAttributes.hunger_weight_bmr, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_stomach_digest, pair(ModAttributes.hunger_stomach_digest, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_stomach_max, pair(ModAttributes.hunger_stomach_max, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_normal, pair(ModAttributes.hunger_weight_normal, true));
+		ATTRIBUTES.put(ModAttributes.NAME_hunger_weight_normal_child, pair(ModAttributes.hunger_weight_normal_child, true));
+		ATTRIBUTES.put(ModAttributes.NAME_courtship_weight, pair(ModAttributes.courtship_weight, true));
+		ATTRIBUTES.put(ModAttributes.NAME_courtship_probability, pair(ModAttributes.courtship_probability, true));
+		ATTRIBUTES.put(ModAttributes.NAME_courtship_stomach_condition, pair(ModAttributes.courtship_stomach_condition, true));
 		ATTRIBUTES.put(ModAttributes.NAME_excretion_factor, pair(ModAttributes.excretion_factor, true));
-		ATTRIBUTES.put(ModAttributes.NAME_child_hunger, pair(ModAttributes.child_hunger, true));
-		ATTRIBUTES.put(ModAttributes.NAME_hunger_max, pair(ModAttributes.hunger_max, true));
+		ATTRIBUTES.put(ModAttributes.NAME_child_delay, pair(ModAttributes.child_delay, true));
+		ATTRIBUTES.put(ModAttributes.NAME_child_growing_length, pair(ModAttributes.child_growing_length, true));
+		ATTRIBUTES.put(ModAttributes.NAME_taming_factor_food, pair(ModAttributes.taming_factor_food, true));
+		ATTRIBUTES.put(ModAttributes.NAME_taming_factor_near, pair(ModAttributes.taming_factor_near, true));
 		ATTRIBUTES.put(ModAttributes.NAME_milk_hunger, pair(ModAttributes.milk_hunger, true));
 		ATTRIBUTES.put(ModAttributes.NAME_milk_delay, pair(ModAttributes.milk_delay, true));
 		ATTRIBUTES.put(ModAttributes.NAME_wool_hunger, pair(ModAttributes.wool_hunger, true));

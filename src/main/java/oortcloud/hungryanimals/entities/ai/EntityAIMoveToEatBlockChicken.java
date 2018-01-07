@@ -22,7 +22,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 	@Override
 	public void eatBlockBonus(IBlockState block) {
 		if (block.getBlock() == Blocks.TALLGRASS) {
-			double prob = pref.getHunger(block) / 2.0 / prefItem.getHunger(new ItemStack(Items.WHEAT_SEEDS));
+			double prob = pref.getNutrient(block) / 2.0 / prefItem.getNutrient(new ItemStack(Items.WHEAT_SEEDS));
 			if (this.entity.getRNG().nextDouble() < prob) {
 				ItemStack stack = new ItemStack(Items.WHEAT_SEEDS);
 				NBTTagCompound tag = new NBTTagCompound();

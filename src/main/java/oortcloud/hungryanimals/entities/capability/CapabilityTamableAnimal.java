@@ -16,6 +16,8 @@ public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 	private TamingLevel prevLevel;
 	protected EntityLiving entity;
 
+	public CapabilityTamableAnimal() {}
+	
 	public CapabilityTamableAnimal(EntityLiving entity) {
 		this.entity = entity;
 		setTaming(-2);

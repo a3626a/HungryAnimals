@@ -1,13 +1,17 @@
 {
-	"hungryanimals.hunger_bmr" : 0.004,
-	"hungryanimals.hunger_max" : 400,
-	"hungryanimals.courtship_hunger" : 20,
-	"hungryanimals.courtship_probability" : 0.0025,
-	"hungryanimals.courtship_hunger_condition" : 0.8,
-	"hungryanimals.excretion_factor" : 0.02,
-	"hungryanimals.child_hunger" : 100,
-	"hungryanimals.wool_hunger" : 20,
-	"hungryanimals.wool_delay" : 6000,
+	"hungryanimals.hunger_weight_bmr" : 0.001495349,
+	"hungryanimals.hunger_weight_normal" : 100,
+	"hungryanimals.hunger_weight_normal_child" : 10,
+	"hungryanimals.hunger_stomach_digest" : 0.007476744,
+	"hungryanimals.hunger_stomach_max" : 8.972092687,
+	"hungryanimals.courtship_weight" : 0.0,
+	"hungryanimals.courtship_probability" : 0.05,
+	"hungryanimals.courtship_stomach_condition" : 0.8,
+	"hungryanimals.excretion_factor" : 0.1,
+	"hungryanimals.child_delay" : 89165,
+	"hungryanimals.child_growing_length" : 300933,
+	"hungryanimals.taming_factor_near" : 0.96,
+    "hungryanimals.taming_factor_food" : 0.002,
 	"generic.maxHealth" : 20,
-	"generic.movementSpeed" : 0.20
+	"generic.movementSpeed" : 0.25
 }

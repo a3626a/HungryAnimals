@@ -25,9 +25,14 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
+import oortcloud.hungryanimals.core.network.HandlerEntityClient;
+import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
+import oortcloud.hungryanimals.core.network.PacketEntityClient;
+import oortcloud.hungryanimals.core.network.PacketGeneralClient;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
@@ -137,5 +142,11 @@ public class ClientProxy extends CommonProxy {
 		// NEIHandler.init();
 	}
 
+	@Override
+	public void registerPacketHandler() {
+		super.registerPacketHandler();
+		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 2, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 3, Side.CLIENT);
+	}
 
 }

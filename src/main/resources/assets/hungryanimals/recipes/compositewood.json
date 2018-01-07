@@ -1,0 +1,24 @@
+{
+    "type" : "hungryanimals:distinct_ore_shaped",
+    "pattern" : [
+        "abc",
+        "abc",
+        "abc"
+    ],
+    "key" : {
+        "a" : {
+            "type": "forge:ore_dict",
+            "ore": "logWood"
+        },
+        "b" : {
+            "item" : "hungryanimals:animalglue"
+        },
+        "c" : {
+            "type": "forge:ore_dict",
+            "ore": "logWood"
+        }
+    },
+    "result" : {
+        "item" : "hungryanimals:compositewood"
+    }
+}

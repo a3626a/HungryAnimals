@@ -3,18 +3,21 @@
 		"item": {
 			"name": "minecraft:carrot"
 		},
-		"hunger": 40
+		"nutrient": 0.36,
+		"stomach": 0.6
 	},
 	{
 		"item": {
 			"name": "minecraft:golden_carrot"
 		},
-		"hunger": 150
+		"nutrient": 1.6,
+		"stomach": 2
 	},
 	{
 		"item": {
 			"name": "minecraft:yellow_flower"
 		},
-		"hunger": 20
+		"nutrient": 0.282666667,
+		"stomach": 0.706666667
 	}
 ]
