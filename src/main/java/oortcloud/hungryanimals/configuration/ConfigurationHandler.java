@@ -49,6 +49,9 @@ import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.ai.AIContainer;
+import oortcloud.hungryanimals.entities.ai.AIContainerDuplex;
+import oortcloud.hungryanimals.entities.ai.AIContainerRegisterEvent;
 import oortcloud.hungryanimals.entities.ai.AIManager;
 import oortcloud.hungryanimals.entities.ai.IAIContainer;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
@@ -82,21 +85,21 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON animal;
 	private static ConfigurationHandlerJSON cures;
 	private static ConfigurationHandlerJSON inheat;
-	
+
 	public static Gson GSON_INSTANCE_HASH_BLOCK_STATE = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer()).create();
 	public static Gson GSON_INSTANCE_HASH_ITEM_TYPE = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
 		File basefolder = new File(event.getModConfigurationDirectory(), References.MODID);
-		File examplefolder = new File(event.getModConfigurationDirectory(), References.MODID+"_example");
-		// Create Example Config Folder 
+		File examplefolder = new File(event.getModConfigurationDirectory(), References.MODID + "_example");
+		// Create Example Config Folder
 		try {
 			createExample(examplefolder);
 		} catch (URISyntaxException | IOException e1) {
-			HungryAnimals.logger.error("Couldn\'t create config examples");
+			HungryAnimals.logger.error("Couldn\'t create config examples\n{}", e1);
 		}
-		
+
 		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/block", (text, animal) -> {
 			JsonArray jsonArr;
 			try {
@@ -191,7 +194,11 @@ public class ConfigurationHandler {
 			}
 			String ai = jsonObj.get("type").getAsString();
 			IAIContainer<EntityAnimal> aiContainer = AIManager.getInstance().AITYPES.get(ai).apply(animal);
-			//MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer) aiContainer));
+			if (aiContainer instanceof AIContainer) {
+				MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer) aiContainer));
+			} else if (aiContainer instanceof AIContainerDuplex) {
+				MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, ((AIContainerDuplex) aiContainer).getTask()));
+			}
 			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
 		});
 
@@ -234,7 +241,7 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), text, e });
 				return;
 			}
-			
+
 			for (JsonElement jsonEle : jsonArr) {
 				HashItemType cure = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonEle.getAsJsonObject(), HashItemType.class);
 				CureManager.getInstance().add(cure);
@@ -248,7 +255,7 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), text, e });
 				return;
 			}
-			
+
 			for (JsonElement jsonEle : jsonArr) {
 				JsonElement item = jsonEle.getAsJsonObject().get("item");
 				HashItemType inheatItem = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(item.getAsJsonObject(), HashItemType.class);
@@ -347,56 +354,55 @@ public class ConfigurationHandler {
 		return new ResourceLocation(location.replace('#', ':'));
 	}
 
-	private static void createExample(File basefolder) throws URISyntaxException, IOException {
-		String[] directories = new String[] {"",
-				                             "/ais",
-				                             "/attributes",
-				                             "/food_preferences/block",
-				                             "/food_preferences/entity",
-				                             "/food_preferences/item",
-				                             "/loot_tables/entities"};
+	private static void createExample(File basefolder) throws IOException, URISyntaxException {
+		String[] directories = new String[] { "", "/ais", "/attributes", "/food_preferences/block", "/food_preferences/entity", "/food_preferences/item",
+				"/loot_tables/entities" };
 		String prefix = "/assets/hungryanimals";
-		
+
 		for (String directory : directories) {
-			
 			// Prepare for directory walk
-	        URI uri = ConfigurationHandler.class.getResource(prefix+directory).toURI();
-	        Path myPath;
-	        if (uri.getScheme().equals("jar")) {
-	            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
-	            myPath = fileSystem.getPath(prefix+directory);
-	        } else {
-	            myPath = Paths.get(uri);
-	        }
-	        Stream<Path> walk = Files.walk(myPath, 1);
-	        
-	        // Create Directory
-	        File parent = new File(basefolder.toString()+directory);
-			if (!parent.exists()) {
-				try {
-					Files.createDirectories(parent.toPath());
-				} catch (IOException e) {
-					HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", new Object[] { directory, e });
-					walk.close();
-					return;
-				}
+			URI uri = ConfigurationHandler.class.getResource(prefix + directory).toURI();
+			if (uri.getScheme().equals("jar")) {
+				FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+				Path myPath = fileSystem.getPath(prefix + directory);
+				walkAndCopy(basefolder, directory, myPath);
+				fileSystem.close();
+			} else {
+				Path myPath = Paths.get(uri);
+				walkAndCopy(basefolder, directory, myPath);
 			}
 			
-			// Create Example Files
-	        for (Iterator<Path> it = walk.iterator(); it.hasNext();){
-	        	Path i = it.next();
-	        	
-	        	if (i.toFile().isFile()) {
-		            String textExample = new String(Files.readAllBytes(i));
-		            File target = new File(parent, i.getFileName().toString());
-		            target.createNewFile();
-					FileWriter o = new FileWriter(target);
-					o.write(textExample);
-					o.close();
-	        	}
-	        }
-	        walk.close();
 		}
+	}
+
+	private static void walkAndCopy(File basefolder, String directory, Path path) throws IOException {
+		Stream<Path> walk = Files.walk(path, 1);
+
+		// Create Directory
+		File parent = new File(basefolder.toString() + directory);
+		if (!parent.exists()) {
+			try {
+				Files.createDirectories(parent.toPath());
+			} catch (IOException e) {
+				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", directory, e);
+				walk.close();
+				return;
+			}
+		}
+		// Create Example Files
+		for (Iterator<Path> it = walk.iterator(); it.hasNext();) {
+			Path i = it.next();
+			if (!Files.isDirectory(i)) {
+				String textExample = new String(Files.readAllBytes(i));
+				File target = new File(parent, i.getFileName().toString());
+				target.createNewFile();
+				FileWriter o = new FileWriter(target);
+				o.write(textExample);
+				o.close();
+			}
+		}
+		
+		walk.close();
 	}
 	
 }
