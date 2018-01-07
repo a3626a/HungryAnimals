@@ -10,6 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -311,10 +312,6 @@ public class EntityEventHandler {
 			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.SUCCESS);
 		}
 
-		// Skipping Event to Entity
-		if (entity.isBreedingItem(itemstack)) {
-			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
-		}
 		// For horses, they do not implement isBreedingItem properly
 		if (entity instanceof AbstractHorse) {
 			if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK) || item == Items.APPLE
@@ -328,11 +325,26 @@ public class EntityEventHandler {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
 		}
-		if (entity instanceof EntityOcelot && capTaming.getTamingLevel() != TamingLevel.TAMED) {
-			// For ocelots, to disable feed fish before tamed
+		if (entity instanceof EntityOcelot) {
 			if (item == Items.FISH) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				if (capTaming.getTamingLevel() != TamingLevel.TAMED) {
+					// For ocelots, to disable feed fish before tamed
+					return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+
+				} else {
+					if (!((EntityTameable) entity).isTamed()) {
+						// Can feed wild(Vanilla) animal fish
+						return new Pair<Boolean, EnumActionResult>(false, null);
+					} else {
+						// Can not feed tamed(Vanilla) animal fish
+						return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+					}
+				}
 			}
+		}
+		// Skipping Event to Entity
+		if (entity.isBreedingItem(itemstack)) {
+			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 		}
 
 		return new Pair<Boolean, EnumActionResult>(false, null);
