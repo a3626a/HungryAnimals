@@ -71,7 +71,7 @@
 	},
 	{
 		"item": {
-			"name": "minecraft:raw_fish"
+			"name": "minecraft:fish"
 		},
 		"nutrient": 0.7,
 		"stomach": 1
