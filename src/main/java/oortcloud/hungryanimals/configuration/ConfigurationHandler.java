@@ -216,9 +216,9 @@ public class ConfigurationHandler {
 			}
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				HashItemType state = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
+				Ingredient ing = CraftingHelper.getIngredient(jsonObj.getAsJsonObject("item"), new JsonContext(References.MODID));
 				int count = jsonObj.getAsJsonPrimitive("count").getAsInt();
-				RecipeAnimalGlue.addRecipe(state, count);
+				RecipeAnimalGlue.addRecipe(ing, count);
 			}
 		});
 		world = new ConfigurationHandlerJSON(basefolder, "world", (text) -> {

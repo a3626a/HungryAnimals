@@ -1,19 +1,19 @@
 [
     {
         "item" : {
-            "name" : "minecraft:leather"
+            "item" : "minecraft:leather"
         },
         "count" : 6
     },
     {
         "item" : {
-            "name" : "hungryanimals:tendon"
+            "item" : "hungryanimals:tendon"
         },
         "count" : 4
     },
     {
         "item" : {
-            "name" : "minecraft:bone"
+            "item" : "minecraft:bone"
         },
         "count" : 2
     }
