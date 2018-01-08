@@ -40,9 +40,12 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
@@ -60,10 +63,9 @@ import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
 import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient.FoodPreferenceIngredientEntry;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
 import oortcloud.hungryanimals.entities.handler.CureManager;
@@ -71,6 +73,8 @@ import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeatManager;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
+import oortcloud.hungryanimals.utils.HashBlockState;
+import oortcloud.hungryanimals.utils.HashItemType;
 
 public class ConfigurationHandler {
 
@@ -93,6 +97,7 @@ public class ConfigurationHandler {
 	public static void init(FMLPreInitializationEvent event) {
 		File basefolder = new File(event.getModConfigurationDirectory(), References.MODID);
 		File examplefolder = new File(event.getModConfigurationDirectory(), References.MODID + "_example");
+
 		// Create Example Config Folder
 		try {
 			createExample(examplefolder);
@@ -129,18 +134,17 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { foodPreferencesItem.getDescriptor(), text, animal, e });
 				return;
 			}
-			Map<HashItemType, Pair<Double, Double>> map = new HashMap<HashItemType, Pair<Double, Double>>();
+			List<FoodPreferenceIngredientEntry> list = new ArrayList<FoodPreferenceIngredientEntry>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				HashItemType state = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonObj.getAsJsonObject("item"), HashItemType.class);
+				Ingredient ing = CraftingHelper.getIngredient(jsonObj.getAsJsonObject("item"), new JsonContext(References.MODID));
 				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
 				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
-				map.put(state, new Pair<Double, Double>(nutrient, stomach));
+				list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
 			}
-			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
-					map);
+			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal, list);
 			MinecraftForge.EVENT_BUS.post(event_);
-			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceItemStack(map));
+			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
 		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/entity", (text, animal) -> {
 			JsonArray jsonArr;
@@ -371,7 +375,7 @@ public class ConfigurationHandler {
 				Path myPath = Paths.get(uri);
 				walkAndCopy(basefolder, directory, myPath);
 			}
-			
+
 		}
 	}
 
@@ -401,8 +405,8 @@ public class ConfigurationHandler {
 				o.close();
 			}
 		}
-		
+
 		walk.close();
 	}
-	
+
 }

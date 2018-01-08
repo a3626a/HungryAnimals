@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.recipes;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.utils.HashItemType;
 
 public class RecipeAnimalGlue {
 

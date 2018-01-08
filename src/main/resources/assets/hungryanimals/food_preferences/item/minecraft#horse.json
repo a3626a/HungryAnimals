@@ -1,42 +1,43 @@
 [
 	{
 		"item": {
-			"name": "minecraft:sugar"
+			"item": "minecraft:sugar"
 		},
 		"nutrient": 0.15,
 		"stomach": 0.25
 	},
 	{
 		"item": {
-			"name": "minecraft:wheat"
+			"item": "minecraft:wheat"
 		},
 		"nutrient": 0.57,
 		"stomach": 0.95
 	},
 	{
 		"item": {
-			"name": "minecraft:hay_block"
+			"item": "minecraft:hay_block"
 		},
 		"nutrient": 5.13,
 		"stomach": 8.55
 	},
 	{
 		"item": {
-			"name": "minecraft:apple"
+			"item": "minecraft:apple"
 		},
 		"nutrient": 0.36,
 		"stomach": 0.6
 	},
 	{
 		"item": {
-			"name": "minecraft:golden_carrot"
+			"item": "minecraft:golden_carrot"
 		},
 		"nutrient": 1.6,
 		"stomach": 2
 	},
 	{
 		"item": {
-			"name": "minecraft:golden_apple"
+			"item": "minecraft:golden_apple",
+			"data": 32767
 		},
 		"nutrient": 5,
 		"stomach": 5

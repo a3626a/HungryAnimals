@@ -1,8 +1,5 @@
-Each 'modid#name.json' contains list of 'Item-Types' and nutrient/stomach value it gives.
+Each 'modid#name.json' contains list of 'Ingredients' and nutrient/stomach value it gives.
 
-* Item Type
-  Item Type distinguishes item stacks.
-  {
-    "name" : name_of_item
-    "damage" : damage_of_item
-  }
+* Ingredients
+  Ingredient is generalization of item object used in json based crafting recipe
+  It allows use ore dict, nbt, and so on

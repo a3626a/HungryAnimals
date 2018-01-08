@@ -16,10 +16,10 @@ import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeCategoryAnimalGlue;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeWrapperAnimalGlue;
 import oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe.RecipeWrapperShapedDistinctOreRecipe;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.recipes.ShapedDistinctOreRecipe;
+import oortcloud.hungryanimals.utils.HashItemType;
 
 @JEIPlugin
 public class PluginHungryAnimals implements IModPlugin {

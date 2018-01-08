@@ -1,16 +1,16 @@
 package oortcloud.hungryanimals.entities.food_preferences;
 
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState.HashBlockState;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient.FoodPreferenceIngredientEntry;
+import oortcloud.hungryanimals.utils.HashBlockState;
 
 public class HungryAnimalRegisterEvent extends Event {
 
@@ -48,31 +48,19 @@ public class HungryAnimalRegisterEvent extends Event {
 
 	public static class FoodPreferenceItemStackRegisterEvent extends HungryAnimalRegisterEvent {
 
-		private final Map<HashItemType, Pair<Double, Double>> map;
+		private final List<FoodPreferenceIngredientEntry> list;
 				
-		public FoodPreferenceItemStackRegisterEvent(Class<? extends EntityAnimal> entity, Map<HashItemType, Pair<Double, Double>> map) {
+		public FoodPreferenceItemStackRegisterEvent(Class<? extends EntityAnimal> entity, List<FoodPreferenceIngredientEntry> list) {
 			super(entity);
-			this.map = map;
+			this.list = list;
 		}
 		
-		public void put(Item item, Pair<Double, Double> hunger) {
-			map.put(new HashItemType(item), hunger);
+		public void put(Ingredient item, double nutrient, double stomach) {
+			list.add(new FoodPreferenceIngredientEntry(item, nutrient, stomach));
 		}
 		
-		public void put(Item item, int damage, Pair<Double, Double> hunger) {
-			map.put(new HashItemType(item, damage), hunger);
-		}
-		
-		public void put(ItemStack itemstack, boolean ignoreDamage, Pair<Double, Double> hunger) {
-			if (ignoreDamage) {
-				map.put(new HashItemType(itemstack.getItem()), hunger);
-			} else {
-				map.put(new HashItemType(itemstack.getItem(), itemstack.getItemDamage()), hunger);
-			}
-		}
-		
-		public Map<HashItemType, Pair<Double, Double>> getMap() {
-			return map;
+		public List<FoodPreferenceIngredientEntry> getList() {
+			return list;
 		}
 		
 	}

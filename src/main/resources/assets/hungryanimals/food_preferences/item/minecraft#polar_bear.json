@@ -1,84 +1,86 @@
 [
 	{
 		"item": {
-			"name": "minecraft:chicken"
+			"item": "minecraft:chicken"
 		},
 		"nutrient": 3.5,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:cooked_chicken"
+			"item": "minecraft:cooked_chicken"
 		},
 		"nutrient": 4,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:rabbit"
+			"item": "minecraft:rabbit"
 		},
 		"nutrient": 3.5,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:cooked_rabbit"
+			"item": "minecraft:cooked_rabbit"
 		},
 		"nutrient": 4,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:mutton"
+			"item": "minecraft:mutton"
 		},
 		"nutrient": 3.5,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:cooked_mutton"
+			"item": "minecraft:cooked_mutton"
 		},
 		"nutrient": 4,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:porkchop"
+			"item": "minecraft:porkchop"
 		},
 		"nutrient": 3.5,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:cooked_porkchop"
+			"item": "minecraft:cooked_porkchop"
 		},
 		"nutrient": 4,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:beef"
+			"item": "minecraft:beef"
 		},
 		"nutrient": 3.5,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:cooked_beef"
+			"item": "minecraft:cooked_beef"
 		},
 		"nutrient": 4,
 		"stomach": 5
 	},
 	{
 		"item": {
-			"name": "minecraft:fish"
+			"item": "minecraft:fish",
+			"data": 32767
 		},
 		"nutrient": 0.7,
 		"stomach": 1
 	},
 	{
 		"item": {
-			"name": "minecraft:cooked_fish"
+			"item": "minecraft:cooked_fish",
+			"data": 32767
 		},
 		"nutrient": 0.8,
 		"stomach": 1

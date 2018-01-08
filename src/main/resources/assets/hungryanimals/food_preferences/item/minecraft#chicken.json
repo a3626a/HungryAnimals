@@ -1,28 +1,28 @@
 [
 	{
 		"item": {
-			"name": "minecraft:wheat_seeds"
+			"item": "minecraft:wheat_seeds"
 		},
 		"nutrient": 0.16,
 		"stomach": 0.2
 	},
 	{
 		"item": {
-			"name": "minecraft:pumpkin_seeds"
+			"item": "minecraft:pumpkin_seeds"
 		},
 		"nutrient": 0.2,
 		"stomach": 0.25
 	},
 	{
 		"item": {
-			"name": "minecraft:melon_seeds"
+			"item": "minecraft:melon_seeds"
 		},
 		"nutrient": 0.2,
 		"stomach": 0.25
 	},
 	{
 		"item": {
-			"name": "minecraft:beetroot_seeds"
+			"item": "minecraft:beetroot_seeds"
 		},
 		"nutrient": 0.16,
 		"stomach": 0.2

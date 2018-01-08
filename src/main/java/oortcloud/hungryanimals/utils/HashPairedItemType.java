@@ -1,6 +1,4 @@
-package oortcloud.hungryanimals.configuration.util;
-
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
+package oortcloud.hungryanimals.utils;
 
 public class HashPairedItemType {
 
@@ -45,3 +43,4 @@ public class HashPairedItemType {
 	}
 	
 }
+

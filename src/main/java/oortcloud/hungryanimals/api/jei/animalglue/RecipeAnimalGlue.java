@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.api.jei.animalglue;
 
 import java.util.Map.Entry;
 
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceItemStack.HashItemType;
+import oortcloud.hungryanimals.utils.HashItemType;
 
 public class RecipeAnimalGlue {
 

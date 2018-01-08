@@ -1,21 +1,21 @@
 [
 	{
 		"item": {
-			"name": "minecraft:wheat"
+			"item": "minecraft:wheat"
 		},
 		"nutrient": 0.57,
 		"stomach": 0.95
 	},
 	{
 		"item": {
-			"name": "minecraft:reeds"
+			"item": "minecraft:reeds"
 		},
 		"nutrient": 0.2,
 		"stomach": 0.5
 	},
 	{
 		"item": {
-			"name": "minecraft:hay_block"
+			"item": "minecraft:hay_block"
 		},
 		"nutrient": 5.13,
 		"stomach": 8.55
