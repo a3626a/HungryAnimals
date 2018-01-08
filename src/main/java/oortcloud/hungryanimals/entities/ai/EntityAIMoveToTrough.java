@@ -29,15 +29,17 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	private World world;
 	public BlockPos pos;
 	private int delayCounter;
-	private static int delay = 20;
+	private static int delay = 100;
 	private ICapabilityHungryAnimal capHungry;
 	private ICapabilityTamableAnimal capTaming;
-	
+	private IFoodPreference<ItemStack> pref;
+
 	public EntityAIMoveToTrough(EntityAnimal entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
-		
+		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+
 		this.entity = entity;
 		this.world = this.entity.getEntityWorld();
 		this.speed = speed;
@@ -48,7 +50,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	public boolean shouldExecute() {
 		if (pos == null)
 			return false;
-		
+
 		if (this.delayCounter > 0) {
 			--this.delayCounter;
 			return false;
@@ -58,7 +60,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (this.capTaming.getTamingLevel() == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
-					return !trough.stack.isEmpty() && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack);
+					return !trough.stack.isEmpty() && pref.canEat(capHungry, trough.stack);
 				} else {
 					return false;
 				}
@@ -82,13 +84,11 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;
-					if (!trough.stack.isEmpty() && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass()).canEat(this.capHungry, trough.stack)) {
+					while (!trough.stack.isEmpty() && pref.canEat(capHungry, trough.stack)) {
 						eatFoodBonus(trough.stack);
 						trough.stack.shrink(1);
-						
-						// TODO check valid flag
-						world.notifyBlockUpdate(pos, state, state, 3);
 					}
+					world.notifyBlockUpdate(pos, state, state, 3);
 				}
 			}
 			return false;
@@ -104,31 +104,28 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 		double nutrient = pref.getNutrient(item);
 		capHungry.addNutrient(nutrient);
-		
+
 		double stomach = pref.getStomach(item);
 		capHungry.addStomach(stomach);
-		
+
 		if (this.entity.getGrowingAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (nutrient
-						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
+				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0002
-					/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue()
-					* nutrient);
+			this.capTaming.addTaming(0.0002 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
 
 	}
-	
+
 	@Override
 	public void resetTask() {
 		delayCounter = delay;
 	}
-	
+
 }

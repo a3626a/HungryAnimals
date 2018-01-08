@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
+@Deprecated
 public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 
 	private IFoodPreference<ItemStack> prefItem;
