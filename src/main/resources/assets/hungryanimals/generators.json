@@ -1,0 +1,51 @@
+[
+    {
+        "generator" : {
+            "condition" : {
+                "below" : {"name" : "minecraft:grass"},
+                "chance" : 0.1,
+                "not_adjacent" : {
+                    "name": "minecraft:tallgrass",
+                    "type": "tall_grass"
+                }
+            },
+            "grass" : {
+                "name": "minecraft:tallgrass",
+                "type": "tall_grass"
+            }
+        }
+    },
+    {
+        "biome" : "minecraft:jungle",
+        "generator" : {
+            "condition" : {
+                "below" : {"name" : "minecraft:grass"},
+                "chance" : 0.2,
+                "not_adjacent" : {
+                    "name": "minecraft:tallgrass",
+                    "type": "fern"
+                }
+            },
+            "grass" : {
+                "name": "minecraft:tallgrass",
+                "type": "fern"
+            }
+        }
+    },
+    {
+        "biome" : "minecraft:plains",
+        "generator" : {
+            "condition" : {
+                "below" : {"name" : "minecraft:grass"},
+                "chance" : 1,
+                "not_adjacent" : {
+                    "name": "minecraft:tallgrass",
+                    "type": "fern"
+                }
+            },
+            "grass" : {
+                "name": "minecraft:yellow_flower"
+            }
+        }
+    }
+]

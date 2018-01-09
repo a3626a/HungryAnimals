@@ -43,14 +43,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
-import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.AIContainer;
 import oortcloud.hungryanimals.entities.ai.AIContainerDuplex;
@@ -72,9 +73,10 @@ import oortcloud.hungryanimals.entities.handler.CureManager;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeatManager;
 import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
+import oortcloud.hungryanimals.generation.Generator;
+import oortcloud.hungryanimals.generation.GrassGenerationManager;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.utils.HashBlockState;
-import oortcloud.hungryanimals.utils.HashItemType;
 
 public class ConfigurationHandler {
 
@@ -89,9 +91,8 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON animal;
 	private static ConfigurationHandlerJSON cures;
 	private static ConfigurationHandlerJSON inheat;
+	private static ConfigurationHandlerJSON generators;
 
-	public static Gson GSON_INSTANCE_HASH_BLOCK_STATE = new GsonBuilder().registerTypeAdapter(HashBlockState.class, new HashBlockState.Serializer()).create();
-	public static Gson GSON_INSTANCE_HASH_ITEM_TYPE = new GsonBuilder().registerTypeAdapter(HashItemType.class, new HashItemType.Serializer()).create();
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
@@ -116,7 +117,7 @@ public class ConfigurationHandler {
 			Map<HashBlockState, Pair<Double, Double>> map = new HashMap<HashBlockState, Pair<Double, Double>>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				HashBlockState state = GSON_INSTANCE_HASH_BLOCK_STATE.fromJson(jsonObj.getAsJsonObject("block"), HashBlockState.class);
+				HashBlockState state = HashBlockState.parse(jsonObj.getAsJsonObject("block"));
 				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
 				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
 				map.put(state, new Pair<Double, Double>(nutrient, stomach));
@@ -142,7 +143,8 @@ public class ConfigurationHandler {
 				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
 				list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
 			}
-			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal, list);
+			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
+					list);
 			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
@@ -234,7 +236,7 @@ public class ConfigurationHandler {
 			BlockExcreta.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_probability").getAsDouble();
 			BlockExcreta.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
 			BlockExcreta.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
-			WorldEventHandler.grassProbability = jsonObj.getAsJsonPrimitive("grass_probability").getAsDouble();
+			GrassGenerationManager.grassProbability = jsonObj.getAsJsonPrimitive("grass_probability").getAsDouble();
 			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
 		cures = new ConfigurationHandlerJSON(basefolder, "cures", (text) -> {
@@ -265,6 +267,29 @@ public class ConfigurationHandler {
 				Ingredient inheat = CraftingHelper.getIngredient(item, new JsonContext(References.MODID));
 				int inheatDuration = JsonUtils.getInt(jsonEle.getAsJsonObject(), "duration");
 				InHeatManager.getInstance().add(inheat, inheatDuration);
+			}
+		});
+		generators = new ConfigurationHandlerJSON(basefolder, "generators", (text) -> {
+			JsonArray jsonArr;
+			try {
+				jsonArr = (new JsonParser()).parse(text).getAsJsonArray();
+			} catch (JsonSyntaxException e) {
+				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), text, e });
+				return;
+			}
+
+			for (JsonElement jsonEle : jsonArr) {
+				JsonObject jsonObj = jsonEle.getAsJsonObject();
+				Biome biome = null;
+				if (jsonObj.has("biome")) {
+					String biomeName = JsonUtils.getString(jsonObj, "biome");
+					biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(biomeName));
+					if (biome == null) {
+						throw new JsonSyntaxException(biomeName);
+					}
+				}
+				JsonElement generator = jsonObj.get("generator");
+				GrassGenerationManager.getInstance().registerGenerator(biome, Generator.parse(generator));
 			}
 		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (text) -> {
@@ -320,6 +345,7 @@ public class ConfigurationHandler {
 		world.sync();
 		cures.sync();
 		inheat.sync();
+		generators.sync();
 		LootTableModifier.sync();
 	}
 

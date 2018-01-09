@@ -1,8 +1,1 @@
-'cures.json' contains list of 'Item-Types' which can cure disease
-
-* Item Type
-  Item Type distinguishes item stacks.
-  {
-    "name" : name_of_item
-    "damage" : damage_of_item
-  }
+'cures.json' contains list of 'Ingredient' which can cure disease

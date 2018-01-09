@@ -9,7 +9,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
-import oortcloud.hungryanimals.core.handler.WorldEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.HandlerGeneralServer;
@@ -56,7 +55,6 @@ public class CommonProxy {
 	}
 
 	public void registerEventHandler() {
-		MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
 		MinecraftForge.EVENT_BUS.register(new ConfigurationEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHandler());

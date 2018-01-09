@@ -105,7 +105,7 @@ public class DebugOverlayHandler extends Gui {
 		
 		Entity entity = mc.world.getEntityByID(targetEntityID.data);
 		if (entity != null) {
-			String text = (String)EntityList.getEntityString(entity);
+			String text = (String)EntityList.getKey(entity).toString();
 			if (text != null) {
 				if (entity instanceof EntityAnimal) text+=" (Compatible)";
 				this.drawString(mc.fontRenderer, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);
