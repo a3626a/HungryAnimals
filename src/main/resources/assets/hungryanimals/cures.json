@@ -1,8 +1,8 @@
 [
     {
-	    "name": "minecraft:brown_mushroom"
+	    "item": "minecraft:brown_mushroom"
     },
     {
-	    "name": "minecraft:red_mushroom"
+	    "item": "minecraft:red_mushroom"
     }
 ]

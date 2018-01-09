@@ -1,18 +1,18 @@
 package oortcloud.hungryanimals.entities.handler;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import oortcloud.hungryanimals.utils.HashItemType;
+import net.minecraft.item.crafting.Ingredient;
 
 public class CureManager {
 	private static CureManager INSTANCE;
 
-	private Set<HashItemType> REGISTRY;
+	private List<Ingredient> REGISTRY;
 	
 	private CureManager() {
-		REGISTRY = new HashSet<HashItemType>();
+		REGISTRY = new ArrayList<Ingredient>();
 	}
 	
 	public static CureManager getInstance() {
@@ -22,17 +22,16 @@ public class CureManager {
 		return INSTANCE;
 	}
 	
-	public boolean add(HashItemType cure) {
+	public boolean add(Ingredient cure) {
 		return REGISTRY.add(cure);
 	}
 	
 	public boolean isCure(ItemStack food) {
-		if (REGISTRY.contains(new HashItemType(food.getItem()))) {
-			return true;
-		} else if (REGISTRY.contains(new HashItemType(food.getItem(), food.getItemDamage()))) {
-			return true;
-		} else {
-			return false;
+		for (Ingredient i : REGISTRY) {
+			if (i.apply(food)) {
+				return true;
+			}
 		}
+		return false;
 	}
 }

@@ -247,7 +247,7 @@ public class ConfigurationHandler {
 			}
 
 			for (JsonElement jsonEle : jsonArr) {
-				HashItemType cure = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(jsonEle.getAsJsonObject(), HashItemType.class);
+				Ingredient cure = CraftingHelper.getIngredient(jsonEle, new JsonContext(References.MODID));
 				CureManager.getInstance().add(cure);
 			}
 		});
@@ -262,9 +262,9 @@ public class ConfigurationHandler {
 
 			for (JsonElement jsonEle : jsonArr) {
 				JsonElement item = jsonEle.getAsJsonObject().get("item");
-				HashItemType inheatItem = GSON_INSTANCE_HASH_ITEM_TYPE.fromJson(item.getAsJsonObject(), HashItemType.class);
+				Ingredient inheat = CraftingHelper.getIngredient(item, new JsonContext(References.MODID));
 				int inheatDuration = JsonUtils.getInt(jsonEle.getAsJsonObject(), "duration");
-				InHeatManager.getInstance().add(inheatItem, inheatDuration);
+				InHeatManager.getInstance().add(inheat, inheatDuration);
 			}
 		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (text) -> {
