@@ -1,5 +1,8 @@
 package oortcloud.hungryanimals.items.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -24,12 +27,8 @@ public class DebugOverlayHandler extends Gui {
 	private boolean isEnabled = false;
 	private Minecraft mc;
 
-	private GuiLabelNBT targetEntityID;
-	private GuiLabelNBTEditable hunger;
-	private GuiLabelNBT excretion;
-	private GuiLabelNBTEditable taming;
-	private GuiLabelNBT age;
-	private GuiLabelNBT[] labels;
+	private GuiLabelNBTInteger targetEntityID;
+	private List<GuiPlacable> labels;
 
 	private int index;
 
@@ -44,20 +43,19 @@ public class DebugOverlayHandler extends Gui {
 
 	private void init(Minecraft mc) {
 		index = 0;
-
-		labels = new GuiLabelNBT[5];
-		targetEntityID = GuiLabelNBT.createIntegerNBT(mc.fontRenderer, "target");
-		labels[0] = targetEntityID;
-		hunger = GuiLabelNBTEditable.createDoubleNBT(mc.fontRenderer, "hunger", 10, targetEntityID);
-		labels[1] = hunger;
-		excretion = GuiLabelNBT.createDoubleNBT(mc.fontRenderer, "excretion");
-		labels[2] = excretion;
-		taming = GuiLabelNBTEditable.createDoubleNBT(mc.fontRenderer, "taming", 0.5, targetEntityID);
-		labels[3] = taming;
-		age = GuiLabelNBT.createIntegerNBT(mc.fontRenderer, "age");
-		labels[4] = age;
-		for (int i = 0; i < labels.length; i++) {
-			labels[i].setPosition(START_X, START_Y + FONTHEIGHT * i);
+		labels = new ArrayList<GuiPlacable>();
+		targetEntityID = new GuiLabelNBTInteger(mc.fontRenderer, "target");
+		labels.add(targetEntityID);
+		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "weight", 10, targetEntityID));
+		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "nutrient", 1, targetEntityID));
+		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "stomach", 1, targetEntityID));
+		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "excretion", 0.1, targetEntityID));
+		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "taming", 0.5, targetEntityID));
+		labels.add(new GuiLabelNBTEditableInteger(mc.fontRenderer, "age", 60*20, targetEntityID));
+		int cnt = 0;
+		for (GuiPlacable i : labels) {
+			i.setPosition(START_X, START_Y + FONTHEIGHT * cnt);
+			cnt++;
 		}
 	}
 
@@ -88,8 +86,8 @@ public class DebugOverlayHandler extends Gui {
 						return;
 					}
 				}
-				for (int i = 0; i < labels.length; i++) {
-					labels[i].update();
+				for (GuiPlacable i : labels) {
+					i.update();
 				}
 			}
 		}
@@ -105,7 +103,7 @@ public class DebugOverlayHandler extends Gui {
 		ScaledResolution res = event.getResolution();
 		this.drawGradientRect(0, 0, WIDTH, res.getScaledHeight(), -1072689136, -804253680);
 		
-		Entity entity = mc.world.getEntityByID(targetEntityID.intData);
+		Entity entity = mc.world.getEntityByID(targetEntityID.data);
 		if (entity != null) {
 			String text = (String)EntityList.getEntityString(entity);
 			if (text != null) {
@@ -114,11 +112,11 @@ public class DebugOverlayHandler extends Gui {
 			}
 		}
 		
-		for (int i = 0; i < labels.length; i++) {
+		for (int i = 0; i < labels.size(); i++) {
 			if (i == index) {
 				this.drawGradientRect(0, START_Y + FONTHEIGHT * i, WIDTH, START_Y + FONTHEIGHT * (i+1), 0x80A0A0A0, 0x80FFFFFF);
 			}
-			labels[i].draw();
+			labels.get(i).draw();
 		}
 	}
 
@@ -126,7 +124,7 @@ public class DebugOverlayHandler extends Gui {
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if (this.isEnabled) {
 			if (ModKeyBindings.keyDown.isPressed()) {
-				if (index < labels.length - 1)
+				if (index < labels.size() - 1)
 					index++;
 			}
 			if (ModKeyBindings.keyUp.isPressed()) {
@@ -134,13 +132,13 @@ public class DebugOverlayHandler extends Gui {
 					index--;
 			}
 			if (ModKeyBindings.keyRight.isPressed()) {
-				if (labels[index] instanceof GuiLabelNBTEditable) {
-					((GuiLabelNBTEditable)labels[index]).increase();
+				if (labels.get(index) instanceof IEditable) {
+					((IEditable)labels.get(index)).increase();
 				}
 			}
 			if (ModKeyBindings.keyLeft.isPressed()) {
-				if (labels[index] instanceof GuiLabelNBTEditable) {
-					((GuiLabelNBTEditable)labels[index]).decrease();
+				if (labels.get(index) instanceof IEditable) {
+					((IEditable)labels.get(index)).decrease();
 				}
 			}
 		}
