@@ -17,7 +17,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 
 public class TileEntityTrough extends TileEntity implements ITickable {
 
@@ -45,7 +45,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.getWorld().getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (EntityAnimal i : list) {
 				if (i.hasCapability(ProviderHungryAnimal.CAP, null) && i.hasCapability(ProviderTamableAnimal.CAP, null)) {
-					if (i.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.TAMED && FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(i.getClass()).canEat(i.getCapability(ProviderHungryAnimal.CAP, null), this.stack)) {
+					if (i.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.TAMED && FoodPreferences.getInstance().REGISTRY_ITEM.get(i.getClass()).canEat(i.getCapability(ProviderHungryAnimal.CAP, null), this.stack)) {
 						i.tasks.taskEntries.forEach(entry -> {
 							if (entry.action instanceof EntityAIMoveToTrough) {
 								((EntityAIMoveToTrough)entry.action).pos = this.pos;

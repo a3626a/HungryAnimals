@@ -19,7 +19,6 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ItemDebugGlass extends Item {
 
@@ -57,17 +56,20 @@ public class ItemDebugGlass extends Item {
 						return;
 
 					EntityAnimal entity = (EntityAnimal) target;
-					if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
-						return;
 
-					ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
-					ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
-
-					tag.setDouble("weight", capHungry.getWeight());
-					tag.setDouble("nutrient", capHungry.getNutrient());
-					tag.setDouble("stomach", capHungry.getStomach());
-					tag.setDouble("excretion", capHungry.getExcretion());
-					tag.setDouble("taming", capTaming.getTaming());
+					if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
+						ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+						tag.setDouble("weight", capHungry.getWeight());
+						tag.setDouble("nutrient", capHungry.getNutrient());
+						tag.setDouble("stomach", capHungry.getStomach());
+						tag.setDouble("excretion", capHungry.getExcretion());
+					}
+					
+					if (entity.hasCapability(ProviderTamableAnimal.CAP, null)) {
+						ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+						tag.setDouble("taming", capTaming.getTaming());
+					}
+					
 					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
 				}
 			}

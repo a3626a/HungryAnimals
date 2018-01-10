@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
 public class EntityAIMoveToEatBlock extends EntityAIBase {
@@ -39,7 +39,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		this.entity = entity;
 		this.worldObj = this.entity.getEntityWorld();
 		this.speed = speed;
-		this.pref = FoodPreferenceManager.getInstance().REGISTRY_BLOCK.get(this.entity.getClass());
+		this.pref = FoodPreferences.getInstance().REGISTRY_BLOCK.get(this.entity.getClass());
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.setMutexBits(1);
 	}

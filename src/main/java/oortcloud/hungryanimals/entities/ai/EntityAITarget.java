@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreferenceSimple;
 
 public class EntityAITarget extends EntityAINearestAttackableTarget<EntityLiving> {
@@ -25,7 +25,7 @@ public class EntityAITarget extends EntityAINearestAttackableTarget<EntityLiving
 			@Override
 			public boolean apply(EntityLiving input) {
 				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
-				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferenceManager.getInstance().REGISTRY_ENTITY.get(creature.getClass());
+				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
 
 				// DON'T EAT BABY
 				if (input instanceof EntityAgeable) {
@@ -37,7 +37,7 @@ public class EntityAITarget extends EntityAINearestAttackableTarget<EntityLiving
 				return pref.canEat(cap, input);
 			}
 		});
-		pref = FoodPreferenceManager.getInstance().REGISTRY_ENTITY.get(creature.getClass());
+		pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
 		cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
 		this.herding = herding;
 	}

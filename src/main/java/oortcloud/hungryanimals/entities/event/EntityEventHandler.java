@@ -32,19 +32,18 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
-import oortcloud.hungryanimals.entities.ai.AIManager;
-import oortcloud.hungryanimals.entities.attributes.AttributeManager;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
-import oortcloud.hungryanimals.entities.handler.CureManager;
+import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.handler.InHeatManager;
+import oortcloud.hungryanimals.entities.handler.InHeats;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class EntityEventHandler {
@@ -58,11 +57,11 @@ public class EntityEventHandler {
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
-		AttributeManager.getInstance().applyAttributes(entity);
+		ModAttributes.getInstance().applyAttributes(entity);
 		entity.setHealth(entity.getMaxHealth());
 
 		if (!entity.getEntityWorld().isRemote)
-			AIManager.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
+			AIContainers.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
 	}
 
 	@SubscribeEvent
@@ -74,7 +73,7 @@ public class EntityEventHandler {
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
-		AttributeManager.getInstance().registerAttributes(entity);
+		ModAttributes.getInstance().registerAttributes(entity);
 	}
 
 	@SubscribeEvent
@@ -186,14 +185,14 @@ public class EntityEventHandler {
 		if (floor.getBlock() == ModBlocks.floorcover_leaf) {
 			int j = entity.getGrowingAge();
 			if (j < 0) {
-				j += (int) (entity.getRNG().nextInt(4) / 4.0);
+				j += (int) ((entity.getRNG().nextInt(4)+1) / 4.0);
 				entity.setGrowingAge(j);
 			}
 		}
 		if (floor.getBlock() == ModBlocks.floorcover_wool) {
 			int j = entity.getGrowingAge();
 			if (j > 0) {
-				j -= (int) (entity.getRNG().nextInt(4) / 4.0);
+				j -= (int) ((entity.getRNG().nextInt(4)+1) / 4.0);
 				entity.setGrowingAge(j);
 			}
 		}
@@ -240,14 +239,14 @@ public class EntityEventHandler {
 			return;
 
 		EntityAnimal entity = (EntityAnimal) event.getEntity();
-		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
-			return;
 
-		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
-		DamageSource source = event.getSource();
-		if (!entity.isEntityInvulnerable(source)) {
-			if (source.getTrueSource() instanceof EntityPlayer) {
-				cap.addTaming(-4 / entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() * event.getAmount());
+		if (entity.hasCapability(ProviderTamableAnimal.CAP, null)) {
+			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
+			DamageSource source = event.getSource();
+			if (!entity.isEntityInvulnerable(source)) {
+				if (source.getTrueSource() instanceof EntityPlayer) {
+					cap.addTaming(-4 / entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() * event.getAmount());
+				}
 			}
 		}
 	}
@@ -279,7 +278,7 @@ public class EntityEventHandler {
 	private Pair<Boolean, EnumActionResult> interact(EntityInteract event, EnumHand hand, ItemStack itemstack, EntityAnimal entity) {
 		ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
-		IFoodPreference<ItemStack> prefItem = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+		IFoodPreference<ItemStack> prefItem = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		boolean flagEat = false;
 		boolean flagCure = false;
@@ -289,10 +288,10 @@ public class EntityEventHandler {
 			flagEat = true;
 		}
 		if (entity.isPotionActive(ModPotions.potionDisease) && capTaming.getTamingLevel() == TamingLevel.TAMED) {
-			flagCure = CureManager.getInstance().isCure(itemstack);
+			flagCure = Cures.getInstance().isCure(itemstack);
 		}
 		if (!entity.isPotionActive(ModPotions.potionInheat) && capTaming.getTamingLevel() == TamingLevel.TAMED) {
-			heat = InHeatManager.getInstance().getDuration(itemstack);
+			heat = InHeats.getInstance().getDuration(itemstack);
 		}
 
 		if (flagEat) {
@@ -355,7 +354,7 @@ public class EntityEventHandler {
 		if (item.isEmpty())
 			return;
 
-		IFoodPreference<ItemStack> pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+		IFoodPreference<ItemStack> pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		double nutrient = pref.getNutrient(item);
 		capHungry.addNutrient(nutrient);

@@ -6,9 +6,9 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
-public class InHeatManager {
+public class InHeats {
 
-	private static InHeatManager INSTANCE;
+	private static InHeats INSTANCE;
 
 	private List<InHeatEntry> REGISTRY;
 
@@ -22,13 +22,13 @@ public class InHeatManager {
 		}
 	}
 
-	private InHeatManager() {
+	private InHeats() {
 		REGISTRY = new ArrayList<InHeatEntry>();
 	}
 
-	public static InHeatManager getInstance() {
+	public static InHeats getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new InHeatManager();
+			INSTANCE = new InHeats();
 		}
 		return INSTANCE;
 	}

@@ -53,28 +53,28 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.entities.ai.AIContainer;
-import oortcloud.hungryanimals.entities.ai.AIContainerDuplex;
-import oortcloud.hungryanimals.entities.ai.AIContainerRegisterEvent;
-import oortcloud.hungryanimals.entities.ai.AIManager;
-import oortcloud.hungryanimals.entities.ai.IAIContainer;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
+import oortcloud.hungryanimals.entities.ai.handler.EventAIContainerRegister;
+import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
-import oortcloud.hungryanimals.entities.attributes.AttributeManager;
 import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
 import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient.FoodPreferenceIngredientEntry;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
-import oortcloud.hungryanimals.entities.handler.CureManager;
+import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
-import oortcloud.hungryanimals.entities.handler.InHeatManager;
-import oortcloud.hungryanimals.entities.loot_tables.LootTableModifier;
-import oortcloud.hungryanimals.generation.Generator;
-import oortcloud.hungryanimals.generation.GrassGenerationManager;
+import oortcloud.hungryanimals.entities.handler.InHeats;
+import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
+import oortcloud.hungryanimals.generation.GrassGenerator;
+import oortcloud.hungryanimals.generation.GrassGenerators;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.utils.HashBlockState;
 
@@ -125,7 +125,7 @@ public class ConfigurationHandler {
 			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(animal,
 					map);
 			MinecraftForge.EVENT_BUS.post(event_);
-			FoodPreferenceManager.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
+			FoodPreferences.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
 		foodPreferencesItem = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/item", (text, animal) -> {
 			JsonArray jsonArr;
@@ -146,7 +146,7 @@ public class ConfigurationHandler {
 			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
 					list);
 			MinecraftForge.EVENT_BUS.post(event_);
-			FoodPreferenceManager.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
+			FoodPreferences.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
 		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/entity", (text, animal) -> {
 			JsonArray jsonArr;
@@ -162,7 +162,7 @@ public class ConfigurationHandler {
 				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(resourceLocation));
 				set.add(entityClass.asSubclass(EntityLiving.class));
 			}
-			FoodPreferenceManager.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
+			FoodPreferences.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
 		});
 		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (text, animal) -> {
 			JsonObject jsonObj;
@@ -175,17 +175,17 @@ public class ConfigurationHandler {
 
 			List<IAttributeEntry> list = new ArrayList<IAttributeEntry>();
 			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
-				if (!AttributeManager.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
+				if (!ModAttributes.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
 					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal });
 					continue;
 				}
-				IAttribute attribute = AttributeManager.getInstance().ATTRIBUTES.get(i.getKey()).attribute;
-				boolean shouldRegister = AttributeManager.getInstance().ATTRIBUTES.get(i.getKey()).shouldRegister;
+				IAttribute attribute = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).attribute;
+				boolean shouldRegister = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).shouldRegister;
 				list.add(new AttributeEntry(attribute, shouldRegister, i.getValue().getAsDouble()));
 			}
 			AttributeRegisterEvent event_ = new AttributeRegisterEvent(animal, list);
 			MinecraftForge.EVENT_BUS.post(event_);
-			AttributeManager.getInstance().REGISTRY.put(animal, list);
+			ModAttributes.getInstance().REGISTRY.put(animal, list);
 		});
 
 		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables/entities", (file, animal) -> {
@@ -199,13 +199,13 @@ public class ConfigurationHandler {
 				return;
 			}
 			String ai = jsonObj.get("type").getAsString();
-			IAIContainer<EntityAnimal> aiContainer = AIManager.getInstance().AITYPES.get(ai).apply(animal);
-			if (aiContainer instanceof AIContainer) {
-				MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, (AIContainer) aiContainer));
-			} else if (aiContainer instanceof AIContainerDuplex) {
-				MinecraftForge.EVENT_BUS.post(new AIContainerRegisterEvent(animal, ((AIContainerDuplex) aiContainer).getTask()));
+			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().AITYPES.get(ai).apply(animal);
+			if (aiContainer instanceof AIContainerTask) {
+				MinecraftForge.EVENT_BUS.post(new EventAIContainerRegister(animal, (AIContainerTask) aiContainer));
+			} else if (aiContainer instanceof AIContainer) {
+				MinecraftForge.EVENT_BUS.post(new EventAIContainerRegister(animal, ((AIContainer) aiContainer).getTask()));
 			}
-			AIManager.getInstance().REGISTRY.put(animal, aiContainer);
+			AIContainers.getInstance().REGISTRY.put(animal, aiContainer);
 		});
 
 		recipes = new ConfigurationHandlerJSON(new File(basefolder, "recipes"), "animalglue", (text) -> {
@@ -249,7 +249,7 @@ public class ConfigurationHandler {
 
 			for (JsonElement jsonEle : jsonArr) {
 				Ingredient cure = CraftingHelper.getIngredient(jsonEle, new JsonContext(References.MODID));
-				CureManager.getInstance().add(cure);
+				Cures.getInstance().add(cure);
 			}
 		});
 		inheat = new ConfigurationHandlerJSON(basefolder, "inheat", (text) -> {
@@ -265,7 +265,7 @@ public class ConfigurationHandler {
 				JsonElement item = jsonEle.getAsJsonObject().get("item");
 				Ingredient inheat = CraftingHelper.getIngredient(item, new JsonContext(References.MODID));
 				int inheatDuration = JsonUtils.getInt(jsonEle.getAsJsonObject(), "duration");
-				InHeatManager.getInstance().add(inheat, inheatDuration);
+				InHeats.getInstance().add(inheat, inheatDuration);
 			}
 		});
 		generators = new ConfigurationHandlerJSON(basefolder, "generators", (text) -> {
@@ -288,7 +288,7 @@ public class ConfigurationHandler {
 					}
 				}
 				JsonElement generator = jsonObj.get("generator");
-				GrassGenerationManager.getInstance().registerGenerator(biome, Generator.parse(generator));
+				GrassGenerators.getInstance().register(biome, GrassGenerator.parse(generator));
 			}
 		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (text) -> {
@@ -329,7 +329,7 @@ public class ConfigurationHandler {
 			}
 		});
 
-		LootTableModifier.init(basefolder);
+		ModLootTables.init(basefolder);
 	}
 
 	public static void sync() {
@@ -345,7 +345,7 @@ public class ConfigurationHandler {
 		cures.sync();
 		inheat.sync();
 		generators.sync();
-		LootTableModifier.sync();
+		ModLootTables.sync();
 	}
 
 	public static void postSync() {

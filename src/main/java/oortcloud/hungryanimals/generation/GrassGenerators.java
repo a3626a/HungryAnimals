@@ -20,32 +20,32 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber
-public class GrassGenerationManager {
+public class GrassGenerators {
 
-	private static GrassGenerationManager INSTACNE;
+	private static GrassGenerators INSTACNE;
 
-	private Map<Integer, List<Generator>> generators;
-	private List<Generator> defaults;
+	private Map<Integer, List<GrassGenerator>> generators;
+	private List<GrassGenerator> defaults;
 
-	public GrassGenerationManager() {
-		generators = new HashMap<Integer, List<Generator>>();
-		defaults = new ArrayList<Generator>();
+	public GrassGenerators() {
+		generators = new HashMap<Integer, List<GrassGenerator>>();
+		defaults = new ArrayList<GrassGenerator>();
 	}
 
-	public static GrassGenerationManager getInstance() {
+	public static GrassGenerators getInstance() {
 		if (INSTACNE == null) {
-			INSTACNE = new GrassGenerationManager();
+			INSTACNE = new GrassGenerators();
 		}
 		return INSTACNE;
 	}
 
-	public boolean registerGenerator(@Nullable Biome biome, Generator generator) {
+	public boolean register(@Nullable Biome biome, GrassGenerator generator) {
 		if (biome == null) {
 			return defaults.add(generator);
 		} else {
 			int id = Biome.getIdForBiome(biome);
 			if (!generators.containsKey(id)) {
-				generators.put(id, new ArrayList<Generator>());
+				generators.put(id, new ArrayList<GrassGenerator>());
 			}
 			return generators.get(id).add(generator);
 		}
@@ -72,14 +72,14 @@ public class GrassGenerationManager {
 						Biome biome = world.getBiome(pos);
 						int biomeID = Biome.getIdForBiome(biome);
 						
-						List<Generator> target;
+						List<GrassGenerator> target;
 						if (getInstance().generators.containsKey(biomeID)) {
 							target = getInstance().generators.get(biomeID);
 						} else {
 							target = getInstance().defaults;
 						}
 						
-						for (Generator i : target) {
+						for (GrassGenerator i : target) {
 							if (i.condition.canGrassGrow(world, pos)) {
 								newPoses.add(pos);
 								newStates.add(i.states.get(world.rand.nextInt(i.states.size())));

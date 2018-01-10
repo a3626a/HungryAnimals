@@ -6,18 +6,18 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
-public class CureManager {
-	private static CureManager INSTANCE;
+public class Cures {
+	private static Cures INSTANCE;
 
 	private List<Ingredient> REGISTRY;
 	
-	private CureManager() {
+	private Cures() {
 		REGISTRY = new ArrayList<Ingredient>();
 	}
 	
-	public static CureManager getInstance() {
+	public static Cures getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new CureManager();
+			INSTANCE = new Cures();
 		}
 		return INSTANCE;
 	}

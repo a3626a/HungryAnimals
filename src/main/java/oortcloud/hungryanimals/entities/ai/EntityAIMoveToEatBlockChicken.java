@@ -7,7 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
 @Deprecated
@@ -17,7 +17,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 	
 	public EntityAIMoveToEatBlockChicken(EntityLiving entity, double speed) {
 		super(entity, speed);
-		this.prefItem = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+		this.prefItem = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 	}
 
 	@Override

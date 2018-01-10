@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.ai;
+package oortcloud.hungryanimals.entities.ai.handler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,30 +15,42 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Items;
-import oortcloud.hungryanimals.entities.ai.AIContainer.AIRemoverIsInstance;
+import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
+import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
+import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
+import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
+import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
+import oortcloud.hungryanimals.entities.ai.EntityAITarget;
+import oortcloud.hungryanimals.entities.ai.EntityAITargetNonTamed;
+import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask.AIRemoverIsInstance;
 
-public class AIManager {
+public class AIContainers {
 
-	private static AIManager INSTANCE;
+	private static AIContainers INSTANCE;
 
 	public Map<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>> REGISTRY;
 	public Map<String, Function<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>> AITYPES;
 
-	private AIManager() {
+	private AIContainers() {
 		REGISTRY = new HashMap<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>();
 		AITYPES = new HashMap<String, Function<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>>();
 	}
 
-	public static AIManager getInstance() {
+	public static AIContainers getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new AIManager();
+			INSTANCE = new AIContainers();
 		}
 		return INSTANCE;
 	}
 
+	public IAIContainer<EntityAnimal> registerAIContainer(Class<? extends EntityAnimal> animal, IAIContainer<EntityAnimal> aiContainer) {
+		return REGISTRY.put(animal, aiContainer);
+	}
+	
 	public void init() {
 		AITYPES.put("herbivore", (animal) -> {
-			AIContainer aiContainer = new AIContainer();
+			AIContainerTask aiContainer = new AIContainerTask();
 			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
 			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
 			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
@@ -53,7 +65,7 @@ public class AIManager {
 		});
 		
 		AITYPES.put("rabbit", (animal) -> {
-			AIContainer aiContainer = new AIContainer();
+			AIContainerTask aiContainer = new AIContainerTask();
 			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
 			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
 			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
@@ -69,14 +81,14 @@ public class AIManager {
 		});
 		
 		AITYPES.put("pig", (animal) -> {
-			AIContainer aiContainer = new AIContainer((AIContainer) AITYPES.get("herbivore").apply(animal));
+			AIContainerTask aiContainer = new AIContainerTask((AIContainerTask) AITYPES.get("herbivore").apply(animal));
 			aiContainer.priorTo(EntityAITemptEdibleItem.class)
 					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
 			return aiContainer;
 		});
 		
 		AITYPES.put("wolf", (animal)->{
-			AIContainerDuplex aiContainer = new AIContainerDuplex();
+			AIContainer aiContainer = new AIContainer();
 			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
 			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
 			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
@@ -91,7 +103,7 @@ public class AIManager {
 	    });
 
 		AITYPES.put("polar_bear", (animal)->{
-			AIContainerDuplex aiContainer = new AIContainerDuplex();
+			AIContainer aiContainer = new AIContainer();
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));

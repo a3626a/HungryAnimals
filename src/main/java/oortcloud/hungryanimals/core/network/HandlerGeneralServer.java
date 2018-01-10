@@ -42,29 +42,36 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 						if (entity != null && entity instanceof EntityAnimal) {
 							EntityAnimal animal = (EntityAnimal) entity;
 
-							if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))
-								break;
-
 							switch (message.getString()) {
 							case "nutrient":
-								ICapabilityHungryAnimal capHungry1 = animal.getCapability(ProviderHungryAnimal.CAP, null);
-								capHungry1.setNutrient(message.getDouble());
+								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
+									ICapabilityHungryAnimal capHungry1 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+									capHungry1.setNutrient(message.getDouble());
+								}
 								break;
 							case "stomach":
-								ICapabilityHungryAnimal capHungry2 = animal.getCapability(ProviderHungryAnimal.CAP, null);
-								capHungry2.setStomach(message.getDouble());
+								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
+									ICapabilityHungryAnimal capHungry2 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+									capHungry2.setStomach(message.getDouble());
+								}
 								break;
 							case "weight":
-								ICapabilityHungryAnimal capHungry3 = animal.getCapability(ProviderHungryAnimal.CAP, null);
-								capHungry3.setWeight(message.getDouble());
+								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
+									ICapabilityHungryAnimal capHungry3 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+									capHungry3.setWeight(message.getDouble());
+								}
 								break;
 							case "excretion":
-								ICapabilityHungryAnimal capHungry4 = animal.getCapability(ProviderHungryAnimal.CAP, null);
-								capHungry4.setExcretion(message.getDouble());
+								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
+									ICapabilityHungryAnimal capHungry4 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+									capHungry4.setExcretion(message.getDouble());
+								}
 								break;
 							case "taming":
-								ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
-								capTaming.setTaming(message.getDouble());
+								if (animal.hasCapability(ProviderTamableAnimal.CAP, null)) {
+									ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+									capTaming.setTaming(message.getDouble());
+								}
 								break;
 							}
 						}

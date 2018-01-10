@@ -7,7 +7,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
 public class EntityAITemptEdibleItem extends EntityAITempt {
@@ -21,7 +21,7 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 		super(temptedEntityIn, speedIn, scaredByPlayerMovementIn, null);
 		
 		this.temptedEntity = temptedEntityIn;
-		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(this.temptedEntity.getClass());
+		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(this.temptedEntity.getClass());
 		this.capHungry = temptedEntityIn.getCapability(ProviderHungryAnimal.CAP, null);
 	}
 

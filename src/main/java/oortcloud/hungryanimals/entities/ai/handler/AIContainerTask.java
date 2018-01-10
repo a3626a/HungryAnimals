@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.ai;
+package oortcloud.hungryanimals.entities.ai.handler;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.EntityAnimal;
 
-public class AIContainer implements IAIContainer<EntityAnimal> {
+public class AIContainerTask implements IAIContainer<EntityAnimal> {
 
 	protected LinkedList<IAIPlacer> ais;
 
@@ -21,11 +21,11 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 	protected List<Class<? extends EntityAIBase>> prior;
 	protected List<Class<? extends EntityAIBase>> posterior;
 
-	public AIContainer() {
+	public AIContainerTask() {
 		this(null);
 	}
 
-	public AIContainer(AIContainer parent) {
+	public AIContainerTask(AIContainerTask parent) {
 		this.ais = new LinkedList<IAIPlacer>();
 		this.toRemove = new LinkedList<IAIRemover>();
 
@@ -94,22 +94,22 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 		posterior = null;
 	}
 
-	public AIContainer priorTo(Class<? extends EntityAIBase> target) {
+	public AIContainerTask priorTo(Class<? extends EntityAIBase> target) {
 		getPrior().add(target);
 		return this;
 	}
 
-	public AIContainer priorTo(List<Class<? extends EntityAIBase>> targets) {
+	public AIContainerTask priorTo(List<Class<? extends EntityAIBase>> targets) {
 		getPrior().addAll(targets);
 		return this;
 	}
 
-	public AIContainer posteriorTo(Class<? extends EntityAIBase> target) {
+	public AIContainerTask posteriorTo(Class<? extends EntityAIBase> target) {
 		getPosterior().add(target);
 		return this;
 	}
 
-	public AIContainer posteriorTo(List<Class<? extends EntityAIBase>> targets) {
+	public AIContainerTask posteriorTo(List<Class<? extends EntityAIBase>> targets) {
 		getPosterior().addAll(targets);
 		return this;
 	}

@@ -1,18 +1,18 @@
-package oortcloud.hungryanimals.entities.ai;
+package oortcloud.hungryanimals.entities.ai.handler;
 
 import net.minecraft.entity.passive.EntityAnimal;
 
-public class AIContainerDuplex implements IAIContainer<EntityAnimal> {
+public class AIContainer implements IAIContainer<EntityAnimal> {
 	
-	private AIContainer task;
+	private AIContainerTask task;
 	private AIContainerTarget target;
 	
-	public AIContainerDuplex() {
-		task = new AIContainer();
+	public AIContainer() {
+		task = new AIContainerTask();
 		target = new AIContainerTarget();
 	}
 	
-	public AIContainer getTask() {
+	public AIContainerTask getTask() {
 		return task;
 	}
 	

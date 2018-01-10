@@ -4,7 +4,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
-import oortcloud.hungryanimals.entities.attributes.AttributeManager;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class API {
@@ -36,7 +36,8 @@ public class API {
 	 * @return true if registration failed, otherwise false
 	 */
 	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, IAttribute attribute, double val, boolean shouldRegistered) {
-		return AttributeManager.getInstance().REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegistered, val));
+		// TODO take a look at it
+		return ModAttributes.getInstance().REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegistered, val));
 	}
 	
 	/**

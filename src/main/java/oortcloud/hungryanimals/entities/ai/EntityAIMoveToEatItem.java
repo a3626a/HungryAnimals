@@ -17,7 +17,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 
@@ -56,7 +56,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		this.entity = entity;
 		this.worldObj = this.entity.getEntityWorld();
 		this.speed = speed;
-		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		this.setMutexBits(1);

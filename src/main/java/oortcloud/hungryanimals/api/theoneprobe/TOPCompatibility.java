@@ -18,7 +18,6 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class TOPCompatibility {
 
@@ -53,17 +52,19 @@ public class TOPCompatibility {
 						return;
 						
 					EntityAnimal animal = (EntityAnimal)entity;
-					if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))
-						return;
-					
-					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
-					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
-					probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float)capHungry.getWeight()));
-					probeInfo.horizontal().text("STOMACH").progress((int)capHungry.getStomach(), (int)capHungry.getMaxStomach(), probeInfo.defaultProgressStyle().filledColor(0xFF0000FF).alternateFilledColor(0xFF0000FF).borderColor(0));
-					if (capTaming.getTaming() >= 0) {
-						probeInfo.horizontal().text("TAMING").progress((int)(Math.min(capTaming.getTaming(), 2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFF00FF00).alternateFilledColor(0xFF00FF00).borderColor(0).showText(false));
-					} else {
-						probeInfo.horizontal().text("TAMING").progress((int)(-Math.max(capTaming.getTaming(), -2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFFFF0000).alternateFilledColor(0xFFFF0000).borderColor(0).showText(false));
+
+					if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
+						ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+						probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float)capHungry.getWeight()));
+						probeInfo.horizontal().text("STOMACH").progress((int)capHungry.getStomach(), (int)capHungry.getMaxStomach(), probeInfo.defaultProgressStyle().filledColor(0xFF0000FF).alternateFilledColor(0xFF0000FF).borderColor(0));
+					}
+					if (animal.hasCapability(ProviderTamableAnimal.CAP, null)) {
+						ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+						if (capTaming.getTaming() >= 0) {
+							probeInfo.horizontal().text("TAMING").progress((int)(Math.min(capTaming.getTaming(), 2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFF00FF00).alternateFilledColor(0xFF00FF00).borderColor(0).showText(false));
+						} else {
+							probeInfo.horizontal().text("TAMING").progress((int)(-Math.max(capTaming.getTaming(), -2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFFFF0000).alternateFilledColor(0xFFFF0000).borderColor(0).showText(false));
+						}
 					}
 				}
 			});

@@ -19,8 +19,8 @@ import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
-import oortcloud.hungryanimals.entities.ai.AIManager;
-import oortcloud.hungryanimals.entities.attributes.AttributeManager;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.ModPotions;
@@ -65,7 +65,7 @@ public class HungryAnimals {
 		proxy.registerEventHandler();
 		proxy.registerPacketHandler();
 		HungryAnimalManager.getInstance().init();
-		AttributeManager.getInstance().init();
+		ModAttributes.getInstance().init();
 		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
@@ -73,7 +73,7 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void Init(FMLInitializationEvent event) {
-		AIManager.getInstance().init();
+		AIContainers.getInstance().init();
 		ConfigurationHandler.sync();
 		
 		proxy.registerColors();

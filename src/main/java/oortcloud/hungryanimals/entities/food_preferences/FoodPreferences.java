@@ -8,23 +8,23 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 
-public class FoodPreferenceManager {
+public class FoodPreferences {
 	
-	private static FoodPreferenceManager INSTANCE;
+	private static FoodPreferences INSTANCE;
 
 	public Map<Class<? extends EntityAnimal>, IFoodPreference<IBlockState>> REGISTRY_BLOCK;
 	public Map<Class<? extends EntityAnimal>, IFoodPreference<ItemStack>> REGISTRY_ITEM;
 	public Map<Class<? extends EntityAnimal>, IFoodPreferenceSimple<EntityLiving>> REGISTRY_ENTITY;
 	
-	private FoodPreferenceManager() {
+	private FoodPreferences() {
 		REGISTRY_BLOCK = new HashMap<Class<? extends EntityAnimal>, IFoodPreference<IBlockState>>();
 		REGISTRY_ITEM = new HashMap<Class<? extends EntityAnimal>, IFoodPreference<ItemStack>>();
 		REGISTRY_ENTITY = new HashMap<Class<? extends EntityAnimal>, IFoodPreferenceSimple<EntityLiving>>();
 	}
 	
-	public static FoodPreferenceManager getInstance() {
+	public static FoodPreferences getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new FoodPreferenceManager();
+			INSTANCE = new FoodPreferences();
 		}
 		return INSTANCE;
 	}

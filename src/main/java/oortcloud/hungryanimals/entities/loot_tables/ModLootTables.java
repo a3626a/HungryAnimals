@@ -42,7 +42,7 @@ import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
  * @author Oortcloud
  */
 
-public class LootTableModifier {
+public class ModLootTables {
 
 	private static LootTableManager manager;
 

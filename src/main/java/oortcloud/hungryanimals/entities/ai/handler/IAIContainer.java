@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.ai;
+package oortcloud.hungryanimals.entities.ai.handler;
 
 public interface IAIContainer<T> {
 

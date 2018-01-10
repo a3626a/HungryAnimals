@@ -12,23 +12,23 @@ import net.minecraft.block.state.IBlockState;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.HashBlockState;
 
-public class Generator {
+public class GrassGenerator {
 
 	public ICondition condition;
 	public List<IBlockState> states;
 	
-	public Generator(ICondition condition, IBlockState state) {
+	public GrassGenerator(ICondition condition, IBlockState state) {
 		this.condition = condition;
 		this.states = new ArrayList<IBlockState>();
 		this.states.add(state);
 	}
 
-	public Generator(ICondition condition, List<IBlockState> states) {
+	public GrassGenerator(ICondition condition, List<IBlockState> states) {
 		this.condition = condition;
 		this.states = states;
 	}
 	
-	public static Generator parse(JsonElement jsonEle) {
+	public static GrassGenerator parse(JsonElement jsonEle) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("Generator must an json object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -46,11 +46,11 @@ public class Generator {
 				IBlockState state = grass.toBlockState();
 				states.add(state);
 			}
-			return new Generator(condition, states);
+			return new GrassGenerator(condition, states);
 		} else {
 			HashBlockState grass = HashBlockState.parse(jsonGrass);
 			IBlockState state = grass.toBlockState();
-			return new Generator(condition, state);
+			return new GrassGenerator(condition, state);
 		}
 	}
 	

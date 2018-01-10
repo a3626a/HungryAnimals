@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.ai;
+package oortcloud.hungryanimals.entities.ai.handler;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.EntityAnimal;
 
-public class AIContainerTarget extends AIContainer {
+public class AIContainerTarget extends AIContainerTask {
 
 	@Override
 	public void registerAI(EntityAnimal entity) {

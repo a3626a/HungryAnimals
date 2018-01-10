@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.entities.util;
+package oortcloud.hungryanimals.utils;
 
 import com.google.common.base.Predicate;
 

@@ -17,7 +17,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
-import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceManager;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
@@ -38,7 +38,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
-		this.pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		this.entity = entity;
 		this.world = this.entity.getEntityWorld();
@@ -100,7 +100,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		if (item.isEmpty())
 			return;
 
-		IFoodPreference<ItemStack> pref = FoodPreferenceManager.getInstance().REGISTRY_ITEM.get(entity.getClass());
+		IFoodPreference<ItemStack> pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		double nutrient = pref.getNutrient(item);
 		capHungry.addNutrient(nutrient);
