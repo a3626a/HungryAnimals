@@ -94,22 +94,22 @@ public class AIContainerTask implements IAIContainer<EntityAnimal> {
 		posterior = null;
 	}
 
-	public AIContainerTask priorTo(Class<? extends EntityAIBase> target) {
+	public AIContainerTask before(Class<? extends EntityAIBase> target) {
 		getPrior().add(target);
 		return this;
 	}
 
-	public AIContainerTask priorTo(List<Class<? extends EntityAIBase>> targets) {
+	public AIContainerTask before(List<Class<? extends EntityAIBase>> targets) {
 		getPrior().addAll(targets);
 		return this;
 	}
 
-	public AIContainerTask posteriorTo(Class<? extends EntityAIBase> target) {
+	public AIContainerTask after(Class<? extends EntityAIBase> target) {
 		getPosterior().add(target);
 		return this;
 	}
 
-	public AIContainerTask posteriorTo(List<Class<? extends EntityAIBase>> targets) {
+	public AIContainerTask after(List<Class<? extends EntityAIBase>> targets) {
 		getPosterior().addAll(targets);
 		return this;
 	}
@@ -142,10 +142,7 @@ public class AIContainerTask implements IAIContainer<EntityAnimal> {
 		removeAll = true;
 	}
 
-	@FunctionalInterface
-	public static interface AIFactory {
-		public EntityAIBase apply(EntityAnimal entity);
-	}
+
 
 	public static interface IAIRemover {
 		public boolean matches(EntityAITaskEntry entry);

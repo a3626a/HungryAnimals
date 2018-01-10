@@ -1,8 +1,15 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
@@ -33,5 +40,18 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 	@Override
 	protected boolean isTempting(ItemStack stack) {
 		return stack.isEmpty() ? false : pref.canEat(capHungry, stack);
+	}
+	
+	public static AIFactory parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Tempt must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		
+		JsonObject jsonObject = (JsonObject)jsonEle ;
+		
+		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		boolean scaredBy = JsonUtils.getBoolean(jsonObject, "scared_by");
+		return (entity) -> new EntityAITemptEdibleItem(entity, speed, scaredBy);
 	}
 }

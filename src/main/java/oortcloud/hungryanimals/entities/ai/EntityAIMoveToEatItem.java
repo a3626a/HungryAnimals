@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -11,7 +14,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
@@ -163,5 +169,17 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 		}
+	}
+	
+	public static AIFactory parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Eat Item must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		
+		JsonObject jsonObject = (JsonObject)jsonEle ;
+		
+		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		return (entity) -> new EntityAIMoveToEatItem(entity, speed);
 	}
 }

@@ -6,6 +6,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -14,7 +18,10 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
@@ -200,5 +207,17 @@ public class EntityAIMateModified extends EntityAIBase {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static AIFactory parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Mate must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		
+		JsonObject jsonObject = (JsonObject)jsonEle ;
+		
+		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		return (entity) -> new EntityAIMateModified(entity, speed);
 	}
 }

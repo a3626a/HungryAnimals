@@ -3,14 +3,20 @@ package oortcloud.hungryanimals.entities.ai;
 import java.util.ArrayList;
 
 import com.google.common.base.Predicate;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
@@ -163,5 +169,15 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		capHungry.addStomach(stomach);
 	}
 
-
+	public static AIFactory parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Eat Block must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		
+		JsonObject jsonObject = (JsonObject)jsonEle ;
+		
+		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		return (entity) -> new EntityAIMoveToEatBlock(entity, speed);
+	}
 }

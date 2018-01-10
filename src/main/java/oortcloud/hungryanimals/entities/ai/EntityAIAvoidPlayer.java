@@ -1,11 +1,17 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import com.google.common.base.Predicate;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.items.ModItems;
@@ -44,4 +50,18 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		return this.entity.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.WILD && super.shouldExecute();
 	}
 
+	public static AIFactory parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Avoid Player must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		
+		JsonObject jsonObject = (JsonObject)jsonEle ;
+		
+		float radius = JsonUtils.getFloat(jsonObject, "radius");
+		double farspeed = JsonUtils.getFloat(jsonObject, "farspeed");
+		double nearspeed = JsonUtils.getFloat(jsonObject, "nearspeed");
+		return (entity) -> new EntityAIAvoidPlayer(entity, radius, farspeed, nearspeed);
+	}
+	
 }

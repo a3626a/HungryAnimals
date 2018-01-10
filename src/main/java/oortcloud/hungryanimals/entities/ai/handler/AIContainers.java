@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIEatGrass;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
@@ -21,7 +20,6 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Items;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
@@ -55,51 +53,30 @@ public class AIContainers {
 	}
 	
 	public void init() {
-		PARSERS.put("herbivore", (JsonEle) -> {
-			AIContainerTask aiContainer = new AIContainerTask();
-			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
-			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
-			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
-			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
-			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
-			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
-			aiContainer.remove(EntityAIPanic.class);
-			aiContainer.remove(EntityAIMate.class);
-			aiContainer.remove(EntityAITempt.class);
-			aiContainer.remove(EntityAIEatGrass.class); // For Sheep
+		PARSERS.put("herbivore", AIContainerHerbivore::parse);
+		
+		PARSERS.put("rabbit", (jsonEle) -> {
+			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(jsonEle);
+			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIPanic.class));
+			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIAvoidEntity.class));
+			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIMoveToBlock.class));
 			return aiContainer;
 		});
 		
-		PARSERS.put("rabbit", (JsonEle) -> {
-			AIContainerTask aiContainer = new AIContainerTask();
-			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
-			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
-			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
-			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
-			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
-			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
-			aiContainer.remove(new AIRemoverIsInstance(EntityAIPanic.class));
-			aiContainer.remove(EntityAIMate.class);
-			aiContainer.remove(EntityAITempt.class);
-			aiContainer.remove(new AIRemoverIsInstance(EntityAIAvoidEntity.class));
-			aiContainer.remove(new AIRemoverIsInstance(EntityAIMoveToBlock.class));
-			return aiContainer;
-		});
-		
-		PARSERS.put("pig", (JsonEle) -> {
-			AIContainerTask aiContainer = new AIContainerTask((AIContainerTask) PARSERS.get("herbivore").apply(JsonEle));
-			aiContainer.priorTo(EntityAITemptEdibleItem.class)
+		PARSERS.put("pig", (jsonEle) -> {
+			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(jsonEle);
+			aiContainer.getTask().before(EntityAITemptEdibleItem.class)
 					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
 			return aiContainer;
 		});
 		
-		PARSERS.put("wolf", (JsonEle)->{
+		PARSERS.put("wolf", (jsonEle)->{
 			AIContainer aiContainer = new AIContainer();
-			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
-			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
-			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
-			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
-			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
+			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
+			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
+			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
+			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
+			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
 			aiContainer.getTask().remove(EntityAIMate.class);
 			
 			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, true));
@@ -108,13 +85,13 @@ public class AIContainers {
 			return aiContainer;
 	    });
 
-		PARSERS.put("polar_bear", (JsonEle)->{
+		PARSERS.put("polar_bear", (jsonEle)->{
 			AIContainer aiContainer = new AIContainer();
-			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
-			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
-			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
-			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
-			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
+			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
+			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
+			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
+			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
+			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
 			
 			aiContainer.getTarget().putLast((entity) -> new EntityAITarget(entity, 1, false, false, false));
 			

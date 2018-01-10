@@ -25,7 +25,7 @@ public class Conditions {
 	
 	public static ICondition parse(JsonElement jsonEle) {
 		if (! (jsonEle instanceof JsonObject)) {
-			HungryAnimals.logger.error("Condition must an object.");
+			HungryAnimals.logger.error("Condition must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
 		}
 		JsonObject jsonObj = (JsonObject) jsonEle;
