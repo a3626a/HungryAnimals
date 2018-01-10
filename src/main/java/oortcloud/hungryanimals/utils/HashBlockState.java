@@ -80,9 +80,9 @@ public class HashBlockState {
 
 	public IBlockState toBlockState() {
 		if (ignoreProperty) {
-			HungryAnimals.logger.warn("Get block state from HashBlockState with ignoreProperty == true");
-			HungryAnimals.logger.warn("Block State is not well defined.");
-			HungryAnimals.logger.warn("Block : {}", toString());
+			HungryAnimals.logger.warn("Get block state from HashBlockState with ignoreProperty == true,");
+			HungryAnimals.logger.warn("    Block State is not well defined,");
+			HungryAnimals.logger.warn("    Block : {}", toString());
 		}
 		return block;
 	}

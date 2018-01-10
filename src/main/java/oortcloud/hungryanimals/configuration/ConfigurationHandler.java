@@ -236,7 +236,6 @@ public class ConfigurationHandler {
 			BlockExcreta.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_probability").getAsDouble();
 			BlockExcreta.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
 			BlockExcreta.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
-			GrassGenerationManager.grassProbability = jsonObj.getAsJsonPrimitive("grass_probability").getAsDouble();
 			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
 		cures = new ConfigurationHandlerJSON(basefolder, "cures", (text) -> {

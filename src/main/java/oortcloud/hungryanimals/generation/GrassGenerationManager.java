@@ -18,14 +18,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import oortcloud.hungryanimals.HungryAnimals;
 
 @Mod.EventBusSubscriber
 public class GrassGenerationManager {
 
 	private static GrassGenerationManager INSTACNE;
-
-	public static double grassProbability;
 
 	private Map<Integer, List<Generator>> generators;
 	private List<Generator> defaults;
