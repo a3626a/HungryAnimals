@@ -83,6 +83,7 @@ public class GrassGenerationManager {
 							if (i.condition.canGrassGrow(world, pos)) {
 								newPoses.add(pos);
 								newStates.add(i.states.get(world.rand.nextInt(i.states.size())));
+								break;
 							}
 						}
 					}

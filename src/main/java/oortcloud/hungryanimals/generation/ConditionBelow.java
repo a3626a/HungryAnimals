@@ -25,13 +25,12 @@ public class ConditionBelow implements ICondition {
 	
 	@Override
 	public boolean canGrassGrow(World world, BlockPos pos) {
-		boolean flag = false;
 		for (HashBlockState state : states) {
 			if (state.apply(world.getBlockState(pos.down()))) {
-				flag = true;
+				return true;
 			}
 		}
-		return flag;
+		return false;
 	}
 
 	public static ConditionBelow parse(JsonElement jsonEle) {

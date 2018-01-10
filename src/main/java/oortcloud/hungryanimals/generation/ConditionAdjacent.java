@@ -26,7 +26,6 @@ public class ConditionAdjacent implements ICondition {
 	
 	@Override
 	public boolean canGrassGrow(World world, BlockPos pos) {
-		boolean flag = true;
 		ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
@@ -35,13 +34,13 @@ public class ConditionAdjacent implements ICondition {
 				}
 				for (HashBlockState state : states) {
 					if (state.apply(world.getBlockState(pos.add(i, 0, j)))) {
-						flag = false;
+						return false;
 					}
 				}
 
 			}
 		}
-		return flag;
+		return true;
 	}
 	
 	public static ConditionAdjacent parse(JsonElement jsonEle) {
