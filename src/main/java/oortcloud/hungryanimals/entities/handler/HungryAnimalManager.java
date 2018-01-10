@@ -22,7 +22,7 @@ public class HungryAnimalManager {
 		registedClass = new ArrayList<Class<? extends EntityAnimal>>();
 	}
 
-	public boolean registerHungryAnimal(Class<? extends EntityAnimal> animal) {
+	public boolean register(Class<? extends EntityAnimal> animal) {
 		if (!registedClass.contains(animal)) {
 			return registedClass.add(animal);
 		}

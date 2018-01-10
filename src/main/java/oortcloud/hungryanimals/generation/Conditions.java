@@ -15,12 +15,12 @@ import oortcloud.hungryanimals.HungryAnimals;
 
 public class Conditions {
 
-	public static Map<String, Function<JsonElement, ICondition>> REGISTRY = new HashMap<String, Function<JsonElement, ICondition>>();
+	public static Map<String, Function<JsonElement, ICondition>> PARSERS = new HashMap<String, Function<JsonElement, ICondition>>();
 	
 	static {
-		REGISTRY.put("below", ConditionBelow::parse);
-		REGISTRY.put("chance", ConditionChance::parse);
-		REGISTRY.put("not_adjacent", ConditionAdjacent::parse);
+		PARSERS.put("below", ConditionBelow::parse);
+		PARSERS.put("chance", ConditionChance::parse);
+		PARSERS.put("not_adjacent", ConditionAdjacent::parse);
 	}
 	
 	public static ICondition parse(JsonElement jsonEle) {
@@ -32,7 +32,7 @@ public class Conditions {
 
 		List<ICondition> conditions = new ArrayList<ICondition>();
 		for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
-			conditions.add(REGISTRY.get(i.getKey()).apply(i.getValue()));
+			conditions.add(PARSERS.get(i.getKey()).apply(i.getValue()));
 		}
 		
 		return new ConditionAnd(conditions);

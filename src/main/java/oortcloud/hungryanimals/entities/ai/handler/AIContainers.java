@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIEatGrass;
 import net.minecraft.entity.ai.EntityAIFollowParent;
@@ -15,6 +19,8 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Items;
+import net.minecraft.util.JsonUtils;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
@@ -30,11 +36,11 @@ public class AIContainers {
 	private static AIContainers INSTANCE;
 
 	public Map<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>> REGISTRY;
-	public Map<String, Function<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>> AITYPES;
-
+	private Map<String, Function<JsonElement, IAIContainer<EntityAnimal>>> PARSERS;
+	
 	private AIContainers() {
 		REGISTRY = new HashMap<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>();
-		AITYPES = new HashMap<String, Function<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>>();
+		PARSERS = new HashMap<String, Function<JsonElement, IAIContainer<EntityAnimal>>>();
 	}
 
 	public static AIContainers getInstance() {
@@ -44,12 +50,12 @@ public class AIContainers {
 		return INSTANCE;
 	}
 
-	public IAIContainer<EntityAnimal> registerAIContainer(Class<? extends EntityAnimal> animal, IAIContainer<EntityAnimal> aiContainer) {
+	public IAIContainer<EntityAnimal> register(Class<? extends EntityAnimal> animal, IAIContainer<EntityAnimal> aiContainer) {
 		return REGISTRY.put(animal, aiContainer);
 	}
 	
 	public void init() {
-		AITYPES.put("herbivore", (animal) -> {
+		PARSERS.put("herbivore", (JsonEle) -> {
 			AIContainerTask aiContainer = new AIContainerTask();
 			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
 			aiContainer.priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
@@ -64,7 +70,7 @@ public class AIContainers {
 			return aiContainer;
 		});
 		
-		AITYPES.put("rabbit", (animal) -> {
+		PARSERS.put("rabbit", (JsonEle) -> {
 			AIContainerTask aiContainer = new AIContainerTask();
 			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIAvoidPlayer(entity, 16.0F, 1.0D, 2.0D));
 			aiContainer.priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
@@ -80,14 +86,14 @@ public class AIContainers {
 			return aiContainer;
 		});
 		
-		AITYPES.put("pig", (animal) -> {
-			AIContainerTask aiContainer = new AIContainerTask((AIContainerTask) AITYPES.get("herbivore").apply(animal));
+		PARSERS.put("pig", (JsonEle) -> {
+			AIContainerTask aiContainer = new AIContainerTask((AIContainerTask) PARSERS.get("herbivore").apply(JsonEle));
 			aiContainer.priorTo(EntityAITemptEdibleItem.class)
 					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
 			return aiContainer;
 		});
 		
-		AITYPES.put("wolf", (animal)->{
+		PARSERS.put("wolf", (JsonEle)->{
 			AIContainer aiContainer = new AIContainer();
 			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
 			aiContainer.getTask().priorTo(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
@@ -102,7 +108,7 @@ public class AIContainers {
 			return aiContainer;
 	    });
 
-		AITYPES.put("polar_bear", (animal)->{
+		PARSERS.put("polar_bear", (JsonEle)->{
 			AIContainer aiContainer = new AIContainer();
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
 			aiContainer.getTask().priorTo(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
@@ -114,6 +120,18 @@ public class AIContainers {
 			
 			return aiContainer;
 	    });
+	}
+	
+	public IAIContainer<EntityAnimal> parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI container must an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		JsonObject jsonObj = (JsonObject) jsonEle;
+
+		String aiType = JsonUtils.getString(jsonObj, "type");
+		
+		return PARSERS.get(aiType).apply(jsonObj);
 	}
 
 }

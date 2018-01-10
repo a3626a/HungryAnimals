@@ -191,21 +191,20 @@ public class ConfigurationHandler {
 		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables/entities", (file, animal) -> {
 		});
 		ais = new ConfigurationHandlerJSONAnimal(basefolder, "ais", (text, animal) -> {
-			JsonObject jsonObj;
+			JsonElement jsonEle;
 			try {
-				jsonObj = (new JsonParser()).parse(text).getAsJsonObject();
+				jsonEle = (new JsonParser()).parse(text);
 			} catch (JsonSyntaxException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { ais.getDescriptor(), text, animal, e });
 				return;
 			}
-			String ai = jsonObj.get("type").getAsString();
-			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().AITYPES.get(ai).apply(animal);
+			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().parse(jsonEle);
 			if (aiContainer instanceof AIContainerTask) {
 				MinecraftForge.EVENT_BUS.post(new EventAIContainerRegister(animal, (AIContainerTask) aiContainer));
 			} else if (aiContainer instanceof AIContainer) {
 				MinecraftForge.EVENT_BUS.post(new EventAIContainerRegister(animal, ((AIContainer) aiContainer).getTask()));
 			}
-			AIContainers.getInstance().REGISTRY.put(animal, aiContainer);
+			AIContainers.getInstance().register(animal, aiContainer);
 		});
 
 		recipes = new ConfigurationHandlerJSON(new File(basefolder, "recipes"), "animalglue", (text) -> {
@@ -300,31 +299,25 @@ public class ConfigurationHandler {
 				return;
 			}
 
-			for (ResourceLocation key : EntityList.getEntityNameList()) {
-				Class<? extends Entity> i = EntityList.getClass(key);
-				if (i != null && EntityAnimal.class.isAssignableFrom(i)) {
-					// Lightening bolt is null
-					HungryAnimals.logger.info("Configuration: " + key.toString());
-				}
-			}
-			HungryAnimals.logger.info("Configuration: Uncompatible entities' name :");
-			for (ResourceLocation key : EntityList.getEntityNameList()) {
-				Class<? extends Entity> i = EntityList.getClass(key);
-				if (i != null && !EntityAnimal.class.isAssignableFrom(i)) {
-					// Lightening bolt is null
-					HungryAnimals.logger.info("Configuration: " + key.toString());
-				}
-			}
-
 			for (JsonElement jsonEle : jsonArr) {
 				String i = jsonEle.getAsString();
 				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(i));
 				if (entityClass != null) {
 					if (EntityAnimal.class.isAssignableFrom(entityClass)
 							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
-						HungryAnimals.logger.info("Configuration: Register corresponding class " + entityClass);
-						HungryAnimalManager.getInstance().registerHungryAnimal(entityClass.asSubclass(EntityAnimal.class));
+						ResourceLocation name = EntityList.getKey(entityClass);
+						HungryAnimals.logger.info("[Configuration] registered " + name);
+						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class));
 					}
+				}
+			}
+			
+			HungryAnimals.logger.info("[Configuration] following entities are compatible, but not registered");
+			for (ResourceLocation key : EntityList.getEntityNameList()) {
+				Class<? extends Entity> i = EntityList.getClass(key);
+				if (i != null && EntityAnimal.class.isAssignableFrom(i) && !HungryAnimalManager.getInstance().isRegistered(i.asSubclass(EntityAnimal.class))) {
+					// Lightening bolt is null
+					HungryAnimals.logger.info("[Configuration] " + key.toString());
 				}
 			}
 		});

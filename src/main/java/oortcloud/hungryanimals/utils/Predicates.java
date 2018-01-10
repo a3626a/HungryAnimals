@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 
-public class PredicateUtil {
+public class Predicates {
 
 	// TODO Use These predicates to optimize code
 	public static Predicate<Entity> IS_HUNGRY_ANIMAL = new Predicate<Entity>() {
