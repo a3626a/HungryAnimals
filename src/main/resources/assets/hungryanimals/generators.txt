@@ -29,11 +29,11 @@ $generator$
 ---------------------
 {
     "condition" : $condition$,
-    "grass" " $block_state$
+    "grass" " $block_state$ OR [$block_state$, ...]
 }
 
 : when "condition" meets, generates "grass"
-
+  if "grass" is a list, one block state of list is randomly generated.
 
 $condition$
 ---------------------
