@@ -38,9 +38,9 @@ $generator$
 $condition$
 ---------------------
 {
-    "below" : $block_state$,
+    "below" : $block_state$ OR [$block_state$, ...],
     "chance" : $double$,
-    "not_adjacent" : $block_state$
+    "not_adjacent" : $block_state$ OR [$block_state$, ...]
 }
 
 : each field can be missing.
