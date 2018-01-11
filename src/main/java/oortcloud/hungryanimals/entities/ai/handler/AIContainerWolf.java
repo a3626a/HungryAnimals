@@ -12,12 +12,13 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
+import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
 import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 
 public class AIContainerWolf extends AIContainer {
 	
-	public AIContainerWolf(AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory eatItem, AIFactory eatBlock, AIFactory targetNonTamed) {
+	public AIContainerWolf(AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory eatItem, AIFactory eatBlock, AIFactory hunt) {
 		getTask().before(EntityAIWanderAvoidWater.class).put(mate);
 		getTask().before(EntityAIWanderAvoidWater.class).put(trough);
 		getTask().before(EntityAIWanderAvoidWater.class).put(tempt);
@@ -25,7 +26,7 @@ public class AIContainerWolf extends AIContainer {
 		getTask().before(EntityAIWanderAvoidWater.class).put(eatBlock);
 		getTask().remove(EntityAIMate.class);
 		
-		getTarget().putLast(targetNonTamed);
+		getTarget().putLast(hunt);
 		getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
 	}
 	
@@ -43,15 +44,27 @@ public class AIContainerWolf extends AIContainer {
 		JsonElement jsonEatItem = jsonObj.get("eat_item");
 		JsonElement jsonEatBlock = jsonObj.get("eat_block");
 		JsonElement jsonHuntNonTamed = jsonObj.get("hunt_non_tamed");
+		JsonElement jsonHunt = jsonObj.get("hunt");
+
+		if (jsonHuntNonTamed != null && jsonHunt != null) {
+			HungryAnimals.logger.warn("2 hunt AIs are declared. Ignore hunt_non_tamed");
+			jsonHuntNonTamed = null;
+		}
 		
 		AIFactory mate = EntityAIMateModified.parse(jsonMate);
 		AIFactory trough = EntityAIMoveToTrough.parse(jsonTrough);
 		AIFactory tempt = EntityAITemptEdibleItem.parse(jsonTempt);
 		AIFactory eatItem = EntityAIMoveToEatItem.parse(jsonEatItem);
 		AIFactory eatBlock = EntityAIMoveToEatBlock.parse(jsonEatBlock);
-		AIFactory huntNonTamed = EntityAIHuntNonTamed.parse(jsonHuntNonTamed);
+		AIFactory hunt = null;
+		if (jsonHuntNonTamed != null) {
+			hunt = EntityAIHuntNonTamed.parse(jsonHuntNonTamed);
+		}
+		if (jsonHunt != null) {
+			hunt = EntityAIHunt.parse(jsonHunt);
+		}
 		
-		return new AIContainerWolf(mate, trough, tempt, eatItem, eatBlock, huntNonTamed);
+		return new AIContainerWolf(mate, trough, tempt, eatItem, eatBlock, hunt);
 	}
 	
 }

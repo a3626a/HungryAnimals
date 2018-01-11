@@ -52,7 +52,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 	public boolean shouldExecute() {
 		if (!pref.shouldEat(cap))
 			return false;
-		if (super.shouldExecute())
+		if (!super.shouldExecute())
 			return false;
 		
 		return true;
