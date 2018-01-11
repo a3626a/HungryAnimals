@@ -25,7 +25,8 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 	private ICapabilityHungryAnimal cap;
 	private IFoodPreferenceSimple<EntityLiving> pref;
 	private boolean herding;
-
+    private int delay;
+	
 	public EntityAIHunt(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(creature, EntityLiving.class, chance, checkSight, onlyNearby, new Predicate<EntityLiving>() {
 			@Override
@@ -50,10 +51,17 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 
 	@Override
 	public boolean shouldExecute() {
+		if (delay > 0) {
+			delay--;
+			return false;
+		}
+		
 		if (!pref.shouldEat(cap))
 			return false;
 		if (!super.shouldExecute())
 			return false;
+
+		delay = 200;
 		
 		return true;
 	}
