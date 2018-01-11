@@ -1,18 +1,121 @@
-"herbivore"
-    removes : Panic, Vanilla Mate, Vanilla Tempt, Vanilla Eat Grass
-    adds : Avoid Player, HA Mate, Eat Food In Trough, HA Tempt, Eat Item, Eat Block
-    
-"rabbit"
-    removes : Panic, Vanilla Mate, Vanilla Tempt, Raid Farm, Avoid Entity(Player, Wolf, Mob)
-    adds : Avoid Player, HA Mate, Eat food in trough, HA Tempt, Eat item, Eat block
-    
-"pig"
-    parent : "herbivore"
-    adds : Tempt Carrot On A Stick
-    
-"wolf"
-    removes : Vanilla Mate, Vanilla Target Sheep
-    adds : HA Mate, Eat Food In Trough, HA Tempt, Eat Item, Eat Block, HA Target Animals
+AI is a set of instructions to decide animals' behavior.
 
-"polar_bear"
-    adds : HA Mate, Eat Food In Trough, HA Tempt, Eat Item, Eat Block, HA Target Animals
+'ais/modid#animal.json'
+---------------------
+{
+    "type" : $ai_type$,
+    $ai_name$ : $ai_parameters$,
+    $ai_name$ : $ai_parameters$,
+    ...
+}
+
+
+$ai_type$
+---------------------
+"herbivore" OR "rabbit" OR "wolf"
+
+
+List of possible $ai_name$ depends on $ai_type$
+
+"herbivore"'s $ai_name$
+---------------------
+"attack_melee" OR
+"avoid_player" OR
+"mate" OR
+"trough" OR
+"tempt" OR
+"tempt_edible" OR
+"eat_item" OR
+"eat_block" OR
+"hurt_by_player"
+
+
+"rabbit"'s $ai_name$
+---------------------
+as same as "herbivore"'s $ai_name$
+will be deprecated soon
+
+
+"wolf"'s $ai_name$
+---------------------
+"mate" OR
+"trough" OR
+"tempt_edible" OR
+"eat_item" OR
+"eat_block" OR
+"hunt_non_tamed" OR
+"hunt"
+
+
+$ai_name$ : $ai_parameters$ pair refers a minimal set of instructions that have meaning.
+For example, "mate" is an AI to let animals mate when they are full.
+"mate"'s $ai_parameters$ decides movement speed of animals while mating.
+Therefore $ai_parameters$'s content is depends on $ai_name$.
+
+    
+"attack_melee" : attacks target. This AI requires another targeting AI like "hurt_by_player"
+    {
+        "speed" : movement speed
+        "use_long_memory" : if true, the animals will keep attacking target even if the animals can not reach the target
+    }
+    
+"avoid_player" : flees from player (wild animals only)
+    {
+        "radius" : flee when distance to the player is less than "radius"
+        "farspeed" : movement speed when distance to the player is more than 7m 
+        "nearspeed" : movement speed when distance to the player is less than 7m
+    }
+   
+"mate" : mates with other animal
+    {
+        "speed" : movement speed
+    }
+    
+"trough" : eats item inside trough
+    {
+        "speed" : movement speed
+    }
+    
+"tempt" : tempted by items listed.
+    {
+        "speed" : movement speed
+        "scared_by" : if true, the animal stop to be tempted when the player moves.
+        "items" : list of Ingredients (possible one Ingredient)
+    }
+
+"tempt_edible" : tempted by edible items (food preferences)
+    {
+        "speed" : movement speed
+        "scared_by" : if true, the animal stop to be tempted when the player moves.
+    }
+
+"eat_item" : eats fallen items
+    {
+        "speed" : movement speed
+    }
+
+"eat_block" : eats blocks
+    {
+        "speed" : movement speed
+    }
+
+"hurt_by_player" : targets the attacker (player only), this target is used by "attack_melee"
+    {
+        "call_help" : if true, animals nearby target the attacker, too.
+    }
+
+"hunt_non_tamed" : hunts animals (food preferences) when hungry, when not tamed (in Vanilla). This AI can not be used with "hunt"
+    {
+        "chance" : how frequently it hunts (1 -> 100%, 10 -> 10% ...)
+        "check_sight" : if true, only hunts animals in sight
+        "only_nearby" : if true, only hunts animals nearby
+        "herding" : if true, hunts with other carnivores nearby
+    }
+    
+"hunt" : hunts animals (food preferences) when hungry. This AI can not be used with "hunt"
+    {
+        "chance" : how frequently it hunts (1 -> 100%, 10 -> 10% ...)
+        "check_sight" : if true, only hunts animals in sight
+        "only_nearby" : if true, only hunts animals nearby
+        "herding" : if true, hunts with other carnivores nearby
+    }
