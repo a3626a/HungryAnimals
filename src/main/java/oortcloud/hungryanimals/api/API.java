@@ -2,10 +2,17 @@ package oortcloud.hungryanimals.api;
 
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.biome.Biome;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
-import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
+import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.handler.InHeats;
+import oortcloud.hungryanimals.generation.GrassGenerator;
+import oortcloud.hungryanimals.generation.GrassGenerators;
 
 public class API {
 	
@@ -36,8 +43,19 @@ public class API {
 	 * @return true if registration failed, otherwise false
 	 */
 	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, IAttribute attribute, double val, boolean shouldRegistered) {
-		// TODO take a look at it
-		return ModAttributes.getInstance().REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegistered, val));
+		return ModAttributes.getInstance().register(animalclass, attribute, val, shouldRegistered);
+	}
+	
+	public static boolean registerCure(Ingredient cure) {
+		return Cures.getInstance().register(cure);
+	}
+	
+	public static boolean registerInHeat(Ingredient cure, int duration) {
+		return InHeats.getInstance().register(cure, duration);
+	}
+	
+	public static boolean registerGrassGenerator(Biome biome, GrassGenerator generator) {
+		return GrassGenerators.getInstance().register(biome, generator);
 	}
 	
 	/**
@@ -48,8 +66,8 @@ public class API {
 	 * @param ai
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAI(Class<? extends EntityAnimal> animalclass, AIContainer aifactory) {
-		return false;
+	public static IAIContainer<EntityAnimal> registerAIContainer(Class<? extends EntityAnimal> animalclass, AIContainer aiContainer) {
+		return AIContainers.getInstance().register(animalclass, aiContainer);
 	}
 	
 }

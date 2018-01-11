@@ -33,7 +33,7 @@ public class InHeats {
 		return INSTANCE;
 	}
 
-	public boolean add(Ingredient key, int value) {
+	public boolean register(Ingredient key, int value) {
 		return REGISTRY.add(new InHeatEntry(key, value));
 	}
 

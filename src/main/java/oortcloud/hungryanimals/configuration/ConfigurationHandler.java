@@ -45,11 +45,10 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.lib.References;
@@ -58,9 +57,6 @@ import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.ai.handler.EventAIContainerRegister;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
-import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
-import oortcloud.hungryanimals.entities.attributes.AttributeRegisterEvent;
-import oortcloud.hungryanimals.entities.attributes.IAttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
@@ -174,7 +170,6 @@ public class ConfigurationHandler {
 				return;
 			}
 
-			List<IAttributeEntry> list = new ArrayList<IAttributeEntry>();
 			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 				if (!ModAttributes.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
 					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal });
@@ -182,11 +177,12 @@ public class ConfigurationHandler {
 				}
 				IAttribute attribute = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).attribute;
 				boolean shouldRegister = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).shouldRegister;
-				list.add(new AttributeEntry(attribute, shouldRegister, i.getValue().getAsDouble()));
+				API.registerAttribute(animal, attribute, i.getValue().getAsDouble(), shouldRegister);
 			}
-			AttributeRegisterEvent event_ = new AttributeRegisterEvent(animal, list);
-			MinecraftForge.EVENT_BUS.post(event_);
-			ModAttributes.getInstance().REGISTRY.put(animal, list);
+			// TODO Event 
+			// AttributeRegisterEvent event_ = new AttributeRegisterEvent(animal, list);
+			// MinecraftForge.EVENT_BUS.post(event_);
+			// ModAttributes.getInstance().REGISTRY.put(animal, list);
 		});
 
 		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables/entities", (file, animal) -> {
@@ -218,7 +214,7 @@ public class ConfigurationHandler {
 			}
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				Ingredient ing = CraftingHelper.getIngredient(jsonObj.getAsJsonObject("item"), new JsonContext(References.MODID));
+				Ingredient ing = ModJsonUtils.getIngredient(jsonObj.get("item"));
 				int count = jsonObj.getAsJsonPrimitive("count").getAsInt();
 				RecipeAnimalGlue.addRecipe(ing, count);
 			}
@@ -239,18 +235,9 @@ public class ConfigurationHandler {
 			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
 		cures = new ConfigurationHandlerJSON(basefolder, "cures", (text) -> {
-			JsonArray jsonArr;
-			try {
-				jsonArr = (new JsonParser()).parse(text).getAsJsonArray();
-			} catch (JsonSyntaxException e) {
-				HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { world.getDescriptor(), text, e });
-				return;
-			}
-
-			for (JsonElement jsonEle : jsonArr) {
-				Ingredient cure = CraftingHelper.getIngredient(jsonEle, new JsonContext(References.MODID));
-				Cures.getInstance().add(cure);
-			}
+			List<Ingredient> ingredients = ModJsonUtils.getIngredients((new JsonParser()).parse(text));
+			for (Ingredient i : ingredients)
+				Cures.getInstance().register(i);
 		});
 		inheat = new ConfigurationHandlerJSON(basefolder, "inheat", (text) -> {
 			JsonArray jsonArr;
@@ -263,9 +250,9 @@ public class ConfigurationHandler {
 
 			for (JsonElement jsonEle : jsonArr) {
 				JsonElement item = jsonEle.getAsJsonObject().get("item");
-				Ingredient inheat = CraftingHelper.getIngredient(item, new JsonContext(References.MODID));
+				Ingredient inheat = ModJsonUtils.getIngredient(item);
 				int inheatDuration = JsonUtils.getInt(jsonEle.getAsJsonObject(), "duration");
-				InHeats.getInstance().add(inheat, inheatDuration);
+				InHeats.getInstance().register(inheat, inheatDuration);
 			}
 		});
 		generators = new ConfigurationHandlerJSON(basefolder, "generators", (text) -> {

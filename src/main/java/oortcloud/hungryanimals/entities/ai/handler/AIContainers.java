@@ -20,7 +20,7 @@ public class AIContainers {
 
 	private static AIContainers INSTANCE;
 
-	public Map<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>> REGISTRY;
+	private Map<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>> REGISTRY;
 	private Map<String, Function<JsonElement, IAIContainer<EntityAnimal>>> PARSERS;
 	
 	private AIContainers() {
@@ -37,6 +37,10 @@ public class AIContainers {
 
 	public IAIContainer<EntityAnimal> register(Class<? extends EntityAnimal> animal, IAIContainer<EntityAnimal> aiContainer) {
 		return REGISTRY.put(animal, aiContainer);
+	}
+	
+	public void apply(EntityAnimal animal) {
+		REGISTRY.get(animal.getClass()).registerAI(animal);
 	}
 	
 	public void init() {

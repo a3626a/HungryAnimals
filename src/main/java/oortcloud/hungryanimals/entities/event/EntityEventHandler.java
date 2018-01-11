@@ -61,7 +61,7 @@ public class EntityEventHandler {
 		entity.setHealth(entity.getMaxHealth());
 
 		if (!entity.getEntityWorld().isRemote)
-			AIContainers.getInstance().REGISTRY.get(entity.getClass()).registerAI(entity);
+			AIContainers.getInstance().apply(entity);
 	}
 
 	@SubscribeEvent

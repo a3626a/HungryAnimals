@@ -22,7 +22,7 @@ public class Cures {
 		return INSTANCE;
 	}
 	
-	public boolean add(Ingredient cure) {
+	public boolean register(Ingredient cure) {
 		return REGISTRY.add(cure);
 	}
 	

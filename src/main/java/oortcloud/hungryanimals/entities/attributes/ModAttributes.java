@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.attributes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class ModAttributes {
 	
 	private static ModAttributes INSTANCE;
 
-	public Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
+	private Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
 	public Map<String, AttributePair> ATTRIBUTES;
 
 	private ModAttributes() {
@@ -72,7 +73,14 @@ public class ModAttributes {
 		ATTRIBUTES.put("generic.attackDamage", pair(SharedMonsterAttributes.ATTACK_DAMAGE, true));
 	}
 
-	public IAttribute register(String domain, String name, double defVal, double minVal, double maxVal, boolean shouldwatch, boolean shouldRegister) {
+	public boolean register(Class<? extends EntityAnimal> animalclass, IAttribute attribute, double val, boolean shouldRegistered) {
+		if (!REGISTRY.containsKey(animalclass)) {
+			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
+		}
+		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegistered, val));
+	}
+	
+	private IAttribute register(String domain, String name, double defVal, double minVal, double maxVal, boolean shouldwatch, boolean shouldRegister) {
 		String registeryName = domain+"."+name;
 		IAttribute attribtue = new RangedAttribute((IAttribute)null, registeryName, defVal, minVal, maxVal).setShouldWatch(shouldwatch);
 		ATTRIBUTES.put(registeryName, pair(attribtue, shouldRegister));
