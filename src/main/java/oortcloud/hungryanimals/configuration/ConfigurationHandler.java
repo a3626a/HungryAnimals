@@ -77,6 +77,7 @@ import oortcloud.hungryanimals.generation.GrassGenerator;
 import oortcloud.hungryanimals.generation.GrassGenerators;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.utils.HashBlockState;
+import oortcloud.hungryanimals.utils.ModJsonUtils;
 
 public class ConfigurationHandler {
 
@@ -138,7 +139,7 @@ public class ConfigurationHandler {
 			List<FoodPreferenceIngredientEntry> list = new ArrayList<FoodPreferenceIngredientEntry>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				Ingredient ing = CraftingHelper.getIngredient(jsonObj.getAsJsonObject("item"), new JsonContext(References.MODID));
+				Ingredient ing = ModJsonUtils.getIngredient(jsonObj.get("item"));
 				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
 				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
 				list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));

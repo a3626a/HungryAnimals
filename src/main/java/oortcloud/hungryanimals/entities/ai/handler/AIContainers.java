@@ -53,13 +53,6 @@ public class AIContainers {
 			return aiContainer;
 		});
 		
-		PARSERS.put("pig", (jsonEle) -> {
-			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(jsonEle);
-			aiContainer.getTask().before(EntityAITemptEdibleItem.class)
-					.put((entity) -> new EntityAITempt(entity, 1.5D, Items.CARROT_ON_A_STICK, false));
-			return aiContainer;
-		});
-		
 		PARSERS.put("wolf", AIContainerWolf::parse);
 
 	}

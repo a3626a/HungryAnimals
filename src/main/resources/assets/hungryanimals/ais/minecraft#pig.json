@@ -1,5 +1,5 @@
 {
-	"type" : "pig",
+	"type" : "herbivore",
     "avoid_player" : {
         "radius" : 16.0,
         "farspeed" : 1.0,
@@ -12,6 +12,13 @@
         "speed" : 1.0
     },
     "tempt" : {
+        "speed" : 1.5,
+        "scared_by" : false,
+        "items" : {
+            "item" : "minecraft:carrot_on_a_stick"
+        }
+    },
+    "tempt_edible" : {
         "speed" : 1.5,
         "scared_by" : false
     },

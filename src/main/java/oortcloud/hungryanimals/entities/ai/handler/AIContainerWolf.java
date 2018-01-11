@@ -15,13 +15,15 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
+import oortcloud.hungryanimals.entities.ai.EntityAITemptIngredient;
 
 public class AIContainerWolf extends AIContainer {
 	
-	public AIContainerWolf(AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory eatItem, AIFactory eatBlock, AIFactory hunt) {
+	public AIContainerWolf(AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory temptEdible, AIFactory eatItem, AIFactory eatBlock, AIFactory hunt) {
 		putBefore(mate, EntityAIWanderAvoidWater.class);
 		putBefore(trough, EntityAIWanderAvoidWater.class);
 		putBefore(tempt, EntityAIWanderAvoidWater.class);
+		putBefore(temptEdible, EntityAIWanderAvoidWater.class);
 		putBefore(eatItem, EntityAIWanderAvoidWater.class);
 		putBefore(eatBlock, EntityAIWanderAvoidWater.class);
 		getTask().remove(EntityAIMate.class);
@@ -50,7 +52,8 @@ public class AIContainerWolf extends AIContainer {
 		
 		AIFactory mate = parseField(jsonObj, "mate", EntityAIMateModified::parse);
 		AIFactory trough = parseField(jsonObj, "trough", EntityAIMoveToTrough::parse);
-		AIFactory tempt = parseField(jsonObj, "tempt", EntityAITemptEdibleItem::parse);
+		AIFactory tempt = parseField(jsonObj, "tempt", EntityAITemptIngredient::parse);
+		AIFactory temptEdible = parseField(jsonObj, "tempt_edible", EntityAITemptEdibleItem::parse);
 		AIFactory eatItem = parseField(jsonObj, "eat_item", EntityAIMoveToEatItem::parse);
 		AIFactory eatBlock = parseField(jsonObj, "eat_block", EntityAIMoveToEatBlock::parse);
 
@@ -62,7 +65,7 @@ public class AIContainerWolf extends AIContainer {
 			hunt = EntityAIHunt.parse(jsonHunt);
 		}
 		
-		return new AIContainerWolf(mate, trough, tempt, eatItem, eatBlock, hunt);
+		return new AIContainerWolf(mate, trough, tempt, temptEdible, eatItem, eatBlock, hunt);
 	}
 	
 }

@@ -17,14 +17,16 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
+import oortcloud.hungryanimals.entities.ai.EntityAITemptIngredient;
 
 public class AIContainerHerbivore extends AIContainer {
 
-	public AIContainerHerbivore(AIFactory avoidPlayer, AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory eatItem, AIFactory eatBlock) {
+	public AIContainerHerbivore(AIFactory avoidPlayer, AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory temptEdible, AIFactory eatItem, AIFactory eatBlock) {
 		putBefore(avoidPlayer, EntityAIFollowParent.class);
 		putBefore(mate, EntityAIFollowParent.class);
 		putBefore(trough, EntityAIFollowParent.class);
 		putBefore(tempt, EntityAIFollowParent.class);
+		putBefore(temptEdible, EntityAIFollowParent.class);
 		putBefore(eatItem, EntityAIFollowParent.class);
 		putBefore(eatBlock, EntityAIFollowParent.class);
 		getTask().remove(EntityAIPanic.class);
@@ -44,11 +46,12 @@ public class AIContainerHerbivore extends AIContainer {
 		AIFactory avoidPlayer = parseField(jsonObj, "avoid_player", EntityAIAvoidPlayer::parse);
 		AIFactory mate = parseField(jsonObj, "mate", EntityAIMateModified::parse);
 		AIFactory trough = parseField(jsonObj, "trough", EntityAIMoveToTrough::parse);
-		AIFactory tempt = parseField(jsonObj, "tempt", EntityAITemptEdibleItem::parse);
+		AIFactory tempt = parseField(jsonObj, "tempt", EntityAITemptIngredient::parse);
+		AIFactory temptEdible = parseField(jsonObj, "tempt_edible", EntityAITemptEdibleItem::parse);
 		AIFactory eatItem = parseField(jsonObj, "eat_item", EntityAIMoveToEatItem::parse);
 		AIFactory eatBlock = parseField(jsonObj, "eat_block", EntityAIMoveToEatBlock::parse);
 		
-		return new AIContainerHerbivore(avoidPlayer, mate, trough, tempt, eatItem, eatBlock);
+		return new AIContainerHerbivore(avoidPlayer, mate, trough, tempt, temptEdible, eatItem, eatBlock);
 	}
 	
 }

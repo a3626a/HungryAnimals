@@ -6,7 +6,7 @@
     "trough" : {
         "speed" : 1.0
     },
-    "tempt" : {
+    "tempt_edible" : {
         "speed" : 1.5,
         "scared_by" : false
     },
