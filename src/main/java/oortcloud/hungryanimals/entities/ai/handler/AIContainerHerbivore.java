@@ -11,7 +11,9 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.EntityAIAttackMeleeCustom;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
+import oortcloud.hungryanimals.entities.ai.EntityAIHurtByPlayer;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
@@ -21,7 +23,8 @@ import oortcloud.hungryanimals.entities.ai.EntityAITemptIngredient;
 
 public class AIContainerHerbivore extends AIContainer {
 
-	public AIContainerHerbivore(AIFactory avoidPlayer, AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory temptEdible, AIFactory eatItem, AIFactory eatBlock) {
+	public AIContainerHerbivore(AIFactory attackMelee, AIFactory avoidPlayer, AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory temptEdible, AIFactory eatItem, AIFactory eatBlock, AIFactory hurtByPlayer) {
+		putBefore(attackMelee, EntityAIFollowParent.class);
 		putBefore(avoidPlayer, EntityAIFollowParent.class);
 		putBefore(mate, EntityAIFollowParent.class);
 		putBefore(trough, EntityAIFollowParent.class);
@@ -33,6 +36,10 @@ public class AIContainerHerbivore extends AIContainer {
 		getTask().remove(EntityAIMate.class);
 		getTask().remove(EntityAITempt.class);
 		getTask().remove(EntityAIEatGrass.class); // For Sheep
+		
+		if (hurtByPlayer != null) {
+			getTarget().putLast(hurtByPlayer);
+		}
 	}
 	
 	public static IAIContainer<EntityAnimal> parse(JsonElement jsonEle) {
@@ -43,6 +50,7 @@ public class AIContainerHerbivore extends AIContainer {
 		
 		JsonObject jsonObj = (JsonObject)jsonEle;
 		
+		AIFactory attackMelee = parseField(jsonObj, "attack_melee", EntityAIAttackMeleeCustom::parse);
 		AIFactory avoidPlayer = parseField(jsonObj, "avoid_player", EntityAIAvoidPlayer::parse);
 		AIFactory mate = parseField(jsonObj, "mate", EntityAIMateModified::parse);
 		AIFactory trough = parseField(jsonObj, "trough", EntityAIMoveToTrough::parse);
@@ -50,8 +58,9 @@ public class AIContainerHerbivore extends AIContainer {
 		AIFactory temptEdible = parseField(jsonObj, "tempt_edible", EntityAITemptEdibleItem::parse);
 		AIFactory eatItem = parseField(jsonObj, "eat_item", EntityAIMoveToEatItem::parse);
 		AIFactory eatBlock = parseField(jsonObj, "eat_block", EntityAIMoveToEatBlock::parse);
+		AIFactory hurtByPlayer = parseField(jsonObj, "hurt_by_player", EntityAIHurtByPlayer::parse);
 		
-		return new AIContainerHerbivore(avoidPlayer, mate, trough, tempt, temptEdible, eatItem, eatBlock);
+		return new AIContainerHerbivore(attackMelee, avoidPlayer, mate, trough, tempt, temptEdible, eatItem, eatBlock, hurtByPlayer);
 	}
 	
 }

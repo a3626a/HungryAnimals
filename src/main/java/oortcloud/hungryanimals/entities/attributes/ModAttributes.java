@@ -69,6 +69,7 @@ public class ModAttributes {
 		wool_delay = register(id, "wool_delay", true);
 		ATTRIBUTES.put("generic.maxHealth", pair(SharedMonsterAttributes.MAX_HEALTH, false));
 		ATTRIBUTES.put("generic.movementSpeed", pair(SharedMonsterAttributes.MOVEMENT_SPEED, false));
+		ATTRIBUTES.put("generic.attackDamage", pair(SharedMonsterAttributes.ATTACK_DAMAGE, true));
 	}
 
 	public IAttribute register(String domain, String name, double defVal, double minVal, double maxVal, boolean shouldwatch, boolean shouldRegister) {

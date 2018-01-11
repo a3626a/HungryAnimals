@@ -15,5 +15,6 @@
 	"hungryanimals.milk_delay" : 6000,
 	"hungryanimals.milk_hunger" : 25,
 	"generic.maxHealth" : 30,
-	"generic.movementSpeed" : 0.2
+	"generic.movementSpeed" : 0.2,
+	"generic.attackDamage" : 4.0
 }

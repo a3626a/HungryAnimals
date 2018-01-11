@@ -11,12 +11,9 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.init.Items;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask.AIRemoverIsInstance;
 
 public class AIContainers {
@@ -68,5 +65,5 @@ public class AIContainers {
 		
 		return PARSERS.get(aiType).apply(jsonObj);
 	}
-
+	
 }
