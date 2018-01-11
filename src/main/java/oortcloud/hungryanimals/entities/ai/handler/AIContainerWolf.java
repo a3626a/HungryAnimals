@@ -8,25 +8,27 @@ import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
+import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
-import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
-import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 
 public class AIContainerWolf extends AIContainer {
 	
 	public AIContainerWolf(AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory eatItem, AIFactory eatBlock, AIFactory hunt) {
-		getTask().before(EntityAIWanderAvoidWater.class).put(mate);
-		getTask().before(EntityAIWanderAvoidWater.class).put(trough);
-		getTask().before(EntityAIWanderAvoidWater.class).put(tempt);
-		getTask().before(EntityAIWanderAvoidWater.class).put(eatItem);
-		getTask().before(EntityAIWanderAvoidWater.class).put(eatBlock);
+		putBefore(mate, EntityAIWanderAvoidWater.class);
+		putBefore(trough, EntityAIWanderAvoidWater.class);
+		putBefore(tempt, EntityAIWanderAvoidWater.class);
+		putBefore(eatItem, EntityAIWanderAvoidWater.class);
+		putBefore(eatBlock, EntityAIWanderAvoidWater.class);
 		getTask().remove(EntityAIMate.class);
 		
-		getTarget().putLast(hunt);
+		if (hunt != null) {
+			getTarget().putLast(hunt);
+		}
 		getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
 	}
 	
@@ -38,11 +40,6 @@ public class AIContainerWolf extends AIContainer {
 		
 		JsonObject jsonObj = (JsonObject)jsonEle;
 		
-		JsonElement jsonMate = jsonObj.get("mate");
-		JsonElement jsonTrough = jsonObj.get("trough");
-		JsonElement jsonTempt = jsonObj.get("tempt");
-		JsonElement jsonEatItem = jsonObj.get("eat_item");
-		JsonElement jsonEatBlock = jsonObj.get("eat_block");
 		JsonElement jsonHuntNonTamed = jsonObj.get("hunt_non_tamed");
 		JsonElement jsonHunt = jsonObj.get("hunt");
 
@@ -51,11 +48,12 @@ public class AIContainerWolf extends AIContainer {
 			jsonHuntNonTamed = null;
 		}
 		
-		AIFactory mate = EntityAIMateModified.parse(jsonMate);
-		AIFactory trough = EntityAIMoveToTrough.parse(jsonTrough);
-		AIFactory tempt = EntityAITemptEdibleItem.parse(jsonTempt);
-		AIFactory eatItem = EntityAIMoveToEatItem.parse(jsonEatItem);
-		AIFactory eatBlock = EntityAIMoveToEatBlock.parse(jsonEatBlock);
+		AIFactory mate = parseField(jsonObj, "mate", EntityAIMateModified::parse);
+		AIFactory trough = parseField(jsonObj, "trough", EntityAIMoveToTrough::parse);
+		AIFactory tempt = parseField(jsonObj, "tempt", EntityAITemptEdibleItem::parse);
+		AIFactory eatItem = parseField(jsonObj, "eat_item", EntityAIMoveToEatItem::parse);
+		AIFactory eatBlock = parseField(jsonObj, "eat_block", EntityAIMoveToEatBlock::parse);
+
 		AIFactory hunt = null;
 		if (jsonHuntNonTamed != null) {
 			hunt = EntityAIHuntNonTamed.parse(jsonHuntNonTamed);

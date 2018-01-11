@@ -21,12 +21,12 @@ import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 public class AIContainerHerbivore extends AIContainer {
 
 	public AIContainerHerbivore(AIFactory avoidPlayer, AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory eatItem, AIFactory eatBlock) {
-		getTask().before(EntityAIFollowParent.class).put(avoidPlayer);
-		getTask().before(EntityAIFollowParent.class).put(mate);
-		getTask().before(EntityAIFollowParent.class).put(trough);
-		getTask().before(EntityAIFollowParent.class).put(tempt);
-		getTask().before(EntityAIFollowParent.class).put(eatItem);
-		getTask().before(EntityAIFollowParent.class).put(eatBlock);
+		putBefore(avoidPlayer, EntityAIFollowParent.class);
+		putBefore(mate, EntityAIFollowParent.class);
+		putBefore(trough, EntityAIFollowParent.class);
+		putBefore(tempt, EntityAIFollowParent.class);
+		putBefore(eatItem, EntityAIFollowParent.class);
+		putBefore(eatBlock, EntityAIFollowParent.class);
 		getTask().remove(EntityAIPanic.class);
 		getTask().remove(EntityAIMate.class);
 		getTask().remove(EntityAITempt.class);
@@ -41,19 +41,12 @@ public class AIContainerHerbivore extends AIContainer {
 		
 		JsonObject jsonObj = (JsonObject)jsonEle;
 		
-		JsonElement jsonAvoidPlayer = jsonObj.get("avoid_player");
-		JsonElement jsonMate = jsonObj.get("mate");
-		JsonElement jsonTrough = jsonObj.get("trough");
-		JsonElement jsonTempt = jsonObj.get("tempt");
-		JsonElement jsonEatItem = jsonObj.get("eat_item");
-		JsonElement jsonEatBlock = jsonObj.get("eat_block");
-		
-		AIFactory avoidPlayer = EntityAIAvoidPlayer.parse(jsonAvoidPlayer);
-		AIFactory mate = EntityAIMateModified.parse(jsonMate);
-		AIFactory trough = EntityAIMoveToTrough.parse(jsonTrough);
-		AIFactory tempt = EntityAITemptEdibleItem.parse(jsonTempt);
-		AIFactory eatItem = EntityAIMoveToEatItem.parse(jsonEatItem);
-		AIFactory eatBlock = EntityAIMoveToEatBlock.parse(jsonEatBlock);
+		AIFactory avoidPlayer = parseField(jsonObj, "avoid_player", EntityAIAvoidPlayer::parse);
+		AIFactory mate = parseField(jsonObj, "mate", EntityAIMateModified::parse);
+		AIFactory trough = parseField(jsonObj, "trough", EntityAIMoveToTrough::parse);
+		AIFactory tempt = parseField(jsonObj, "tempt", EntityAITemptEdibleItem::parse);
+		AIFactory eatItem = parseField(jsonObj, "eat_item", EntityAIMoveToEatItem::parse);
+		AIFactory eatBlock = parseField(jsonObj, "eat_block", EntityAIMoveToEatBlock::parse);
 		
 		return new AIContainerHerbivore(avoidPlayer, mate, trough, tempt, eatItem, eatBlock);
 	}
