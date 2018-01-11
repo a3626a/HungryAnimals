@@ -1,6 +1,9 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import com.google.common.base.Predicate;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
@@ -8,19 +11,22 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.AxisAlignedBB;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreferenceSimple;
 
-public class EntityAITarget extends EntityAINearestAttackableTarget<EntityLiving> {
+public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> {
 
 	private ICapabilityHungryAnimal cap;
 	private IFoodPreferenceSimple<EntityLiving> pref;
 	private boolean herding;
 
-	public EntityAITarget(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
+	public EntityAIHunt(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(creature, EntityLiving.class, chance, checkSight, onlyNearby, new Predicate<EntityLiving>() {
 			@Override
 			public boolean apply(EntityLiving input) {
@@ -44,7 +50,12 @@ public class EntityAITarget extends EntityAINearestAttackableTarget<EntityLiving
 
 	@Override
 	public boolean shouldExecute() {
-		return pref.shouldEat(cap) && super.shouldExecute();
+		if (!pref.shouldEat(cap))
+			return false;
+		if (super.shouldExecute())
+			return false;
+		
+		return true;
 	}
 
 	@Override
@@ -77,4 +88,19 @@ public class EntityAITarget extends EntityAINearestAttackableTarget<EntityLiving
 		creatureIn.setAttackTarget(entityLivingBaseIn);
 	}
 
+	public static AIFactory parse(JsonElement jsonEle) {
+		if (! (jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Target must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+		
+		JsonObject jsonObject = (JsonObject)jsonEle ;
+		
+		int chance = JsonUtils.getInt(jsonObject, "chance");
+		boolean checkSight = JsonUtils.getBoolean(jsonObject, "check_sight");
+		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
+		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
+		return (entity) -> new EntityAIHunt(entity, chance, checkSight, onlyNearby, herding);
+	}
+	
 }

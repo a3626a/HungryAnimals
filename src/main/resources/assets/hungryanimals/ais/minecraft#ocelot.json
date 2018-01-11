@@ -1,3 +1,25 @@
 {
-	"type" : "wolf"
+	"type" : "wolf",
+    "mate" : {
+        "speed" = 2.0
+    },
+    "trough" : {
+        "speed" = 1.0
+    },
+    "tempt" : {
+        "speed" = 1.5,
+        "scared_by" = false
+    },
+    "eat_item" : {
+        "speed" = 1.5
+    },
+    "eat_block" : {
+        "speed" = 1.0
+    },
+    "hunt_non_tamed" : {
+        "chance" = 10,
+        "check_sight" = false,
+        "only_nearby" = false,
+        "herding" = false
+    }
 }

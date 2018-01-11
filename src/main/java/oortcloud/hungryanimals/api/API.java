@@ -1,8 +1,8 @@
 package oortcloud.hungryanimals.api;
 
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.attributes.AttributeEntry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
@@ -48,12 +48,8 @@ public class API {
 	 * @param ai
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAI(Class<? extends EntityAnimal> animalclass, AIFactory aifactory) {
+	public static boolean registerAI(Class<? extends EntityAnimal> animalclass, AIContainer aifactory) {
 		return false;
 	}
 	
-	@FunctionalInterface
-	public interface AIFactory {
-		public EntityAIBase getAI(EntityAnimal animal);
-	}
 }

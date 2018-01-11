@@ -10,13 +10,10 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Items;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -24,8 +21,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
-import oortcloud.hungryanimals.entities.ai.EntityAITarget;
-import oortcloud.hungryanimals.entities.ai.EntityAITargetNonTamed;
+import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
 import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask.AIRemoverIsInstance;
 
@@ -70,20 +66,7 @@ public class AIContainers {
 			return aiContainer;
 		});
 		
-		PARSERS.put("wolf", (jsonEle)->{
-			AIContainer aiContainer = new AIContainer();
-			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMateModified(entity, 2.0D));
-			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToTrough(entity, 1.0D));
-			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAITemptEdibleItem(entity, 1.5D, false));
-			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
-			aiContainer.getTask().before(EntityAIWanderAvoidWater.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
-			aiContainer.getTask().remove(EntityAIMate.class);
-			
-			aiContainer.getTarget().putLast((entity) -> new EntityAITargetNonTamed((EntityTameable) entity, false, true));
-			aiContainer.getTarget().remove(net.minecraft.entity.ai.EntityAITargetNonTamed.class);
-			
-			return aiContainer;
-	    });
+		PARSERS.put("wolf", AIContainerWolf::parse);
 
 		PARSERS.put("polar_bear", (jsonEle)->{
 			AIContainer aiContainer = new AIContainer();
@@ -93,7 +76,7 @@ public class AIContainers {
 			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatItem(entity, 1.5D));
 			aiContainer.getTask().before(EntityAIFollowParent.class).put((entity) -> new EntityAIMoveToEatBlock(entity, 1.0D));
 			
-			aiContainer.getTarget().putLast((entity) -> new EntityAITarget(entity, 1, false, false, false));
+			aiContainer.getTarget().putLast((entity) -> new EntityAIHunt(entity, 1, false, false, false));
 			
 			return aiContainer;
 	    });
