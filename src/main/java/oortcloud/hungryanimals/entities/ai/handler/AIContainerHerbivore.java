@@ -24,6 +24,11 @@ import oortcloud.hungryanimals.entities.ai.EntityAITemptIngredient;
 public class AIContainerHerbivore extends AIContainer {
 
 	public AIContainerHerbivore(AIFactory attackMelee, AIFactory avoidPlayer, AIFactory mate, AIFactory trough, AIFactory tempt, AIFactory temptEdible, AIFactory eatItem, AIFactory eatBlock, AIFactory hurtByPlayer) {
+		getTask().remove(EntityAIPanic.class);
+		getTask().remove(EntityAIMate.class);
+		getTask().remove(EntityAITempt.class);
+		getTask().remove(EntityAIEatGrass.class); // For Sheep
+		
 		putBefore(attackMelee, EntityAIFollowParent.class);
 		putBefore(avoidPlayer, EntityAIFollowParent.class);
 		putBefore(mate, EntityAIFollowParent.class);
@@ -32,11 +37,6 @@ public class AIContainerHerbivore extends AIContainer {
 		putBefore(temptEdible, EntityAIFollowParent.class);
 		putBefore(eatItem, EntityAIFollowParent.class);
 		putBefore(eatBlock, EntityAIFollowParent.class);
-		getTask().remove(EntityAIPanic.class);
-		getTask().remove(EntityAIMate.class);
-		getTask().remove(EntityAITempt.class);
-		getTask().remove(EntityAIEatGrass.class); // For Sheep
-		
 		if (hurtByPlayer != null) {
 			getTarget().putLast(hurtByPlayer);
 		}

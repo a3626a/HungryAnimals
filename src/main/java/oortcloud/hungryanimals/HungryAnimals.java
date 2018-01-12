@@ -79,15 +79,11 @@ public class HungryAnimals {
 		proxy.registerColors();
 		
 		CraftingHandler.init();
-
-
 	}
 
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
 		ConfigurationHandler.postSync();
-		if (Loader.isModLoaded("NotEnoughItems"))
-			proxy.initNEI();
 	}
 
 }

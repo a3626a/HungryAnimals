@@ -7,7 +7,6 @@ public class ConditionTime implements ICondition {
 
 	@Override
 	public boolean canGrassGrow(World world, BlockPos pos) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

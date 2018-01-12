@@ -8,7 +8,6 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 
 public class Predicates {
 
-	// TODO Use These predicates to optimize code
 	public static Predicate<Entity> IS_HUNGRY_ANIMAL = new Predicate<Entity>() {
 		@Override
 		public boolean apply(Entity input) {
