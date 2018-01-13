@@ -2,30 +2,30 @@ package oortcloud.hungryanimals.configuration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.function.Consumer;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.api.HAPlugins;
 
 public class ConfigurationHandlerJSON {
 
 	protected File directory;
 	protected String descriptor;
 
-	private Consumer<String> read;
+	private Consumer<JsonElement> read;
 
 	public ConfigurationHandlerJSON(File basefolder, String descriptor) {
 		this.descriptor = descriptor;
 		this.directory = basefolder;
 	}
 
-	public ConfigurationHandlerJSON(File basefolder, String descriptor, Consumer<String> read) {
+	public ConfigurationHandlerJSON(File basefolder, String descriptor, Consumer<JsonElement> read) {
 		this.descriptor = descriptor;
 		this.directory = basefolder;
 		this.read = read;
@@ -35,13 +35,13 @@ public class ConfigurationHandlerJSON {
 		checkDirectory();
 		File file = new File(directory, descriptor + ".json");
 		try {
-			String text = null;
+			JsonElement json = null;
 			if (!file.exists()) {
-				text = getDefaultConfigurationText(file);
+				json = HAPlugins.getInstance().getJson(Paths.get(descriptor+".json"));
 			} else {
-				text = new String(Files.readAllBytes(file.toPath()));
+				json = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath())));
 			}
-			this.read.accept(text);
+			this.read.accept(json);
 		} catch (JsonSyntaxException | IOException e) {
 			HungryAnimals.logger.error("Couldn\'t load {} {}\n{}", new Object[] { this.descriptor, file, e });
 		}
@@ -56,28 +56,6 @@ public class ConfigurationHandlerJSON {
 				return;
 			}
 		}
-	}
-
-	protected String getDefaultConfigurationText(File file) {
-		String path_file = file.getPath();
-		int index_config = path_file.indexOf("config");
-		String path_config = path_file.substring(index_config);
-		int index_hungryanimals = path_config.indexOf(References.MODID);
-		String path_hungryanimals = path_config.substring(index_hungryanimals);
-		String resourceName = "/assets/" + path_hungryanimals.replace("\\", "/");
-
-		URL url = getClass().getResource(resourceName);
-		if (url == null) {
-			HungryAnimals.logger.error("Couldn\'t load {} {} from assets", new Object[] { this.descriptor, resourceName });
-			return null;
-		}
-
-		try {
-			return Resources.toString(url, Charsets.UTF_8);
-		} catch (IOException e) {
-			HungryAnimals.logger.error("Couldn\'t load {} {} from {}\n{}", new Object[] { this.descriptor, file, url, e });
-		}
-		return null;
 	}
 
 	public String getDescriptor() {

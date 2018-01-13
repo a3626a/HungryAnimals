@@ -52,8 +52,9 @@ public class HungryAnimals {
 	public static void preInit(FMLPreInitializationEvent event) {
 		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
 		logger = event.getModLog();
-		RecipeAnimalGlue.init();
+		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);
+		RecipeAnimalGlue.init();
 		ModBlocks.init();
 		ModItems.init();
 		ModPotions.init();
@@ -68,8 +69,6 @@ public class HungryAnimals {
 		HungryAnimalManager.getInstance().init();
 		ModAttributes.getInstance().init();
 
-		HAPlugins.getInstance().init(event);
-		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
 	}

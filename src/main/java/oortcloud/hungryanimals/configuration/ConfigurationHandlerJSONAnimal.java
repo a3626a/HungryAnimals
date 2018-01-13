@@ -3,43 +3,50 @@ package oortcloud.hungryanimals.configuration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 
-	private BiConsumer<String, Class<? extends EntityAnimal>> read;
-
+	
+	private BiConsumer<JsonElement, Class<? extends EntityAnimal>> read;
+	private String descriptor;
 	/**
 	 * 
 	 * @param event
 	 * @param descriptor : relative path, never start with /
 	 * @param read
 	 */
-	public ConfigurationHandlerJSONAnimal(File basefolder, String descriptor, BiConsumer<String, Class<? extends EntityAnimal>> read) {
+	public ConfigurationHandlerJSONAnimal(File basefolder, String descriptor, BiConsumer<JsonElement, Class<? extends EntityAnimal>> read) {
 		super(new File(basefolder, descriptor), descriptor);
 		this.read = read;
+		this.descriptor = descriptor;
 	}
 
 	public void sync() {
 		checkDirectory();
 
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			File iFile = new File(directory, ConfigurationHandler.resourceLocationToString(EntityList.getKey(i)) + ".json");
+			String animalName = ConfigurationHandler.resourceLocationToString(EntityList.getKey(i));
+			File iFile = new File(directory, animalName+".json");
 
 			try {
-				String text = null;
+				JsonElement json = null;
 				if (!iFile.exists()) {
-					text = getDefaultConfigurationText(iFile);
+					json = HAPlugins.getInstance().getJson(Paths.get(descriptor, animalName+".json"));
 				} else {
-					text = new String(Files.readAllBytes(iFile.toPath()));
+					json = (new JsonParser()).parse(new String(Files.readAllBytes(iFile.toPath())));
 				}
-				this.read.read(text, i);
+				this.read.read(json, i);
 			} catch (JsonSyntaxException | IOException e) {
 				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
 			}
