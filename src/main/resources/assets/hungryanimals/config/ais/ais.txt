@@ -1,58 +1,56 @@
-AI is a set of instructions to decide animals' behavior.
+################
+#HUNGRY ANIMALS#
+################
 
-'ais/modid#animal.json'
----------------------
-{
-    "type" : $ai_type$,
-    $ai_name$ : $ai_parameters$,
-    $ai_name$ : $ai_parameters$,
-    ...
-}
+AI of an animal is defined by a AI container and AI modifiers.
+AI containers decide category of AI, like "herbivore" or "wolf".
+AI modifiers change details of AI container. AI modifiers are applicable to specific AI containers.
+
+============
+AI CONTAINER
+============
+"herbivore" : should be set to herbivores.
+              removes Vanilla AIs such like being tempted, mating, eating grass.
+
+"rabbit" : almost as same as "herbivore",
+           removes Vanilla AIs specialized to rabbit.
+
+"wolf" : should be set to carnivores.
+         removes Vanilla AIs mentioned above, and hunting.
 
 
-$ai_type$
----------------------
-"herbivore" OR "rabbit" OR "wolf"
+===========
+AI MODIFIER
+===========
+Following lists are possible AI modifiers for each AI container
 
-
-List of possible $ai_name$ depends on $ai_type$
-
-"herbivore"'s $ai_name$
----------------------
-"attack_melee" OR
-"avoid_player" OR
-"mate" OR
-"trough" OR
-"tempt" OR
-"tempt_edible" OR
-"eat_item" OR
-"eat_block" OR
+"herbivore" / "rabbit"
+---------------
+"attack_melee"
+"avoid_player"
+"mate"
+"trough"
+"tempt"
+"tempt_edible"
+"eat_item"
+"eat_block"
 "hurt_by_player"
 
 
-"rabbit"'s $ai_name$
----------------------
-as same as "herbivore"'s $ai_name$
-will be deprecated soon
-
-
-"wolf"'s $ai_name$
----------------------
-"mate" OR
-"trough" OR
-"tempt_edible" OR
-"eat_item" OR
-"eat_block" OR
-"hunt_non_tamed" OR
+"wolf"
+------------------
+"mate"
+"trough"
+"tempt_edible"
+"eat_item"
+"eat_block"
+"hunt_non_tamed"
 "hunt"
 
 
-$ai_name$ : $ai_parameters$ pair refers a minimal set of instructions that have meaning.
-For example, "mate" is an AI to let animals mate when they are full.
-"mate"'s $ai_parameters$ decides movement speed of animals while mating.
-Therefore $ai_parameters$'s content is depends on $ai_name$.
+Each AI modifier has parameters, to indicate details like speed, and conditions.
+Following lists are explanations of AI modifiers and their parameters.
 
-    
 "attack_melee" : attacks target. This AI requires another targeting AI like "hurt_by_player"
     {
         "speed" : movement speed

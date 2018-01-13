@@ -1,3 +1,7 @@
+################
+#HUNGRY ANIMALS#
+################
+
 Each 'modid#name.json' contains list of 'Ingredients' and nutrient/stomach value it gives.
 
 * Ingredients

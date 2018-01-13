@@ -80,7 +80,7 @@ public class GrassGenerators {
 						}
 						
 						for (GrassGenerator i : target) {
-							if (i.condition.canGrassGrow(world, pos)) {
+							if (world.isAirBlock(pos) && i.condition.canGrassGrow(world, pos)) {
 								newPoses.add(pos);
 								newStates.add(i.states.get(world.rand.nextInt(i.states.size())));
 								break;

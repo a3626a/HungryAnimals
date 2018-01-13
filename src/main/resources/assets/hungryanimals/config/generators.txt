@@ -1,3 +1,7 @@
+################
+#HUNGRY ANIMALS#
+################
+
 'generators.json' contains list of 'Generator' which generates grass in the world periodically.
 
 'generators.json'

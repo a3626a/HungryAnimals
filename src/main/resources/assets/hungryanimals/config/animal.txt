@@ -1,3 +1,7 @@
+################
+#HUNGRY ANIMALS#
+################
+
 'animal.json' contains list of the names of animals 
 that will be registered to Hungry Animals.
 

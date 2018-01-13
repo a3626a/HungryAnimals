@@ -1,3 +1,7 @@
+################
+#HUNGRY ANIMALS#
+################
+
 "hungryanimals.hunger_weight_bmr" : weight loss every seconds [kg / s]
 "hungryanimals.hunger_weight_normal" : standard weight of this species [kg]
 "hungryanimals.hunger_weight_normal_child" : baby weight of this species [kg]

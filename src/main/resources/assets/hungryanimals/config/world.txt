@@ -1,3 +1,7 @@
+################
+#HUNGRY ANIMALS#
+################
+
 "disease_probability" : probability(chance) to occur disease from excreta
 "erosion_probability" : probability(chance) to erode excreta
 "erosion_probability_on_hay" : probability(chance) to erode excreta on hay floor cover

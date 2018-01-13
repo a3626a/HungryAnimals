@@ -75,7 +75,7 @@ public class HAPlugins {
 		List<FileSystem> fileSystemClose = new ArrayList<>();
 		List<Stream<Path>> walkClose = new ArrayList<>();
 
-		Map<Path, List<String>> map = new HashMap<Path, List<String>>();
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
 
 		for (IHAPlugin i : plugins) {
 			String injectionPath = i.getJsonInjectionPath();
@@ -97,16 +97,16 @@ public class HAPlugins {
 				if (!Files.isDirectory(j)) {
 					String text = new String(Files.readAllBytes(j));
 					Path relative = myPath.relativize(j);
-					if (!map.containsKey(relative)) {
-						map.put(relative, new ArrayList<>());
+					if (!map.containsKey(path2Str(relative))) {
+						map.put(path2Str(relative), new ArrayList<>());
 					}
-					map.get(relative).add(text);
+					map.get(path2Str(relative)).add(text);
 				}
 			}
 		}
 
-		for (Entry<Path, List<String>> i : map.entrySet()) {
-			if (i.getKey().toString().endsWith(".json")) {
+		for (Entry<String, List<String>> i : map.entrySet()) {
+			if (i.getKey().endsWith(".json")) {
 				JsonArray jsonArray = null;
 				JsonObject jsonObject = null;
 				for (String j : i.getValue()) {
@@ -136,13 +136,13 @@ public class HAPlugins {
 				} else {
 					// TODO Warn or Error
 				}
-			} else if (i.getKey().toString().endsWith(".txt")) {
-				String concated = "";
+			} else if (i.getKey().endsWith(".txt")) {
+				String concatenated = "";
 				for (String j : i.getValue()) {
-					concated += j;
-					concated += "\n";
+					concatenated += j;
+					concatenated += System.lineSeparator();
 				}
-				putTxt(i.getKey(), concated);
+				putTxt(i.getKey(), concatenated);
 			}
 		}
 
@@ -163,22 +163,34 @@ public class HAPlugins {
 		}
 	}
 
+	private static String path2Str(Path key) {
+		return key.toString().replace('\\', '/');
+	}
+	
 	public void putJson(Path key, JsonElement value) {
-		mapJson.put(key.toString().replace('\\', '/'), value);
+		putJson(path2Str(key), value);
+	}
+	
+	public void putJson(String key, JsonElement value) {
+		mapJson.put(key, value);
 	}
 	
 	public void putTxt(Path key, String value) {
-		mapTxt.put(key.toString().replace('\\', '/'), value);
+		putTxt(path2Str(key), value);
+	}
+	
+	public void putTxt(String key, String value) {
+		mapTxt.put(key, value);
 	}
 	
 	public JsonElement getJson(Path target) {
 		// TODO OMG Help me I don't want this replacement TT
-		return mapJson.get(target.toString().replace('\\', '/'));
+		return mapJson.get(path2Str(target));
 	}
 
 	public String getTxt(Path target) {
 		// TODO OMG Help me I don't want this replacement TT
-		return mapTxt.get(target.toString().replace('\\', '/'));
+		return mapTxt.get(path2Str(target));
 	}
 	
 	public static List<IHAPlugin> getModPlugins(ASMDataTable asmDataTable) {
