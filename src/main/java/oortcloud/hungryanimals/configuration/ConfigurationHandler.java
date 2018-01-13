@@ -38,7 +38,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -47,10 +46,7 @@ import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
-import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
-import oortcloud.hungryanimals.entities.ai.handler.EventAIContainerRegister;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
@@ -59,7 +55,6 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient.FoodPreferenceIngredientEntry;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
-import oortcloud.hungryanimals.entities.food_preferences.HungryAnimalRegisterEvent;
 import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeats;
@@ -109,9 +104,6 @@ public class ConfigurationHandler {
 				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
 				map.put(state, new Pair<Double, Double>(nutrient, stomach));
 			}
-			HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceBlockStateRegisterEvent(animal,
-					map);
-			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferences.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
 		foodPreferencesItem = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/item", (jsonElement, animal) -> {
@@ -125,9 +117,6 @@ public class ConfigurationHandler {
 				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
 				list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
 			}
-			HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent event_ = new HungryAnimalRegisterEvent.FoodPreferenceItemStackRegisterEvent(animal,
-					list);
-			MinecraftForge.EVENT_BUS.post(event_);
 			FoodPreferences.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
 		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/entity", (jsonElement, animal) -> {
@@ -153,11 +142,6 @@ public class ConfigurationHandler {
 				boolean shouldRegister = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).shouldRegister;
 				API.registerAttribute(animal, attribute, i.getValue().getAsDouble(), shouldRegister);
 			}
-			// TODO Event
-			// AttributeRegisterEvent event_ = new
-			// AttributeRegisterEvent(animal, list);
-			// MinecraftForge.EVENT_BUS.post(event_);
-			// ModAttributes.getInstance().REGISTRY.put(animal, list);
 		});
 
 		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables/entities", (jsonElement, animal) -> {
@@ -165,11 +149,6 @@ public class ConfigurationHandler {
 		});
 		ais = new ConfigurationHandlerJSONAnimal(basefolder, "ais", (jsonElement, animal) -> {
 			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().parse(jsonElement);
-			if (aiContainer instanceof AIContainerTask) {
-				MinecraftForge.EVENT_BUS.post(new EventAIContainerRegister(animal, (AIContainerTask) aiContainer));
-			} else if (aiContainer instanceof AIContainer) {
-				MinecraftForge.EVENT_BUS.post(new EventAIContainerRegister(animal, ((AIContainer) aiContainer).getTask()));
-			}
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
 
