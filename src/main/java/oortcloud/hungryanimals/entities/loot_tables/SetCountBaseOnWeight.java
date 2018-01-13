@@ -33,7 +33,7 @@ public class SetCountBaseOnWeight  extends LootFunction {
 
     public static class Serializer extends LootFunction.Serializer<SetCountBaseOnWeight>
         {
-            protected Serializer()
+            public Serializer()
             {
                 super(new ResourceLocation("set_count_based_on_weight"), SetCountBaseOnWeight.class);
             }

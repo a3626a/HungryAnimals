@@ -7,5 +7,5 @@ import com.google.gson.JsonElement;
 import oortcloud.hungryanimals.generation.ICondition;
 
 public interface IGrassGeneratorRegistry {
-	public boolean registerCondition(String name, ICondition condition, Function<JsonElement, ICondition> parser);
+	public void registerCondition(String name, Function<JsonElement, ICondition> parser);
 }

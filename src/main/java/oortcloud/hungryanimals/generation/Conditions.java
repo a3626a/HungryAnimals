@@ -12,8 +12,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.IGrassGeneratorRegistry;
 
-public class Conditions {
+public class Conditions implements IGrassGeneratorRegistry {
 
 	public Map<String, Function<JsonElement, ICondition>> PARSERS = new HashMap<String, Function<JsonElement, ICondition>>();
 	
@@ -21,9 +22,6 @@ public class Conditions {
 	
 	public Conditions() {
 		PARSERS = new HashMap<>();
-		register("below", ConditionBelow::parse);
-		register("chance", ConditionChance::parse);
-		register("not_adjacent", ConditionAdjacent::parse);
 	}
 	
 	public static Conditions getInstance() {
@@ -54,6 +52,11 @@ public class Conditions {
 		}
 		
 		return new ConditionAnd(conditions);
+	}
+
+	@Override
+	public void registerCondition(String name, Function<JsonElement, ICondition> parser) {
+		register(name, parser);
 	}
 	
 }

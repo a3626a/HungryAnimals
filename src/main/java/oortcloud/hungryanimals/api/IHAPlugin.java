@@ -4,9 +4,9 @@ public interface IHAPlugin {
 	
 	public String getJsonInjectionPath();
 	
-	public boolean registerAIs(IAIRegistry registry);
-	public boolean registerGrassGenerators(IGrassGeneratorRegistry registry);
-	public boolean registerLootTables(ILootTableRegistry registry);
-	public boolean registerAttributes(IAttributeRegistry registry);
+	public void registerAIs(IAIRegistry registry);
+	public void registerGrassGenerators(IGrassGeneratorRegistry registry);
+	public void registerLootTables(ILootTableRegistry registry);
+	public void registerAttributes(IAttributeRegistry registry);
 	
 }

@@ -27,6 +27,10 @@ import com.google.gson.JsonParser;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
+import oortcloud.hungryanimals.generation.Conditions;
 
 public class HAPlugins {
 
@@ -51,11 +55,19 @@ public class HAPlugins {
 
 	public void init(FMLPreInitializationEvent event) {
 		plugins = getModPlugins(event.getAsmData());
-		HungryAnimals.logger.info("[Configuration] started injecting json files from following mods {}", plugins);
+		HungryAnimals.logger.info("[API] started injecting json files from following mods {}", plugins);
 		try {
 			injectJson();
 		} catch (IOException | URISyntaxException e) {
-			HungryAnimals.logger.error("Failed to inject json");
+			HungryAnimals.logger.error("[API] Failed to inject json");
+		}
+		
+		for (IHAPlugin i : plugins) {
+			i.registerAIs(AIContainers.getInstance());
+			i.registerAttributes(ModAttributes.getInstance());
+			i.registerGrassGenerators(Conditions.getInstance());
+			// TODO Singleton Mod Loot Tables
+			i.registerLootTables(ModLootTables::register);
 		}
 	}
 

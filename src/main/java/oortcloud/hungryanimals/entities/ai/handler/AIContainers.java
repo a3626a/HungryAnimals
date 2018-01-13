@@ -10,26 +10,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.entities.ai.EntityAIAttackMeleeCustom;
-import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
-import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
-import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
-import oortcloud.hungryanimals.entities.ai.EntityAIHurtByPlayer;
-import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
-import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
-import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
-import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
-import oortcloud.hungryanimals.entities.ai.EntityAITemptEdibleItem;
-import oortcloud.hungryanimals.entities.ai.EntityAITemptIngredient;
-import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask.AIRemoverIsInstance;
+import oortcloud.hungryanimals.api.IAIRegistry;
 
-public class AIContainers {
+public class AIContainers implements IAIRegistry {
 
 	private static AIContainers INSTANCE;
 
@@ -69,46 +55,6 @@ public class AIContainers {
 		REGISTRY.get(animal.getClass()).registerAI(animal);
 	}
 
-	public void init() {
-		register("herbivore", AIContainerHerbivore::parse);
-		register("herbivore", "attack_melee", EntityAIAttackMeleeCustom::parse);
-		register("herbivore", "avoid_player", EntityAIAvoidPlayer::parse);
-		register("herbivore", "mate", EntityAIMateModified::parse);
-		register("herbivore", "trough", EntityAIMoveToTrough::parse);
-		register("herbivore", "tempt", EntityAITemptIngredient::parse);
-		register("herbivore", "tempt_edible", EntityAITemptEdibleItem::parse);
-		register("herbivore", "eat_item", EntityAIMoveToEatItem::parse);
-		register("herbivore", "eat_block", EntityAIMoveToEatBlock::parse);
-		register("herbivore", "hurt_by_player", EntityAIHurtByPlayer::parse);
-		
-		register("rabbit", (jsonEle) -> {
-			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(jsonEle);
-			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIPanic.class));
-			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIAvoidEntity.class));
-			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIMoveToBlock.class));
-			return aiContainer;
-		});
-		register("rabbit", "attack_melee", EntityAIAttackMeleeCustom::parse);
-		register("rabbit", "avoid_player", EntityAIAvoidPlayer::parse);
-		register("rabbit", "mate", EntityAIMateModified::parse);
-		register("rabbit", "trough", EntityAIMoveToTrough::parse);
-		register("rabbit", "tempt", EntityAITemptIngredient::parse);
-		register("rabbit", "tempt_edible", EntityAITemptEdibleItem::parse);
-		register("rabbit", "eat_item", EntityAIMoveToEatItem::parse);
-		register("rabbit", "eat_block", EntityAIMoveToEatBlock::parse);
-		register("rabbit", "hurt_by_player", EntityAIHurtByPlayer::parse);
-		
-		register("wolf", AIContainerWolf::parse);
-		register("wolf", "mate", EntityAIMateModified::parse);
-		register("wolf", "trough", EntityAIMoveToTrough::parse);
-		register("wolf", "tempt", EntityAITemptIngredient::parse);
-		register("wolf", "tempt_edible", EntityAITemptEdibleItem::parse);
-		register("wolf", "eat_item", EntityAIMoveToEatItem::parse);
-		register("wolf", "eat_block", EntityAIMoveToEatBlock::parse);
-		register("wolf", "hunt", EntityAIHunt::parse);
-		register("wolf", "hunt_non_tamed", EntityAIHuntNonTamed::parse);
-	}
-
 	public IAIContainer<EntityAnimal> parse(JsonElement jsonEle) {
 		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI container must an object.");
@@ -130,6 +76,16 @@ public class AIContainers {
 		}
 
 		return aiContainer;
+	}
+
+	@Override
+	public void registerAIContainerModifier(String type, String modifierName, BiConsumer<JsonElement, AIContainer> modifier) {
+		register(type, modifierName, modifier);
+	}
+
+	@Override
+	public void registerAIContainer(String type, Function<JsonElement, IAIContainer<EntityAnimal>> aiContainer) {
+		register(type, aiContainer);
 	}
 
 }

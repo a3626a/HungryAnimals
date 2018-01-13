@@ -15,10 +15,12 @@ import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.LootFunction.Serializer;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import oortcloud.hungryanimals.api.ILootTableRegistry;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
@@ -43,7 +45,7 @@ import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
  * @author Oortcloud
  */
 
-public class ModLootTables {
+public class ModLootTables implements ILootTableRegistry {
 
 	private static LootTableManager manager;
 
@@ -54,7 +56,6 @@ public class ModLootTables {
 
 	public static void init(File file) {
 		manager = new LootTableManager(file);
-		register(new SetCountBaseOnWeight.Serializer());
 		tables = new HashMap<ResourceLocation, LootTable>();
 	}
 
@@ -105,6 +106,11 @@ public class ModLootTables {
 			}
 			event.getTable().addPool(i);
 		}
+	}
+
+	@Override
+	public <T extends LootFunction> void registerFunction(Serializer<? extends T> serializer) {
+		register(serializer);
 	}
 
 }

@@ -10,6 +10,6 @@ import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
 
 public interface IAIRegistry {
-	public boolean registerAIContainerModifier(String type, BiConsumer<AIContainer, JsonElement> modifier); 
-	public boolean registerAIContainer(String type, Function<JsonElement, IAIContainer<EntityAnimal>> aiContainer); 
+	public void registerAIContainerModifier(String type, String modifierName, BiConsumer<JsonElement, AIContainer> modifier); 
+	public void registerAIContainer(String type, Function<JsonElement, IAIContainer<EntityAnimal>> aiContainer); 
 }
