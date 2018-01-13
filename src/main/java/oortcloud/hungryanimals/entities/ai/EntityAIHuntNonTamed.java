@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
 public class EntityAIHuntNonTamed extends EntityAIHunt {
@@ -27,7 +28,7 @@ public class EntityAIHuntNonTamed extends EntityAIHunt {
 		return !tameable.isTamed() && super.shouldExecute();
 	}
 
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Target must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -39,7 +40,9 @@ public class EntityAIHuntNonTamed extends EntityAIHunt {
 		boolean checkSight = JsonUtils.getBoolean(jsonObject, "check_sight");
 		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
 		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
-		return (entity) -> new EntityAIHuntNonTamed((EntityTameable) entity, chance, checkSight, onlyNearby, herding);
+		
+		AIFactory factory = (entity) -> new EntityAIHuntNonTamed((EntityTameable) entity, chance, checkSight, onlyNearby, herding);
+		aiContainer.getTarget().putLast(factory);
 	}
 	
 }

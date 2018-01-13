@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.EntityAnimal;
+import oortcloud.hungryanimals.utils.graph.Graph;
+import oortcloud.hungryanimals.utils.graph.GraphSolver;
+import oortcloud.hungryanimals.utils.graph.Vertex;
 
 public class AIContainerTarget extends AIContainerTask {
 
@@ -32,7 +36,7 @@ public class AIContainerTarget extends AIContainerTask {
 		}
 
 		List<EntityAIBase> aibases = new ArrayList<EntityAIBase>();
-		
+
 		// Construct aibases from entity's tasks
 		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.targetTasks.taskEntries);
 		aitaskentries.sort(new Comparator<EntityAITaskEntry>() {
@@ -45,13 +49,35 @@ public class AIContainerTarget extends AIContainerTask {
 			aibases.add(i.action);
 		}
 		entity.targetTasks.taskEntries.clear();
-		
-		for (IAIPlacer i : ais) {
-			i.add(aibases, entity);
+
+		Graph<EntityAIBase> graph = new Graph<EntityAIBase>();
+		Vertex<EntityAIBase> prev = null;
+
+		for (EntityAIBase i : aibases) {
+			if (prev == null) {
+				prev = new Vertex<EntityAIBase>(i);
+			} else {
+				Vertex<EntityAIBase> curr = new Vertex<EntityAIBase>(i);
+				prev.childs.add(curr);
+				curr.parents.add(prev);
+			}
 		}
 
+		for (AIFactoryGraph i : factoriesGraph) {
+			i.addVertex(graph, entity);
+		}
+		for (AIFactoryGraph i : factoriesGraph) {
+			i.addEdge(graph);
+		}
+		
+		List<Vertex<EntityAIBase>> sortedVertex = GraphSolver.sortTopological(graph);
+		List<EntityAIBase> sortedAI = sortedVertex.stream().map((vertex) -> vertex.value).collect(Collectors.toList());
+		
+		sortedAI.addAll(0, factoriesFirst.stream().map((factory)->factory.apply(entity)).collect(Collectors.toList()));
+		sortedAI.addAll(factoriesLast.stream().map((factory)->factory.apply(entity)).collect(Collectors.toList()));
+		
 		int cnt = 0;
-		for (EntityAIBase i : aibases) {
+		for (EntityAIBase i : sortedAI) {
 			entity.targetTasks.addTask(cnt++, i);
 		}
 	}

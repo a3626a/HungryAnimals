@@ -7,10 +7,13 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
@@ -50,7 +53,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		return this.entity.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.WILD && super.shouldExecute();
 	}
 
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Avoid Player must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -61,7 +64,17 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		float radius = JsonUtils.getFloat(jsonObject, "radius");
 		double farspeed = JsonUtils.getFloat(jsonObject, "farspeed");
 		double nearspeed = JsonUtils.getFloat(jsonObject, "nearspeed");
-		return (entity) -> new EntityAIAvoidPlayer(entity, radius, farspeed, nearspeed);
+		
+		AIFactory factory =  (entity) -> new EntityAIAvoidPlayer(entity, radius, farspeed, nearspeed);
+		aiContainer.getTask().after(EntityAISwimming.class)
+		                     .before(EntityAIMateModified.class)
+		                     .before(EntityAIMoveToTrough.class)
+		                     .before(EntityAITemptIngredient.class)
+		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIFollowParent.class)
+		                     .put(factory);
 	}
 	
 }

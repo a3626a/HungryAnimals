@@ -14,6 +14,7 @@ import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,10 +54,14 @@ public class ModLootTables {
 
 	public static void init(File file) {
 		manager = new LootTableManager(file);
-		LootFunctionManager.registerFunction(new SetCountBaseOnWeight.Serializer());
+		register(new SetCountBaseOnWeight.Serializer());
 		tables = new HashMap<ResourceLocation, LootTable>();
 	}
 
+	public static <T extends LootFunction> void register(LootFunction.Serializer <? extends T > serializer) {
+		LootFunctionManager.registerFunction(serializer);
+	}
+	
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			ResourceLocation key = EntityList.getKey(i);

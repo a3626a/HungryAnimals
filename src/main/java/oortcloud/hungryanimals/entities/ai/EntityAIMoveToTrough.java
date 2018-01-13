@@ -6,6 +6,8 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +19,7 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockTrough;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
@@ -135,7 +138,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		delayCounter = delay;
 	}
 
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Trough must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -144,7 +147,15 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		JsonObject jsonObject = (JsonObject)jsonEle ;
 		
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		return (entity) -> new EntityAIMoveToTrough(entity, speed);
+		
+		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
+		aiContainer.getTask().after(EntityAISwimming.class)
+		                     .before(EntityAITemptIngredient.class)
+		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIFollowParent.class)
+		                     .put(factory);
 	}
 	
 }

@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
@@ -66,6 +67,8 @@ public class HungryAnimals {
 		proxy.registerPacketHandler();
 		HungryAnimalManager.getInstance().init();
 		ModAttributes.getInstance().init();
+
+		HAPlugins.getInstance().init(event);
 		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();

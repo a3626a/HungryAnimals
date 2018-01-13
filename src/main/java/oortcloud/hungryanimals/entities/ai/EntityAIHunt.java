@@ -14,6 +14,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -96,7 +97,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 		creatureIn.setAttackTarget(entityLivingBaseIn);
 	}
 
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Target must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -108,7 +109,9 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 		boolean checkSight = JsonUtils.getBoolean(jsonObject, "check_sight");
 		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
 		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
-		return (entity) -> new EntityAIHunt(entity, chance, checkSight, onlyNearby, herding);
+		
+		AIFactory factory = (entity) -> new EntityAIHunt(entity, chance, checkSight, onlyNearby, herding);
+		aiContainer.getTarget().putLast(factory);
 	}
 	
 }

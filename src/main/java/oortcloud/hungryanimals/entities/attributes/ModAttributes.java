@@ -87,6 +87,10 @@ public class ModAttributes {
 		return attribtue;
 	}
 	
+	public void register(String name, IAttribute attribute, boolean shouldRegister) {
+		ATTRIBUTES.put(name, pair(attribute, false));
+	}
+	
 	public IAttribute register(String domain, String name) {
 		return register(domain, name, false);
 	}

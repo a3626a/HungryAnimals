@@ -5,10 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
@@ -45,7 +48,7 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 		return stack.isEmpty() ? false : pref.canEat(capHungry, stack);
 	}
 	
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Tempt must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -55,6 +58,12 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 		
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 		boolean scaredBy = JsonUtils.getBoolean(jsonObject, "scared_by");
-		return (entity) -> new EntityAITemptEdibleItem(entity, speed, scaredBy);
+		
+		AIFactory factory = (entity) -> new EntityAITemptEdibleItem(entity, speed, scaredBy);
+		aiContainer.getTask().after(EntityAISwimming.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIFollowParent.class)
+		                     .put(factory);
 	}
 }

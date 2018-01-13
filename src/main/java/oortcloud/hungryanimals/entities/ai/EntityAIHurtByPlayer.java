@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
 public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
@@ -22,7 +23,7 @@ public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
 		return super.shouldExecute() && this.taskOwner.getRevengeTarget() instanceof EntityPlayer ;
 	}
 
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Hurt By Player must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -32,7 +33,8 @@ public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
 		
 		boolean callHelp = JsonUtils.getBoolean(jsonObject, "call_help");
 		
-		return (entity) -> new EntityAIHurtByPlayer(entity, callHelp);
+		AIFactory factory = (entity) -> new EntityAIHurtByPlayer(entity, callHelp);
+		aiContainer.getTarget().putLast(factory);
 	}
 	
 }

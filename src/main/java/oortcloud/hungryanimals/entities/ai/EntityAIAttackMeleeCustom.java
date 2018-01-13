@@ -9,10 +9,13 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
 public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
@@ -43,7 +46,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
         return target.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
     }
 	
-	public static AIFactory parse(JsonElement jsonEle) {
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
 		if (! (jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Attack Melee must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -54,7 +57,17 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 		double speed = JsonUtils.getFloat(jsonObject, "speed");
 		boolean useLongMemory = JsonUtils.getBoolean(jsonObject, "use_long_memory");
 		
-		return (entity) -> new EntityAIAttackMeleeCustom(entity, speed, useLongMemory);
+		AIFactory factory = (entity) -> new EntityAIAttackMeleeCustom(entity, speed, useLongMemory);
+		aiContainer.getTask().after(EntityAISwimming.class)
+		                     .before(EntityAIAvoidPlayer.class)
+		                     .before(EntityAIMateModified.class)
+		                     .before(EntityAIMoveToTrough.class)
+		                     .before(EntityAITemptIngredient.class)
+		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIFollowParent.class)
+		                     .put(factory);
 	}
 	
 }
