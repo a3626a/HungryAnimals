@@ -226,7 +226,6 @@ public class ConfigurationHandler {
 			}
 		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (jsonElement) -> {
-			HungryAnimals.logger.info(jsonElement);
 			JsonArray jsonArr = (JsonArray)jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {

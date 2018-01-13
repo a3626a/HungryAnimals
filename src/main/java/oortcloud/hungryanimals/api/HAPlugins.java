@@ -33,13 +33,13 @@ public class HAPlugins {
 	private static HAPlugins INSTANCE;
 
 	private List<IHAPlugin> plugins;
-	private Map<Path, JsonElement> mapJson;
-	private Map<Path, String> mapTxt;
+	private Map<String, JsonElement> mapJson;
+	private Map<String, String> mapTxt;
 
 	public HAPlugins() {
 		plugins = new ArrayList<IHAPlugin>();
-		mapJson = new HashMap<Path, JsonElement>();
-		mapTxt = new HashMap<Path, String>();
+		mapJson = new HashMap<String, JsonElement>();
+		mapTxt = new HashMap<String, String>();
 	}
 
 	public static HAPlugins getInstance() {
@@ -118,9 +118,9 @@ public class HAPlugins {
 					}
 				}
 				if (jsonArray != null) {
-					mapJson.put(i.getKey(), jsonArray);
+					putJson(i.getKey(), jsonArray);
 				} else if (jsonObject != null) {
-					mapJson.put(i.getKey(), jsonObject);
+					putJson(i.getKey(), jsonObject);
 				} else {
 					// TODO Warn or Error
 				}
@@ -130,7 +130,7 @@ public class HAPlugins {
 					concated += j;
 					concated += "\n";
 				}
-				mapTxt.put(i.getKey(), concated);
+				putTxt(i.getKey(), concated);
 			}
 		}
 
@@ -143,23 +143,30 @@ public class HAPlugins {
 	}
 
 	public void walkPlugins(BiConsumer<Path, JsonElement> onjson, BiConsumer<Path, String> ontxt) throws IOException, URISyntaxException {
-		for (Entry<Path, JsonElement> i : mapJson.entrySet()) {
-			onjson.accept(i.getKey(), i.getValue());
+		for (Entry<String, JsonElement> i : mapJson.entrySet()) {
+			onjson.accept(Paths.get(i.getKey()), i.getValue());
 		}
-		for (Entry<Path, String> i : mapTxt.entrySet()) {
-			ontxt.accept(i.getKey(), i.getValue());
+		for (Entry<String, String> i : mapTxt.entrySet()) {
+			ontxt.accept(Paths.get(i.getKey()), i.getValue());
 		}
 	}
 
+	public void putJson(Path key, JsonElement value) {
+		mapJson.put(key.toString().replace('\\', '/'), value);
+	}
+	
+	public void putTxt(Path key, String value) {
+		mapTxt.put(key.toString().replace('\\', '/'), value);
+	}
+	
 	public JsonElement getJson(Path target) {
-		HungryAnimals.logger.info(mapJson);
-		HungryAnimals.logger.info("target : {}, conatins? : {}", target, mapJson.containsKey(target));
-		
-		return mapJson.get(target);
+		// TODO OMG Help me I don't want this replacement TT
+		return mapJson.get(target.toString().replace('\\', '/'));
 	}
 
 	public String getTxt(Path target) {
-		return mapTxt.get(target);
+		// TODO OMG Help me I don't want this replacement TT
+		return mapTxt.get(target.toString().replace('\\', '/'));
 	}
 	
 	public static List<IHAPlugin> getModPlugins(ASMDataTable asmDataTable) {
