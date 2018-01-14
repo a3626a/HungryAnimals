@@ -22,7 +22,6 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.items.ModItems;
-import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.recipes.CraftingHandler;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
@@ -55,7 +54,6 @@ public class HungryAnimals {
 		RecipeAnimalGlue.init();
 		ModBlocks.init();
 		ModItems.init();
-		ModPotions.init();
 		proxy.registerEntities();
 		proxy.registerEntityRendering();
 		proxy.registerTileEntities();
@@ -66,6 +64,8 @@ public class HungryAnimals {
 		proxy.registerPacketHandler();
 		HungryAnimalManager.getInstance().init();
 
+		ConfigurationHandler.syncPre();
+		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
 	}
@@ -81,7 +81,7 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
-		ConfigurationHandler.postSync();
+		ConfigurationHandler.syncPost();
 	}
 
 }

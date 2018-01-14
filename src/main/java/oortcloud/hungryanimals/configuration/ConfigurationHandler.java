@@ -61,6 +61,7 @@ import oortcloud.hungryanimals.entities.handler.InHeats;
 import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
 import oortcloud.hungryanimals.generation.GrassGenerator;
 import oortcloud.hungryanimals.generation.GrassGenerators;
+import oortcloud.hungryanimals.potion.PotionDisease;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.utils.HashBlockState;
 import oortcloud.hungryanimals.utils.ModJsonUtils;
@@ -79,7 +80,8 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON cures;
 	private static ConfigurationHandlerJSON inheat;
 	private static ConfigurationHandlerJSON generators;
-
+	private static ConfigurationHandlerJSON disease;
+	
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
@@ -244,10 +246,20 @@ public class ConfigurationHandler {
 				}
 			}
 		});
-
+		disease = new ConfigurationHandlerJSON(basefolder, "disease", (jsonElement) -> {
+			JsonObject jsonObj = (JsonObject)jsonElement;
+			
+			PotionDisease.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
+			PotionDisease.multiplyWeightBMR = JsonUtils.getFloat(jsonObj, "multiply_weight_bmr");
+		});
+				
 		ModLootTables.init(basefolder);
 	}
 
+	public static void syncPre() {
+		disease.sync();
+	}
+	
 	public static void sync() {
 		animal.sync();
 		foodPreferencesBlock.sync();
@@ -264,7 +276,7 @@ public class ConfigurationHandler {
 		ModLootTables.sync();
 	}
 
-	public static void postSync() {
+	public static void syncPost() {
 	}
 
 	public static class Serializer implements JsonDeserializer<ItemStack> {
