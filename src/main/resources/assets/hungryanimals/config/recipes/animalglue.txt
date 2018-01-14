@@ -1,0 +1,20 @@
+################
+#HUNGRY ANIMALS#
+################
+
+'recipes/animalglue.json' contains list of recipes for creating animal glue.
+
+[
+    $animalglue_recipe$,
+    $animalglue_recipe$,
+    ...,
+    $animalglue_recipe$
+]
+
+
+$animalglue_recipe$
+-------------------
+{
+    "item" : $Ingredient$,
+    "count" : $Integer$
+}
