@@ -192,6 +192,7 @@ public class ConfigurationHandler {
 
 			for (JsonElement jsonEle : jsonArr) {
 				JsonObject jsonObj = jsonEle.getAsJsonObject();
+				JsonElement generator = jsonObj.get("generator");
 				Biome biome = null;
 				if (jsonObj.has("biome")) {
 					String biomeName = JsonUtils.getString(jsonObj, "biome");
@@ -199,9 +200,23 @@ public class ConfigurationHandler {
 					if (biome == null) {
 						throw new JsonSyntaxException(biomeName);
 					}
+					GrassGenerators.getInstance().registerByBiome(biome, GrassGenerator.parse(generator));
+				} else if (jsonObj.has("types")) {
+					JsonElement jsonEleTypes = jsonObj.get("types");
+					if (jsonEleTypes instanceof JsonArray) {
+						JsonArray jsonArrayTypes = (JsonArray)jsonEleTypes;
+						List<String> stringTypes = new ArrayList<>();
+						for (JsonElement i : jsonArrayTypes) {
+							stringTypes.add(i.getAsString());
+						}
+						GrassGenerators.getInstance().registerByTypeName(stringTypes, GrassGenerator.parse(generator));
+					} else {
+						throw new JsonSyntaxException(jsonEleTypes.toString());
+					}
+				} else {
+					GrassGenerators.getInstance().registerByBiome(null, GrassGenerator.parse(generator));
 				}
-				JsonElement generator = jsonObj.get("generator");
-				GrassGenerators.getInstance().register(biome, GrassGenerator.parse(generator));
+
 			}
 		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (jsonElement) -> {

@@ -54,8 +54,8 @@ public class API {
 		return InHeats.getInstance().register(cure, duration);
 	}
 	
-	public static boolean registerGrassGenerator(Biome biome, GrassGenerator generator) {
-		return GrassGenerators.getInstance().register(biome, generator);
+	public static GrassGenerator registerGrassGenerator(Biome biome, GrassGenerator generator) {
+		return GrassGenerators.getInstance().registerByBiome(biome, generator);
 	}
 	
 	/**

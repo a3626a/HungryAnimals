@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
@@ -24,12 +26,23 @@ public class GrassGenerators {
 
 	private static GrassGenerators INSTACNE;
 
-	private Map<Integer, List<GrassGenerator>> generators;
-	private List<GrassGenerator> defaults;
+	private List<BiomeDictionaryEntry> dictionaryGenerators;
+	private Map<Integer, GrassGenerator> biomeGenerators;
+	private GrassGenerator defaultGenerator;
+
+	public static class BiomeDictionaryEntry {
+		public List<BiomeDictionary.Type> types;
+		public GrassGenerator generator;
+
+		public BiomeDictionaryEntry(List<BiomeDictionary.Type> types, GrassGenerator generator) {
+			this.types = types;
+			this.generator = generator;
+		}
+	}
 
 	public GrassGenerators() {
-		generators = new HashMap<Integer, List<GrassGenerator>>();
-		defaults = new ArrayList<GrassGenerator>();
+		dictionaryGenerators = new ArrayList<>();
+		biomeGenerators = new HashMap<>();
 	}
 
 	public static GrassGenerators getInstance() {
@@ -39,15 +52,47 @@ public class GrassGenerators {
 		return INSTACNE;
 	}
 
-	public boolean register(@Nullable Biome biome, GrassGenerator generator) {
+	public boolean registerByTypeName(List<String> types, GrassGenerator generator) {
+		List<BiomeDictionary.Type> typesDict;
+		typesDict = types.stream().map((i)-> {
+			// TODO prevent getType to create new biome type.
+			return BiomeDictionary.Type.getType(i);
+		}).collect(Collectors.toList());
+		return registerByType(typesDict, generator);
+	}
+	
+	public boolean registerByType(List<BiomeDictionary.Type> types, GrassGenerator generator) {
+		return dictionaryGenerators.add(new BiomeDictionaryEntry(types, generator));
+	}
+
+	public GrassGenerator registerByBiome(@Nullable Biome biome, GrassGenerator generator) {
 		if (biome == null) {
-			return defaults.add(generator);
+			GrassGenerator old = defaultGenerator;
+			defaultGenerator = generator;
+			return old;
 		} else {
 			int id = Biome.getIdForBiome(biome);
-			if (!generators.containsKey(id)) {
-				generators.put(id, new ArrayList<GrassGenerator>());
+			return biomeGenerators.put(id, generator);
+		}
+	}
+
+	private GrassGenerator getGrassGenerator(Biome biome) {
+		if (biome == null) {
+			return defaultGenerator;
+		}
+		
+		// PERFORMANCE issue here?
+		for (BiomeDictionaryEntry i : dictionaryGenerators) {
+			if (BiomeDictionary.getTypes(biome).containsAll(i.types)) {
+				return i.generator;
 			}
-			return generators.get(id).add(generator);
+		}
+		
+		int biomeID = Biome.getIdForBiome(biome);
+		if (getInstance().biomeGenerators.containsKey(biomeID)) {
+			return biomeGenerators.get(biomeID);
+		} else {
+			return defaultGenerator;
 		}
 	}
 	
@@ -70,20 +115,11 @@ public class GrassGenerators {
 						int h = chunk.getHeightValue(Randx, Randz);
 						BlockPos pos = new BlockPos(x + Randx, h, z + Randz);
 						Biome biome = world.getBiome(pos);
-						int biomeID = Biome.getIdForBiome(biome);
-						
-						List<GrassGenerator> target;
-						if (getInstance().generators.containsKey(biomeID)) {
-							target = getInstance().generators.get(biomeID);
-						} else {
-							target = getInstance().defaults;
-						}
-						
-						for (GrassGenerator i : target) {
-							if (world.isAirBlock(pos) && i.condition.canGrassGrow(world, pos)) {
+						GrassGenerator target = getInstance().getGrassGenerator(biome);
+						if (target != null) {
+							if (world.isAirBlock(pos) && target.condition.canGrassGrow(world, pos)) {
 								newPoses.add(pos);
-								newStates.add(i.states.get(world.rand.nextInt(i.states.size())));
-								break;
+								newStates.add(target.states.get(world.rand.nextInt(target.states.size())));
 							}
 						}
 					}

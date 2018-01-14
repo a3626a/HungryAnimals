@@ -17,6 +17,11 @@
 $biome_and_generator$
 ---------------------
 {
+    "types" : [$biome_type$, ...],
+    "generator" : $generator$
+}
+OR
+{
     "biome" : $string$,
     "generator" : $generator$
 }
@@ -25,8 +30,44 @@ OR
     "generator" : $generator$
 }
 
+: if "types" is specifeid, corresponding generator is applied to every biome wihch has all the types.
 : if "biome" is specified, corresponding generator is applied to the biome only.
-: if "biome" is missing, the generator is applied to every biome w/o any generator.
+: if both fields are missing, the generator is applied to every biome w/o any generator.
+
+
+$biome_type$
+-------------
+"HOT"
+"COLD"
+"SPARSE"
+"DENSE"
+"WET"
+"DRY"
+"SAVANNA"
+"CONIFEROUS"
+"JUNGLE"
+"SPOOKY"
+"DEAD"
+"LUSH"
+"NETHER"
+"END"
+"MUSHROOM"
+"MAGICAL"
+"RARE"
+"OCEAN"
+"RIVER"
+"WATER"
+"MESA"
+"FOREST"
+"PLAINS"
+"MOUNTAIN"
+"HILLS"
+"SWAMP"
+"SANDY"
+"SNOWY"
+"WASTELAND"
+"BEACH"
+"VOID"
 
 
 $generator$
@@ -38,6 +79,7 @@ $generator$
 
 : when "condition" meets, generates "grass"
   if "grass" is a list, one block state of list is randomly generated.
+
 
 $condition$
 ---------------------
@@ -97,6 +139,22 @@ EXAMPLES
         "grass" : {
             "name": "minecraft:yellow_flower",
             "type": "dandelion"
+        }
+    }
+}
+=====================
+3. Cold Mountains
+{
+    "types" : ["COLD", "MOUNTAIN"],
+    "generator" : {
+        "condition" : {
+            "below" : {"name" : "minecraft:grass"},
+            "chance" : 0.1,
+            "not_adjacent" : {"name": "minecraft:tallgrass"}
+        },
+        "grass" : {
+            "name": "minecraft:tallgrass",
+            "type": "fern"
         }
     }
 }
