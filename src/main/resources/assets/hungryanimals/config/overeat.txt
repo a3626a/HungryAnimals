@@ -1,0 +1,9 @@
+################
+#HUNGRY ANIMALS#
+################
+
+"multiply_movement_speed" : multiply to movement speed of the animal
+
+For example,
++3.0 : +300%
+-0.2 : -20%

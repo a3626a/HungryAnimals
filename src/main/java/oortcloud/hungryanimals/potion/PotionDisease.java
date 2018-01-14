@@ -2,7 +2,6 @@ package oortcloud.hungryanimals.potion;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
@@ -19,7 +18,6 @@ public class PotionDisease extends PotionHungryAnimals {
 		setRegistryName(References.MODID, Strings.potionDiseaseName);
 		setPotionName(Strings.potionDiseaseUnlocalizedName);
 		registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F16089D", multiplyMovementSpeed, 1);
-		HungryAnimals.logger.info(multiplyWeightBMR);
 		registerPotionAttributeModifier(ModAttributes.hunger_weight_bmr, "7107DE5E-7CE8-4030-940E-514C1F16089E", multiplyWeightBMR, 1);
 	}
 

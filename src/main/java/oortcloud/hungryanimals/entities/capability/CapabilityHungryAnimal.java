@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.entities.capability;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,6 +11,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.potion.ModPotions;
 
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
@@ -80,8 +82,12 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 			this.stomach = stomach;
 		}
 		boolean currIsFull = getStomach() >= getMaxStomach();
+		
 		if (currIsFull != prevIsFull) {
 			sync();
+			if (currIsFull && !entity.isPotionActive(ModPotions.potionOvereat)) {
+				entity.addPotionEffect(new PotionEffect(ModPotions.potionOvereat, Integer.MAX_VALUE, 0, false, false));
+			}
 		}
 		prevIsFull = currIsFull;
 		return oldStomach;

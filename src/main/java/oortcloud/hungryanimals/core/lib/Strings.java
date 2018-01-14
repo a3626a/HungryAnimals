@@ -35,4 +35,6 @@ public class Strings {
 	public static final String potionInheatUnlocalizedName = "potion.inheat";
 	public static final String potionYoungName = "young";
 	public static final String potionYoungUnlocalizedName = "potion.young";
+	public static final String potionOvereatName = "overeat";
+	public static final String potionOvereatUnlocalizedName = "potion.overeat";
 }
