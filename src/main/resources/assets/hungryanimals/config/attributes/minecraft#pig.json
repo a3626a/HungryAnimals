@@ -10,7 +10,8 @@
 	"hungryanimals.excretion_factor" : 0.1,
 	"hungryanimals.child_delay" : 89165,
 	"hungryanimals.child_growing_length" : 300933,
-	"hungryanimals.taming_factor_near" : 0.96,
+	"hungryanimals.taming_factor_near_tamed" : 0.999,
+	"hungryanimals.taming_factor_near_wild" : 0.9975,
     "hungryanimals.taming_factor_food" : 0.002,
 	"generic.maxHealth" : 20,
 	"generic.movementSpeed" : 0.25

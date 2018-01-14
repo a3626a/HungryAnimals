@@ -204,18 +204,20 @@ public class EntityEventHandler {
 	private void updateTaming(EntityAnimal entity) {
 		double radius = 16;
 
-		if ((entity.getEntityWorld().getWorldTime() + entity.getEntityId()) % 100 == 0) {
+		if (entity.getEntityWorld().getTotalWorldTime() % 200 == 0) {
 			ArrayList<EntityPlayer> players = (ArrayList<EntityPlayer>) entity.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
 					entity.getEntityBoundingBox().grow(radius));
 			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
-			double tamingFactor = entity.getEntityAttribute(ModAttributes.taming_factor_near).getAttributeValue();
+			double tamingFactorWild = entity.getEntityAttribute(ModAttributes.taming_factor_near_wild).getAttributeValue();
+			double tamingFactorTamed = entity.getEntityAttribute(ModAttributes.taming_factor_near_tamed).getAttributeValue();
+			
 			if (players.isEmpty()) {
 				if (cap.getTaming() > 0) {
-					cap.setTaming(cap.getTaming() * tamingFactor);
+					cap.setTaming(cap.getTaming() * tamingFactorTamed);
 				}
 			} else {
 				if (cap.getTaming() < 0) {
-					cap.setTaming(cap.getTaming() * tamingFactor);
+					cap.setTaming(cap.getTaming() * tamingFactorWild);
 				}
 			}
 		}

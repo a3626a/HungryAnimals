@@ -13,5 +13,6 @@
 "hungryanimals.excretion_factor" : excretion gain per 1 kg of digested food [kg]
 "hungryanimals.child_delay" : time required to create an other baby [tick]
 "hungryanimals.child_growing_length" : time required to be fully grown [tick]
-"hungryanimals.taming_factor_near" : tendency taming value to be neutral
+"hungryanimals.taming_factor_near_tamed" : tendency taming value to be neutral of tamed animals (1.0->no change, 0.0->neutralized immediately)
+"hungryanimals.taming_factor_near_wild" : tendency taming value to be neutral of wild animals (1.0->no change, 0.0->neutralized immediately)
 "hungryanimals.taming_factor_food" : taming value gain proportional to nutrient eaten
