@@ -130,7 +130,12 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	
 	@Override
 	public double getNormalWeight() {
-		int age = entity.getGrowingAge();
+		int age;
+		if (entity.getEntityWorld() == null) {
+			age = 0;
+		} else {
+			age = entity.getGrowingAge();
+		}
 		double hungerWeightNormal = entity.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
 		if (age < 0) {
 			age = -age;
