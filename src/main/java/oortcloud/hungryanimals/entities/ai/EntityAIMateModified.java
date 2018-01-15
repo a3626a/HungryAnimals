@@ -30,6 +30,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMateModified extends EntityAIBase {
 	private EntityAnimal animal;
@@ -105,6 +106,10 @@ public class EntityAIMateModified extends EntityAIBase {
 		return entityanimal;
 	}
 
+	private static double calculateBabyTaming(ICapabilityTamableAnimal parent1, ICapabilityTamableAnimal parent2) {
+		return (Tamings.get(parent1) + Tamings.get(parent2)) / 2.0;
+	}
+
 	/**
 	 * Spawns a baby animal of the same type.
 	 */
@@ -134,15 +139,18 @@ public class EntityAIMateModified extends EntityAIBase {
 		if (entityageable != null) {
 			ICapabilityTamableAnimal childTamable = entityageable.getCapability(ProviderTamableAnimal.CAP, null);
 			ICapabilityHungryAnimal childHungry = entityageable.getCapability(ProviderHungryAnimal.CAP, null);
-			
+
 			// Pay Hunger
 			double weight_child = entityageable.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
-			targetMateCapHungry.addWeight(-weight_child/2);
-			theAnimalCapHungry.addWeight(-weight_child/2);
-			
-			childHungry.setWeight(weight_child);
-			childTamable.setTaming((theAnimalCapTamable.getTaming() + targetMateCapTamable.getTaming()) / 2.0);
+			targetMateCapHungry.addWeight(-weight_child / 2);
+			theAnimalCapHungry.addWeight(-weight_child / 2);
 
+			childHungry.setWeight(weight_child);
+			double childTaming = calculateBabyTaming(theAnimalCapTamable, targetMateCapTamable);
+			if (childTamable != null) {
+				childTamable.setTaming(childTaming);
+			}
+			
 			EntityPlayerMP entityplayermp = this.animal.getLoveCause();
 
 			if (entityplayermp == null && this.targetMate.getLoveCause() != null) {
@@ -211,25 +219,20 @@ public class EntityAIMateModified extends EntityAIBase {
 		}
 		return null;
 	}
-	
+
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
-		if (! (jsonEle instanceof JsonObject)) {
+		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Mate must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
 		}
-		
-		JsonObject jsonObject = (JsonObject)jsonEle ;
-		
+
+		JsonObject jsonObject = (JsonObject) jsonEle;
+
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		
-		AIFactory factory =  (entity) -> new EntityAIMateModified(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class)
-		                     .before(EntityAIMoveToTrough.class)
-		                     .before(EntityAITemptIngredient.class)
-		                     .before(EntityAITemptEdibleItem.class)
-		                     .before(EntityAIMoveToEatItem.class)
-		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParent.class)
-		                     .put(factory);
+
+		AIFactory factory = (entity) -> new EntityAIMateModified(entity, speed);
+		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(EntityAITemptIngredient.class)
+				.before(EntityAITemptEdibleItem.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
+				.before(EntityAIFollowParent.class).put(factory);
 	}
 }

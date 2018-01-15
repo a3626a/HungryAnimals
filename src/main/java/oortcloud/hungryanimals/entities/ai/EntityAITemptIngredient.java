@@ -20,6 +20,7 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.utils.ModJsonUtils;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAITemptIngredient extends EntityAITempt {
 
@@ -43,7 +44,7 @@ public class EntityAITemptIngredient extends EntityAITempt {
 	
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && capTaming.getTamingLevel() == TamingLevel.TAMED;
+		return super.shouldExecute() && Tamings.getLevel(capTaming) == TamingLevel.TAMED;
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {

@@ -14,10 +14,14 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
+import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class TileEntityTrough extends TileEntity implements ITickable {
 
@@ -44,8 +48,11 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getWorld().getWorldTime() % TileEntityTrough.period == 0 && !this.stack.isEmpty()) {
 			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.getWorld().getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (EntityAnimal i : list) {
-				if (i.hasCapability(ProviderHungryAnimal.CAP, null) && i.hasCapability(ProviderTamableAnimal.CAP, null)) {
-					if (i.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.TAMED && FoodPreferences.getInstance().REGISTRY_ITEM.get(i.getClass()).canEat(i.getCapability(ProviderHungryAnimal.CAP, null), this.stack)) {
+				if (i.hasCapability(ProviderHungryAnimal.CAP, null)) {
+					ICapabilityHungryAnimal capHungry = i.getCapability(ProviderHungryAnimal.CAP, null);
+					ICapabilityTamableAnimal capTaming = i.getCapability(ProviderTamableAnimal.CAP, null);
+					IFoodPreference<ItemStack> pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(i.getClass());
+					if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && pref.canEat(capHungry, this.stack)) {
 						i.tasks.taskEntries.forEach(entry -> {
 							if (entry.action instanceof EntityAIMoveToTrough) {
 								((EntityAIMoveToTrough)entry.action).pos = this.pos;

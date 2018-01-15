@@ -31,6 +31,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMoveToTrough extends EntityAIBase {
 
@@ -68,7 +69,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
-				if (this.capTaming.getTamingLevel() == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
+				if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
 					return !trough.stack.isEmpty() && pref.canEat(capHungry, trough.stack);
 				} else {
@@ -128,7 +129,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0002 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			if (this.capTaming != null) {
+				this.capTaming.addTaming(0.0002 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			}
 		}
 
 	}
@@ -139,23 +142,18 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
-		if (! (jsonEle instanceof JsonObject)) {
+		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Trough must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
 		}
-		
-		JsonObject jsonObject = (JsonObject)jsonEle ;
-		
+
+		JsonObject jsonObject = (JsonObject) jsonEle;
+
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		
+
 		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class)
-		                     .before(EntityAITemptIngredient.class)
-		                     .before(EntityAITemptEdibleItem.class)
-		                     .before(EntityAIMoveToEatItem.class)
-		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParent.class)
-		                     .put(factory);
+		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAITemptIngredient.class).before(EntityAITemptEdibleItem.class)
+				.before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class).before(EntityAIFollowParent.class).put(factory);
 	}
-	
+
 }

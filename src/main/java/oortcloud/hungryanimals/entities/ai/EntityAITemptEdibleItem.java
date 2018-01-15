@@ -20,6 +20,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAITemptEdibleItem extends EntityAITempt {
 	/** The entity using this AI that is tempted by the player. */
@@ -40,7 +41,7 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && capTaming.getTamingLevel() == TamingLevel.TAMED;
+		return super.shouldExecute() && Tamings.getLevel(capTaming) == TamingLevel.TAMED;
 	}
 
 	@Override

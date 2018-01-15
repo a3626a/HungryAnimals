@@ -15,9 +15,11 @@ import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
+import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.items.ModItems;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 	/**
@@ -44,13 +46,16 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		
 	};
 
+	private ICapabilityTamableAnimal cap;
+	
 	public EntityAIAvoidPlayer(EntityCreature entity, float radius, double farspeed, double nearspeed) {
 		super(entity, EntityPlayer.class, predicate, radius, farspeed, nearspeed);
+		cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 	}
 	
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getCapability(ProviderTamableAnimal.CAP, null).getTamingLevel() == TamingLevel.WILD && super.shouldExecute();
+		return Tamings.getLevel(cap) == TamingLevel.WILD && super.shouldExecute();
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {

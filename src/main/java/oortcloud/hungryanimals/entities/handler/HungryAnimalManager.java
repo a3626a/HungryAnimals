@@ -11,6 +11,13 @@ public class HungryAnimalManager {
 
 	private List<Class<? extends EntityAnimal>> registedClass;
 
+	public static class HungryAnimalEntry {
+		public boolean isHungry;
+		public boolean isTamable;
+		public boolean isAttribute;
+		
+	}
+	
 	public static HungryAnimalManager getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new HungryAnimalManager();

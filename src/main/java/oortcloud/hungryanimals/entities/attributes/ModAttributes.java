@@ -31,7 +31,7 @@ public class ModAttributes implements IAttributeRegistry {
 	public static IAttribute milk_delay;
 	public static IAttribute wool_hunger;
 	public static IAttribute wool_delay;
-	
+
 	private static ModAttributes INSTANCE;
 
 	private Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
@@ -54,34 +54,33 @@ public class ModAttributes implements IAttributeRegistry {
 			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
 			return false;
 		}
-		
+
 		if (!REGISTRY.containsKey(animalclass)) {
 			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
 		}
-		
+
 		IAttribute attribute = ATTRIBUTES.get(name).attribute;
 		boolean shouldRegister = ATTRIBUTES.get(name).shouldRegister;
 		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
 	}
-	
+
 	public boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val, boolean shouldRegister) {
 		if (!ATTRIBUTES.containsKey(name)) {
 			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
 			return false;
 		}
-		
+
 		if (!REGISTRY.containsKey(animalclass)) {
 			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
 		}
-		
+
 		IAttribute attribute = ATTRIBUTES.get(name).attribute;
 		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
 	}
-	
+
 	public void registerName(String name, IAttribute attribute, boolean shouldRegister) {
 		ATTRIBUTES.put(name, pair(attribute, shouldRegister));
 	}
-	
 
 	/**
 	 * called EntityJoinWorldEvent
@@ -90,8 +89,10 @@ public class ModAttributes implements IAttributeRegistry {
 	 * @param entity
 	 */
 	public void applyAttributes(EntityLivingBase entity) {
-		for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
-			i.apply(entity);
+		if (REGISTRY.containsKey(entity.getClass())) {
+			for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
+				i.apply(entity);
+			}
 		}
 	}
 
@@ -101,8 +102,10 @@ public class ModAttributes implements IAttributeRegistry {
 	 * @param entity
 	 */
 	public void registerAttributes(EntityLivingBase entity) {
-		for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
-			i.register(entity);
+		if (REGISTRY.containsKey(entity.getClass())) {
+			for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
+				i.register(entity);
+			}
 		}
 	}
 

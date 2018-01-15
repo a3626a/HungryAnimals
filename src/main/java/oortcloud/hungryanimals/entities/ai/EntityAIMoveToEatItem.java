@@ -29,6 +29,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
 
@@ -138,7 +139,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	}
 
 	private int executeProbability() {
-		double taming = capTaming.getTaming();
+		double taming = Tamings.get(capTaming);
 		double hunger = capHungry.getStomach() / capHungry.getMaxStomach();
 		if (taming > 1) {
 			taming = 1;
@@ -170,24 +171,23 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
-			capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			if (capTaming != null) {
+				capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			}
 		}
 	}
-	
+
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
-		if (! (jsonEle instanceof JsonObject)) {
+		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Eat Item must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
 		}
-		
-		JsonObject jsonObject = (JsonObject)jsonEle ;
-		
+
+		JsonObject jsonObject = (JsonObject) jsonEle;
+
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		
+
 		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class)
-		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParent.class)
-		                     .put(factory);
+		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToEatBlock.class).before(EntityAIFollowParent.class).put(factory);
 	}
 }
