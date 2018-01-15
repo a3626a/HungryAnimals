@@ -118,7 +118,14 @@ public class PluginHungryAnimals implements IHAPlugin {
 		ModAttributes.wool_delay = register(registry, id, "wool_delay", true);
 		registry.registerAttribute("generic.maxHealth", SharedMonsterAttributes.MAX_HEALTH, false);
 		registry.registerAttribute("generic.movementSpeed", SharedMonsterAttributes.MOVEMENT_SPEED, false);
+		registry.registerAttribute("generic.knockbackResistance", SharedMonsterAttributes.KNOCKBACK_RESISTANCE, false);
+		registry.registerAttribute("generic.armor", SharedMonsterAttributes.ARMOR, false);
+		registry.registerAttribute("generic.armorToughness", SharedMonsterAttributes.ARMOR_TOUGHNESS, false);
+		registry.registerAttribute("generic.followRange", SharedMonsterAttributes.FOLLOW_RANGE, false);
 		registry.registerAttribute("generic.attackDamage", SharedMonsterAttributes.ATTACK_DAMAGE, true);
+		registry.registerAttribute("generic.flyingSpeed", SharedMonsterAttributes.FLYING_SPEED, true);
+		registry.registerAttribute("generic.attackSpeed", SharedMonsterAttributes.ATTACK_SPEED, true);
+		registry.registerAttribute("generic.luck", SharedMonsterAttributes.LUCK, true);
 	}
 
 	private IAttribute register(IAttributeRegistry registry, String domain, String name, double defVal, double minVal, double maxVal, boolean shouldwatch, boolean shouldRegister) {

@@ -30,7 +30,6 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,7 +47,6 @@ import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
-import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
@@ -137,14 +135,18 @@ public class ConfigurationHandler {
 		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (jsonElement, animal) -> {
 			JsonObject jsonObj = (JsonObject)jsonElement;
 
-			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
-				if (!ModAttributes.getInstance().ATTRIBUTES.containsKey(i.getKey())) {
-					HungryAnimals.logger.warn("Couldn\'t load {} {} of {}", new Object[] { attributes.getDescriptor(), i, animal });
-					continue;
+			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {		
+				if (i.getValue().isJsonObject()) {
+					// Custom shouldRegister
+					JsonObject jsonAttribute = i.getValue().getAsJsonObject();
+					boolean shouldRegister = JsonUtils.getBoolean(jsonAttribute, "should_register");
+					double value = JsonUtils.getFloat(jsonAttribute, "value");
+					API.registerAttribute(animal, i.getKey(), value, shouldRegister);
+				} else {
+					// Default shouldRegister
+					double value = i.getValue().getAsDouble();
+					API.registerAttribute(animal, i.getKey(), value);
 				}
-				IAttribute attribute = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).attribute;
-				boolean shouldRegister = ModAttributes.getInstance().ATTRIBUTES.get(i.getKey()).shouldRegister;
-				API.registerAttribute(animal, attribute, i.getValue().getAsDouble(), shouldRegister);
 			}
 		});
 

@@ -1,6 +1,5 @@
 package oortcloud.hungryanimals.api;
 
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.biome.Biome;
@@ -42,8 +41,12 @@ public class API {
 	 * @param shouldRegistered
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, IAttribute attribute, double val, boolean shouldRegistered) {
-		return ModAttributes.getInstance().register(animalclass, attribute, val, shouldRegistered);
+	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val, boolean shouldRegistered) {
+		return ModAttributes.getInstance().registerAttribute(animalclass, name, val, shouldRegistered);
+	}
+	
+	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val) {
+		return ModAttributes.getInstance().registerAttribute(animalclass, name, val);
 	}
 	
 	public static boolean registerCure(Ingredient cure) {

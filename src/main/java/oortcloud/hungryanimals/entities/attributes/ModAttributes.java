@@ -8,6 +8,7 @@ import java.util.Map;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAttributeRegistry;
 
 public class ModAttributes implements IAttributeRegistry {
@@ -34,7 +35,7 @@ public class ModAttributes implements IAttributeRegistry {
 	private static ModAttributes INSTANCE;
 
 	private Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
-	public Map<String, AttributePair> ATTRIBUTES;
+	private Map<String, AttributePair> ATTRIBUTES;
 
 	private ModAttributes() {
 		REGISTRY = new HashMap<Class<? extends EntityAnimal>, List<IAttributeEntry>>();
@@ -48,20 +49,43 @@ public class ModAttributes implements IAttributeRegistry {
 		return INSTANCE;
 	}
 
-	public boolean register(Class<? extends EntityAnimal> animalclass, IAttribute attribute, double val, boolean shouldRegistered) {
+	public boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val) {
+		if (!ATTRIBUTES.containsKey(name)) {
+			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
+			return false;
+		}
+		
 		if (!REGISTRY.containsKey(animalclass)) {
 			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
 		}
-		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegistered, val));
+		
+		IAttribute attribute = ATTRIBUTES.get(name).attribute;
+		boolean shouldRegister = ATTRIBUTES.get(name).shouldRegister;
+		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
 	}
 	
-	public void register(String name, IAttribute attribute, boolean shouldRegister) {
+	public boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val, boolean shouldRegister) {
+		if (!ATTRIBUTES.containsKey(name)) {
+			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
+			return false;
+		}
+		
+		if (!REGISTRY.containsKey(animalclass)) {
+			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
+		}
+		
+		IAttribute attribute = ATTRIBUTES.get(name).attribute;
+		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
+	}
+	
+	public void registerName(String name, IAttribute attribute, boolean shouldRegister) {
 		ATTRIBUTES.put(name, pair(attribute, shouldRegister));
 	}
 	
 
 	/**
 	 * called EntityJoinWorldEvent
+	 * It is called after entity construction
 	 * 
 	 * @param entity
 	 */
@@ -73,7 +97,7 @@ public class ModAttributes implements IAttributeRegistry {
 
 	/**
 	 * called EntityConstructing
-	 * 
+	 * It is called before applyEntityAttributes and attachCapabilities
 	 * @param entity
 	 */
 	public void registerAttributes(EntityLivingBase entity) {
@@ -98,6 +122,6 @@ public class ModAttributes implements IAttributeRegistry {
 
 	@Override
 	public void registerAttribute(String name, IAttribute attribute, boolean shouldRegister) {
-		register(name, attribute, shouldRegister);
+		registerName(name, attribute, shouldRegister);
 	}
 }
