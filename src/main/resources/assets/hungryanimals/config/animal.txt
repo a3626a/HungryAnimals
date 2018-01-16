@@ -33,6 +33,6 @@ Example)
 ]
 
 Cow and Chicken are registered, but cow's taming is disabled.
-"Disabling taming" is to consider cow as tamed.
+"Disabling taming" is to consider cow as tamed always.
 
 Read console logs, or use Debug Glass in game to get name of an animal.
