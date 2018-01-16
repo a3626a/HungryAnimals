@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -35,6 +37,7 @@ import oortcloud.hungryanimals.utils.Tamings;
 public class EntityAIMateModified extends EntityAIBase {
 	private EntityAnimal animal;
 	private ICapabilityHungryAnimal theAnimalCapHungry;
+	@Nullable
 	private ICapabilityTamableAnimal theAnimalCapTamable;
 	World theWorld;
 	private EntityAnimal targetMate;
@@ -142,15 +145,19 @@ public class EntityAIMateModified extends EntityAIBase {
 
 			// Pay Hunger
 			double weight_child = entityageable.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
-			targetMateCapHungry.addWeight(-weight_child / 2);
+			if (targetMateCapHungry != null) {
+				targetMateCapHungry.addWeight(-weight_child / 2);
+			}
 			theAnimalCapHungry.addWeight(-weight_child / 2);
 
-			childHungry.setWeight(weight_child);
+			if (childHungry != null) {
+				childHungry.setWeight(weight_child);
+			}
 			double childTaming = calculateBabyTaming(theAnimalCapTamable, targetMateCapTamable);
 			if (childTamable != null) {
 				childTamable.setTaming(childTaming);
 			}
-			
+
 			EntityPlayerMP entityplayermp = this.animal.getLoveCause();
 
 			if (entityplayermp == null && this.targetMate.getLoveCause() != null) {

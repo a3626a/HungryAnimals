@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -69,7 +70,7 @@ public class ModelItemSlingshot implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		List<BakedQuad> combinedQuadsList = new ArrayList<BakedQuad>(model_shooting.getQuads(state, side, rand));
 		combinedQuadsList.add(leftString);
 		combinedQuadsList.add(rightString);
@@ -80,8 +81,8 @@ public class ModelItemSlingshot implements IBakedModel {
 	public ItemOverrideList getOverrides() {
 		return new ItemOverrideList(ImmutableList.of()) {
 			@Override
-			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world,
-					EntityLivingBase entity) {
+			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, @Nullable World world,
+					@Nullable EntityLivingBase entity) {
 				EntityPlayer player = Minecraft.getMinecraft().player;
 				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();

@@ -44,34 +44,29 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 
 							switch (message.getString()) {
 							case "nutrient":
-								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
-									ICapabilityHungryAnimal capHungry1 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								ICapabilityHungryAnimal capHungry1 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								if (capHungry1 != null)
 									capHungry1.setNutrient(message.getDouble());
-								}
 								break;
 							case "stomach":
-								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
-									ICapabilityHungryAnimal capHungry2 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								ICapabilityHungryAnimal capHungry2 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								if (capHungry2 != null)
 									capHungry2.setStomach(message.getDouble());
-								}
 								break;
 							case "weight":
-								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
-									ICapabilityHungryAnimal capHungry3 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								ICapabilityHungryAnimal capHungry3 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								if (capHungry3 != null)
 									capHungry3.setWeight(message.getDouble());
-								}
 								break;
 							case "excretion":
-								if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
-									ICapabilityHungryAnimal capHungry4 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								ICapabilityHungryAnimal capHungry4 = animal.getCapability(ProviderHungryAnimal.CAP, null);
+								if (capHungry4 != null)
 									capHungry4.setExcretion(message.getDouble());
-								}
 								break;
 							case "taming":
-								if (animal.hasCapability(ProviderTamableAnimal.CAP, null)) {
-									ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+								ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+								if (capTaming != null)
 									capTaming.setTaming(message.getDouble());
-								}
 								break;
 							}
 						}

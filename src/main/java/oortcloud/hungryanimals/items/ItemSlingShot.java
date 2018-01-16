@@ -60,8 +60,12 @@ public class ItemSlingShot extends Item {
         }
     }
 
-    protected boolean isArrow(ItemStack stack)
+	@SuppressWarnings("null")
+	protected boolean isArrow(ItemStack stack)
     {
+		if (stack == null)
+			return false;
+		
     	for (ItemStack i : OreDictionary.getOres("cobblestone")) {
     		if (OreDictionary.itemMatches(stack, i, false)) {
     			return true;

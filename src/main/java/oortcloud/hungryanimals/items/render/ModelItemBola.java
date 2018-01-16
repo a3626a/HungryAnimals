@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.items.render;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3f;
 
@@ -44,7 +45,7 @@ public class ModelItemBola implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 		return model_spin.getQuads(state, side, rand);
 	}
 
@@ -52,7 +53,7 @@ public class ModelItemBola implements IBakedModel {
 	public ItemOverrideList getOverrides() {
 		return new ItemOverrideList(ImmutableList.of()) {
 			@Override
-			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, World world, EntityLivingBase entity) {
+			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, @Nullable World world, @Nullable EntityLivingBase entity) {
 				EntityPlayer player = Minecraft.getMinecraft().player;
 				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();

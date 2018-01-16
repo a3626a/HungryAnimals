@@ -32,7 +32,7 @@ public class ItemDebugGlass extends Item {
 	}
 
 	@Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
 		if (playerIn.getEntityWorld().isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
@@ -43,7 +43,7 @@ public class ItemDebugGlass extends Item {
 			}
 		}
 		return false;
-    }
+	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -57,19 +57,18 @@ public class ItemDebugGlass extends Item {
 
 					EntityAnimal entity = (EntityAnimal) target;
 
-					if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
-						ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+					ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+					if (capHungry != null) {
 						tag.setDouble("weight", capHungry.getWeight());
 						tag.setDouble("nutrient", capHungry.getNutrient());
 						tag.setDouble("stomach", capHungry.getStomach());
 						tag.setDouble("excretion", capHungry.getExcretion());
 					}
-					
-					if (entity.hasCapability(ProviderTamableAnimal.CAP, null)) {
-						ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+
+					ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+					if (capTaming != null) {
 						tag.setDouble("taming", capTaming.getTaming());
 					}
-					
 					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
 				}
 			}

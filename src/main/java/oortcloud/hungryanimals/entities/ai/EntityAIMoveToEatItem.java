@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonElement;
@@ -40,17 +42,22 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	private IFoodPreference<ItemStack> pref;
 	private ICapabilityHungryAnimal capHungry;
+	@Nullable
 	private ICapabilityTamableAnimal capTaming;
 	private int delayCounter;
 	private static int delay = 100;
 
 	private Predicate<EntityItem> EAT_EDIBLE = new Predicate<EntityItem>() {
-		public boolean apply(EntityItem entityIn) {
+		public boolean apply(@Nullable EntityItem entityIn) {
+			if (entityIn == null)
+				return false;
 			return pref.canEat(capHungry, entityIn.getItem());
 		}
 	};
 	private Predicate<EntityItem> EAT_NATURAL = new Predicate<EntityItem>() {
-		public boolean apply(EntityItem entityIn) {
+		public boolean apply(@Nullable EntityItem entityIn) {
+			if (entityIn == null)
+				return false;
 			ItemStack item = entityIn.getItem();
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag != null) {

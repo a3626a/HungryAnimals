@@ -81,7 +81,7 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON generators;
 	private static ConfigurationHandlerJSON disease;
 	private static ConfigurationHandlerJSON overeat;
-	
+
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
@@ -96,7 +96,7 @@ public class ConfigurationHandler {
 		}
 
 		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/block", (jsonElement, animal) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
+			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			Map<HashBlockState, Pair<Double, Double>> map = new HashMap<HashBlockState, Pair<Double, Double>>();
 			for (JsonElement i : jsonArr) {
@@ -109,8 +109,8 @@ public class ConfigurationHandler {
 			FoodPreferences.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
 		foodPreferencesItem = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/item", (jsonElement, animal) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
-			
+			JsonArray jsonArr = (JsonArray) jsonElement;
+
 			List<FoodPreferenceIngredientEntry> list = new ArrayList<FoodPreferenceIngredientEntry>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
@@ -122,20 +122,24 @@ public class ConfigurationHandler {
 			FoodPreferences.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
 		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/entity", (jsonElement, animal) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
+			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			Set<Class<? extends EntityLiving>> set = new HashSet<Class<? extends EntityLiving>>();
 			for (JsonElement i : jsonArr) {
 				String resourceLocation = i.getAsString();
 				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(resourceLocation));
-				set.add(entityClass.asSubclass(EntityLiving.class));
+				if (entityClass != null) {
+					set.add(entityClass.asSubclass(EntityLiving.class));
+				} else {
+					HungryAnimals.logger.error("cannot find the animal {}", resourceLocation);
+				}
 			}
 			FoodPreferences.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
 		});
 		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (jsonElement, animal) -> {
-			JsonObject jsonObj = (JsonObject)jsonElement;
+			JsonObject jsonObj = (JsonObject) jsonElement;
 
-			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {		
+			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 				if (i.getValue().isJsonObject()) {
 					// Custom shouldRegister
 					JsonObject jsonAttribute = i.getValue().getAsJsonObject();
@@ -151,7 +155,7 @@ public class ConfigurationHandler {
 		});
 
 		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables/entities", (jsonElement, animal) -> {
-			
+
 		});
 		ais = new ConfigurationHandlerJSONAnimal(basefolder, "ais", (jsonElement, animal) -> {
 			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().parse(jsonElement);
@@ -159,7 +163,7 @@ public class ConfigurationHandler {
 		});
 
 		recipes = new ConfigurationHandlerJSON(basefolder, "recipes/animalglue", (jsonElement) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
+			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
@@ -169,7 +173,7 @@ public class ConfigurationHandler {
 			}
 		});
 		world = new ConfigurationHandlerJSON(basefolder, "world", (jsonElement) -> {
-			JsonObject jsonObj = (JsonObject)jsonElement;
+			JsonObject jsonObj = (JsonObject) jsonElement;
 
 			BlockExcreta.diseaseProbability = jsonObj.getAsJsonPrimitive("disease_probability").getAsDouble();
 			BlockExcreta.erosionProbabilityOnHay = jsonObj.getAsJsonPrimitive("erosion_probability_on_hay").getAsDouble();
@@ -184,7 +188,7 @@ public class ConfigurationHandler {
 				Cures.getInstance().register(i);
 		});
 		inheat = new ConfigurationHandlerJSON(basefolder, "inheat", (jsonElement) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
+			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {
 				JsonElement item = jsonEle.getAsJsonObject().get("item");
@@ -194,7 +198,7 @@ public class ConfigurationHandler {
 			}
 		});
 		generators = new ConfigurationHandlerJSON(basefolder, "generators", (jsonElement) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
+			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {
 				JsonObject jsonObj = jsonEle.getAsJsonObject();
@@ -210,7 +214,7 @@ public class ConfigurationHandler {
 				} else if (jsonObj.has("types")) {
 					JsonElement jsonEleTypes = jsonObj.get("types");
 					if (jsonEleTypes instanceof JsonArray) {
-						JsonArray jsonArrayTypes = (JsonArray)jsonEleTypes;
+						JsonArray jsonArrayTypes = (JsonArray) jsonEleTypes;
 						List<String> stringTypes = new ArrayList<>();
 						for (JsonElement i : jsonArrayTypes) {
 							stringTypes.add(i.getAsString());
@@ -226,17 +230,27 @@ public class ConfigurationHandler {
 			}
 		});
 		animal = new ConfigurationHandlerJSON(basefolder, "animal", (jsonElement) -> {
-			JsonArray jsonArr = (JsonArray)jsonElement;
+			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {
-				String i = jsonEle.getAsString();
-				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(i));
+
+				String name;
+				boolean disableTaming = false;
+
+				if (jsonEle.isJsonObject()) {
+					JsonObject jsonObj = jsonEle.getAsJsonObject();
+					name = JsonUtils.getString(jsonObj, "name");
+					disableTaming = JsonUtils.getBoolean(jsonObj, "disable_taming");
+				} else {
+					name = jsonEle.getAsString();
+				}
+				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(name));
 				if (entityClass != null) {
 					if (EntityAnimal.class.isAssignableFrom(entityClass)
 							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
-						ResourceLocation name = EntityList.getKey(entityClass);
-						HungryAnimals.logger.info("[Configuration] registered " + name);
-						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class));
+						ResourceLocation resource = EntityList.getKey(entityClass);
+						HungryAnimals.logger.info("[Configuration] registered " + resource);
+						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class), disableTaming);
 					}
 				}
 			}
@@ -251,18 +265,17 @@ public class ConfigurationHandler {
 			}
 		});
 		disease = new ConfigurationHandlerJSON(basefolder, "disease", (jsonElement) -> {
-			JsonObject jsonObj = (JsonObject)jsonElement;
-			
+			JsonObject jsonObj = (JsonObject) jsonElement;
+
 			PotionDisease.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
 			PotionDisease.multiplyWeightBMR = JsonUtils.getFloat(jsonObj, "multiply_weight_bmr");
 		});
 		overeat = new ConfigurationHandlerJSON(basefolder, "overeat", (jsonElement) -> {
-			JsonObject jsonObj = (JsonObject)jsonElement;
-			
+			JsonObject jsonObj = (JsonObject) jsonElement;
+
 			PotionOvereat.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
 		});
-		
-		
+
 		ModLootTables.init(basefolder);
 	}
 
@@ -270,7 +283,7 @@ public class ConfigurationHandler {
 		disease.sync();
 		overeat.sync();
 	}
-	
+
 	public static void sync() {
 		animal.sync();
 		foodPreferencesBlock.sync();

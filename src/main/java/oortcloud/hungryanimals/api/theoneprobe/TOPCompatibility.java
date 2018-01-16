@@ -23,52 +23,59 @@ public class TOPCompatibility {
 
 	private static boolean registered;
 
-    public static void register() {
-        if (registered)
-            return;
-        registered = true;
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility$GetTheOneProbe");
-    }
-	
-    public static class GetTheOneProbe implements com.google.common.base.Function<ITheOneProbe, Void> {
+	public static void register() {
+		if (registered)
+			return;
+		registered = true;
+		FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility$GetTheOneProbe");
+	}
 
-        public static ITheOneProbe probe;
+	public static class GetTheOneProbe implements com.google.common.base.Function<ITheOneProbe, Void> {
 
-        @Nullable
-        @Override
-        public Void apply(ITheOneProbe theOneProbe) {
-            probe = theOneProbe;
-            HungryAnimals.logger.info("Enabled support for The One Probe");
-            probe.registerEntityProvider(new IProbeInfoEntityProvider() {
-				
+		public static ITheOneProbe probe;
+
+		@Nullable
+		@Override
+		public Void apply(@Nullable ITheOneProbe theOneProbe) {
+			probe = theOneProbe;
+			HungryAnimals.logger.info("Enabled support for The One Probe");
+			probe.registerEntityProvider(new IProbeInfoEntityProvider() {
+
 				@Override
 				public String getID() {
-					return References.MODID+":hungryanimalsprovider";
+					return References.MODID + ":hungryanimalsprovider";
 				}
-				
+
 				@Override
-				public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity, IProbeHitEntityData data) {
+				public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity,
+						IProbeHitEntityData data) {
 					if (!(entity instanceof EntityAnimal))
 						return;
-						
-					EntityAnimal animal = (EntityAnimal)entity;
 
-					if (animal.hasCapability(ProviderHungryAnimal.CAP, null)) {
-						ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
-						probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float)capHungry.getWeight()));
-						probeInfo.horizontal().text("STOMACH").progress((int)capHungry.getStomach(), (int)capHungry.getMaxStomach(), probeInfo.defaultProgressStyle().filledColor(0xFF0000FF).alternateFilledColor(0xFF0000FF).borderColor(0));
+					EntityAnimal animal = (EntityAnimal) entity;
+
+					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+
+					if (capHungry != null) {
+						probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float) capHungry.getWeight()));
+						probeInfo.horizontal().text("STOMACH").progress((int) capHungry.getStomach(), (int) capHungry.getMaxStomach(),
+								probeInfo.defaultProgressStyle().filledColor(0xFF0000FF).alternateFilledColor(0xFF0000FF).borderColor(0));
 					}
-					if (animal.hasCapability(ProviderTamableAnimal.CAP, null)) {
-						ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+					if (capTaming != null) {
 						if (capTaming.getTaming() >= 0) {
-							probeInfo.horizontal().text("TAMING").progress((int)(Math.min(capTaming.getTaming(), 2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFF00FF00).alternateFilledColor(0xFF00FF00).borderColor(0).showText(false));
+							int prog = (int) (Math.min(capTaming.getTaming(), 2.0) * 100);
+							probeInfo.horizontal().text("TAMING").progress(prog, 200,
+									probeInfo.defaultProgressStyle().filledColor(0xFF00FF00).alternateFilledColor(0xFF00FF00).borderColor(0).showText(false));
 						} else {
-							probeInfo.horizontal().text("TAMING").progress((int)(-Math.max(capTaming.getTaming(), -2.0)*100), 200, probeInfo.defaultProgressStyle().filledColor(0xFFFF0000).alternateFilledColor(0xFFFF0000).borderColor(0).showText(false));
+							int prog = (int) (-Math.max(capTaming.getTaming(), -2.0) * 100);
+							probeInfo.horizontal().text("TAMING").progress(prog, 200,
+									probeInfo.defaultProgressStyle().filledColor(0xFFFF0000).alternateFilledColor(0xFFFF0000).borderColor(0).showText(false));
 						}
 					}
 				}
 			});
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 }

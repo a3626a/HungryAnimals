@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.entities.loot_tables;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
 public class WeightValueRange
@@ -18,8 +20,11 @@ public class WeightValueRange
         return this.weight_per_meat;
     }
 
-    public int generateInt(ICapabilityHungryAnimal cap, Random rand)
+    public int generateInt(@Nullable ICapabilityHungryAnimal cap, Random rand)
     {
+    	if (cap == null)
+    		return 0;
+    	
     	float weight_meat = (float) (cap.getWeight()-cap.getNormalWeight()*0.5);
     	if (weight_meat > 0) {
     		float num_meat = weight_meat/weight_per_meat;
@@ -34,8 +39,11 @@ public class WeightValueRange
     	return 0;
     }
 
-    public float generateFloat(ICapabilityHungryAnimal cap)
+    public float generateFloat(@Nullable ICapabilityHungryAnimal cap)
     {
+    	if (cap == null)
+    		return 0;
+    	
     	float weight_meat = (float) (cap.getWeight()-cap.getNormalWeight()*0.5);
     	if (weight_meat > 0) {
     		return weight_meat/weight_per_meat;

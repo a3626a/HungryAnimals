@@ -1,5 +1,8 @@
 package oortcloud.hungryanimals.entities.capability;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTBase;
@@ -25,12 +28,12 @@ public class ProviderTamableAnimal implements ICapabilitySerializable<NBTBase> {
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CAP;
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
 		return capability == CAP ? CAP.<T>cast(this.instance) : null;
 	}
 

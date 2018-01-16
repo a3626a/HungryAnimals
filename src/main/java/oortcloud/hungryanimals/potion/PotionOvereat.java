@@ -28,10 +28,9 @@ public class PotionOvereat extends PotionHungryAnimals {
 	
 	@Override
 	public void performEffect(EntityLivingBase entity, int amplifier) {
-		if (!entity.hasCapability(ProviderHungryAnimal.CAP, null))
-			return;
-		
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		if (cap == null)
+			return;
 		
 		if (cap.getStomach() < cap.getMaxStomach()) {
 			entity.removePotionEffect(this);

@@ -86,6 +86,9 @@ public class ClientRenderEventHandler {
 		float height = 0.7F;
 
 		EntityPlayer entity = (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity();
+		if (entity == null)
+			return;
+		
 		EntityLivingBase animal = event.getEntity();
 		ItemStack stack = entity.getHeldItemMainhand();
 		if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {

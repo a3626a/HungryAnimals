@@ -25,10 +25,15 @@ public class CapabilityHandler {
 		EntityAnimal animal = (EntityAnimal) event.getObject();
 		if (HungryAnimalManager.getInstance().isRegistered(animal.getClass())) {
 			event.addCapability(CAP_HUNGRYANIMALS, new ProviderHungryAnimal(animal));
-			if (animal instanceof AbstractHorse) {
-				event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal((AbstractHorse) animal));
-			} else {
-				event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal(animal));
+
+			boolean disabledTaming = HungryAnimalManager.getInstance().isDisabledTaming(animal.getClass());
+
+			if (!disabledTaming) {
+				if (animal instanceof AbstractHorse) {
+					event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal((AbstractHorse) animal));
+				} else {
+					event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal(animal));
+				}
 			}
 		}
 	}
@@ -36,14 +41,12 @@ public class CapabilityHandler {
 	@SubscribeEvent
 	public static void onStartTracking(PlayerEvent.StartTracking event) {
 		Entity target = event.getTarget();
-		if (target.hasCapability(ProviderTamableAnimal.CAP, null)) {
-			CapabilityTamableAnimal cap = (CapabilityTamableAnimal) target.getCapability(ProviderTamableAnimal.CAP, null);
-			cap.syncTo((EntityPlayerMP)event.getEntityPlayer());
-		}
-		if (target.hasCapability(ProviderHungryAnimal.CAP, null)) {
-			CapabilityHungryAnimal cap = (CapabilityHungryAnimal) target.getCapability(ProviderHungryAnimal.CAP, null);
-			cap.syncTo((EntityPlayerMP)event.getEntityPlayer());
-		}
+		CapabilityTamableAnimal capTamable = (CapabilityTamableAnimal) target.getCapability(ProviderTamableAnimal.CAP, null);
+		if (capTamable != null)
+			capTamable.syncTo((EntityPlayerMP) event.getEntityPlayer());
+		CapabilityHungryAnimal capHungry = (CapabilityHungryAnimal) target.getCapability(ProviderHungryAnimal.CAP, null);
+		if (capHungry != null)
+		capHungry.syncTo((EntityPlayerMP) event.getEntityPlayer());
 	}
 
 }

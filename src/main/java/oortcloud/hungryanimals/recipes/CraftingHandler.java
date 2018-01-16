@@ -13,6 +13,7 @@ public class CraftingHandler {
 		registerRecipe();
 	}
 
+	@SuppressWarnings("null")
 	private static void registerRecipe() {
 		//RecipeSorter.register(References.RESOURCESPREFIX+"shapeddistinctore",     ShapedDistinctOreRecipe.class,    SHAPED,    "after:forge:shapedore before:minecraft:shapeless");
 		

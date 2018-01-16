@@ -1,7 +1,6 @@
 package oortcloud.hungryanimals.utils;
 
 import java.util.Collection;
-import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -111,18 +110,4 @@ public class HashBlockState {
 		return state.withProperty(property, property.parseValue(value).get());
 	}
 
-	public static JsonElement serialize(HashBlockState block) {
-		if (block.ignoreProperty) {
-			JsonObject jsonobject = new JsonObject();
-			jsonobject.addProperty("name", block.block.getBlock().getRegistryName().toString());
-			return new JsonObject();
-		} else {
-			JsonObject jsonobject = new JsonObject();
-			jsonobject.addProperty("name", block.block.getBlock().getRegistryName().toString());
-			for (Entry<IProperty<?>, Comparable<?>> i : block.block.getProperties().entrySet()) {
-				jsonobject.addProperty(i.getKey().getName(), i.getValue().toString());
-			}
-			return jsonobject;
-		}
-	}
 }

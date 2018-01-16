@@ -15,27 +15,25 @@ public class HandlerEntityClient implements IMessageHandler<PacketEntityClient, 
 
 	@Override
 	public PacketEntityServer onMessage(PacketEntityClient message, MessageContext ctx) {
-		Minecraft.getMinecraft().addScheduledTask(()->{
-			World world =  FMLClientHandler.instance().getClient().world;
-			if (world == null) 
+		Minecraft.getMinecraft().addScheduledTask(() -> {
+			World world = FMLClientHandler.instance().getClient().world;
+			if (world == null)
 				return;
-			
+
 			Entity entity = world.getEntityByID(message.entityID);
 			if (entity == null)
 				return;
-			
+
 			switch (message.index) {
 			case SyncIndex.TAMING_LEVEL_SYNC:
-				if (entity.hasCapability(ProviderTamableAnimal.CAP, null)) {
-					ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
-					cap.setTaming(message.getDouble());
-				}
+				ICapabilityTamableAnimal cap1 = entity.getCapability(ProviderTamableAnimal.CAP, null);
+				if (cap1 != null)
+					cap1.setTaming(message.getDouble());
 				break;
 			case SyncIndex.STOMACH_SYNC:
-				if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
-					ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-					cap.setStomach(message.getDouble());
-				}
+				ICapabilityHungryAnimal cap2 = entity.getCapability(ProviderHungryAnimal.CAP, null);
+				if (cap2 != null)
+					cap2.setStomach(message.getDouble());
 				break;
 			}
 		});

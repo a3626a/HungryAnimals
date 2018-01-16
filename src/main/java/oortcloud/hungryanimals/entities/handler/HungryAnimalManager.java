@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.entity.passive.EntityAnimal;
 
@@ -9,13 +9,18 @@ public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
-	private List<Class<? extends EntityAnimal>> registedClass;
-
+	private Map<Class<? extends EntityAnimal>, HungryAnimalEntry> REGISTRY;
+	
 	public static class HungryAnimalEntry {
-		public boolean isHungry;
-		public boolean isTamable;
-		public boolean isAttribute;
+		public boolean disableTaming;
 		
+		public HungryAnimalEntry() {
+			disableTaming = false;
+		}
+		
+		public HungryAnimalEntry(boolean disableTaming) {
+			this.disableTaming = disableTaming;
+		}
 	}
 	
 	public static HungryAnimalManager getInstance() {
@@ -26,24 +31,36 @@ public class HungryAnimalManager {
 	}
 
 	private HungryAnimalManager() {
-		registedClass = new ArrayList<Class<? extends EntityAnimal>>();
+		REGISTRY = new HashMap<>();
 	}
 
 	public boolean register(Class<? extends EntityAnimal> animal) {
-		if (!registedClass.contains(animal)) {
-			return registedClass.add(animal);
+		return register(animal, false);
+	}
+
+	public boolean register(Class<? extends EntityAnimal> animal, boolean disableTaming) {
+		if (!REGISTRY.containsKey(animal)) {
+			REGISTRY.put(animal, new HungryAnimalEntry(disableTaming));
+			return true;
 		}
 		return false;
 	}
-
-	public List<Class<? extends EntityAnimal>> getRegisteredAnimal() {
-		return registedClass;
+	
+	public Iterable<Class<? extends EntityAnimal>> getRegisteredAnimal() {
+		return REGISTRY.keySet();
 	}
 
 	public boolean isRegistered(Class<? extends EntityAnimal> animal) {
-		return registedClass.contains(animal);
+		return REGISTRY.containsKey(animal);
 	}
 
+	public boolean isDisabledTaming(Class<? extends EntityAnimal> animal) {
+		if (REGISTRY.containsKey(animal)) {
+			return REGISTRY.get(animal).disableTaming;
+		}
+		return true;
+	}
+	
 	public void init() {
 
 	}

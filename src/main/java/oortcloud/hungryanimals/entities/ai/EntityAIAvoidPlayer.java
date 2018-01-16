@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -22,18 +24,18 @@ import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
-	/**
-	 * Wild animals avoid players within certain range.
-	 * 
-	 */
-
+	
+	@Nullable
+	private ICapabilityTamableAnimal cap;
+	
 	private static final Predicate<EntityPlayer> predicate = new Predicate<EntityPlayer>() {
 		/**
 		 * Select players
 		 * Players who has "debug glass" in creative mode are ignored.
 		 */
-		
-		public boolean apply(EntityPlayer player) {
+		public boolean apply(@Nullable EntityPlayer player) {
+			if (player == null)
+				return false;
 			if (!player.capabilities.isCreativeMode)
 				return true;
 			for (int i = 0; i < 9; i++) {
@@ -43,10 +45,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 			}
 			return true;
 		}
-		
 	};
-
-	private ICapabilityTamableAnimal cap;
 	
 	public EntityAIAvoidPlayer(EntityCreature entity, float radius, double farspeed, double nearspeed) {
 		super(entity, EntityPlayer.class, predicate, radius, farspeed, nearspeed);

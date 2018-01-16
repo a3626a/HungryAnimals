@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonSyntaxException;
@@ -44,11 +46,11 @@ public class ShapedDistinctOreRecipe extends ShapedOreRecipe {
 		this(group, new ItemStack(result), parse(recipe));
 	}
 
-	public ShapedDistinctOreRecipe(ResourceLocation group, ItemStack result, Object... recipe) {
+	public ShapedDistinctOreRecipe(ResourceLocation group, @Nonnull ItemStack result, Object... recipe) {
 		this(group, result, parse(recipe));
 	}
 
-	public ShapedDistinctOreRecipe(ResourceLocation group, ItemStack result, ShapedPrimerDistinct primer) {
+	public ShapedDistinctOreRecipe(ResourceLocation group, @Nonnull ItemStack result, ShapedPrimerDistinct primer) {
 		super(group, result, primer);
 		//setRegistryName(group);
 		characters = primer.characters;
@@ -179,6 +181,7 @@ public class ShapedDistinctOreRecipe extends ShapedOreRecipe {
 		return super.checkMatch(inv, startX, startY, mirror) && checkDistinct(inv, startX, startY, mirror);
 	}
 
+	@SuppressWarnings("null")
 	protected boolean checkDistinct(InventoryCrafting inv, int startX, int startY, boolean mirror) {
 
 		HashMap<Character, ItemStack> map = new HashMap<Character, ItemStack>();

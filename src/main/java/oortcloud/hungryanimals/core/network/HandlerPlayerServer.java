@@ -14,14 +14,17 @@ public class HandlerPlayerServer implements IMessageHandler<PacketPlayerServer, 
 	public PacketPlayerClient onMessage(PacketPlayerServer message, MessageContext ctx) {
 		FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
 			EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(message.name);
+			if (player == null)
+				return;
+
 			ItemStack stack = player.getHeldItemMainhand();
 			switch (message.index) {
 			case SyncIndex.DEBUG_SETTARGET:
 				if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
 					NBTTagCompound tag = stack.getTagCompound();
 					if (tag == null) {
-						stack.setTagCompound(new NBTTagCompound());
-						tag = stack.getTagCompound();
+						tag = new NBTTagCompound();
+						stack.setTagCompound(tag);
 					}
 					tag.setInteger("target", message.getInt());
 				}

@@ -66,6 +66,9 @@ public class ModLootTables implements ILootTableRegistry {
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			ResourceLocation key = EntityList.getKey(i);
+			if (key == null)
+				continue;
+			
 			String domain = key.getResourceDomain();
 			String name = key.getResourcePath();
 			

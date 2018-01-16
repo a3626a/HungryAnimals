@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -28,7 +30,9 @@ import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 public class EntityAIMoveToEatBlock extends EntityAIBase {
 
 	private Predicate<Entity> predicate = new Predicate<Entity>() {
-		public boolean apply(Entity obj) {
+		public boolean apply(@Nullable Entity obj) {
+			if (obj == null)
+				return false;
 			return obj.getClass() == entity.getClass();
 		}
 	};

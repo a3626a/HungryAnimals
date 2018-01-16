@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -42,6 +44,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	private int delayCounter;
 	private static int delay = 100;
 	private ICapabilityHungryAnimal capHungry;
+	@Nullable
 	private ICapabilityTamableAnimal capTaming;
 	private IFoodPreference<ItemStack> pref;
 

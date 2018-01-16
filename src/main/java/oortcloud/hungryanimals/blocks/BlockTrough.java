@@ -45,16 +45,15 @@ public class BlockTrough extends Block {
 	public static final AxisAlignedBB WEST = new AxisAlignedBB(0.875F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 	public static final AxisAlignedBB NORTH = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 0.125F);
 	public static final AxisAlignedBB SOUTH = new AxisAlignedBB(0.0F, 0.0F, 0.875F, 1.0F, 0.5F, 1.0F);
-	
-	
+
 	private final Random random = new Random();
 
 	protected BlockTrough() {
 		super(Material.WOOD);
 		setHarvestLevel("axe", 0);
 		setHardness(2.0F);
-		
-		setUnlocalizedName(References.MODID+"."+Strings.blockTroughName); 
+
+		setUnlocalizedName(References.MODID + "." + Strings.blockTroughName);
 		setRegistryName(Strings.blockTroughName);
 	}
 
@@ -62,7 +61,7 @@ public class BlockTrough extends Block {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, net.minecraft.util.math.BlockPos pos) {
 		return BOUND_BOX;
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { FACING, PART });
@@ -78,7 +77,6 @@ public class BlockTrough extends Block {
 		return BlockRenderLayer.CUTOUT;
 	}
 
-	
 	@Override
 	public EnumPushReaction getMobilityFlag(IBlockState state) {
 		return EnumPushReaction.IGNORE;
@@ -146,9 +144,10 @@ public class BlockTrough extends Block {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes,
+			@Nullable Entity entityIn, boolean p_185477_7_) {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, FLOOR);
-		
+
 		EnumFacing rot = ((EnumFacing) state.getValue(FACING));
 		if (state.getValue(PART) == EnumPartType.HEAD)
 			rot = rot.getOpposite();
@@ -166,28 +165,30 @@ public class BlockTrough extends Block {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST);
 		}
 	}
-	
+
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
 		return state.getValue(PART) == EnumPartType.FOOT;
 	}
-	
+
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return (state.getValue(PART) == EnumPartType.FOOT) ? new TileEntityTrough() : null;
 	}
-	
+
 	public TileEntity getTileEntity(World world, BlockPos pos) {
 		IBlockState meta = world.getBlockState(pos);
 		if (meta.getBlock() == this) {
-			return (meta.getValue(PART) == EnumPartType.HEAD ? world.getTileEntity(pos.offset(((EnumFacing) meta.getValue(FACING)).getOpposite())) : world.getTileEntity(pos));
+			return (meta.getValue(PART) == EnumPartType.HEAD ? world.getTileEntity(pos.offset(((EnumFacing) meta.getValue(FACING)).getOpposite()))
+					: world.getTileEntity(pos));
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX,
+			float hitY, float hitZ) {
 		TileEntity te = this.getTileEntity(worldIn, pos);
 
 		if (!(te instanceof TileEntityTrough)) {
@@ -259,11 +260,12 @@ public class BlockTrough extends Block {
 					}
 
 					itemstack.shrink(j1);
-					EntityItem entityitem = new EntityItem(worldIn, (double) ((float) pos.getX() + f), (double) ((float) pos.getY() + f1), (double) ((float) pos.getZ() + f2),
-							new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+					EntityItem entityitem = new EntityItem(worldIn, (double) ((float) pos.getX() + f), (double) ((float) pos.getY() + f1),
+							(double) ((float) pos.getZ() + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
-					if (itemstack.hasTagCompound()) {
-						entityitem.getItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+					NBTTagCompound tag = itemstack.getTagCompound();
+					if (tag != null) {
+						entityitem.getItem().setTagCompound(tag.copy());
 					}
 
 					float f3 = 0.05F;

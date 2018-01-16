@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,7 +33,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 	public EntityAIHunt(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(creature, EntityLiving.class, chance, checkSight, onlyNearby, new Predicate<EntityLiving>() {
 			@Override
-			public boolean apply(EntityLiving input) {
+			public boolean apply(@Nullable EntityLiving input) {
 				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
 				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
 

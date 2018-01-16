@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.entities.ai;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -25,6 +27,7 @@ import oortcloud.hungryanimals.utils.Tamings;
 public class EntityAITemptIngredient extends EntityAITempt {
 
 	private List<Ingredient> tempt;
+	@Nullable
 	private ICapabilityTamableAnimal capTaming;
 	
 	public EntityAITemptIngredient(EntityCreature entity, double speed, boolean scaredBy, List<Ingredient> items) {
