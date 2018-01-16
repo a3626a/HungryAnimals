@@ -10,7 +10,6 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
-import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer, PacketGeneralClient> {
 
@@ -83,9 +82,6 @@ public class HandlerGeneralServer implements IMessageHandler<PacketGeneralServer
 						Entity entity = worldserver.getEntityByID(id3);
 						if (entity != null && entity instanceof EntityAnimal) {
 							EntityAnimal animal = (EntityAnimal) entity;
-
-							if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))
-								break;
 
 							switch (message.getString()) {
 							case "age":
