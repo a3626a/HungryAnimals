@@ -30,6 +30,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
+import oortcloud.hungryanimals.entities.production.Productions;
 import oortcloud.hungryanimals.generation.Conditions;
 
 public class HAPlugins {
@@ -68,6 +69,7 @@ public class HAPlugins {
 			i.registerGrassGenerators(Conditions.getInstance());
 			// TODO Singleton Mod Loot Tables
 			i.registerLootTables(ModLootTables::register);
+			i.registerProductions(Productions.getInstance());
 		}
 	}
 

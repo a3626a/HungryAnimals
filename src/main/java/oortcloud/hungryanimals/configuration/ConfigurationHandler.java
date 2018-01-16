@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -57,6 +58,8 @@ import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeats;
 import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
+import oortcloud.hungryanimals.entities.production.IProduction;
+import oortcloud.hungryanimals.entities.production.Productions;
 import oortcloud.hungryanimals.generation.GrassGenerator;
 import oortcloud.hungryanimals.generation.GrassGenerators;
 import oortcloud.hungryanimals.potion.PotionDisease;
@@ -73,6 +76,7 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSONAnimal attributes;
 	private static ConfigurationHandlerJSONAnimal lootTables;
 	private static ConfigurationHandlerJSONAnimal ais;
+	private static ConfigurationHandlerJSONAnimal productions;
 	private static ConfigurationHandlerJSON recipes;
 	private static ConfigurationHandlerJSON world;
 	private static ConfigurationHandlerJSON animal;
@@ -161,7 +165,20 @@ public class ConfigurationHandler {
 			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().parse(jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
-
+		productions = new ConfigurationHandlerJSONAnimal(basefolder, "productions", (jsonElement, animal) -> {
+			JsonArray jsonArr = jsonElement.getAsJsonArray();
+			
+			for (JsonElement i : jsonArr) {
+				Function<EntityAnimal, IProduction> factory = Productions.getInstance().parse(i);
+				if (factory != null) {
+					API.registerProduction(animal, factory);
+				} else {
+					HungryAnimals.logger.error("{} is not a valid Production", i);
+				}
+			}
+		});
+		
+		
 		recipes = new ConfigurationHandlerJSON(basefolder, "recipes/animalglue", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
@@ -297,6 +314,7 @@ public class ConfigurationHandler {
 		cures.sync();
 		inheat.sync();
 		generators.sync();
+		productions.sync();
 		ModLootTables.sync();
 	}
 

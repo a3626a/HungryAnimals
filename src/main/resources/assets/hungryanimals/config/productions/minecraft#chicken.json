@@ -1,0 +1,10 @@
+[
+    {
+        "type" : "egg",
+        "name" : "minecraft.chicken.egg",
+        "delay" : 300,
+        "output" : {
+            "item" : "minecraft:egg"
+        }
+    }
+]

@@ -20,5 +20,4 @@ public interface ICapabilityHungryAnimal {
 	public double getExcretion();
 	public double addExcretion(double excretion);
 	public double setExcretion(double excretion);
-	
 }

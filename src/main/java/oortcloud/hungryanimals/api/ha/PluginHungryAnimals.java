@@ -12,6 +12,7 @@ import oortcloud.hungryanimals.api.IAttributeRegistry;
 import oortcloud.hungryanimals.api.IGrassGeneratorRegistry;
 import oortcloud.hungryanimals.api.IHAPlugin;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
+import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.EntityAIAttackMeleeCustom;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
@@ -30,6 +31,8 @@ import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask.AIRemoverIsIn
 import oortcloud.hungryanimals.entities.ai.handler.AIContainerWolf;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.loot_tables.SetCountBaseOnWeight;
+import oortcloud.hungryanimals.entities.production.ProductionEgg;
+import oortcloud.hungryanimals.entities.production.ProductionMilk;
 import oortcloud.hungryanimals.generation.ConditionAdjacent;
 import oortcloud.hungryanimals.generation.ConditionBelow;
 import oortcloud.hungryanimals.generation.ConditionChance;
@@ -145,6 +148,12 @@ public class PluginHungryAnimals implements IHAPlugin {
 	
 	private IAttribute register(IAttributeRegistry registry, String domain, String name, boolean shouldwatch, boolean shouldRegister) {
 		return register(registry, domain, name, 0, 0, Double.MAX_VALUE, shouldwatch, shouldRegister);
+	}
+
+	@Override
+	public void registerProductions(IProductionRegistry registry) {
+		registry.registerParser("milk", ProductionMilk::parse);
+		registry.registerParser("egg", ProductionEgg::parse);
 	}
 	
 }

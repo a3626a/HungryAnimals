@@ -1,5 +1,9 @@
 package oortcloud.hungryanimals.api;
 
+import java.util.function.Function;
+
+import com.google.gson.JsonElement;
+
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.biome.Biome;
@@ -10,6 +14,8 @@ import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeats;
+import oortcloud.hungryanimals.entities.production.IProduction;
+import oortcloud.hungryanimals.entities.production.Productions;
 import oortcloud.hungryanimals.generation.GrassGenerator;
 import oortcloud.hungryanimals.generation.GrassGenerators;
 
@@ -71,6 +77,14 @@ public class API {
 	 */
 	public static IAIContainer<EntityAnimal> registerAIContainer(Class<? extends EntityAnimal> animalclass, AIContainer aiContainer) {
 		return AIContainers.getInstance().register(animalclass, aiContainer);
+	}
+	
+	public static boolean registerProduction(Class<? extends EntityAnimal> animal, Function<EntityAnimal, IProduction> factory) {
+		return Productions.getInstance().registerProduction(animal, factory);
+	}
+	
+	public static void registerParser(String type, Function<JsonElement, Function<EntityAnimal, IProduction>> parser) {
+		Productions.getInstance().registerParser(type, parser);
 	}
 	
 }

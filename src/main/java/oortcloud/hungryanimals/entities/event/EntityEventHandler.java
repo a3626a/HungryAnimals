@@ -35,8 +35,10 @@ import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
@@ -83,24 +85,29 @@ public class EntityEventHandler {
 		if (!(event.getEntity() instanceof EntityAnimal))
 			return;
 
-		EntityAnimal entity = (EntityAnimal) event.getEntity();
+		EntityAnimal animal = (EntityAnimal) event.getEntity();
 
-		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
+		if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))
 			return;
 
-		if (!entity.getEntityWorld().isRemote && entity.getEntityWorld().getTotalWorldTime() % 20 == 0) {
-			updateHunger(entity);
-			updateCourtship(entity);
-			updateExcretion(entity);
-			updateTaming(entity);
-			updateEnvironmentalEffet(entity);
-			updateRecovery(entity);
+		if (!animal.getEntityWorld().isRemote && animal.getEntityWorld().getTotalWorldTime() % 20 == 0) {
+			updateHunger(animal);
+			updateCourtship(animal);
+			updateExcretion(animal);
+			updateTaming(animal);
+			updateEnvironmentalEffet(animal);
+			updateRecovery(animal);
 
-			ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
-			if (cap != null)
-				if (cap.getWeight() < cap.getStarvinglWeight()) {
-					onStarve(entity);
+			ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+			if (capHungry != null)
+				if (capHungry.getWeight() < capHungry.getStarvinglWeight()) {
+					onStarve(animal);
 				}
+			
+			ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP, null);
+			if (capProducing != null) {
+				capProducing.update();
+			}
 		}
 	}
 
@@ -340,6 +347,16 @@ public class EntityEventHandler {
 			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.SUCCESS);
 		}
 
+		
+		ICapabilityProducingAnimal capProducing = entity.getCapability(ProviderProducingAnimal.CAP, null);
+		if (capProducing != null) {
+			EnumActionResult action = capProducing.interact(event, hand, itemstack);
+			if (action != EnumActionResult.PASS) {
+				new Pair<Boolean, EnumActionResult>(true, action); 
+			}
+		}
+		
+		
 		// For horses, they do not implement isBreedingItem properly
 		if (entity instanceof AbstractHorse) {
 			if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK) || item == Items.APPLE

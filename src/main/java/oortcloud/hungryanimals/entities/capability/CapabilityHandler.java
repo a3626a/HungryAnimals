@@ -11,12 +11,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.production.Productions;
 
 @Mod.EventBusSubscriber
 public class CapabilityHandler {
 	public static final ResourceLocation CAP_HUNGRYANIMALS = new ResourceLocation(References.MODID, "hungryanimal");
 	public static final ResourceLocation CAP_TAMABLEANIMALS = new ResourceLocation(References.MODID, "tamableanimal");
-
+	public static final ResourceLocation CAP_PRODUCINGANIMALS = new ResourceLocation(References.MODID, "producinganimal");
+	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
 		if (!(event.getObject() instanceof EntityAnimal))
@@ -34,6 +36,9 @@ public class CapabilityHandler {
 				} else {
 					event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal(animal));
 				}
+			}
+			if (Productions.getInstance().hasProduction(animal)) {
+				event.addCapability(CAP_PRODUCINGANIMALS, new ProviderProducingAnimal(animal));
 			}
 		}
 	}
