@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.IProductionInteraction;
 import oortcloud.hungryanimals.entities.production.IProductionTickable;
+import oortcloud.hungryanimals.entities.production.ISyncable;
 
 public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 
@@ -58,6 +63,28 @@ public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 	@Override
 	public Iterable<IProduction> getProductions() {
 		return productions;
+	}
+
+	public void syncTo(EntityPlayerMP target) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+			for (IProduction i : productions) {
+				if (i instanceof ISyncable) {
+					((ISyncable) i).syncTo(target);
+				}
+			}
+		}
+	}
+	
+	public void readFrom(PacketEntityClient message) {
+		String name = message.getString();
+		for (IProduction i : productions) {
+			if (i instanceof ISyncable) {
+				if (name.equals(i.getName())) {
+					((ISyncable) i).readFrom(message);
+					break;
+				}
+			}
+		}
 	}
 	
 }

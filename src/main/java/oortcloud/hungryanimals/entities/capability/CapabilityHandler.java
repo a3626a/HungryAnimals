@@ -18,7 +18,7 @@ public class CapabilityHandler {
 	public static final ResourceLocation CAP_HUNGRYANIMALS = new ResourceLocation(References.MODID, "hungryanimal");
 	public static final ResourceLocation CAP_TAMABLEANIMALS = new ResourceLocation(References.MODID, "tamableanimal");
 	public static final ResourceLocation CAP_PRODUCINGANIMALS = new ResourceLocation(References.MODID, "producinganimal");
-	
+
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
 		if (!(event.getObject() instanceof EntityAnimal))
@@ -51,7 +51,10 @@ public class CapabilityHandler {
 			capTamable.syncTo((EntityPlayerMP) event.getEntityPlayer());
 		CapabilityHungryAnimal capHungry = (CapabilityHungryAnimal) target.getCapability(ProviderHungryAnimal.CAP, null);
 		if (capHungry != null)
-		capHungry.syncTo((EntityPlayerMP) event.getEntityPlayer());
+			capHungry.syncTo((EntityPlayerMP) event.getEntityPlayer());
+		CapabilityProducingAnimal capProducing = (CapabilityProducingAnimal) target.getCapability(ProviderProducingAnimal.CAP, null);
+		if (capProducing != null)
+			capProducing.syncTo((EntityPlayerMP) event.getEntityPlayer());
 	}
 
 }

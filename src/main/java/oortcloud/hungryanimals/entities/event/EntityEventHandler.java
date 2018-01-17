@@ -9,6 +9,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
@@ -341,13 +342,10 @@ public class EntityEventHandler {
 		}
 		if (flagEat || flagCure || heat > 0) {
 			itemstack.shrink(1);
-
 			// Play Animation
-
 			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.SUCCESS);
 		}
 
-		
 		ICapabilityProducingAnimal capProducing = entity.getCapability(ProviderProducingAnimal.CAP, null);
 		if (capProducing != null) {
 			EnumActionResult action = capProducing.interact(event, hand, itemstack);
@@ -356,8 +354,17 @@ public class EntityEventHandler {
 			}
 		}
 		
-		
+		return cancelEvent(item, itemstack, entity, tamingLevel);
+	}
+
+	private Pair<Boolean, EnumActionResult> cancelEvent(Item item, ItemStack itemstack, EntityAnimal entity, TamingLevel tamingLevel) {
+		// Skip Event. TODO Too Dirty Here.
 		// For horses, they do not implement isBreedingItem properly
+		if (entity instanceof EntityCow) {
+			if (item == Items.BUCKET) {
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
+		}
 		if (entity instanceof AbstractHorse) {
 			if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK) || item == Items.APPLE
 					|| item == Items.GOLDEN_CARROT || item == Items.GOLDEN_APPLE) {
@@ -391,10 +398,9 @@ public class EntityEventHandler {
 		if (entity.isBreedingItem(itemstack)) {
 			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 		}
-
 		return new Pair<Boolean, EnumActionResult>(false, null);
 	}
-
+	
 	private void eatFoodBonus(EntityAnimal entity, ICapabilityHungryAnimal capHungry, ICapabilityTamableAnimal capTaming, ItemStack item) {
 		// TODO It must merged with AI's eatFoodBonus to increase maintainance
 		if (item.isEmpty())
