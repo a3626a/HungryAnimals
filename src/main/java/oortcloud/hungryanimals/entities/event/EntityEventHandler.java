@@ -10,6 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
@@ -360,8 +361,13 @@ public class EntityEventHandler {
 	private Pair<Boolean, EnumActionResult> cancelEvent(Item item, ItemStack itemstack, EntityAnimal entity, TamingLevel tamingLevel) {
 		// Skip Event. TODO Too Dirty Here.
 		// For horses, they do not implement isBreedingItem properly
-		if (entity instanceof EntityCow) {
+		if (entity.getClass() == EntityCow.class) {
 			if (item == Items.BUCKET) {
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
+		}
+		if (entity.getClass() == EntityMooshroom.class) {
+			if (item == Items.BOWL) {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
 		}

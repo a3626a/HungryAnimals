@@ -32,36 +32,40 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 	private int delay;
 	private ItemStack emptyBucket;
 	private ItemStack filledBucket;
+	private boolean shouldAdult;
 	protected EntityAnimal animal;
 
 	private boolean prevCanProduce;
-	
+
 	String name;
 
-	public ProductionMilk(String name, EntityAnimal animal, int delay, ItemStack emptyBucket, ItemStack filledBucket) {
+	public ProductionMilk(String name, EntityAnimal animal, int delay, ItemStack emptyBucket, ItemStack filledBucket, boolean shouldAdult) {
 		this.name = name;
 		this.animal = animal;
 		this.delay = delay;
 		this.emptyBucket = emptyBucket;
 		this.filledBucket = filledBucket;
+		this.shouldAdult = shouldAdult;
 	}
 
 	@Override
 	public EnumActionResult interact(EntityInteract event, EnumHand hand, ItemStack itemstack) {
 		EntityPlayer player = event.getEntityPlayer();
 		if (canProduce()) {
-			if (itemstack.isItemEqual(emptyBucket)) {
-				player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
-				itemstack.shrink(1);
+			if (!shouldAdult || !animal.isChild()) {
+				if (itemstack.isItemEqual(emptyBucket)) {
+					player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+					itemstack.shrink(1);
 
-				if (itemstack.isEmpty()) {
-					player.setHeldItem(hand, filledBucket.copy());
-				} else if (!player.inventory.addItemStackToInventory(filledBucket.copy())) {
-					player.dropItem(filledBucket.copy(), false);
+					if (itemstack.isEmpty()) {
+						player.setHeldItem(hand, filledBucket.copy());
+					} else if (!player.inventory.addItemStackToInventory(filledBucket.copy())) {
+						player.dropItem(filledBucket.copy(), false);
+					}
+
+					resetCooldown();
+					return EnumActionResult.SUCCESS;
 				}
-
-				resetCooldown();
-				return EnumActionResult.SUCCESS;
 			}
 		}
 		return EnumActionResult.PASS;
@@ -105,10 +109,11 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 
 		String name = JsonUtils.getString(jsonObj, "name");
 		int delay = JsonUtils.getInt(jsonObj, "delay");
+		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 
-		return (animal) -> new ProductionMilk(name, animal, delay, input, output);
+		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult);
 	}
 
 	public void sync() {
@@ -136,5 +141,5 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 	public void readFrom(PacketEntityClient message) {
 		cooldown = message.getInt();
 	}
-	
+
 }

@@ -3,6 +3,7 @@
         "type" : "milk",
         "name" : "minecraft.cow.milk",
         "delay" : 300,
+        "should_adult" : true,
         "input" : {
         	"item" : "minecraft:bucket"
         },

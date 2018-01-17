@@ -1,2 +1,14 @@
 [
+    {
+        "type" : "milk",
+        "name" : "minecraft.llama.milk",
+        "delay" : 300,
+        "should_adult" : true,
+        "input" : {
+        	"item" : "minecraft:bucket"
+        },
+        "output" : {
+        	"item" : "minecraft:milk_bucket"
+        }
+    }
 ]

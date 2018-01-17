@@ -43,6 +43,9 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 				JsonElement json = null;
 				if (!iFile.exists()) {
 					json = HAPlugins.getInstance().getJson(Paths.get(descriptor, animalName+".json"));
+					
+					if (json == null)
+						continue;
 				} else {
 					json = (new JsonParser()).parse(new String(Files.readAllBytes(iFile.toPath())));
 				}

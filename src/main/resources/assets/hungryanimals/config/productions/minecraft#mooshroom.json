@@ -1,2 +1,14 @@
 [
+    {
+        "type" : "milk",
+        "name" : "minecraft.mooshroom.milk",
+        "delay" : 300,
+        "should_adult" : true,
+        "input" : {
+        	"item" : "minecraft:bowl"
+        },
+        "output" : {
+        	"item" : "minecraft:mushroom_stew"
+        }
+    }
 ]

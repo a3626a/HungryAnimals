@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
@@ -50,6 +51,7 @@ public class ProductionEgg implements IProductionTickable {
 
 	private void produce() {
 		if (!animal.getEntityWorld().isRemote) {
+			animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (animal.getRNG().nextFloat() - animal.getRNG().nextFloat()) * 0.2F + 1.0F);
 			animal.entityDropItem(stack.copy(), 0);
 		}
 	}
