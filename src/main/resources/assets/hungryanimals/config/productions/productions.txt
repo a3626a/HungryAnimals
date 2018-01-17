@@ -1,0 +1,69 @@
+################
+#HUNGRY ANIMALS#
+################
+
+"Production" is a representation of producing items.
+For example, laying eggs, milking can be interpreted as "Production"
+So, you can add various productions by this config.
+
+
+PRODUCTIONS
+-----------
+[
+    $production$,
+    $production$,
+    ...
+]
+
+
+$production$
+------------
+$milk$
+OR
+$egg$
+------------
+A type production like $milk$ or $egg$ is distinguished by "type" field.
+Every production must have "name" which is used to save data to disc.
+This name must be unique.
+
+
+$milk$
+------
+{
+    "type" : "milk",
+    "name" : $String$,
+    "delay" : $range$,
+    "should_adult" : $Boolean$,
+    "disable_sound" : $Boolean$,
+    "input" : $ItemStack$,
+    "output" : $ItemStack$
+}
+------
+Milk production is way of producing milk by Cow.
+You can specify "bucket" as "input", "milk" as "output".
+Additionally, you can also set "delay", "should_adult", "disable_sound"
+
+
+$egg$
+-----
+{
+    "type" : "egg",
+    "name" : $String$,
+    "delay" : $range$,
+    "should_adult" : $Boolean$,
+    "disable_sound" : $Boolean$,
+    "output" : $ItemStack$,
+}
+-----
+Egg production is way of producing egg by Chicken.
+You can specify "egg" as "output".
+Additionally, you can also set "delay", "should_adult", "disable_sound"
+
+$range$
+-------
+$Integer$
+OR
+{
+    "min" : $Integer$,
+    "max" : $Integer$
+}

@@ -23,16 +23,18 @@ public class ProductionEgg implements IProductionTickable {
 	private int cooldown;
 	private IRange delay;
 	private ItemStack stack;
+	private boolean shouldAdult;
 	private boolean disableSound;
 	protected EntityAnimal animal;
 
 	private String name;
 
-	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack, boolean disableSound) {
+	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack, boolean shouldAdult, boolean disableSound) {
 		this.name = name;
 		this.delay = delay;
 		this.animal = animal;
 		this.stack = stack;
+		this.shouldAdult = shouldAdult;
 		this.disableSound = disableSound;
 	}
 
@@ -41,8 +43,10 @@ public class ProductionEgg implements IProductionTickable {
 		cooldown--;
 
 		if (canProduce()) {
-			produce();
-			resetCooldown();
+			if (!shouldAdult || !animal.isChild()) {
+				produce();
+				resetCooldown();
+			}
 		}
 	}
 
@@ -93,13 +97,14 @@ public class ProductionEgg implements IProductionTickable {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
 		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
+		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
-		
-		return (animal) -> new ProductionEgg(name, animal, delay, stack, disableSound);
+
+		return (animal) -> new ProductionEgg(name, animal, delay, stack, shouldAdult, disableSound);
 	}
 
 	public int getCooldown() {
 		return cooldown;
 	}
-	
+
 }
