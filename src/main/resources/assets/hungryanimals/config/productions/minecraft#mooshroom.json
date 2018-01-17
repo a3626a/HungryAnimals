@@ -2,8 +2,12 @@
     {
         "type" : "milk",
         "name" : "minecraft.mooshroom.milk",
-        "delay" : 300,
+        "delay" : {
+            "min" : 300,
+            "max" : 400
+        },
         "should_adult" : true,
+        "disable_sound" : true,
         "input" : {
         	"item" : "minecraft:bowl"
         },

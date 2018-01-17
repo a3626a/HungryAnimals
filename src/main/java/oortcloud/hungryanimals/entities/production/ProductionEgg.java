@@ -14,21 +14,26 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.production.utils.IRange;
+import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
+import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
 
 public class ProductionEgg implements IProductionTickable {
 
 	private int cooldown;
-	private int delay;
+	private IRange delay;
 	private ItemStack stack;
+	private boolean disableSound;
 	protected EntityAnimal animal;
 
 	private String name;
 
-	public ProductionEgg(String name, EntityAnimal animal, int delay, ItemStack stack) {
+	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack, boolean disableSound) {
 		this.name = name;
 		this.delay = delay;
 		this.animal = animal;
 		this.stack = stack;
+		this.disableSound = disableSound;
 	}
 
 	@Override
@@ -46,12 +51,14 @@ public class ProductionEgg implements IProductionTickable {
 	}
 
 	private void resetCooldown() {
-		cooldown = delay;
+		cooldown = delay.get(animal);
 	}
 
 	private void produce() {
 		if (!animal.getEntityWorld().isRemote) {
-			animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (animal.getRNG().nextFloat() - animal.getRNG().nextFloat()) * 0.2F + 1.0F);
+			if (!disableSound) {
+				animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (animal.getRNG().nextFloat() - animal.getRNG().nextFloat()) * 0.2F + 1.0F);
+			}
 			animal.entityDropItem(stack.copy(), 0);
 		}
 	}
@@ -75,10 +82,24 @@ public class ProductionEgg implements IProductionTickable {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
-		int delay = JsonUtils.getInt(jsonObj, "delay");
+		IRange delay;
+		JsonElement jsonDelay = jsonObj.get("delay");
+		if (jsonDelay.isJsonObject()) {
+			JsonObject jsonObjDelay = jsonDelay.getAsJsonObject();
+			int min = JsonUtils.getInt(jsonObjDelay, "min");
+			int max = JsonUtils.getInt(jsonObjDelay, "max");
+			delay = new RangeRandom(min, max);
+		} else {
+			delay = new RangeConstant(jsonDelay.getAsInt());
+		}
 		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
-
-		return (animal) -> new ProductionEgg(name, animal, delay, stack);
+		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
+		
+		return (animal) -> new ProductionEgg(name, animal, delay, stack, disableSound);
 	}
 
+	public int getCooldown() {
+		return cooldown;
+	}
+	
 }

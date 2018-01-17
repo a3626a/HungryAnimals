@@ -25,27 +25,33 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.entities.production.utils.IRange;
+import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
+import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
 
 public class ProductionMilk implements IProductionInteraction, IProductionTickable, ISyncable {
 
 	private int cooldown;
-	private int delay;
+	private IRange delay;
 	private ItemStack emptyBucket;
 	private ItemStack filledBucket;
 	private boolean shouldAdult;
+	private boolean disableSound;
 	protected EntityAnimal animal;
 
 	private boolean prevCanProduce;
 
 	String name;
 
-	public ProductionMilk(String name, EntityAnimal animal, int delay, ItemStack emptyBucket, ItemStack filledBucket, boolean shouldAdult) {
+	public ProductionMilk(String name, EntityAnimal animal, IRange delay, ItemStack emptyBucket, ItemStack filledBucket, boolean shouldAdult,
+			boolean disableSound) {
 		this.name = name;
 		this.animal = animal;
 		this.delay = delay;
 		this.emptyBucket = emptyBucket;
 		this.filledBucket = filledBucket;
 		this.shouldAdult = shouldAdult;
+		this.disableSound = disableSound;
 	}
 
 	@Override
@@ -54,7 +60,9 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 		if (canProduce()) {
 			if (!shouldAdult || !animal.isChild()) {
 				if (itemstack.isItemEqual(emptyBucket)) {
-					player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+					if (!disableSound) {
+						player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+					}
 					itemstack.shrink(1);
 
 					if (itemstack.isEmpty()) {
@@ -86,7 +94,7 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 	}
 
 	private void resetCooldown() {
-		cooldown = delay;
+		cooldown = delay.get(animal);
 	}
 
 	@Override
@@ -108,12 +116,22 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
-		int delay = JsonUtils.getInt(jsonObj, "delay");
+		IRange delay;
+		JsonElement jsonDelay = jsonObj.get("delay");
+		if (jsonDelay.isJsonObject()) {
+			JsonObject jsonObjDelay = jsonDelay.getAsJsonObject();
+			int min = JsonUtils.getInt(jsonObjDelay, "min");
+			int max = JsonUtils.getInt(jsonObjDelay, "max");
+			delay = new RangeRandom(min, max);
+		} else {
+			delay = new RangeConstant(jsonDelay.getAsInt());
+		}
 		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
+		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 
-		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult);
+		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult, disableSound);
 	}
 
 	public void sync() {
@@ -142,4 +160,8 @@ public class ProductionMilk implements IProductionInteraction, IProductionTickab
 		cooldown = message.getInt();
 	}
 
+	public int getCooldown() {
+		return cooldown;
+	}
+	
 }

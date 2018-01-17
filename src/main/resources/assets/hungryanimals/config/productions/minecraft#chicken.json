@@ -2,7 +2,11 @@
     {
         "type" : "egg",
         "name" : "minecraft.chicken.egg",
-        "delay" : 300,
+        "delay" : {
+            "min" : 300,
+            "max" : 600
+        },
+        "disable_sound" : false,
         "output" : {
             "item" : "minecraft:egg"
         }
