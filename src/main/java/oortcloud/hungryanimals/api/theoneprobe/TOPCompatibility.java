@@ -15,9 +15,14 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.entities.production.IProduction;
+import oortcloud.hungryanimals.entities.production.ProductionEgg;
+import oortcloud.hungryanimals.entities.production.ProductionMilk;
 
 public class TOPCompatibility {
 
@@ -56,7 +61,8 @@ public class TOPCompatibility {
 
 					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
-
+					ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP, null);
+					
 					if (capHungry != null) {
 						probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float) capHungry.getWeight()));
 						probeInfo.horizontal().text("STOMACH").progress((int) capHungry.getStomach(), (int) capHungry.getMaxStomach(),
@@ -72,6 +78,20 @@ public class TOPCompatibility {
 							probeInfo.horizontal().text("TAMING").progress(prog, 200,
 									probeInfo.defaultProgressStyle().filledColor(0xFFFF0000).alternateFilledColor(0xFFFF0000).borderColor(0).showText(false));
 						}
+					}
+					if (capProducing != null) {
+						for (IProduction i : capProducing.getProductions()) {
+							if (i instanceof ProductionMilk) {
+								String text = String.format("Milk after %d seconds", ((ProductionMilk)i).getCooldown());
+								probeInfo.horizontal().text(text);
+							}
+							if (i instanceof ProductionEgg) {
+								String text = String.format("Egg after %d seconds", ((ProductionEgg)i).getCooldown());
+								probeInfo.horizontal().text(text);
+							}
+							
+						}
+						
 					}
 				}
 			});
