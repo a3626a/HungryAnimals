@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -174,6 +175,10 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		
 		double stomach = pref.getStomach(block);
 		capHungry.addStomach(stomach);
+		
+		if (entity instanceof EntitySheep) {
+			entity.eatGrassBonus();
+		}
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
