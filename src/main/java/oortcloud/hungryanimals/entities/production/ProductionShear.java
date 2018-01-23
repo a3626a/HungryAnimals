@@ -6,81 +6,51 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
 import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
 import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
 
-public class ProductionEgg implements IProductionTickable {
+public class ProductionShear extends ProductionInteraction {
 
-	private int cooldown;
-	private IRange delay;
-	private ItemStack stack;
+	private ItemStack input;
+	private ItemStack output;
+	private int damage;
 	private boolean shouldAdult;
 	private boolean disableSound;
-	protected EntityAnimal animal;
 
-	private String name;
-
-	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack, boolean shouldAdult, boolean disableSound) {
-		this.name = name;
-		this.delay = delay;
-		this.animal = animal;
-		this.stack = stack;
+	public ProductionShear(String name, EntityAnimal animal, IRange delay, ItemStack tool, ItemStack wool, int damage, boolean shouldAdult,
+			boolean disableSound) {
+		super(name, animal, delay);
+		this.input = tool;
+		this.output = wool;
+		this.damage = damage;
 		this.shouldAdult = shouldAdult;
 		this.disableSound = disableSound;
-		resetCooldown();
 	}
 
 	@Override
-	public void update() {
-		cooldown--;
-
+	public EnumActionResult interact(EntityInteract event, EnumHand hand, ItemStack itemstack) {
+		EntityPlayer player = event.getEntityPlayer();
 		if (canProduce()) {
 			if (!shouldAdult || !animal.isChild()) {
-				produce();
-				resetCooldown();
+				if (itemstack.isItemEqual(input)) {
+				}
 			}
 		}
-	}
-
-	private boolean canProduce() {
-		return cooldown <= 0;
-	}
-
-	private void resetCooldown() {
-		cooldown = delay.get(animal);
-	}
-
-	private void produce() {
-		if (!animal.getEntityWorld().isRemote) {
-			if (!disableSound) {
-				animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (animal.getRNG().nextFloat() - animal.getRNG().nextFloat()) * 0.2F + 1.0F);
-			}
-			animal.entityDropItem(stack.copy(), 0);
-		}
-	}
-
-	@Override
-	public NBTBase writeNBT() {
-		return new NBTTagInt(cooldown);
-	}
-
-	@Override
-	public void readNBT(NBTBase nbt) {
-		cooldown = ((NBTTagInt) nbt).getInt();
-	}
-
-	@Override
-	public String getName() {
-		return name;
+		return EnumActionResult.PASS;
 	}
 
 	public static Function<EntityAnimal, IProduction> parse(JsonElement jsonEle) {
@@ -97,15 +67,12 @@ public class ProductionEgg implements IProductionTickable {
 		} else {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
-		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
+		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
+		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 
-		return (animal) -> new ProductionEgg(name, animal, delay, stack, shouldAdult, disableSound);
+		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult, disableSound);
 	}
-
-	public int getCooldown() {
-		return cooldown;
-	}
-
 }
+

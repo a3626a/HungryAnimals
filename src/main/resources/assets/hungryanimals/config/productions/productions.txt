@@ -4,7 +4,7 @@
 
 "Production" is a representation of producing items.
 For example, laying eggs, milking can be interpreted as "Production"
-So, you can add various productions by this config.
+So, you can add various productions using this config.
 
 
 PRODUCTIONS
@@ -24,7 +24,7 @@ $egg$
 ------------
 A type production like $milk$ or $egg$ is distinguished by "type" field.
 Every production must have "name" which is used to save data to disc.
-This name must be unique.
+This "name" must be unique.
 
 
 $milk$
@@ -39,9 +39,10 @@ $milk$
     "output" : $ItemStack$
 }
 ------
-Milk production is way of producing milk by Cow.
+Milk production is way of producing milk like Cow.
 You can specify "bucket" as "input", "milk" as "output".
 Additionally, you can also set "delay", "should_adult", "disable_sound"
+* There's no limitation on "input"/"output", you can specify anything.
 
 
 $egg$
@@ -55,9 +56,11 @@ $egg$
     "output" : $ItemStack$,
 }
 -----
-Egg production is way of producing egg by Chicken.
+Egg production is way of producing egg like Chicken.
 You can specify "egg" as "output".
 Additionally, you can also set "delay", "should_adult", "disable_sound"
+* There's no limitation on "output", you can specify anything.
+
 
 $range$
 -------
