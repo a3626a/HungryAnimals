@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -81,16 +82,23 @@ public class ClientRenderEventHandler {
 	
 	@SubscribeEvent
 	public void renderDebugGlassEntity(RenderLivingEvent.Post<EntityPlayer> event) {
-
+		// TODO RenderLivingEvent.Post<EntityPlayer> is called to draw Player, or by Player?
+		
 		float radius = 0.5F;
 		float height = 0.7F;
-
-		EntityPlayer entity = (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity();
+		 
+		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
 		if (entity == null)
 			return;
 		
+		if (!(entity instanceof EntityPlayer)) {
+			return;
+		}
+		
+		EntityPlayer player = (EntityPlayer)entity;
+		
 		EntityLivingBase animal = event.getEntity();
-		ItemStack stack = entity.getHeldItemMainhand();
+		ItemStack stack = player.getHeldItemMainhand();
 		if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
