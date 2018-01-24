@@ -7,10 +7,8 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.JsonUtils;
@@ -18,11 +16,15 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
 import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
 import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
 
+/**
+ * This Production is different from IShearable
+ * @author LeeChangHwan
+ *
+ */
 public class ProductionShear extends ProductionInteraction {
 
 	private ItemStack input;
@@ -47,6 +49,12 @@ public class ProductionShear extends ProductionInteraction {
 		if (canProduce()) {
 			if (!shouldAdult || !animal.isChild()) {
 				if (itemstack.isItemEqual(input)) {
+					animal.entityDropItem(output.copy(), 1.0F);
+					itemstack.damageItem(damage, player);
+					if (!disableSound) {
+						animal.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+					}
+					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
@@ -67,12 +75,13 @@ public class ProductionShear extends ProductionInteraction {
 		} else {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
+		int damage = JsonUtils.getInt(jsonObj, "damage");
 		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 
-		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult, disableSound);
+		return (animal) -> new ProductionShear(name, animal, delay, input, output, damage, shouldAdult, disableSound);
 	}
 }
 

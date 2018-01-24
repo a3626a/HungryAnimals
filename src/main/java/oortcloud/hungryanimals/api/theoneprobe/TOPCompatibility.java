@@ -23,6 +23,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.ProductionEgg;
 import oortcloud.hungryanimals.entities.production.ProductionMilk;
+import oortcloud.hungryanimals.entities.production.ProductionShear;
 
 public class TOPCompatibility {
 
@@ -89,7 +90,10 @@ public class TOPCompatibility {
 								String text = String.format("Egg after %d seconds", ((ProductionEgg)i).getCooldown());
 								probeInfo.horizontal().text(text);
 							}
-							
+							if (i instanceof ProductionShear) {
+								String text = String.format("Shearing after %d seconds", ((ProductionShear)i).getCooldown());
+								probeInfo.horizontal().text(text);
+							}
 						}
 						
 					}
