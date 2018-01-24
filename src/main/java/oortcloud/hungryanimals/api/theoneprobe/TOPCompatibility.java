@@ -83,16 +83,13 @@ public class TOPCompatibility {
 					if (capProducing != null) {
 						for (IProduction i : capProducing.getProductions()) {
 							if (i instanceof ProductionMilk) {
-								String text = String.format("Milk after %d seconds", ((ProductionMilk)i).getCooldown());
-								probeInfo.horizontal().text(text);
+								probeInfo.horizontal().text(getMessage("Milk", ((ProductionMilk)i).getCooldown()));
 							}
 							if (i instanceof ProductionEgg) {
-								String text = String.format("Egg after %d seconds", ((ProductionEgg)i).getCooldown());
-								probeInfo.horizontal().text(text);
+								probeInfo.horizontal().text(getMessage("Egg", ((ProductionEgg)i).getCooldown()));
 							}
 							if (i instanceof ProductionShear) {
-								String text = String.format("Shearing after %d seconds", ((ProductionShear)i).getCooldown());
-								probeInfo.horizontal().text(text);
+								probeInfo.horizontal().text(getMessage("Shearing", ((ProductionShear)i).getCooldown()));
 							}
 						}
 						
@@ -100,6 +97,13 @@ public class TOPCompatibility {
 				}
 			});
 			return null;
+		}
+		
+		public static String getMessage(String name, int delay) {
+			if (delay < 0) {
+				return String.format("%s now", name);
+			}
+			return String.format("%s after %d seconds", name, delay);
 		}
 	}
 }
