@@ -9,6 +9,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
@@ -68,6 +69,12 @@ public class EntityEventHandler {
 
 		if (!entity.getEntityWorld().isRemote)
 			AIContainers.getInstance().apply(entity);
+		
+		// Disable Vanilla Egg Drop
+		if (entity instanceof EntityChicken) {
+			EntityChicken chicken = (EntityChicken) entity;
+			chicken.timeUntilNextEgg = Integer.MAX_VALUE;
+		}
 	}
 
 	@SubscribeEvent
