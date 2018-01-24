@@ -21,8 +21,10 @@ $production$
 $milk$
 OR
 $egg$
+OR
+$shear$
 ------------
-A type production like $milk$ or $egg$ is distinguished by "type" field.
+A type production like $milk$, $egg$, or $shear$ is distinguished by "type" field.
 Every production must have "name" which is used to save data to disc.
 This "name" must be unique.
 
@@ -60,6 +62,48 @@ Egg production is way of producing egg like Chicken.
 You can specify "egg" as "output".
 Additionally, you can also set "delay", "should_adult", "disable_sound"
 * There's no limitation on "output", you can specify anything.
+
+
+$shear$
+-------
+{
+    "type" : "shear",
+    "name" : $String$,
+    "delay" : $range$,
+    "should_adult" : $Boolean$,
+    "disable_sound" : $Boolean$,
+    "damage" : $Integer$,
+    "input" : $ItemStack$,
+    "output" : $ItemStack$
+}
+-------
+Shearing production is way of producing wool like Sheep.
+You can specify "wool" as "output", "shears" as "input".
+"damage" determines durability cost per shearing.
+* There's no limitation on "output", you can specify anything.
+  For "input", it must be damagable, like equipment.
+
+
+EXAMPLE
+{
+    "type" : "shear",
+    "name" : "minecraft.llama.shear",
+    "delay" : {
+        "min" : 15,
+        "max" : 30
+    },
+    "should_adult" : true,
+    "disable_sound" : false,
+    "damage" : 2,
+    "input" : {
+    	"item" : "minecraft:shears"
+    },
+    "output" : {
+    	"item" : "minecraft:string"
+    }
+}
+------
+This production above, produces string from llama with shears.
 
 
 $range$

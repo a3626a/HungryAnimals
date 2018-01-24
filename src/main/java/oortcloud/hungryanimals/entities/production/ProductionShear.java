@@ -48,12 +48,15 @@ public class ProductionShear extends ProductionInteraction {
 		EntityPlayer player = event.getEntityPlayer();
 		if (canProduce()) {
 			if (!shouldAdult || !animal.isChild()) {
-				if (itemstack.isItemEqual(input)) {
-					animal.entityDropItem(output.copy(), 1.0F);
-					itemstack.damageItem(damage, player);
-					if (!disableSound) {
-						animal.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+				if (!input.isEmpty() && itemstack.getItem() == input.getItem()) {
+					if (!animal.getEntityWorld().isRemote) {
+						animal.entityDropItem(output.copy(), 1.0F);
+						itemstack.damageItem(damage, player);
+						if (!disableSound) {
+							animal.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+						}
 					}
+					resetCooldown();
 					return EnumActionResult.SUCCESS;
 				}
 			}
@@ -84,4 +87,3 @@ public class ProductionShear extends ProductionInteraction {
 		return (animal) -> new ProductionShear(name, animal, delay, input, output, damage, shouldAdult, disableSound);
 	}
 }
-

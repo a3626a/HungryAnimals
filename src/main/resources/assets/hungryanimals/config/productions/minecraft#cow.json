@@ -14,22 +14,5 @@
         "output" : {
         	"item" : "minecraft:milk_bucket"
         }
-    },
-    {
-        "type" : "shear",
-        "name" : "minecraft.cow.shear",
-        "delay" : {
-            "min" : 800,
-            "max" : 1000
-        },
-        "should_adult" : true,
-        "disable_sound" : false,
-        "damage" : 2,
-        "input" : {
-        	"item" : "minecraft:shears"
-        },
-        "output" : {
-        	"item" : "minecraft:leather"
-        }
     }
 ]

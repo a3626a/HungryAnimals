@@ -42,17 +42,18 @@ public class ProductionMilk extends ProductionInteraction {
 		if (canProduce()) {
 			if (!shouldAdult || !animal.isChild()) {
 				if (itemstack.isItemEqual(emptyBucket)) {
-					if (!disableSound) {
-						player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
-					}
-					itemstack.shrink(1);
+					if (!animal.getEntityWorld().isRemote) {
+						if (!disableSound) {
+							player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+						}
+						itemstack.shrink(1);
 
-					if (itemstack.isEmpty()) {
-						player.setHeldItem(hand, filledBucket.copy());
-					} else if (!player.inventory.addItemStackToInventory(filledBucket.copy())) {
-						player.dropItem(filledBucket.copy(), false);
+						if (itemstack.isEmpty()) {
+							player.setHeldItem(hand, filledBucket.copy());
+						} else if (!player.inventory.addItemStackToInventory(filledBucket.copy())) {
+							player.dropItem(filledBucket.copy(), false);
+						}
 					}
-
 					resetCooldown();
 					return EnumActionResult.SUCCESS;
 				}
