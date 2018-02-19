@@ -346,11 +346,11 @@ public class ConfigurationHandler {
 
 	public static String resourceLocationToString(ResourceLocation location) {
 		String stringLocation = location.toString();
-		return stringLocation.replace(':', '#');
+		return stringLocation.replace(':', '#').replace('/', '@');
 	}
 
 	public static ResourceLocation stringToResourceLocation(String location) {
-		return new ResourceLocation(location.replace('#', ':'));
+		return new ResourceLocation(location.replace('#', ':').replace('@', '/'));
 	}
 
 	private static void createExample(File basefolder) throws IOException, URISyntaxException {
