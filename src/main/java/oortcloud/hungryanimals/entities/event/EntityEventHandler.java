@@ -13,6 +13,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -395,7 +396,6 @@ public class EntityEventHandler {
 				if (tamingLevel != TamingLevel.TAMED) {
 					// For ocelots, to disable feed fish before tamed
 					return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
-
 				} else {
 					if (!((EntityTameable) entity).isTamed()) {
 						// Can feed wild(Vanilla) animal fish
@@ -406,6 +406,14 @@ public class EntityEventHandler {
 					}
 				}
 			}
+		}
+		if (entity instanceof EntitySheep) {
+			/*
+			if (item == Items.SHEARS) {
+				// TODO How to disable all 'shearing' items...!
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
+			*/
 		}
 		// Skipping Event to Entity
 		if (entity.isBreedingItem(itemstack)) {
