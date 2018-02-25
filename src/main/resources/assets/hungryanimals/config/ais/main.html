@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<title>Hungry Animals Config Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../style.css">
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="#" class="w3-bar-item w3-button w3-theme-l1">Categories</a>
+    <a href="../main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
+    <a href="../attributes/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Attributes</a>
+    <a href="../ais/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">AIs</a>
+    <a href="../productions/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Productions</a>
+    <a href="../food_preferences/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Food Preferences</a>
+    <a href="../recipes/animalglue.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Recipes</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="#">AIs</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Introduction</h1>
+      <p>AI of an animal is defined by a AI container and AI modifiers. AI containers decide category of AI, like "herbivore" or "wolf". AI modifiers change details of AI container. AI modifiers are applicable to specific AI containers.</p>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Grammar</h1>
+<pre>
+<code class="ha-replacement">"attributes/modid#animal.json"</code> : 
+    {
+        "type" : <a href="#ai_container" class="ha-replacement">ai_container</a>,
+        <a href="#ai_modifier" class="ha-replacement">ai_modifier</a>,
+        <a href="#ai_modifier" class="ha-replacement">ai_modifier</a>,
+        ...
+    }
+</pre>
+<pre>
+<a id="ai_container" class="ha-replacement">ai_container</a> :
+    "herbivore" |
+    "rabbit" |
+    "wolf"
+</pre>
+<pre>
+<a id="ai_modifier" class="ha-replacement">ai_modifier</a> :
+    "attack_melee" : {
+        "speed" : <a class="ha-replacement">double</a>,
+        "use_long_memory" : <a class="ha-replacement">boolean</a>
+    }
+    |
+    "avoid_player" : {
+        "radius" : <a class="ha-replacement">double</a>,
+        "farspeed" : <a class="ha-replacement">double</a>,
+        "nearspeed" : <a class="ha-replacement">double</a>
+    }
+    |
+    "mate" :{
+        "speed" : <a class="ha-replacement">double</a>
+    }
+    |
+    "trough" : {
+        "speed" : <a class="ha-replacement">double</a>
+    }
+    |
+    "tempt" : {
+        "speed" : <a class="ha-replacement">double</a>,
+        "scared_by" : <a class="ha-replacement">boolean</a>,
+        "items" : <a class="ha-replacement" href="../miscellaneous.html#ingredient">ingredient</a> | [<a class="ha-replacement" href="../miscellaneous.html#ingredient">ingredient</a>, ...]
+    }
+    |
+    "tempt_edible" : {
+        "speed" : <a class="ha-replacement">double</a>,
+        "scared_by" : <a class="ha-replacement">boolean</a>
+    }
+    |
+    "eat_item" : {
+        "speed" : <a class="ha-replacement">double</a>
+    }
+    |
+    "eat_block" : {
+        "speed" : <a class="ha-replacement">double</a>
+    }
+    |
+    "hurt_by_player" : {
+        "call_help" : <a class="ha-replacement">boolean</a>
+    }
+    |
+    "hunt_non_tamed" : {
+        "chance" : <a class="ha-replacement">integer</a>,
+        "check_sight" : <a class="ha-replacement">boolean</a>,
+        "only_nearby" : <a class="ha-replacement">boolean</a>,
+        "herding" : <a class="ha-replacement">boolean</a>
+    }
+    |
+    "hunt" : {
+        "chance" : <a class="ha-replacement">integer</a>,
+        "check_sight" : <a class="ha-replacement">boolean</a>,
+        "only_nearby" : <a class="ha-replacement">boolean</a>,
+        "herding" : <a class="ha-replacement">boolean</a>
+    }
+</pre>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Usage</h1>
+      <p>There are 3 <a href="#ai_container" class="ha-replacement">ai_container</a>s, <code>"herbivore"</code>, <code>"rabbit"</code>, and <code>"wolf"</code>. <a href="#ai_container" class="ha-replacement">ai_container</a> removes Vanilla AIs, and determines possible <a href="#ai_modifier" class="ha-replacement">ai_modifier</a>s. <code>"herbivore"</code> removes Vanilla AIs such like being tempted, mating, eating grass. <code>"rabbit"</code> is similar to <code>"herbivore"</code>. It removes Vanilla AIs specialized to rabbit. <code>"wolf"</code> removes Vanilla AIs mentioned above, and hunting.</p>
+      <table>
+        <tr>
+          <th><a href="#ai_container" class="ha-replacement">ai_container</a></th>
+          <th><code>"attack_melee"</code></th>
+          <th><code>"avoid_player"</code></th>
+          <th><code>"hurt_by_player"</code></th>
+          <th><code>"hunt_non_tamed"</code></th>
+          <th><code>"hunt"</code></th>
+          <th><code>"mate"</code></th>
+          <th><code>"trough"</code></th>
+          <th><code>"tempt"</code></th>
+          <th><code>"tempt_edible"</code></th>
+          <th><code>"eat_item"</code></th>
+          <th><code>"eat_block"</code></th>
+        </tr>
+        <tr>
+          <th><code>"herbivore"</code></th>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>X</td>
+          <td>X</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+        </tr>
+        <tr>
+          <th><code>"rabbit"</code></th>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>X</td>
+          <td>X</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+        </tr>
+        <tr>
+          <th><code>"wolf"</code></th>
+          <td>X</td>
+          <td>X</td>
+          <td>X</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+          <td>O</td>
+        </tr>
+      </table>
+      <p>Each <a href="#ai_modifier" class="ha-replacement">ai_modifier</a> has parameters, to indicate details like speed, and conditions. Following lists are explanations of <a href="#ai_modifier" class="ha-replacement">ai_modifier</a>s and their parameters.</p>
+      <p><code>"attack_melee"</code> : The animal attacks target while moving at <code>"speed"</code>. This AI requires another targeting AI like <code>"hurt_by_player"</code>. If <code>"use_long_memory"</code> is true, the animals will keep attacking target even if the animals can not reach the target.</p>
+      <p><code>"avoid_player"</code> : The animal flees from player when the animal is wild. it flees when distance to the player is less than <code>"radius"</code>. It moves at <code>"farspeed"</code> if distance to the player is more than 7m, at <code>"nearspeed"</code> otherwise.</p>
+      <p><code>"mate"</code> : The animal mates with other animal while moving at <code>"speed"</code>.</p>
+      <p><code>"trough"</code> : The animal eats item inside trough while moving at <code>"speed"</code>.</p>
+      <p><code>"tempt"</code> : The animal is tempted by <code>"items"</code> while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>
+      <p><code>"tempt_edible"</code> : The animal is tempted by edible items (food preferences) while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>
+      <p><code>"eat_item"</code> : The animal eats fallen items while moving at <code>"speed"</code>.</p>
+      <p><code>"eat_block"</code> : The animal eats blocks while moving at <code>"speed"</code>.</p>
+      <p><code>"hurt_by_player"</code> : The animal targets the attacker (player only), this target is used by <code>"attack_melee"</code>. If <code>"call_help"</code> is true, animals nearby target the attacker, too.</p>
+      <p><code>"hunt_non_tamed"</code> : The animal hunts animals (food preferences) when hungry, when not tamed (in Vanilla). <code>"chance"</code> decides how frequently it hunts(1 -> 100%, 10 -> 10% ...). If <code>"check_sight"</code> is true, only hunts animals in sight. If <code>"only_nearby"</code> is true, only hunts animals nearby. If <code>"herding"</code> is true, hunts with other carnivores nearby. This <a href="#ai_modifier" class="ha-replacement">ai_modifier</a> can not be used with <code>"hunt"</code> at the same time.</p>
+      <p><code>"hunt"</code> : The animal hunts animals (food preferences) when hungry, when not tamed (in Vanilla). <code>"chance"</code> decides how frequently it hunts(1 -> 100%, 10 -> 10% ...). If <code>"check_sight"</code> is true, only hunts animals in sight. If <code>"only_nearby"</code> is true, only hunts animals nearby. If <code>"herding"</code> is true, hunts with other carnivores nearby. This <a href="#ai_modifier" class="ha-replacement">ai_modifier</a> can not be used with <code>"hunt_non_tamed"</code> at the same time.</p>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

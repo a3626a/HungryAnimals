@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<title>Hungry Animals Config Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../style.css">
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="#" class="w3-bar-item w3-button w3-theme-l1">Categories</a>
+    <a href="../main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
+    <a href="../attributes/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Attributes</a>
+    <a href="../ais/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">AIs</a>
+    <a href="../productions/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Productions</a>
+    <a href="../food_preferences/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Food Preferences</a>
+    <a href="../recipes/animalglue.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Recipes</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="#">attributes</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Introduction</h1>
+      <p>'attributes/modid#animal.json' registers, or modifies attributes of the animal.</p>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Grammar</h1>
+
+<pre>
+<code class="ha-replacement">"attributes/modid#animal.json"</code> : 
+    {
+        <a href="#attribute" class="ha-replacement">attribute</a> : <a href="#attribute_value" class="ha-replacement">attribute_value</a>,
+        ...
+    }
+</pre>
+<pre>
+<a id="attribute" class="ha-replacement">attribute</a> :
+    "hungryanimals.hunger_weight_bmr" |
+    "hungryanimals.hunger_weight_normal" |
+    "hungryanimals.hunger_weight_normal_child" |
+    "hungryanimals.hunger_stomach_digest" |
+    "hungryanimals.hunger_stomach_max" |
+    "hungryanimals.courtship_weight" |
+    "hungryanimals.courtship_probability" |
+    "hungryanimals.courtship_stomach_condition" |
+    "hungryanimals.excretion_factor" |
+    "hungryanimals.child_delay" |
+    "hungryanimals.child_growing_length" |
+    "hungryanimals.taming_factor_near_tamed" |
+    "hungryanimals.taming_factor_near_wild" |
+    "hungryanimals.taming_factor_food" |
+    "generic.maxHealth" |
+    "generic.movementSpeed" |
+    "generic.knockbackResistance" |
+    "generic.armor" |
+    "generic.armorToughness" |
+    "generic.followRange" |
+    "generic.attackDamage" |
+    "generic.flyingSpeed" |
+    "generic.attackSpeed" |
+    "generic.luck"
+</pre>
+<pre>
+<a id="attribute_value" class="ha-replacement">attribute_value</a> :
+    {
+        "value" : <a class="ha-replacement">double</a>,
+        "should_register" : <a class="ha-replacement">boolean</a>
+    }
+    |
+    <a class="ha-replacement">double</a>
+</pre>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Usage</h1>
+      <p><code>"value"</code> determines base value of the attribute,
+<code>"should_register"</code> determines this attribute should be registered by HA.
+<code>"should_register"</code> must be true, if no other mods (including Vanilla) register the attribute,
+<code>"should_register"</code> must be false, if other mods (including Vanilla) register the attribute.
+
+<code>"should_register"</code> can be omitted like :</p>
+<pre>
+{
+    <a href="#attribute" class="ha-replacement">attribute</a> : <a class="ha-replacement">double</a>,
+    ...
+}
+</pre>
+<p>Then, assigned <code><a class="ha-replacement">double</a></code> value is used as <code>"value"</code> field, and default <code>"should_register"</code> of the <code><a href="#attribute" class="ha-replacement">attribute</a></code> is used.
+This default values work very well, but there's a exception.
+In case of <code>"generic.attackDamage"</code>,
+    <code>"should_register"</code> should be false for <code>"minecraft#wolf"</code>, (because <code>"generic.attackDamage"</code> is registered by Minecraft)
+    <code>"should_register"</code> should be true for <code>"minecraft#cow"</code>,
+Therefore, default value of <code>"should_register"</code> for <code>"minecraft#wolf"</code> will crash Minecraft.<br/><br/>
+
+The default <code>"should_register"</code> values are :<br/>
+<code>"hungryanimals.*"</code> : true <small>(every attributes added by Hungry Animals)</small><br/>
+<code>"generic.maxHealth"</code> : false<br/>
+<code>"generic.movementSpeed"</code> : false<br/>
+<code>"generic.knockbackResistance"</code> : false<br/>
+<code>"generic.armor"</code> : false<br/>
+<code>"generic.armorToughness"</code> : false<br/>
+<code>"generic.followRange"</code> : false<br/>
+<code>"generic.attackDamage"</code> : true<br/>
+<code>"generic.flyingSpeed"</code> : true<br/>
+<code>"generic.attackSpeed"</code> : true<br/>
+<code>"generic.luck"</code> : true<br/>
+</p>
+    </div>
+  </div>
+
+
+
+
+
+    </div>
+  </div>
+
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

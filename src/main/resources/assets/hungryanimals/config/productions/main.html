@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<title>Hungry Animals Config Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../style.css">
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="#" class="w3-bar-item w3-button w3-theme-l1">Categories</a>
+    <a href="../main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
+    <a href="../attributes/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Attributes</a>
+    <a href="../ais/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">AIs</a>
+    <a href="../productions/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Productions</a>
+    <a href="../food_preferences/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Food Preferences</a>
+    <a href="../recipes/animalglue.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Recipes</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="#">productions</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Introduction</h1>
+      <p>"Production" is a representation of producing items. For example, laying eggs, milking can be interpreted as "Production". So, you can add various productions using this config.</p>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Grammar</h1>
+<pre>
+<a class="ha-replacement">"productions/modid#animal.json"</a> : 
+    [
+        <a href="#production" class="ha-replacement">production</a>,
+        <a href="#production" class="ha-replacement">production</a>,
+        ...
+    ]
+    
+<a id="production" class="ha-replacement">production</a> :
+    <a href="#milk" class="ha-replacement">milk</a>
+    |
+    <a href="#egg" class="ha-replacement">egg</a>
+    |
+    <a href="#shear" class="ha-replacement">shear</a>
+    
+<a id="milk" class="ha-replacement">milk</a> :
+    {
+        "type" : "milk",
+        "name" : <a class="ha-replacement">string</a>,
+        "delay" : <a href="#range" class="ha-replacement">range</a>,
+        "should_adult" : <a class="ha-replacement">boolean</a>,
+        "disable_sound" : <a class="ha-replacement">boolean</a>,
+        "input" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>,
+        "output" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>
+    }
+    
+<a id="egg" class="ha-replacement">egg</a> :
+    {
+        "type" : "egg",
+        "name" : <a class="ha-replacement">string</a>,
+        "delay" : <a href="#range" class="ha-replacement">range</a>,
+        "should_adult" : <a class="ha-replacement">boolean</a>,
+        "disable_sound" : <a class="ha-replacement">boolean</a>,
+        "output" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>,
+    }
+
+<a id="shear" class="ha-replacement">shear</a> :
+    {
+        "type" : "shear",
+        "name" : <a class="ha-replacement">string</a>,
+        "delay" : <a href="#range" class="ha-replacement">range</a>,
+        "should_adult" : <a class="ha-replacement">boolean</a>,
+        "disable_sound" : <a class="ha-replacement">boolean</a>,
+        "damage" : <a class="ha-replacement">integer</a>,
+        "input" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>,
+        "output" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>
+    }
+
+<a id="range" class="ha-replacement">range</a> :
+    <a class="ha-replacement">integer</a>
+    |
+    {
+        "min" : <a class="ha-replacement">integer</a>,
+        "max" : <a class="ha-replacement">integer</a>
+    }
+</pre>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Usage</h1>
+      <p>A type production like <a href="#milk" class="ha-replacement">milk</a>, <a href="#egg" class="ha-replacement">egg</a>, or <a href="#shear" class="ha-replacement">shear</a> is distinguished by <code>"type"</code> field. Every production must have <code>"name"</code> which is used to save data to disc. This <code>"name"</code> must be unique.</p>
+      <p><a href="#milk" class="ha-replacement">milk</a> production is way of producing milk like Cow. You can specify "bucket" as <code>"input"</code>, "milk" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"should_adult"</code>, <code>"disable_sound"</code>.<br>* <code>"input"</code>/<code>"output"</code> don't have to be buckets, you can specify anything.</p>
+      <p><a href="#egg" class="ha-replacement">egg</a> production is way of producing egg like Chicken. You can specify "egg" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"should_adult"</code>, <code>"disable_sound"</code>.<br>* There's no limitation on <code>"output"</code>, you can specify anything.</p>
+      <p><a href="#shear" class="ha-replacement">shear</a> production is way of producing wool like Sheep. You can specify "wool" as <code>"output"</code>, "shears" as <code>"input"</code>. <code>"damage"</code> determines durability cost per shearing.<br>* There's no limitation on <code>"output"</code>, you can specify anything. For <code>"input"</code>, it must be damagable, like tools or equipments.</p>
+      <p><a href="#range" class="ha-replacement">range</a> determines delay or cooldown of productions. <a href="#range" class="ha-replacement">range</a> with one <a class="ha-replacement">integer</a> value always has fixed cooldown in <a class="ha-replacement">integer</a> seconds. <a href="#range" class="ha-replacement">range</a> with <code>"min"</code> and <code>"max"</code> field has random cooldown between <code>"min"</code> and <code>"max"</code> seconds.</p>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Example</h1>
+<pre>
+    {
+        "type" : "shear",
+        "name" : "minecraft.llama.shear",
+        "delay" : {
+            "min" : 15,
+            "max" : 30
+        },
+        "should_adult" : true,
+        "disable_sound" : false,
+        "damage" : 2,
+        "input" : {
+            "item" : "minecraft:shears"
+        },
+        "output" : {
+            "item" : "minecraft:string"
+        }
+    }
+</pre>
+      <p>This production above, produces string from llama by using shears.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

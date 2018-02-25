@@ -2,37 +2,4 @@
 #HUNGRY ANIMALS#
 ################
 
-'animal.json' contains list of the names of animals 
-that will be registered to Hungry Animals.
-
-[
-    $hungry_animal_entry$,
-    $hungry_animal_entry$,
-    ...
-]
-
-$hungry_animal_entry$
----------------------
-$String$
-OR
-{
-    "name" : $String$,
-    "disable_taming" : $Boolean$
-}
-
-
-if "disable_taming" is true, then taming is disabled for the animal
-
-Example)
-[
-    {
-        "name" : "minecraft:cow"
-        "disable_taming" : true
-    },
-    "minecraft:chicken"
-]
-
-Cow and Chicken are registered, but cow's taming is disabled.
-"Disabling taming" is to consider cow as tamed always.
-
-Read console logs, or use Debug Glass in game to get name of an animal.
+see animal.html

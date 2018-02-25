@@ -2,9 +2,4 @@
 #HUNGRY ANIMALS#
 ################
 
-"multiply_weigth_bmr" : multiply to weigth bmr of patient
-"multiply_movement_speed" : multiply to movement speed of patient
-
-For example,
-+3.0 : +300%
--0.2 : -20%
+see disease.html

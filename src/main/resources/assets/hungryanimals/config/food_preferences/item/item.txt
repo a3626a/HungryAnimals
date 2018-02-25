@@ -2,8 +2,4 @@
 #HUNGRY ANIMALS#
 ################
 
-Each 'modid#name.json' contains list of 'Ingredients' and nutrient/stomach value it gives.
-
-* Ingredients
-  Ingredient is generalization of item object used in json based crafting recipe
-  It allows use ore dict, nbt, and so on
+see 'food_preferences/item/item.html'.

@@ -2,4 +2,4 @@
 #HUNGRY ANIMALS#
 ################
 
-'cures.json' contains list of 'Ingredient' which can cure disease
+see cures.html

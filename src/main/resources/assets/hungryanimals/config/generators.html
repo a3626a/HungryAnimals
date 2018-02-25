@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<title>Hungry Animals Config Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="style.css">
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a class="w3-bar-item w3-button w3-theme-l1">Categories</a>
+    <a href="main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Home</a>
+    <a href="attributes/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Attributes</a>
+    <a href="ais/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">AIs</a>
+    <a href="productions/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Productions</a>
+    <a href="food_preferences/main.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Food Preferences</a>
+    <a href="recipes/animalglue.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Recipes</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="animal.html">Animal Registry</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="cures.html">Cure Registry</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="inheat.html">Inheat Item Registry</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="disease.html">Disease Effect</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="overeat.html">Overeat Effect</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="generators.html">Grass Generation</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="world.html">Block Options</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="miscellaneous.html">Miscellaneous</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Introduction</h1>
+      <p>'generators.json' contains a list of 'Generator' which generates grass in the world periodically.</p>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Grammar</h1>
+<pre>
+<code class="ha-replacement">"generators.json"</code> : 
+    [
+        <a href="#biome_and_generator" class="ha-replacement">biome_and_generator</a>,
+        <a href="#biome_and_generator" class="ha-replacement">biome_and_generator</a>,
+        ...
+    ]
+</pre>
+<pre>
+<a id="biome_and_generator" class="ha-replacement">biome_and_generator</a> :
+    {
+        "types" : [<a href="#biome_type" class="ha-replacement">biome_type</a>, ...],
+        "generator" : <a href="#generator" class="ha-replacement">generator</a>
+    }
+    |
+    {
+        "biome" : $string$,
+        "generator" : <a href="#generator" class="ha-replacement">generator</a>
+    }
+    |
+    {
+        "generator" : <a href="#generator" class="ha-replacement">generator</a>
+    }
+</pre>
+<pre>
+<a id="biome_type" class="ha-replacement">biome_type</a> :
+    "HOT" |
+    "COLD" |
+    "SPARSE" |
+    "DENSE" |
+    "WET" |
+    "DRY" |
+    "SAVANNA" |
+    "CONIFEROUS" |
+    "JUNGLE" |
+    "SPOOKY" |
+    "DEAD" |
+    "LUSH" |
+    "NETHER" |
+    "END" |
+    "MUSHROOM" |
+    "MAGICAL" |
+    "RARE" |
+    "OCEAN" |
+    "RIVER" |
+    "WATER" |
+    "MESA" |
+    "FOREST" |
+    "PLAINS" |
+    "MOUNTAIN" |
+    "HILLS" |
+    "SWAMP" |
+    "SANDY" |
+    "SNOWY" |
+    "WASTELAND" |
+    "BEACH" |
+    "VOID" |
+</pre>
+<pre>
+<a id="generator" class="ha-replacement">generator</a> :
+    {
+        "condition" : <a href="#condition" class="ha-replacement">condition</a>,
+        "grass" : <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a> | [<a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a>, ...]
+    }
+</pre>
+<pre>
+<a id="condition" class="ha-replacement">condition</a> :
+    {
+        "below" : <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a> | [<a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a>, ...],
+        "chance" : <a class="ha-replacement">double</a>,
+        "not_adjacent" : <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a> | [<a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a>, ...]
+    }
+</pre>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Usage</h1>
+      <p>There are 3 variants of <a href="#biome_and_generator" class="ha-replacement">biome_and_generator</a>.
+         First variant which has <code>"types"</code> field, applies corresponding <a href="#generator" class="ha-replacement">generator</a> to every biome wihch has all <code>"types"</code>.
+         Second variant which has <code>"biome"</code> field, applies corresponding <a href="#generator" class="ha-replacement">generator</a> to the <code>"biome"</code> only.
+         Last one applies the <a href="#generator" class="ha-replacement">generator</a> to every biome without any other generator. In other words, this is a default generator.</p>
+      <p><a href="#generator" class="ha-replacement">generator</a> has two fields <code>"condition"</code> and <code>"grass"</code>. When <code>"condition"</code> meets, generates <code>"grass"</code>. <code>"grass"</code> can be a single <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a> or a list of <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a>s. When <code>"grass"</code> is given as a list, one <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a> is randomly selected and generated.</p>
+      <p><a href="#condition" class="ha-replacement">condition</a> has three fields, and each field can be ommited. Each field represents a condition, and every field must be satisfied. Ommited field is simply considered satisfied.
+         <code>"below"</code> is met when block below target position is one of listed <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a>.
+         <code>"chance"</code> is met purely by chance. <code>"1.0"</code> means always, <code>"0.0"</code> means never. Using this field you can specify speed or frequency of grass growth.
+         <code>"not_adjacent"</code> is met when there's no <a href="miscellaneous.html#block_state" class="ha-replacement">block_state</a> listed nearby target position (8 blocks).</p>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Examples</h1>
+<pre>
+{
+    "biome" : "minecraft:jungle",
+    "generator" : {
+        "condition" : {
+            "below" : {"name" : "minecraft:grass"},
+            "chance" : 0.25,
+            "not_adjacent" : {
+                "name": "minecraft:tallgrass",
+                "type": "fern"
+            }
+        },
+        "grass" : {
+            "name": "minecraft:tallgrass",
+            "type": "fern"
+        }
+    }
+}
+</pre>
+      <p>Grass grows rapidly in jungle.</p>
+<pre>
+{
+    "biome" : "minecraft:plains",
+    "generator" : {
+        "condition" : {
+            "below" : {"name" : "minecraft:grass"},
+            "chance" : 0.1,
+            "not_adjacent" : {"name": "minecraft:yellow_flower"}
+        },
+        "grass" : {
+            "name": "minecraft:yellow_flower",
+            "type": "dandelion"
+        }
+    }
+}
+</pre>
+      <p>Dandelion is growing in plains.</p>
+<pre>
+{
+    "types" : ["COLD", "MOUNTAIN"],
+    "generator" : {
+        "condition" : {
+            "below" : {"name" : "minecraft:grass"},
+            "chance" : 0.05,
+            "not_adjacent" : {"name": "minecraft:tallgrass"}
+        },
+        "grass" : {
+            "name": "minecraft:tallgrass",
+            "type": "fern"
+        }
+    }
+}
+</pre>
+      <p>Grass grows very slowly in every "COLD" "MOUNTAIN".</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

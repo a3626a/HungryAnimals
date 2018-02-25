@@ -35,16 +35,18 @@ import oortcloud.hungryanimals.generation.Conditions;
 
 public class HAPlugins {
 
+	private static final String[] EXTENTIONS = { ".txt", ".css", ".html" };
+
 	private static HAPlugins INSTANCE;
 
 	private List<IHAPlugin> plugins;
 	private Map<String, JsonElement> mapJson;
-	private Map<String, String> mapTxt;
+	private Map<String, String> mapText;
 
 	public HAPlugins() {
 		plugins = new ArrayList<IHAPlugin>();
 		mapJson = new HashMap<String, JsonElement>();
-		mapTxt = new HashMap<String, String>();
+		mapText = new HashMap<String, String>();
 	}
 
 	public static HAPlugins getInstance() {
@@ -62,7 +64,7 @@ public class HAPlugins {
 		} catch (IOException | URISyntaxException e) {
 			HungryAnimals.logger.error("[API] Failed to inject json");
 		}
-		
+
 		for (IHAPlugin i : plugins) {
 			i.registerAIs(AIContainers.getInstance());
 			i.registerAttributes(ModAttributes.getInstance());
@@ -138,13 +140,22 @@ public class HAPlugins {
 				} else {
 					// TODO Warn or Error
 				}
-			} else if (i.getKey().endsWith(".txt")) {
-				String concatenated = "";
-				for (String j : i.getValue()) {
-					concatenated += j;
-					concatenated += System.lineSeparator();
+			} else {
+				boolean isSupportingExtension = false;
+				for (String ext : EXTENTIONS) {
+					if (i.getKey().endsWith(ext)) {
+						isSupportingExtension = true;
+						break;
+					}
 				}
-				putTxt(i.getKey(), concatenated);
+				if (isSupportingExtension) {
+					String concatenated = "";
+					for (String j : i.getValue()) {
+						concatenated += j;
+						concatenated += System.lineSeparator();
+					}
+					putText(i.getKey(), concatenated);
+				}
 			}
 		}
 
@@ -160,7 +171,7 @@ public class HAPlugins {
 		for (Entry<String, JsonElement> i : mapJson.entrySet()) {
 			onjson.accept(Paths.get(i.getKey()), i.getValue());
 		}
-		for (Entry<String, String> i : mapTxt.entrySet()) {
+		for (Entry<String, String> i : mapText.entrySet()) {
 			ontxt.accept(Paths.get(i.getKey()), i.getValue());
 		}
 	}
@@ -168,23 +179,23 @@ public class HAPlugins {
 	private static String path2Str(Path key) {
 		return key.toString().replace('\\', '/');
 	}
-	
+
 	public void putJson(Path key, JsonElement value) {
 		putJson(path2Str(key), value);
 	}
-	
+
 	public void putJson(String key, JsonElement value) {
 		mapJson.put(key, value);
 	}
-	
+
 	public void putTxt(Path key, String value) {
-		putTxt(path2Str(key), value);
+		putText(path2Str(key), value);
 	}
-	
-	public void putTxt(String key, String value) {
-		mapTxt.put(key, value);
+
+	public void putText(String key, String value) {
+		mapText.put(key, value);
 	}
-	
+
 	public JsonElement getJson(Path target) {
 		// TODO OMG Help me I don't want this replacement TT
 		return mapJson.get(path2Str(target));
@@ -192,9 +203,9 @@ public class HAPlugins {
 
 	public String getTxt(Path target) {
 		// TODO OMG Help me I don't want this replacement TT
-		return mapTxt.get(path2Str(target));
+		return mapText.get(path2Str(target));
 	}
-	
+
 	public static List<IHAPlugin> getModPlugins(ASMDataTable asmDataTable) {
 		return getInstances(asmDataTable, HAPlugin.class, IHAPlugin.class);
 	}
