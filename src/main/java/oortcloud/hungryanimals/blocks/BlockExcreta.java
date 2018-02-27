@@ -76,6 +76,14 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
+	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (face == EnumFacing.DOWN) {
+			return true;
+		}
+		return super.doesSideBlockRendering(state, world, pos, face);
+	}
+
+	@Override
 	public boolean isFullCube(IBlockState state) {
 		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man == 4;
 	}
@@ -83,6 +91,11 @@ public class BlockExcreta extends BlockFalling {
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return isFullCube(state);
+	}
+
+	@Override
+	public boolean causesSuffocation(IBlockState state) {
+		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man >= 3;
 	}
 
 	@Override
@@ -264,10 +277,9 @@ public class BlockExcreta extends BlockFalling {
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-
 		if (!worldIn.isRemote) {
 			if (entityIn instanceof EntityFallingBlock) {
-				EntityFallingBlock entityFall = (EntityFallingBlock)entityIn;
+				EntityFallingBlock entityFall = (EntityFallingBlock) entityIn;
 				IBlockState stateFall = entityFall.getBlock();
 				if (stateFall != null && stateFall.getBlock() == this && entityFall.fallTime > 1 && !entityIn.isDead) {
 					entityIn.setDead();
@@ -279,6 +291,11 @@ public class BlockExcreta extends BlockFalling {
 				}
 			}
 		}
+		// TODO configurable
+		int volume = ((EnumType) state.getValue(CONTENT)).exc+((EnumType) state.getValue(CONTENT)).man;
+		entityIn.motionX *= (1-0.2*volume);
+		entityIn.motionY *= (1-0.2*volume);
+		entityIn.motionZ *= (1-0.2*volume);
 	}
 
 	@Override
