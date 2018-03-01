@@ -48,6 +48,8 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private int delayCounter;
 	private static int delay = 100;
 
+	int eatingGrassTimer;
+	
 	public EntityAIMoveToEatBlock(EntityLiving entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.entity = entity;
@@ -134,7 +136,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 			float distanceSq = 2;
 			if (bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
 				if (this.worldObj.getGameRules().getBoolean("mobGriefing")) {
-					this.worldObj.setBlockToAir(bestPos);
+					this.worldObj.destroyBlock(bestPos, false);
 				}
 				eatBlockBonus(block);
 			}
