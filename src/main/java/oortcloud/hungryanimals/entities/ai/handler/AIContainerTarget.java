@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.EntityAnimal;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.graph.Graph;
 import oortcloud.hungryanimals.utils.graph.GraphSolver;
 import oortcloud.hungryanimals.utils.graph.Vertex;
@@ -54,13 +55,13 @@ public class AIContainerTarget extends AIContainerTask {
 		Vertex<EntityAIBase> prev = null;
 
 		for (EntityAIBase i : aibases) {
-			if (prev == null) {
-				prev = new Vertex<EntityAIBase>(i);
-			} else {
-				Vertex<EntityAIBase> curr = new Vertex<EntityAIBase>(i);
+			Vertex<EntityAIBase> curr = new Vertex<EntityAIBase>(i);
+			graph.vertices.add(curr);
+			if (prev != null) {
 				prev.childs.add(curr);
 				curr.parents.add(prev);
 			}
+			prev = curr;
 		}
 
 		for (AIFactoryGraph i : factoriesGraph) {
