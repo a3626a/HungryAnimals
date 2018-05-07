@@ -50,6 +50,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	protected IFoodPreference<IBlockState> pref;
 	protected ICapabilityHungryAnimal capHungry;
 	private int delayCounter;
+	private int timeoutCounter;
 	private static int delay = 100;
 
 	private State state = State.IDLE;
@@ -132,6 +133,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		entity.getNavigator().tryMoveToXYZ(bestPos.getX(), bestPos.getY(), bestPos.getZ(), this.speed);
 
 		state = State.MOVING;
+		timeoutCounter = 0;
 	}
 
 	@Override
@@ -140,14 +142,21 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 			return false;
 		}
 
-		// Escape to IDLE state
-		IBlockState block = this.worldObj.getBlockState(bestPos);
-		if (!this.pref.canEat(capHungry, block)) {
-			this.entity.getNavigator().clearPath();
-			state = State.IDLE;
-			return false;
+		if (state == State.MOVING) {
+			// Escape to IDLE state
+			IBlockState block = this.worldObj.getBlockState(bestPos);
+			if (!this.pref.canEat(capHungry, block)) {
+				this.entity.getNavigator().clearPath();
+				state = State.IDLE;
+				return false;
+			}
+			
+			// Timeout
+			if (timeoutCounter > 1200) {
+				return false;
+			}
 		}
-
+		
 		return true;
 	}
 
@@ -156,8 +165,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		if (state == State.IDLE) {
 
 		} else if (state == State.MOVING) {
-			if (entity.getNavigator().noPath()) {
-				float distanceSq = 2;
+				float distanceSq = 1;
 				if (bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
 					state = State.EATING;
 					eatingGrassTimer = 40;
@@ -165,8 +173,15 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 						worldObj.setEntityState(entity, (byte)10);
 					}
 					entity.getNavigator().clearPath();
+				} else {
+					timeoutCounter += 1;
+					
+		            if (this.timeoutCounter % 40 == 0)
+		            {
+		            	entity.getNavigator().tryMoveToXYZ(bestPos.getX(), bestPos.getY(), bestPos.getZ(), this.speed);
+		            }
 				}
-			}
+			
 		} else if (state == State.EATING) {
 			eatingGrassTimer -= 1;
 			if (eatingGrassTimer == 4) {
