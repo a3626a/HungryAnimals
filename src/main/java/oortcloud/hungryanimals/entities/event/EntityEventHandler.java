@@ -36,6 +36,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
@@ -55,6 +56,7 @@ import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityEventHandler {
 
+	
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if (!(event.getEntity() instanceof EntityAnimal))
@@ -66,7 +68,6 @@ public class EntityEventHandler {
 			return;
 
 		ModAttributes.getInstance().applyAttributes(entity);
-		entity.setHealth(entity.getMaxHealth());
 
 		if (!entity.getEntityWorld().isRemote)
 			AIContainers.getInstance().apply(entity);
@@ -76,6 +77,23 @@ public class EntityEventHandler {
 			EntityChicken chicken = (EntityChicken) entity;
 			chicken.timeUntilNextEgg = Integer.MAX_VALUE;
 		}
+		
+		if (!entity.getEntityData().hasKey(References.MODID+".isInitialized")) {
+			// This is called only once for each animal
+			// Should be used as "After Constructor Code Block"
+			entity.setHealth(entity.getMaxHealth());
+			
+			if (entity.getGrowingAge() < 0) {
+				// Baby created
+				ICapabilityHungryAnimal childHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+				if (childHungry != null) {
+					childHungry.setWeight(childHungry.getNormalWeight());
+				}
+			}
+
+			entity.getEntityData().setBoolean(References.MODID+".isInitialized", true);
+		}
+		
 	}
 
 	@SubscribeEvent

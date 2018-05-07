@@ -141,7 +141,6 @@ public class EntityAIMateModified extends EntityAIBase {
 
 		if (entityageable != null) {
 			ICapabilityTamableAnimal childTamable = entityageable.getCapability(ProviderTamableAnimal.CAP, null);
-			ICapabilityHungryAnimal childHungry = entityageable.getCapability(ProviderHungryAnimal.CAP, null);
 
 			// Pay Hunger
 			double weight_child = entityageable.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
@@ -150,9 +149,6 @@ public class EntityAIMateModified extends EntityAIBase {
 			}
 			theAnimalCapHungry.addWeight(-weight_child / 2);
 
-			if (childHungry != null) {
-				childHungry.setWeight(weight_child);
-			}
 			double childTaming = calculateBabyTaming(theAnimalCapTamable, targetMateCapTamable);
 			if (childTamable != null) {
 				childTamable.setTaming(childTaming);
