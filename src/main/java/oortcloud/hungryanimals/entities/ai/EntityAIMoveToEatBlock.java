@@ -13,8 +13,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.BlockPos;
@@ -65,7 +65,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.setMutexBits(7);
 	}
-
+	
 	@Override
 	public boolean shouldExecute() {
 		if (!pref.shouldEat(capHungry)) {
@@ -174,6 +174,11 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 					}
 					entity.getNavigator().clearPath();
 				} else {
+					if (entity.getNavigator().noPath()) {
+						state = State.IDLE;
+						return;
+					}
+					
 					timeoutCounter += 1;
 					
 		            if (this.timeoutCounter % 40 == 0)
@@ -250,6 +255,9 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> new EntityAIMoveToEatBlock(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIFollowParent.class).put(factory);
+		aiContainer.getTask().after(EntityAISwimming.class)
+					         .before(EntityAIFollowParentFixed.class)
+				 	         .before(EntityAIWanderAvoidWater.class)
+		                     .put(factory);
 	}
 }

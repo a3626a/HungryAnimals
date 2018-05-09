@@ -15,8 +15,8 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -234,8 +234,14 @@ public class EntityAIMateModified extends EntityAIBase {
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> new EntityAIMateModified(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(EntityAITemptIngredient.class)
-				.before(EntityAITemptEdibleItem.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
-				.before(EntityAIFollowParent.class).put(factory);
+		aiContainer.getTask().after(EntityAISwimming.class)
+		                     .before(EntityAIMoveToTrough.class)
+		                     .before(EntityAITemptIngredient.class)
+		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIFollowParentFixed.class)
+		                     .before(EntityAIWanderAvoidWater.class)
+		                     .put(factory);
 	}
 }

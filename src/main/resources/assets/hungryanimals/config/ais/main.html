@@ -104,6 +104,10 @@
         "speed" : <a class="ha-replacement">double</a>
     }
     |
+    "follow_parent" : {
+        "speed" : <a class="ha-replacement">double</a>
+    }
+    |
     "hurt_by_player" : {
         "call_help" : <a class="ha-replacement">boolean</a>
     }
@@ -142,6 +146,7 @@
           <th><code>"tempt_edible"</code></th>
           <th><code>"eat_item"</code></th>
           <th><code>"eat_block"</code></th>
+          <th><code>"follow_parent"</code></th>
         </tr>
         <tr>
           <th><code>"herbivore"</code></th>
@@ -150,6 +155,7 @@
           <td>O</td>
           <td>X</td>
           <td>X</td>
+          <td>O</td>
           <td>O</td>
           <td>O</td>
           <td>O</td>
@@ -170,12 +176,14 @@
           <td>O</td>
           <td>O</td>
           <td>O</td>
+          <td>O</td>
         </tr>
         <tr>
           <th><code>"wolf"</code></th>
           <td>X</td>
           <td>X</td>
           <td>X</td>
+          <td>O</td>
           <td>O</td>
           <td>O</td>
           <td>O</td>
@@ -195,6 +203,7 @@
       <p><code>"tempt_edible"</code> : The animal is tempted by edible items (food preferences) while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>
       <p><code>"eat_item"</code> : The animal eats fallen items while moving at <code>"speed"</code>.</p>
       <p><code>"eat_block"</code> : The animal eats blocks while moving at <code>"speed"</code>.</p>
+      <p><code>"follow_parent"</code> : The animal follows its parent while moving at <code>"speed"</code>.</p>
       <p><code>"hurt_by_player"</code> : The animal targets the attacker (player only), this target is used by <code>"attack_melee"</code>. If <code>"call_help"</code> is true, animals nearby target the attacker, too.</p>
       <p><code>"hunt_non_tamed"</code> : The animal hunts animals (food preferences) when hungry, when not tamed (in Vanilla). <code>"chance"</code> decides how frequently it hunts(1 -> 100%, 10 -> 10% ...). If <code>"check_sight"</code> is true, only hunts animals in sight. If <code>"only_nearby"</code> is true, only hunts animals nearby. If <code>"herding"</code> is true, hunts with other carnivores nearby. This <a href="#ai_modifier" class="ha-replacement">ai_modifier</a> can not be used with <code>"hunt"</code> at the same time.</p>
       <p><code>"hunt"</code> : The animal hunts animals (food preferences) when hungry, when not tamed (in Vanilla). <code>"chance"</code> decides how frequently it hunts(1 -> 100%, 10 -> 10% ...). If <code>"check_sight"</code> is true, only hunts animals in sight. If <code>"only_nearby"</code> is true, only hunts animals nearby. If <code>"herding"</code> is true, hunts with other carnivores nearby. This <a href="#ai_modifier" class="ha-replacement">ai_modifier</a> can not be used with <code>"hunt_non_tamed"</code> at the same time.</p>

@@ -35,7 +35,7 @@ public class DebugOverlayHandler extends Gui {
 
 	private static final int START_X = 10;
 	private static final int START_Y = 10;
-	private static final int WIDTH = 100;
+	private static final int WIDTH = 200;
 	private static final int FONTHEIGHT = 10;
 
 	public DebugOverlayHandler(Minecraft mc) {
@@ -53,6 +53,7 @@ public class DebugOverlayHandler extends Gui {
 		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "excretion", 0.1, targetEntityID));
 		labels.add(new GuiLabelNBTEditableDouble(mc.fontRenderer, "taming", 0.5, targetEntityID));
 		labels.add(new GuiLabelNBTEditableInteger(mc.fontRenderer, "age", 60 * 20, targetEntityID));
+		labels.add(new GuiLabelNBTAIList(mc.fontRenderer));
 		int cnt = 0;
 		for (GuiPlacable i : labels) {
 			i.setPosition(START_X, START_Y + FONTHEIGHT * cnt);

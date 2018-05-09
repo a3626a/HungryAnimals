@@ -20,5 +20,8 @@
     },
     "eat_block" : {
         "speed" : 1.0
+    },
+    "follow_parent" : {
+        "speed" : 1.1
     }
 }

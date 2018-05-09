@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -55,9 +56,9 @@ public class ItemDebugGlass extends Item {
 					if (!(target instanceof EntityAnimal))
 						return;
 
-					EntityAnimal entity = (EntityAnimal) target;
+					EntityAnimal animal = (EntityAnimal) target;
 
-					ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					if (capHungry != null) {
 						tag.setDouble("weight", capHungry.getWeight());
 						tag.setDouble("nutrient", capHungry.getNutrient());
@@ -65,11 +66,24 @@ public class ItemDebugGlass extends Item {
 						tag.setDouble("excretion", capHungry.getExcretion());
 					}
 
-					ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
 					if (capTaming != null) {
 						tag.setDouble("taming", capTaming.getTaming());
 					}
 					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
+					
+					int index = 0;
+					for (EntityAITaskEntry i : animal.tasks.taskEntries) {
+						NBTTagCompound iTag = new NBTTagCompound();
+						String name = i.action.getClass().toString();
+						name = name.substring(name.lastIndexOf(".")+1);
+						iTag.setString("name", name);
+						iTag.setInteger("priority", i.priority);
+						iTag.setBoolean("using", i.using);
+						tag.setTag("ais."+index, iTag);
+						index += 1;
+					}
+					tag.setInteger("ais.length", index);
 				}
 			}
 		}

@@ -8,8 +8,8 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -155,8 +155,14 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAITemptIngredient.class).before(EntityAITemptEdibleItem.class)
-				.before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class).before(EntityAIFollowParent.class).put(factory);
+		aiContainer.getTask().after(EntityAISwimming.class)
+		                     .before(EntityAITemptIngredient.class)
+		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIFollowParentFixed.class)
+		                     .before(EntityAIWanderAvoidWater.class)
+		                     .put(factory);
 	}
 
 }

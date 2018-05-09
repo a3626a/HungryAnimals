@@ -25,6 +25,9 @@
     "eat_block" : {
         "speed" : 1.0
     },
+    "follow_parent" : {
+        "speed" : 1.25
+    },
     "hurt_by_player" : {
         "call_help" : true
     }
