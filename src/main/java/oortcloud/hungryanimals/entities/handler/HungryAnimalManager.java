@@ -13,13 +13,16 @@ public class HungryAnimalManager {
 	
 	public static class HungryAnimalEntry {
 		public boolean disableTaming;
+		public boolean modelGrowing;
 		
 		public HungryAnimalEntry() {
 			disableTaming = false;
+			modelGrowing = true;
 		}
 		
-		public HungryAnimalEntry(boolean disableTaming) {
+		public HungryAnimalEntry(boolean disableTaming, boolean modelGrowing) {
 			this.disableTaming = disableTaming;
+			this.modelGrowing = modelGrowing;
 		}
 	}
 	
@@ -35,12 +38,12 @@ public class HungryAnimalManager {
 	}
 
 	public boolean register(Class<? extends EntityAnimal> animal) {
-		return register(animal, false);
+		return register(animal, false, true);
 	}
 
-	public boolean register(Class<? extends EntityAnimal> animal, boolean disableTaming) {
+	public boolean register(Class<? extends EntityAnimal> animal, boolean disableTaming, boolean modelGrowing) {
 		if (!REGISTRY.containsKey(animal)) {
-			REGISTRY.put(animal, new HungryAnimalEntry(disableTaming));
+			REGISTRY.put(animal, new HungryAnimalEntry(disableTaming, modelGrowing));
 			return true;
 		}
 		return false;
@@ -57,6 +60,13 @@ public class HungryAnimalManager {
 	public boolean isDisabledTaming(Class<? extends EntityAnimal> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).disableTaming;
+		}
+		return true;
+	}
+	
+	public boolean isModelGrowing(Class<? extends EntityAnimal> animal) {
+		if (REGISTRY.containsKey(animal)) {
+			return REGISTRY.get(animal).modelGrowing;
 		}
 		return true;
 	}

@@ -33,10 +33,12 @@ public class HandlerEntityClient implements IMessageHandler<PacketEntityClient, 
 				if (cap1 != null)
 					cap1.setTaming(message.getDouble());
 				break;
-			case SyncIndex.STOMACH_SYNC:
+			case SyncIndex.HUNGRY_SYNC:
 				ICapabilityHungryAnimal cap2 = entity.getCapability(ProviderHungryAnimal.CAP, null);
-				if (cap2 != null)
+				if (cap2 != null) {
 					cap2.setStomach(message.getDouble());
+					cap2.setWeight(message.getDouble());
+				}
 				break;
 			case SyncIndex.PRODUCTION_SYNC:
 				ICapabilityProducingAnimal capProducing = entity.getCapability(ProviderProducingAnimal.CAP, null);

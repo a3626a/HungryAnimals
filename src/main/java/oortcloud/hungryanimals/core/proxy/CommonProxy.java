@@ -55,6 +55,9 @@ public class CommonProxy {
 	public void registerEntityRendering() {
 	}
 
+	public void injectRender() {
+	}
+	
 	public void registerTileEntityRendering() {
 	}
 

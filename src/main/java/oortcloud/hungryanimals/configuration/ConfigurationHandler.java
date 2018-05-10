@@ -253,11 +253,13 @@ public class ConfigurationHandler {
 
 				String name;
 				boolean disableTaming = false;
-
+				boolean modelGrowing = true;
+				
 				if (jsonEle.isJsonObject()) {
 					JsonObject jsonObj = jsonEle.getAsJsonObject();
 					name = JsonUtils.getString(jsonObj, "name");
 					disableTaming = JsonUtils.getBoolean(jsonObj, "disable_taming");
+					modelGrowing = JsonUtils.getBoolean(jsonObj, "model_growing");
 				} else {
 					name = jsonEle.getAsString();
 				}
@@ -267,7 +269,7 @@ public class ConfigurationHandler {
 							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
 						ResourceLocation resource = EntityList.getKey(entityClass);
 						HungryAnimals.logger.info("[Configuration] registered " + resource);
-						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class), disableTaming);
+						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class), disableTaming, modelGrowing);
 					}
 				}
 			}

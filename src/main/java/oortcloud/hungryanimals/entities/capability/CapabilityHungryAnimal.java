@@ -21,6 +21,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	private double weight; 
 	
 	private boolean prevIsFull;
+	private int prevWeight;
 	
 	private EntityAnimal entity;
 
@@ -90,6 +91,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 			}
 		}
 		prevIsFull = currIsFull;
+		
 		return oldStomach;
 	}
 
@@ -120,6 +122,13 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		} else {
 			this.weight = weight;
 		}
+		
+		int currWeight = (int) getWeight();
+		if (currWeight != prevWeight) {
+			sync();
+		}
+		prevWeight = currWeight;
+		
 		return oldWeight;
 	}
 	
@@ -174,8 +183,9 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) entity.getEntityWorld();
 			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(entity)) {
-				PacketEntityClient packet = new PacketEntityClient(SyncIndex.STOMACH_SYNC, entity);
+				PacketEntityClient packet = new PacketEntityClient(SyncIndex.HUNGRY_SYNC, entity);
 				packet.setDouble(getStomach());
+				packet.setDouble(getWeight());
 				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 			}
 		}
@@ -183,8 +193,9 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	public void syncTo(EntityPlayerMP target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketEntityClient packet = new PacketEntityClient(SyncIndex.STOMACH_SYNC, entity);
+			PacketEntityClient packet = new PacketEntityClient(SyncIndex.HUNGRY_SYNC, entity);
 			packet.setDouble(getStomach());
+			packet.setDouble(getWeight());
 			HungryAnimals.simpleChannel.sendTo(packet, target);
 		}
 	}

@@ -71,7 +71,8 @@
     |
     {
         "name" : <a class="ha-replacement">string</a>,
-        "disable_taming" : <a class="ha-replacement">boolean</a>
+        "disable_taming" : <a class="ha-replacement">boolean</a>,
+        "model_growing" : <a class="ha-replacement">boolean</a>
     }
 </pre>
     </div>
@@ -80,12 +81,14 @@
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Usage</h1>
       <p>if <code>"disable_taming"</code> is true, then taming is disabled for the animal.<br/>
+      <p>if <code>"model_growing"</code> is true, then animals's size grows depends on their weight. Default value is true.<br/>
       Example)</p>
 <pre>
 [
     {
         "name" : "minecraft:cow"
-        "disable_taming" : true
+        "disable_taming" : true,
+        "model_growing" : true
     },
     "minecraft:chicken"
 ]

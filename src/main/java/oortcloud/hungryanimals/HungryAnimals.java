@@ -75,6 +75,7 @@ public class HungryAnimals {
 		ConfigurationHandler.sync();
 		
 		proxy.registerColors();
+		proxy.injectRender();
 		
 		CraftingHandler.init();
 	}

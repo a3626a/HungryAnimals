@@ -27,6 +27,9 @@ public class GuiLabelNBTAIList extends GuiPlacable {
 
 	protected GuiLabelNBTAIList(FontRenderer fontRenderer) {
 		this.fontRenderer = fontRenderer;
+		this.data = new ArrayList<>();
+		// It is possible that "draw" called before "updated".
+		// So initialization should be done here.
 	}
 
 	@Override

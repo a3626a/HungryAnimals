@@ -9,7 +9,10 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -35,8 +38,10 @@ import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.core.network.PacketGeneralClient;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
 import oortcloud.hungryanimals.entities.render.RenderEntitySlingShotBall;
+import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.items.gui.DebugOverlayHandler;
 import oortcloud.hungryanimals.items.render.ModelItemBola;
@@ -52,6 +57,17 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySlingShotBall.class, RenderEntitySlingShotBall::new);
 	}
 
+	public void injectRender() {
+		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+			if (HungryAnimalManager.getInstance().isModelGrowing(i)) {
+				Render<EntityAnimal> render = (Render<EntityAnimal>) renderManager.entityRenderMap.get(i);
+				renderManager.entityRenderMap.put(i, new RenderEntityWeight(render, Minecraft.getMinecraft().getRenderManager()));
+			}
+		}
+		
+	}
+	
 	public void registerTileEntityRendering() {
 		ClientRegistry.<TileEntityTrough>bindTileEntitySpecialRenderer(TileEntityTrough.class, new RenderTileEntityTrough());
 	}
