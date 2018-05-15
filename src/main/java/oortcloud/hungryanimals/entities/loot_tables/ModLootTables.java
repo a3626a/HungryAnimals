@@ -18,8 +18,10 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.LootFunction.Serializer;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
@@ -72,18 +74,31 @@ public class ModLootTables implements ILootTableRegistry {
 			String domain = key.getResourceDomain();
 			String name = key.getResourcePath();
 			
-			ResourceLocation keyTable = new ResourceLocation(domain, "entities/"+name);
+			// This keyTable is inferred at LootTableLoadEvent
+			// ResourceLocation keyTable = new ResourceLocation(domain, "entities/"+name);
 			ResourceLocation valueTable = new ResourceLocation(References.MODID, "entities/"+domain+"#"+name);
-			tables.put(keyTable, manager.getLootTableFromLocation(valueTable));
+			manager.getLootTableFromLocation(valueTable);
 		}
 	}
 
+	
 	@SuppressWarnings("unchecked")
-	@SubscribeEvent
-	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
-		LootTable table = tables.get(event.getName());
-		if (table == null)
+	@SubscribeEvent(priority=EventPriority.HIGHEST)
+	public void LootTableLoadEventCancel(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
+		if (event.getLootTableManager()==manager) {
+			String valueName = event.getName().getResourcePath();
+			String[] valueNameSplited = valueName.split("#");
+			String valueDomain = valueNameSplited[0].substring(valueNameSplited[0].indexOf("/")+1);
+			String valuePath = "entities/"+valueNameSplited[1];
+			tables.put(new ResourceLocation(valueDomain, valuePath), event.getTable());
+			event.setCanceled(true);
 			return;
+		}
+		
+		LootTable table = tables.get(event.getName());
+		if (table == null) 
+			return;
+		
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
 			if (iEntries.size() == 1) {
@@ -110,7 +125,8 @@ public class ModLootTables implements ILootTableRegistry {
 			event.getTable().addPool(i);
 		}
 	}
-
+	
+	
 	@Override
 	public <T extends LootFunction> void registerFunction(Serializer<? extends T> serializer) {
 		register(serializer);
