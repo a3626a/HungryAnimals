@@ -75,7 +75,6 @@ public class HungryAnimals {
 		ConfigurationHandler.sync();
 		
 		proxy.registerColors();
-		proxy.injectRender();
 		
 		CraftingHandler.init();
 	}
@@ -83,6 +82,7 @@ public class HungryAnimals {
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
 		ConfigurationHandler.syncPost();
+		proxy.injectRender();
 	}
 
 }

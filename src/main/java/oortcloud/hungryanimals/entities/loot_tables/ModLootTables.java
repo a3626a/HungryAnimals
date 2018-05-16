@@ -21,7 +21,6 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
