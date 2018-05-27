@@ -57,6 +57,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySlingShotBall.class, RenderEntitySlingShotBall::new);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void injectRender() {
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
