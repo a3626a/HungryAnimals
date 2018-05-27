@@ -8,8 +8,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -72,21 +72,28 @@ public class DebugOverlayHandler extends Gui {
 	public void onUpdate(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {
 			if (!this.isEnabled) {
-				EntityPlayer entity = (EntityPlayer) mc.getRenderViewEntity();
-				if (entity != null) {
-					ItemStack stack = getDebugGlass(entity);
+				Entity entity = mc.getRenderViewEntity();
+				if (entity != null && entity instanceof EntityLivingBase) {
+					EntityLivingBase living = (EntityLivingBase) entity;
+					ItemStack stack = getDebugGlass(living);
 					if (!stack.isEmpty()) {
 						this.setOpened(true);
 					}
+				} else {
+					this.setOpened(false);
 				}
 			} else {
-				EntityPlayer entity = (EntityPlayer) mc.getRenderViewEntity();
-				if (entity != null) {
-					ItemStack stack = getDebugGlass(entity);
+				Entity entity = mc.getRenderViewEntity();
+				if (entity != null && entity instanceof EntityLivingBase) {
+					EntityLivingBase living = (EntityLivingBase) entity;
+					ItemStack stack = getDebugGlass(living);
 					if (stack.isEmpty()) {
 						this.setOpened(false);
 						return;
 					}
+				} else {
+					this.setOpened(false);
+					return;
 				}
 				for (GuiPlacable i : labels) {
 					i.update();
@@ -150,7 +157,7 @@ public class DebugOverlayHandler extends Gui {
 		}
 	}
 
-	private ItemStack getDebugGlass(EntityPlayer player) {
+	private ItemStack getDebugGlass(EntityLivingBase player) {
 		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
 		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
 			return stack;
