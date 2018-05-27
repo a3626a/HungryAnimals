@@ -50,7 +50,7 @@
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Introduction</h1>
-      <p>'world.json' contains a list of fields related to excreta and niter bed.</p>
+      <p>'slingshot.json' contains list of 'Ingredient' which slingshots can fire.</p>
     </div>
   </div>
 
@@ -59,30 +59,16 @@
       <h1 class="w3-text-teal">Grammar</h1>
 
 <pre>
-<code class="ha-replacement">"world.json"</code> : 
+<code class="ha-replacement">"slingshot.json"</code> : 
     {
-        "disease_probability" : <a class="ha-replacement">double</a>,
-        "erosion_probability_on_hay" : <a class="ha-replacement">double</a>,
-        "erosion_probability" : <a class="ha-replacement">double</a>,
-        "fermentation_probability" : <a class="ha-replacement">double</a>,
-        "fertilization_probability" : <a class="ha-replacement">double</a>,
-        "ripening_probability" : <a class="ha-replacement">double</a>
+        "ammos" : [
+            <a href="miscellaneous.html#ingredient" class="ha-replacement">ingredient</a>,
+            <a href="miscellaneous.html#ingredient" class="ha-replacement">ingredient</a>,
+            ...
+        ],
+        "damage" : <a class="ha-replacement">double</a>
     }
 </pre>
-    </div>
-  </div>
-  <div class="w3-row w3-padding-64">
-    <div class="w3-twothird w3-container">
-      <h1 class="w3-text-teal">Usage</h1>
-        <p>
-          <code>"disease_probability"</code> : probability(chance) to occur disease from excreta.<br/>
-          <code>"erosion_probability_on_hay"</code> : probability(chance) to erode excreta.<br/>
-          <code>"erosion_probability"</code> : probability(chance) to erode excreta on hay floor cover.<br/>
-          <code>"fermentation_probability"</code> : probability(chance) to ferment excreta to manure.<br/>
-          <code>"fertilization_probability"</code> : probability(chance) excreta to fertilize block underneath.<br/>
-          <code>"ripening_probability"</code> : probability(chance) to ripen niter bed.<br/>
-          Although all these fields are probability, you can consider these as speed. Higher number at most 1.0 will fasten the process.
-        </p>
     </div>
   </div>
 </div>

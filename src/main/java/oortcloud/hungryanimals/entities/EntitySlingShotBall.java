@@ -204,7 +204,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 				damagesource = DamageSource.causeThrownDamage(this, this.shootingEntity);
 			}
 
-			if (entity.attackEntityFrom(damagesource, 2.0F)) {
+			if (entity.attackEntityFrom(damagesource, getEntityData().getFloat("hungryanimals.damage"))) {
 				if (entity instanceof EntityLivingBase) {
 					EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
 

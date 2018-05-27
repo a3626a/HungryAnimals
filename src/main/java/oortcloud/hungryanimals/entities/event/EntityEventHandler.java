@@ -185,7 +185,6 @@ public class EntityEventHandler {
 	private void updateCourtship(EntityAnimal entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
-		// TODO Sometime can get rid of this
 		if (cap == null)
 			return;
 

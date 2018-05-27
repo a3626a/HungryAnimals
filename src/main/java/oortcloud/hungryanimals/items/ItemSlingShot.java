@@ -1,5 +1,8 @@
 package oortcloud.hungryanimals.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,13 +13,13 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -24,6 +27,9 @@ import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 
 public class ItemSlingShot extends Item {
 
+	public List<Ingredient> ammos; 
+	public float damage;
+	
 	public ItemSlingShot() {
 		super();
 		setUnlocalizedName(References.MODID+"."+Strings.itemSlingShotName);
@@ -32,6 +38,8 @@ public class ItemSlingShot extends Item {
 		
 		setMaxStackSize(1);
 		setMaxDamage(64);
+		
+		ammos = new ArrayList<Ingredient>();
 	}
 
 	private ItemStack findAmmo(EntityPlayer player)
@@ -60,19 +68,18 @@ public class ItemSlingShot extends Item {
         }
     }
 
-	@SuppressWarnings("null")
 	protected boolean isArrow(ItemStack stack)
     {
 		if (stack == null)
 			return false;
 		
-    	for (ItemStack i : OreDictionary.getOres("cobblestone")) {
-    		if (OreDictionary.itemMatches(stack, i, false)) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+		for (Ingredient i : ammos) {
+			if (i.apply(stack)) {
+				return true;
+			}
+		}
+		
+		return false;
     }
 	
     @Override
@@ -104,6 +111,7 @@ public class ItemSlingShot extends Item {
                     {
                     	EntitySlingShotBall entityball = new EntitySlingShotBall(worldIn, entityplayer);
                     	entityball.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 2.0F, 1.0F);
+                    	entityball.getEntityData().setFloat("hungryanimals.damage", damage);
                     	
                     	stack.damageItem(1, entityplayer);
 

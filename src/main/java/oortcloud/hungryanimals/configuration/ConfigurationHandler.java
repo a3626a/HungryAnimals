@@ -61,6 +61,8 @@ import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.Productions;
 import oortcloud.hungryanimals.generation.GrassGenerator;
 import oortcloud.hungryanimals.generation.GrassGenerators;
+import oortcloud.hungryanimals.items.ItemSlingShot;
+import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.PotionDisease;
 import oortcloud.hungryanimals.potion.PotionOvereat;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
@@ -84,7 +86,8 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON generators;
 	private static ConfigurationHandlerJSON disease;
 	private static ConfigurationHandlerJSON overeat;
-
+	private static ConfigurationHandlerJSON slingshot;
+	
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
@@ -294,6 +297,18 @@ public class ConfigurationHandler {
 			PotionOvereat.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
 		});
 
+		slingshot = new ConfigurationHandlerJSON(basefolder, "slingshot", (jsonElement) -> {
+			JsonObject jsonObj = (JsonObject) jsonElement;
+			
+			JsonElement ammos = jsonObj.get("ammos");
+			List<Ingredient> ingredients = ModJsonUtils.getIngredients(ammos);
+			for (Ingredient i : ingredients)
+				((ItemSlingShot)ModItems.slingshot).ammos.add(i);
+			
+
+			((ItemSlingShot)ModItems.slingshot).damage = JsonUtils.getFloat(jsonObj, "damage");
+		});
+		
 		ModLootTables.init(basefolder);
 	}
 
@@ -316,6 +331,7 @@ public class ConfigurationHandler {
 		inheat.sync();
 		generators.sync();
 		productions.sync();
+		slingshot.sync();
 		ModLootTables.sync();
 	}
 
