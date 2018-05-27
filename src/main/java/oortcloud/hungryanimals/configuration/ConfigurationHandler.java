@@ -1,6 +1,5 @@
 package oortcloud.hungryanimals.configuration;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URISyntaxException;
@@ -89,8 +88,8 @@ public class ConfigurationHandler {
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
-		File basefolder = new File(event.getModConfigurationDirectory(), References.MODID);
-		File examplefolder = new File(event.getModConfigurationDirectory(), References.MODID + "_example");
+		Path basefolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID);
+		Path examplefolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID+"_example");
 
 		// Create Example Config Folder
 		try {
@@ -346,22 +345,25 @@ public class ConfigurationHandler {
 		}
 	}
 
-	public static String resourceLocationToString(ResourceLocation location) {
-		String stringLocation = location.toString();
-		return stringLocation.replace(':', '#').replace('/', '@');
+	public static Path resourceLocationToPath(ResourceLocation location, String ext) {
+		String domain = location.getResourceDomain();
+		String path = location.getResourcePath();
+		String[] paths = path.split("/");
+		paths[paths.length-1] += "."+ext;
+		return Paths.get(domain, paths);
 	}
 
 	public static ResourceLocation stringToResourceLocation(String location) {
 		return new ResourceLocation(location.replace('#', ':').replace('@', '/'));
 	}
 
-	private static void createExample(File basefolder) throws IOException, URISyntaxException {
+	private static void createExample(Path basefolder) throws IOException, URISyntaxException {
 		HAPlugins.getInstance().walkPlugins((path, jsonElement) -> {
 			Path parent;
 			if (path.getParent() != null) {
-				parent = Paths.get(basefolder.toString(), path.getParent().toString());
+				parent = basefolder.resolve(path.getParent());
 			} else {
-				parent = basefolder.toPath();
+				parent = basefolder;
 			}
 			try {
 				Files.createDirectories(parent);
@@ -370,7 +372,7 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
 			}
 
-			Path target = Paths.get(basefolder.toString(), path.toString());
+			Path target = basefolder.resolve(path);
 			try {
 				Files.createFile(target);
 			} catch (FileAlreadyExistsException e) {
@@ -386,9 +388,9 @@ public class ConfigurationHandler {
 		}, (path, txt) -> {
 			Path parent;
 			if (path.getParent() != null) {
-				parent = Paths.get(basefolder.toString(), path.getParent().toString());
+				parent = basefolder.resolve(path.getParent());
 			} else {
-				parent = basefolder.toPath();
+				parent = basefolder;
 			}
 			try {
 				Files.createDirectories(parent);
@@ -397,7 +399,7 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
 			}
 
-			Path target = Paths.get(basefolder.toString(), path.toString());
+			Path target = basefolder.resolve(path);
 			try {
 				Files.createFile(target);
 			} catch (FileAlreadyExistsException e) {
@@ -410,23 +412,6 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
 			}
 		});
-		/*
-		 * String[] directories = new String[] { "", "/ais", "/attributes",
-		 * "/food_preferences/block", "/food_preferences/entity",
-		 * "/food_preferences/item", "/loot_tables/entities" }; String prefix =
-		 * "/assets/hungryanimals";
-		 * 
-		 * for (String directory : directories) { // Prepare for directory walk
-		 * URI uri = ConfigurationHandler.class.getResource(prefix +
-		 * directory).toURI(); if (uri.getScheme().equals("jar")) { FileSystem
-		 * fileSystem = FileSystems.newFileSystem(uri, Collections.<String,
-		 * Object>emptyMap()); Path myPath = fileSystem.getPath(prefix +
-		 * directory); walkAndCopy(basefolder, directory, myPath);
-		 * fileSystem.close(); } else { Path myPath = Paths.get(uri);
-		 * walkAndCopy(basefolder, directory, myPath); }
-		 * 
-		 * }
-		 */
 	}
 
 }

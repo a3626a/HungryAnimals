@@ -1,8 +1,8 @@
 package oortcloud.hungryanimals.configuration;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
 
@@ -15,17 +15,17 @@ import oortcloud.hungryanimals.api.HAPlugins;
 
 public class ConfigurationHandlerJSON {
 
-	protected File directory;
+	protected Path directory;
 	protected String descriptor;
 
 	private Consumer<JsonElement> read;
 
-	public ConfigurationHandlerJSON(File basefolder, String descriptor) {
+	public ConfigurationHandlerJSON(Path basefolder, String descriptor) {
 		this.descriptor = descriptor;
 		this.directory = basefolder;
 	}
 
-	public ConfigurationHandlerJSON(File basefolder, String descriptor, Consumer<JsonElement> read) {
+	public ConfigurationHandlerJSON(Path basefolder, String descriptor, Consumer<JsonElement> read) {
 		this.descriptor = descriptor;
 		this.directory = basefolder;
 		this.read = read;
@@ -33,13 +33,14 @@ public class ConfigurationHandlerJSON {
 
 	public void sync() {
 		checkDirectory();
-		File file = new File(directory, descriptor + ".json");
+		Path file = directory.resolve(descriptor + ".json");
 		try {
 			JsonElement json = null;
-			if (!file.exists()) {
+			
+			if (Files.notExists(file)) {
 				json = HAPlugins.getInstance().getJson(Paths.get(descriptor+".json"));
 			} else {
-				json = (new JsonParser()).parse(new String(Files.readAllBytes(file.toPath())));
+				json = (new JsonParser()).parse(new String(Files.readAllBytes(file)));
 			}
 			this.read.accept(json);
 		} catch (JsonSyntaxException | IOException e) {
@@ -48,9 +49,9 @@ public class ConfigurationHandlerJSON {
 	}
 
 	protected void checkDirectory() {
-		if (!directory.exists()) {
+		if (Files.notExists(directory)) {
 			try {
-				Files.createDirectories(directory.toPath());
+				Files.createDirectories(directory);
 			} catch (IOException e) {
 				HungryAnimals.logger.error("Couldn\'t create {} folder {}\n{}", new Object[] { descriptor, directory, e });
 				return;

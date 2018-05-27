@@ -1,8 +1,8 @@
 package oortcloud.hungryanimals.configuration;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.google.gson.JsonElement;
@@ -26,8 +26,8 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 	 * @param descriptor : relative path, never start with /
 	 * @param read
 	 */
-	public ConfigurationHandlerJSONAnimal(File basefolder, String descriptor, BiConsumer<JsonElement, Class<? extends EntityAnimal>> read) {
-		super(new File(basefolder, descriptor), descriptor);
+	public ConfigurationHandlerJSONAnimal(Path basefolder, String descriptor, BiConsumer<JsonElement, Class<? extends EntityAnimal>> read) {
+		super(basefolder.resolve(descriptor), descriptor);
 		this.read = read;
 		this.descriptor = descriptor;
 	}
@@ -36,22 +36,23 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 		checkDirectory();
 
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			String animalName = ConfigurationHandler.resourceLocationToString(EntityList.getKey(i));
-			File iFile = new File(directory, animalName+".json");
+			Path path = ConfigurationHandler.resourceLocationToPath(EntityList.getKey(i), "json");
+			Path configPath = directory.resolve(path);
 
 			try {
 				JsonElement json = null;
-				if (!iFile.exists()) {
-					json = HAPlugins.getInstance().getJson(Paths.get(descriptor, animalName+".json"));
+				if (Files.notExists(configPath)) {
+					// Config file not exist, so use default(internal)
+					json = HAPlugins.getInstance().getJson(Paths.get(descriptor).resolve(path));
 					
 					if (json == null)
 						continue;
 				} else {
-					json = (new JsonParser()).parse(new String(Files.readAllBytes(iFile.toPath())));
+					json = (new JsonParser()).parse(new String(Files.readAllBytes(configPath)));
 				}
 				this.read.read(json, i);
 			} catch (JsonSyntaxException | IOException e) {
-				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, iFile, i, e });
+				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, configPath, i, e });
 			}
 		}
 

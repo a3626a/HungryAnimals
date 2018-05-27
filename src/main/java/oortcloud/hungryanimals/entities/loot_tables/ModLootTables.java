@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
-import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +55,8 @@ public class ModLootTables implements ILootTableRegistry {
 	private static final Field pools = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c");
 	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class, "lootEntries", "field_186453_a");
 
-	public static void init(File file) {
-		manager = new LootTableManager(file);
+	public static void init(Path file) {
+		manager = new LootTableManager(file.toFile());
 		tables = new HashMap<ResourceLocation, LootTable>();
 	}
 
