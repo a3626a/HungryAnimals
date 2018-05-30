@@ -137,6 +137,16 @@ public class EntityEventHandler {
 				if (capProducing != null) {
 					capProducing.update();
 				}
+				
+				if (animal.getGrowingAge() < 0) {
+					// TODO I HATE THIS BUSY LOOP. IS THERE ANY BETTER SOLUTION?
+					if (!animal.isPotionActive(ModPotions.potionYoung)) {
+						animal.addPotionEffect(new PotionEffect(ModPotions.potionYoung, Integer.MAX_VALUE, 0, false, false));
+						if (animal.getHealth() > animal.getMaxHealth()) {
+							animal.setHealth(animal.getMaxHealth());
+						}
+					}
+				}
 			}
 		}
 	}

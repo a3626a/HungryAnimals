@@ -1,5 +1,7 @@
 package oortcloud.hungryanimals.potion;
 
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
@@ -16,4 +18,21 @@ public class PotionYoung extends PotionHungryAnimals {
 		registerPotionAttributeModifier(SharedMonsterAttributes.MAX_HEALTH, "e703c0b2-e5f2-11e7-80c1-9a214cf093ae", -0.5, 1);
 	}
 
+	@Override
+	public boolean isReady(int duration, int amplifier) {
+		return true;
+	}
+	
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		if (entity instanceof EntityAgeable) {
+			EntityAgeable animal = (EntityAgeable)entity;
+			
+			if (animal.getGrowingAge() >= 0) {
+				entity.removePotionEffect(this);
+			}
+		} else {
+			entity.removePotionEffect(this);
+		}
+	}
 }

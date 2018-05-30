@@ -12,6 +12,7 @@ public class ModPotions {
 	public static Potion potionGrowth;
 	public static Potion potionInheat;
 	public static Potion potionOvereat;
+	public static Potion potionYoung;
 	
 	@SubscribeEvent
 	public static void registerPotions(RegistryEvent.Register<Potion> event) {
@@ -19,7 +20,8 @@ public class ModPotions {
 		potionGrowth = new PotionGrowth((100 << 16) + (200 << 8) + (0));
 		potionInheat = new PotionInheat((255 << 16) + (50 << 8) + (50));
 		potionOvereat = new PotionOvereat((200 << 16) + (100 << 8) + (0));
-	    event.getRegistry().registerAll(potionDisease, potionGrowth, potionInheat, potionOvereat);
+		potionYoung = new PotionYoung((200 << 16) + (200 << 8) + (0));
+	    event.getRegistry().registerAll(potionDisease, potionGrowth, potionInheat, potionOvereat, potionYoung);
 	}
 
 }
