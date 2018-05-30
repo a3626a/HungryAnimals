@@ -105,13 +105,14 @@ public class RenderEntityWeight extends Render<EntityAnimal> {
 				age = animal.getGrowingAge();
 			}
 			
-			double standardWeight;
+			double standardWeight = animal.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
 			if (age < 0) {
-				return 1;
+				return Math.pow(cap.getWeight() / (standardWeight / 4.0), 1 / 3.0);
 			} else {
-				standardWeight = animal.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
+				
+				return Math.pow(cap.getWeight() / standardWeight, 1 / 3.0);
 			}
-			return Math.pow(cap.getWeight() / standardWeight, 1 / 3.0);
+			
 		} else {
 			return 1;
 		}

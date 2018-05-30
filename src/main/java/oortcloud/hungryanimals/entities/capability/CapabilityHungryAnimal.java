@@ -1,20 +1,28 @@
 package oortcloud.hungryanimals.entities.capability;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
+	public static Method setScale = ReflectionHelper.findMethod(EntityAgeable.class, "setScale", "func_98055_j", float.class);
+	
 	private double excretion;
 	private double stomach; 
 	private double nutrient;
@@ -125,11 +133,27 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		
 		int currWeight = (int) getWeight();
 		if (currWeight != prevWeight) {
+			updateSize();
 			sync();
 		}
 		prevWeight = currWeight;
 		
 		return oldWeight;
+	}
+	
+	private void updateSize() {
+		float ratio = (float) RenderEntityWeight.getRatio(entity);
+		
+		if (entity.getGrowingAge() < 0) {
+			ratio *= 0.5;
+		}
+		
+		try {
+			setScale.invoke(entity, ratio);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			HungryAnimals.logger.warn("Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
