@@ -1,4 +1,4 @@
-Each 'modid#name.json' contains a Loot Table.
+Each 'modid/name.json' contains a Loot Table.
 If an entry of this loot table drops same item of vanilla loot table,
 this loot table removes duplicated vanilla entry.
 
