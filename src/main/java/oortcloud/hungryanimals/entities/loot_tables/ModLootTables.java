@@ -55,49 +55,49 @@ public class ModLootTables implements ILootTableRegistry {
 	private static final Field pools = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c");
 	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class, "lootEntries", "field_186453_a");
 
-	public static void init(Path file) {
-		manager = new LootTableManager(file.toFile());
+	public static void init(Path path) {
+		manager = new LootTableManager(path.toFile());
 		tables = new HashMap<ResourceLocation, LootTable>();
 	}
 
-	public static <T extends LootFunction> void register(LootFunction.Serializer <? extends T > serializer) {
+	public static <T extends LootFunction> void register(LootFunction.Serializer<? extends T> serializer) {
 		LootFunctionManager.registerFunction(serializer);
 	}
-	
+
 	public static void sync() {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			ResourceLocation key = EntityList.getKey(i);
 			if (key == null)
 				continue;
-			
+
 			String domain = key.getResourceDomain();
 			String name = key.getResourcePath();
-			
+
 			// This keyTable is inferred at LootTableLoadEvent
-			// ResourceLocation keyTable = new ResourceLocation(domain, "entities/"+name);
-			ResourceLocation valueTable = new ResourceLocation(References.MODID, "entities/"+domain+"#"+name);
+			// ResourceLocation keyTable = new ResourceLocation(domain,
+			// "entities/"+name);
+			ResourceLocation valueTable = new ResourceLocation(References.MODID+"/config", "entities/" + domain + "#" + name);
 			manager.getLootTableFromLocation(valueTable);
 		}
 	}
 
-	
 	@SuppressWarnings("unchecked")
-	@SubscribeEvent(priority=EventPriority.HIGHEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void LootTableLoadEventCancel(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
-		if (event.getLootTableManager()==manager) {
+		if (event.getLootTableManager() == manager) {
 			String valueName = event.getName().getResourcePath();
 			String[] valueNameSplited = valueName.split("#");
-			String valueDomain = valueNameSplited[0].substring(valueNameSplited[0].indexOf("/")+1);
-			String valuePath = "entities/"+valueNameSplited[1];
+			String valueDomain = valueNameSplited[0].substring(valueNameSplited[0].indexOf("/") + 1);
+			String valuePath = "entities/" + valueNameSplited[1];
 			tables.put(new ResourceLocation(valueDomain, valuePath), event.getTable());
 			event.setCanceled(true);
 			return;
 		}
-		
+
 		LootTable table = tables.get(event.getName());
-		if (table == null) 
+		if (table == null)
 			return;
-		
+
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
 			if (iEntries.size() == 1) {
@@ -124,11 +124,9 @@ public class ModLootTables implements ILootTableRegistry {
 			event.getTable().addPool(i);
 		}
 	}
-	
-	
+
 	@Override
 	public <T extends LootFunction> void registerFunction(Serializer<? extends T> serializer) {
 		register(serializer);
 	}
-
 }
