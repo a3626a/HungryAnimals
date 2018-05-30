@@ -89,7 +89,7 @@ public class RenderEntityWeight extends Render<EntityAnimal> {
 		return null;
 	}
 
-	protected double getRatio(Entity entity) {
+	public static double getRatio(Entity entity) {
 		if (!(entity instanceof EntityAnimal)) {
 			return 1;
 		}

@@ -1,10 +1,13 @@
 package oortcloud.hungryanimals.entities.event;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -34,6 +37,8 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
@@ -51,11 +56,13 @@ import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeats;
+import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityEventHandler {
 
+	public static Method setScale = ReflectionHelper.findMethod(EntityAgeable.class, "setScale", "func_98055_j", float.class);
 	
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -118,34 +125,45 @@ public class EntityEventHandler {
 		if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))
 			return;
 
-		if (!animal.getEntityWorld().isRemote && animal.getEntityWorld().getTotalWorldTime() % 20 == 0) {
-			updateHunger(animal);
-			updateCourtship(animal);
-			updateExcretion(animal);
-			updateTaming(animal);
-			updateEnvironmentalEffet(animal);
-			updateRecovery(animal);
-
-			ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
-			if (capHungry != null)
-				if (capHungry.getWeight() < capHungry.getStarvinglWeight()) {
-					onStarve(animal);
-				}
+		if (animal.getEntityWorld().getTotalWorldTime() % 20 == 0) {
+			updateSize(animal);
 			
-			ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP, null);
-			if (capProducing != null) {
-				capProducing.update();
+			if (!animal.getEntityWorld().isRemote) {
+				updateHunger(animal);
+				updateCourtship(animal);
+				updateExcretion(animal);
+				updateTaming(animal);
+				updateEnvironmentalEffet(animal);
+				updateRecovery(animal);
+				
+				
+				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+				if (capHungry != null)
+					if (capHungry.getWeight() < capHungry.getStarvinglWeight()) {
+						onStarve(animal);
+					}
+				
+				ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP, null);
+				if (capProducing != null) {
+					capProducing.update();
+				}
+			}
+		}
+	}
+
+	private void updateSize(EntityAnimal animal) {
+		if (animal instanceof EntityAgeable) {
+			float ratio = (float) RenderEntityWeight.getRatio(animal);
+			try {
+				setScale.invoke(animal, ratio);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				HungryAnimals.logger.warn("Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
+				e.printStackTrace();
 			}
 		}
 	}
 
 	private void updateHunger(EntityAnimal entity) {
-		/*
-		 * double vel = (!this.entity.isAirBorne) ? this.entity.motionX
-		 * this.entity.motionX + this.entity.motionY this.entity.motionY +
-		 * this.entity.motionZ this.entity.motionZ : 0; vel = 20 *
-		 * Math.sqrt(vel); this.subHunger(this.hunger_bmr * (1 + vel / 2.0));
-		 */
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
 		if (cap == null)
