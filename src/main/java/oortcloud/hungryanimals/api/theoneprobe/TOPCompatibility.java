@@ -16,9 +16,12 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityProducingAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilitySexual;
+import oortcloud.hungryanimals.entities.capability.ICapabilitySexual.Sex;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderProducingAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.ProductionEgg;
@@ -63,6 +66,7 @@ public class TOPCompatibility {
 					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
 					ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP, null);
+					ICapabilitySexual capSexual = animal.getCapability(ProviderSexual.CAP, null);
 					
 					if (capHungry != null) {
 						probeInfo.horizontal().text("WEIGHT:").text(String.format("%.1fkg", (float) capHungry.getWeight()));
@@ -92,7 +96,13 @@ public class TOPCompatibility {
 								probeInfo.horizontal().text(getMessage("Shearing", ((ProductionShear)i).getCooldown()));
 							}
 						}
-						
+					}
+					if (capSexual != null) {
+						if (capSexual.getSex() == Sex.MALE) {
+							probeInfo.horizontal().text("¡Î");
+						} else if (capSexual.getSex() == Sex.FEMALE) {
+							probeInfo.horizontal().text("¡Ï");
+						}
 					}
 				}
 			});

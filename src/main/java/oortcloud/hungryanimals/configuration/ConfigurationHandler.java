@@ -55,6 +55,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredien
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager.HungryAnimalEntry;
 import oortcloud.hungryanimals.entities.handler.InHeats;
 import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
 import oortcloud.hungryanimals.entities.production.IProduction;
@@ -254,14 +255,26 @@ public class ConfigurationHandler {
 			for (JsonElement jsonEle : jsonArr) {
 
 				String name;
-				boolean disableTaming = false;
-				boolean modelGrowing = true;
 				
+				HungryAnimalEntry entry = new HungryAnimalEntry();
 				if (jsonEle.isJsonObject()) {
 					JsonObject jsonObj = jsonEle.getAsJsonObject();
 					name = JsonUtils.getString(jsonObj, "name");
-					disableTaming = JsonUtils.getBoolean(jsonObj, "disable_taming");
-					modelGrowing = JsonUtils.getBoolean(jsonObj, "model_growing");
+					if (jsonObj.has("disable_taming")) {
+						// Backward compatibility
+						entry.setTamable(!JsonUtils.getBoolean(jsonObj, "disable_taming"));
+					} else if (jsonObj.has("tamable")) {
+						entry.setTamable(JsonUtils.getBoolean(jsonObj, "tamable"));
+					}
+					
+					if (jsonObj.has("model_growing")) {
+						entry.setModelGrowing(JsonUtils.getBoolean(jsonObj, "model_growing"));
+					}
+					
+					if (jsonObj.has("sexual")) {
+						entry.setSexual(JsonUtils.getBoolean(jsonObj, "sexual"));
+					}
+					
 				} else {
 					name = jsonEle.getAsString();
 				}
@@ -271,7 +284,7 @@ public class ConfigurationHandler {
 							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
 						ResourceLocation resource = EntityList.getKey(entityClass);
 						HungryAnimals.logger.info("[Configuration] registered " + resource);
-						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class), disableTaming, modelGrowing);
+						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class), entry);
 					}
 				}
 			}

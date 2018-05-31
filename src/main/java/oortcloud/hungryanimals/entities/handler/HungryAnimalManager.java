@@ -12,18 +12,31 @@ public class HungryAnimalManager {
 	private Map<Class<? extends EntityAnimal>, HungryAnimalEntry> REGISTRY;
 	
 	public static class HungryAnimalEntry {
-		public boolean disableTaming;
-		public boolean modelGrowing;
+		public boolean isTamable;
+		public boolean isModelGrowing;
+		public boolean isSexual;
 		
 		public HungryAnimalEntry() {
-			disableTaming = false;
-			modelGrowing = true;
+			isTamable = false;
+			isModelGrowing = true;
+			isSexual = true;
 		}
 		
-		public HungryAnimalEntry(boolean disableTaming, boolean modelGrowing) {
-			this.disableTaming = disableTaming;
-			this.modelGrowing = modelGrowing;
+		public HungryAnimalEntry setTamable(boolean isTamable) {
+			this.isTamable = isTamable;
+			return this;
 		}
+		
+		public HungryAnimalEntry setModelGrowing(boolean isModelGrowing) {
+			this.isModelGrowing = isModelGrowing;
+			return this;
+		}
+		
+		public HungryAnimalEntry setSexual(boolean isSexual) {
+			this.isSexual = isSexual;
+			return this;
+		}
+		
 	}
 	
 	public static HungryAnimalManager getInstance() {
@@ -38,12 +51,12 @@ public class HungryAnimalManager {
 	}
 
 	public boolean register(Class<? extends EntityAnimal> animal) {
-		return register(animal, false, true);
+		return register(animal, new HungryAnimalEntry());
 	}
 
-	public boolean register(Class<? extends EntityAnimal> animal, boolean disableTaming, boolean modelGrowing) {
+	public boolean register(Class<? extends EntityAnimal> animal, HungryAnimalEntry entry) {
 		if (!REGISTRY.containsKey(animal)) {
-			REGISTRY.put(animal, new HungryAnimalEntry(disableTaming, modelGrowing));
+			REGISTRY.put(animal, entry);
 			return true;
 		}
 		return false;
@@ -59,16 +72,23 @@ public class HungryAnimalManager {
 
 	public boolean isDisabledTaming(Class<? extends EntityAnimal> animal) {
 		if (REGISTRY.containsKey(animal)) {
-			return REGISTRY.get(animal).disableTaming;
+			return REGISTRY.get(animal).isTamable;
 		}
 		return true;
 	}
 	
 	public boolean isModelGrowing(Class<? extends EntityAnimal> animal) {
 		if (REGISTRY.containsKey(animal)) {
-			return REGISTRY.get(animal).modelGrowing;
+			return REGISTRY.get(animal).isModelGrowing;
 		}
-		return true;
+		return false;
+	}
+	
+	public boolean isSexual(Class<? extends EntityAnimal> animal) {
+		if (REGISTRY.containsKey(animal)) {
+			return REGISTRY.get(animal).isSexual;
+		}
+		return false;
 	}
 	
 	public void init() {

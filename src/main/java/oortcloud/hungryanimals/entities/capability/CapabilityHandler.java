@@ -18,7 +18,8 @@ public class CapabilityHandler {
 	public static final ResourceLocation CAP_HUNGRYANIMALS = new ResourceLocation(References.MODID, "hungryanimal");
 	public static final ResourceLocation CAP_TAMABLEANIMALS = new ResourceLocation(References.MODID, "tamableanimal");
 	public static final ResourceLocation CAP_PRODUCINGANIMALS = new ResourceLocation(References.MODID, "producinganimal");
-
+	public static final ResourceLocation CAP_SEXUAL = new ResourceLocation(References.MODID, "sexual");
+	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
 		if (!(event.getObject() instanceof EntityAnimal))
@@ -29,7 +30,6 @@ public class CapabilityHandler {
 			event.addCapability(CAP_HUNGRYANIMALS, new ProviderHungryAnimal(animal));
 
 			boolean disabledTaming = HungryAnimalManager.getInstance().isDisabledTaming(animal.getClass());
-
 			if (!disabledTaming) {
 				if (animal instanceof AbstractHorse) {
 					event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal((AbstractHorse) animal));
@@ -37,8 +37,14 @@ public class CapabilityHandler {
 					event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal(animal));
 				}
 			}
+			
 			if (Productions.getInstance().hasProduction(animal)) {
 				event.addCapability(CAP_PRODUCINGANIMALS, new ProviderProducingAnimal(animal));
+			}
+			
+			boolean isSexual = HungryAnimalManager.getInstance().isSexual(animal.getClass());
+			if (isSexual) {
+				event.addCapability(CAP_SEXUAL, new ProviderSexual(animal));
 			}
 		}
 	}
