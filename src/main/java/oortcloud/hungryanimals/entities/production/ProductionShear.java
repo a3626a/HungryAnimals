@@ -86,4 +86,5 @@ public class ProductionShear extends ProductionInteraction {
 
 		return (animal) -> new ProductionShear(name, animal, delay, input, output, damage, shouldAdult, disableSound);
 	}
+	
 }

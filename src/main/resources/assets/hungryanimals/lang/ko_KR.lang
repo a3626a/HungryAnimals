@@ -27,3 +27,8 @@ potion.disease=감염
 potion.inheat=발정기
 potion.young=성장기
 potion.overeat=과식
+
+minecraft.cow.milk=우유
+minecraft.chicken.egg=달걀
+minecraft.llama.milk=우유
+minecraft.mooshroom.milk=수프

@@ -27,3 +27,8 @@ potion.disease=Disease
 potion.inheat=In Heat
 potion.young=Young
 potion.overeat=Overeat
+
+minecraft.cow.milk=Milk
+minecraft.chicken.egg=Egg
+minecraft.llama.milk=Milk
+minecraft.mooshroom.milk=Soup

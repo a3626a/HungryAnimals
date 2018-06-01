@@ -24,9 +24,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.production.IProduction;
-import oortcloud.hungryanimals.entities.production.ProductionEgg;
-import oortcloud.hungryanimals.entities.production.ProductionMilk;
-import oortcloud.hungryanimals.entities.production.ProductionShear;
+import oortcloud.hungryanimals.entities.production.IProductionTOP;
 
 public class TOPCompatibility {
 
@@ -86,14 +84,11 @@ public class TOPCompatibility {
 					}
 					if (capProducing != null) {
 						for (IProduction i : capProducing.getProductions()) {
-							if (i instanceof ProductionMilk) {
-								probeInfo.horizontal().text(getMessage("Milk", ((ProductionMilk)i).getCooldown()));
-							}
-							if (i instanceof ProductionEgg) {
-								probeInfo.horizontal().text(getMessage("Egg", ((ProductionEgg)i).getCooldown()));
-							}
-							if (i instanceof ProductionShear) {
-								probeInfo.horizontal().text(getMessage("Shearing", ((ProductionShear)i).getCooldown()));
+							if (i instanceof IProductionTOP) {
+								String msg = ((IProductionTOP)i).getMessage();
+								if (msg != null) {
+									probeInfo.horizontal().text(msg);
+								}
 							}
 						}
 					}
@@ -109,11 +104,5 @@ public class TOPCompatibility {
 			return null;
 		}
 		
-		public static String getMessage(String name, int delay) {
-			if (delay < 0) {
-				return String.format("%s now", name);
-			}
-			return String.format("%s after %d seconds", name, delay);
-		}
 	}
 }

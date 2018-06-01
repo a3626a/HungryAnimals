@@ -5,6 +5,7 @@ import java.util.function.Function;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,7 @@ import oortcloud.hungryanimals.entities.production.utils.IRange;
 import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
 import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
 
-public class ProductionEgg implements IProductionTickable {
+public class ProductionEgg implements IProductionTickable, IProductionTOP {
 
 	private int cooldown;
 	private IRange delay;
@@ -108,4 +109,12 @@ public class ProductionEgg implements IProductionTickable {
 		return cooldown;
 	}
 
+	@Override
+	public String getMessage() {
+		if (cooldown < 0) {
+			return String.format("%s now", I18n.format(name));
+		}
+		return String.format("%s after %d seconds", I18n.format(name), cooldown);
+	}
+	
 }

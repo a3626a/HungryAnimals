@@ -83,4 +83,5 @@ public class ProductionMilk extends ProductionInteraction {
 
 		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult, disableSound);
 	}
+	
 }
