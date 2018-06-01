@@ -29,8 +29,10 @@ import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilitySexual;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.utils.Tamings;
 
@@ -99,13 +101,27 @@ public class EntityAIMateModified extends EntityAIBase {
 		double d0 = Double.MAX_VALUE;
 		EntityAnimal entityanimal = null;
 
-		for (EntityAnimal entityanimal1 : list) {
-			if (this.animal.canMateWith(entityanimal1) && this.animal.getDistanceSq(entityanimal1) < d0) {
-				entityanimal = entityanimal1;
-				d0 = this.animal.getDistanceSq(entityanimal1);
+		ICapabilitySexual sexual = animal.getCapability(ProviderSexual.CAP, null);
+
+		if (sexual != null) {
+			for (EntityAnimal entityanimal1 : list) {
+				if (this.animal.canMateWith(entityanimal1)) {
+					ICapabilitySexual sexual1 = entityanimal1.getCapability(ProviderSexual.CAP, null);
+					if (sexual1 != null && sexual.getSex() != sexual1.getSex() && this.animal.getDistanceSq(entityanimal1) < d0) {
+						entityanimal = entityanimal1;
+						d0 = this.animal.getDistanceSq(entityanimal1);
+					}
+				}
+			}
+		} else {
+			for (EntityAnimal entityanimal1 : list) {
+				if (this.animal.canMateWith(entityanimal1) && !entityanimal1.hasCapability(ProviderSexual.CAP, null)
+						&& this.animal.getDistanceSq(entityanimal1) < d0) {
+					entityanimal = entityanimal1;
+					d0 = this.animal.getDistanceSq(entityanimal1);
+				}
 			}
 		}
-
 		return entityanimal;
 	}
 
@@ -234,14 +250,8 @@ public class EntityAIMateModified extends EntityAIBase {
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> new EntityAIMateModified(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class)
-		                     .before(EntityAIMoveToTrough.class)
-		                     .before(EntityAITemptIngredient.class)
-		                     .before(EntityAITemptEdibleItem.class)
-		                     .before(EntityAIMoveToEatItem.class)
-		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParentFixed.class)
-		                     .before(EntityAIWanderAvoidWater.class)
-		                     .put(factory);
+		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(EntityAITemptIngredient.class)
+				.before(EntityAITemptEdibleItem.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
+				.before(EntityAIFollowParentFixed.class).before(EntityAIWanderAvoidWater.class).put(factory);
 	}
 }
