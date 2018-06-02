@@ -7,7 +7,7 @@
             "max" : 400
         },
         "condition" : {
-        	"age" : {}
+        	"age" : "adult"
         },
         "disable_sound" : true,
         "input" : {

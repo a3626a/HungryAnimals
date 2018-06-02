@@ -7,10 +7,8 @@
             "max" : 600
         },
         "condition" : {
-        	"age" : {},
-        	"sex" : {
-        		"female_only" : true
-        	}
+        	"age" : "adult",
+        	"sex" : "female"
         },
         "disable_sound" : false,
         "output" : {

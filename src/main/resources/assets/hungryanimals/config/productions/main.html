@@ -69,7 +69,7 @@
         "type" : "milk",
         "name" : <a class="ha-replacement">string</a>,
         "delay" : <a href="#range" class="ha-replacement">range</a>,
-        "should_adult" : <a class="ha-replacement">boolean</a>,
+        "condition" : <a href="#condition" class="ha-replacement">condition</a>,
         "disable_sound" : <a class="ha-replacement">boolean</a>,
         "input" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>,
         "output" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>
@@ -80,7 +80,7 @@
         "type" : "egg",
         "name" : <a class="ha-replacement">string</a>,
         "delay" : <a href="#range" class="ha-replacement">range</a>,
-        "should_adult" : <a class="ha-replacement">boolean</a>,
+        "condition" : <a href="#condition" class="ha-replacement">condition</a>,
         "disable_sound" : <a class="ha-replacement">boolean</a>,
         "output" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>,
     }
@@ -90,7 +90,7 @@
         "type" : "shear",
         "name" : <a class="ha-replacement">string</a>,
         "delay" : <a href="#range" class="ha-replacement">range</a>,
-        "should_adult" : <a class="ha-replacement">boolean</a>,
+        "condition" : <a href="#condition" class="ha-replacement">condition</a>,
         "disable_sound" : <a class="ha-replacement">boolean</a>,
         "damage" : <a class="ha-replacement">integer</a>,
         "input" : <a href="../miscellaneous.html#itemstack" class="ha-replacement">itemstack</a>,
@@ -104,15 +104,21 @@
         "min" : <a class="ha-replacement">integer</a>,
         "max" : <a class="ha-replacement">integer</a>
     }
+    
+<a id="condition" class="ha-replacement">condition</a> :
+    {
+        "age" : "baby" | "adult",
+        "sex" : "female" | "male",
+    }
 </pre>
     </div>
   </div>
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Usage</h1>
-      <p>A type production like <a href="#milk" class="ha-replacement">milk</a>, <a href="#egg" class="ha-replacement">egg</a>, or <a href="#shear" class="ha-replacement">shear</a> is distinguished by <code>"type"</code> field. Every production must have <code>"name"</code> which is used to save data to disc. This <code>"name"</code> must be unique.</p>
-      <p><a href="#milk" class="ha-replacement">milk</a> production is way of producing milk like Cow. You can specify "bucket" as <code>"input"</code>, "milk" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"should_adult"</code>, <code>"disable_sound"</code>.<br>* <code>"input"</code>/<code>"output"</code> don't have to be buckets, you can specify anything.</p>
-      <p><a href="#egg" class="ha-replacement">egg</a> production is way of producing egg like Chicken. You can specify "egg" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"should_adult"</code>, <code>"disable_sound"</code>.<br>* There's no limitation on <code>"output"</code>, you can specify anything.</p>
+      <p>A type of production like <a href="#milk" class="ha-replacement">milk</a>, <a href="#egg" class="ha-replacement">egg</a>, or <a href="#shear" class="ha-replacement">shear</a> is distinguished by <code>"type"</code> field. Every production must have <code>"name"</code> which is used to save data to disc. This <code>"name"</code> must be unique. <code>"condition"</code> is a requirement for the production. <a href="#condition" class="ha-replacement">condition</a> has two fields which can be omitted. If <code>"sex"</code> is omitted, then animals can produce regardless of sex.</p>
+      <p><a href="#milk" class="ha-replacement">milk</a> production is way of producing milk like Cow. You can specify "bucket" as <code>"input"</code>, "milk" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"disable_sound"</code>.<br>* <code>"input"</code>/<code>"output"</code> don't have to be buckets, you can specify anything.</p>
+      <p><a href="#egg" class="ha-replacement">egg</a> production is way of producing egg like Chicken. You can specify "egg" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"disable_sound"</code>.<br>* There's no limitation on <code>"output"</code>, you can specify anything.</p>
       <p><a href="#shear" class="ha-replacement">shear</a> production is way of producing wool like Sheep. You can specify "wool" as <code>"output"</code>, "shears" as <code>"input"</code>. <code>"damage"</code> determines durability cost per shearing.<br>* There's no limitation on <code>"output"</code>, you can specify anything. For <code>"input"</code>, it must be damagable, like tools or equipments.</p>
       <p><a href="#range" class="ha-replacement">range</a> determines delay or cooldown of productions. <a href="#range" class="ha-replacement">range</a> with one <a class="ha-replacement">integer</a> value always has fixed cooldown in <a class="ha-replacement">integer</a> seconds. <a href="#range" class="ha-replacement">range</a> with <code>"min"</code> and <code>"max"</code> field has random cooldown between <code>"min"</code> and <code>"max"</code> seconds.</p>
     </div>
@@ -128,7 +134,9 @@
             "min" : 15,
             "max" : 30
         },
-        "should_adult" : true,
+        "condition" : {
+            "age" : "adult"
+        }
         "disable_sound" : false,
         "damage" : 2,
         "input" : {

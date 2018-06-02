@@ -82,6 +82,13 @@ public class TOPCompatibility {
 									probeInfo.defaultProgressStyle().filledColor(0xFFFF0000).alternateFilledColor(0xFFFF0000).borderColor(0).showText(false));
 						}
 					}
+					if (capSexual != null) {
+						if (capSexual.getSex() == Sex.MALE) {
+							probeInfo.horizontal().text("SEX: MALE ［");
+						} else if (capSexual.getSex() == Sex.FEMALE) {
+							probeInfo.horizontal().text("SEX: FEMALE ］");
+						}
+					}
 					if (capProducing != null) {
 						for (IProduction i : capProducing.getProductions()) {
 							if (i instanceof IProductionTOP) {
@@ -90,13 +97,6 @@ public class TOPCompatibility {
 									probeInfo.horizontal().text(msg);
 								}
 							}
-						}
-					}
-					if (capSexual != null) {
-						if (capSexual.getSex() == Sex.MALE) {
-							probeInfo.horizontal().text("［");
-						} else if (capSexual.getSex() == Sex.FEMALE) {
-							probeInfo.horizontal().text("］");
 						}
 					}
 				}
