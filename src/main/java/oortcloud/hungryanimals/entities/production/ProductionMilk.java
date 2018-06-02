@@ -2,9 +2,11 @@ package oortcloud.hungryanimals.entities.production;
 
 import java.util.function.Function;
 
+import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -16,6 +18,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
 import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
 import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
@@ -24,15 +27,15 @@ public class ProductionMilk extends ProductionInteraction {
 
 	private ItemStack emptyBucket;
 	private ItemStack filledBucket;
-	private boolean shouldAdult;
+	private Predicate<EntityAgeable> condition;
 	private boolean disableSound;
 
-	public ProductionMilk(String name, EntityAnimal animal, IRange delay, ItemStack emptyBucket, ItemStack filledBucket, boolean shouldAdult,
+	public ProductionMilk(String name, EntityAnimal animal, IRange delay, ItemStack emptyBucket, ItemStack filledBucket, Predicate<EntityAgeable> condition,
 			boolean disableSound) {
 		super(name, animal, delay);
 		this.emptyBucket = emptyBucket;
 		this.filledBucket = filledBucket;
-		this.shouldAdult = shouldAdult;
+		this.condition = condition;
 		this.disableSound = disableSound;
 	}
 
@@ -40,7 +43,7 @@ public class ProductionMilk extends ProductionInteraction {
 	public EnumActionResult interact(EntityInteract event, EnumHand hand, ItemStack itemstack) {
 		EntityPlayer player = event.getEntityPlayer();
 		if (canProduce()) {
-			if (!shouldAdult || !animal.isChild()) {
+			if (condition.apply(animal)) {
 				if (itemstack.isItemEqual(emptyBucket)) {
 					if (!animal.getEntityWorld().isRemote) {
 						if (!disableSound) {
@@ -76,12 +79,20 @@ public class ProductionMilk extends ProductionInteraction {
 		} else {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
-		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
+		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 
-		return (animal) -> new ProductionMilk(name, animal, delay, input, output, shouldAdult, disableSound);
+		return (animal) -> new ProductionMilk(name, animal, delay, input, output, condition, disableSound);
 	}
 	
+	@Override
+	public String getMessage() {
+		if (condition.apply(animal)) {
+			return super.getMessage();
+		} else {
+			return null;
+		}
+	}
 }

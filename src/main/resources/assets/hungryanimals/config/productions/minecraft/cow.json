@@ -6,7 +6,12 @@
             "min" : 300,
             "max" : 400
         },
-        "should_adult" : true,
+        "condition" : {
+        	"age" : {},
+        	"sex" : {
+        		"female_only" : true
+        	}
+        },
         "disable_sound" : false,
         "input" : {
         	"item" : "minecraft:bucket"

@@ -8,12 +8,15 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.api.IProductionRegistry;
+import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
 public class Productions implements IProductionRegistry {
 
@@ -78,4 +81,9 @@ public class Productions implements IProductionRegistry {
 		
 	}
 
+	@Override
+	public void registerCondition(String name, Function<JsonElement, Predicate<EntityAgeable>> parser) {
+		Conditions.getInstance().register(name, parser);
+	}
+	
 }

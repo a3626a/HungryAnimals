@@ -6,7 +6,9 @@
             "min" : 300,
             "max" : 400
         },
-        "should_adult" : true,
+        "condition" : {
+        	"age" : {}
+        },
         "disable_sound" : true,
         "input" : {
         	"item" : "minecraft:bowl"

@@ -35,6 +35,8 @@ import oortcloud.hungryanimals.entities.loot_tables.SetCountBaseOnWeight;
 import oortcloud.hungryanimals.entities.production.ProductionEgg;
 import oortcloud.hungryanimals.entities.production.ProductionMilk;
 import oortcloud.hungryanimals.entities.production.ProductionShear;
+import oortcloud.hungryanimals.entities.production.condition.ConditionAge;
+import oortcloud.hungryanimals.entities.production.condition.ConditionSex;
 import oortcloud.hungryanimals.generation.ConditionAdjacent;
 import oortcloud.hungryanimals.generation.ConditionBelow;
 import oortcloud.hungryanimals.generation.ConditionChance;
@@ -160,6 +162,9 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerParser("milk", ProductionMilk::parse);
 		registry.registerParser("egg", ProductionEgg::parse);
 		registry.registerParser("shear", ProductionShear::parse);
+		
+		registry.registerCondition("age", ConditionAge::parse);
+		registry.registerCondition("sex", ConditionSex::parse);
 	}
 	
 }

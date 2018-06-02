@@ -2,9 +2,11 @@ package oortcloud.hungryanimals.entities.production;
 
 import java.util.function.Function;
 
+import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -16,6 +18,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
 import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
 import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
@@ -30,16 +33,16 @@ public class ProductionShear extends ProductionInteraction {
 	private ItemStack input;
 	private ItemStack output;
 	private int damage;
-	private boolean shouldAdult;
+	private Predicate<EntityAgeable> condition;
 	private boolean disableSound;
 
-	public ProductionShear(String name, EntityAnimal animal, IRange delay, ItemStack tool, ItemStack wool, int damage, boolean shouldAdult,
+	public ProductionShear(String name, EntityAnimal animal, IRange delay, ItemStack tool, ItemStack wool, int damage, Predicate<EntityAgeable> condition,
 			boolean disableSound) {
 		super(name, animal, delay);
 		this.input = tool;
 		this.output = wool;
 		this.damage = damage;
-		this.shouldAdult = shouldAdult;
+		this.condition = condition;
 		this.disableSound = disableSound;
 	}
 
@@ -47,7 +50,7 @@ public class ProductionShear extends ProductionInteraction {
 	public EnumActionResult interact(EntityInteract event, EnumHand hand, ItemStack itemstack) {
 		EntityPlayer player = event.getEntityPlayer();
 		if (canProduce()) {
-			if (!shouldAdult || !animal.isChild()) {
+			if (condition.apply(animal)) {
 				if (!input.isEmpty() && itemstack.getItem() == input.getItem()) {
 					if (!animal.getEntityWorld().isRemote) {
 						animal.entityDropItem(output.copy(), 1.0F);
@@ -79,12 +82,20 @@ public class ProductionShear extends ProductionInteraction {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
 		int damage = JsonUtils.getInt(jsonObj, "damage");
-		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
+		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
 
-		return (animal) -> new ProductionShear(name, animal, delay, input, output, damage, shouldAdult, disableSound);
+		return (animal) -> new ProductionShear(name, animal, delay, input, output, damage, condition, disableSound);
 	}
-	
+
+	@Override
+	public String getMessage() {
+		if (condition.apply(animal)) {
+			return super.getMessage();
+		} else {
+			return null;
+		}
+	}
 }

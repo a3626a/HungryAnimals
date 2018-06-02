@@ -2,10 +2,12 @@ package oortcloud.hungryanimals.entities.production;
 
 import java.util.function.Function;
 
+import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
 import oortcloud.hungryanimals.entities.production.utils.RangeConstant;
 import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
@@ -24,18 +27,19 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	private int cooldown;
 	private IRange delay;
 	private ItemStack stack;
-	private boolean shouldAdult;
+	private Predicate<EntityAgeable> condition;
 	private boolean disableSound;
 	protected EntityAnimal animal;
 
 	private String name;
 
-	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack, boolean shouldAdult, boolean disableSound) {
+	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack,
+			Predicate<EntityAgeable> condition, boolean disableSound) {
 		this.name = name;
 		this.delay = delay;
 		this.animal = animal;
 		this.stack = stack;
-		this.shouldAdult = shouldAdult;
+		this.condition = condition;
 		this.disableSound = disableSound;
 		resetCooldown();
 	}
@@ -45,7 +49,7 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		cooldown--;
 
 		if (canProduce()) {
-			if (!shouldAdult || !animal.isChild()) {
+			if (condition.apply(animal)) {
 				produce();
 				resetCooldown();
 			}
@@ -63,7 +67,8 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	private void produce() {
 		if (!animal.getEntityWorld().isRemote) {
 			if (!disableSound) {
-				animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (animal.getRNG().nextFloat() - animal.getRNG().nextFloat()) * 0.2F + 1.0F);
+				animal.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F,
+						(animal.getRNG().nextFloat() - animal.getRNG().nextFloat()) * 0.2F + 1.0F);
 			}
 			animal.entityDropItem(stack.copy(), 0);
 		}
@@ -98,11 +103,12 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		} else {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
-		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
-		boolean shouldAdult = JsonUtils.getBoolean(jsonObj, "should_adult");
+		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"),
+				new JsonContext(References.MODID));
+		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 
-		return (animal) -> new ProductionEgg(name, animal, delay, stack, shouldAdult, disableSound);
+		return (animal) -> new ProductionEgg(name, animal, delay, stack, condition, disableSound);
 	}
 
 	public int getCooldown() {
@@ -111,10 +117,14 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 
 	@Override
 	public String getMessage() {
-		if (cooldown < 0) {
-			return String.format("%s now", I18n.format(name));
+		if (condition.apply(animal)) {
+			if (cooldown < 0) {
+				return String.format("%s now", I18n.format(name));
+			}
+			return String.format("%s after %d seconds", I18n.format(name), cooldown);
+		} else {
+			return null;
 		}
-		return String.format("%s after %d seconds", I18n.format(name), cooldown);
 	}
-	
+
 }
