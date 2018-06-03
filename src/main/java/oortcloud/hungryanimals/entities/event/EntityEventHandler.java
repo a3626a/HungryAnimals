@@ -382,7 +382,7 @@ public class EntityEventHandler {
 		if (capProducing != null) {
 			EnumActionResult action = capProducing.interact(event, hand, itemstack);
 			if (action != EnumActionResult.PASS) {
-				new Pair<Boolean, EnumActionResult>(true, action); 
+				return new Pair<Boolean, EnumActionResult>(true, action); 
 			}
 		}
 		

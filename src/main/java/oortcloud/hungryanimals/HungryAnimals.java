@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -45,6 +46,10 @@ public class HungryAnimals {
 
 	public static Logger logger;
 
+	static {
+	    FluidRegistry.enableUniversalBucket();
+	}
+	
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);

@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.core.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
@@ -197,5 +198,13 @@ public class PacketBasicServer implements IMessage{
 			ret[i] = getItemStack();
 		}
 		return ret;
+	}
+	
+	public void setTag(NBTTagCompound tag) {
+		ByteBufUtils.writeTag(data, tag);
+	}
+	
+	public NBTTagCompound getTag() {
+		return ByteBufUtils.readTag(data);
 	}
 }

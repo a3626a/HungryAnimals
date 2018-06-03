@@ -2,6 +2,8 @@ package oortcloud.hungryanimals.entities.production;
 
 import java.util.function.Function;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -40,7 +42,7 @@ public class ProductionMilk extends ProductionInteraction {
 	}
 
 	@Override
-	public EnumActionResult interact(EntityInteract event, EnumHand hand, ItemStack itemstack) {
+	public EnumActionResult interact(EntityInteract event, EnumHand hand, @Nonnull ItemStack itemstack) {
 		EntityPlayer player = event.getEntityPlayer();
 		if (canProduce()) {
 			if (condition.apply(animal)) {
