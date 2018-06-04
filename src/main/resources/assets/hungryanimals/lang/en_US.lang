@@ -32,3 +32,5 @@ minecraft.cow.milk=Milk
 minecraft.chicken.egg=Egg
 minecraft.llama.milk=Milk
 minecraft.mooshroom.milk=Soup
+
+fluid.milk=Milk

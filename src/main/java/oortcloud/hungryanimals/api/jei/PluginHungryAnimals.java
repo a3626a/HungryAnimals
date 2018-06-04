@@ -49,7 +49,6 @@ public class PluginHungryAnimals implements IModPlugin {
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-
 	}
 
 }

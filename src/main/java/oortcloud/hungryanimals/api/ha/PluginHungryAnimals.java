@@ -123,8 +123,8 @@ public class PluginHungryAnimals implements IHAPlugin {
 		ModAttributes.taming_factor_food = register(registry, id, "taming_factor_food");
 		ModAttributes.taming_factor_near_wild = register(registry, id, "taming_factor_near_wild", 0, 0, 1, false, true);
 		ModAttributes.taming_factor_near_tamed = register(registry, id, "taming_factor_near_tamed", 0, 0, 1, false, true);
-		ModAttributes.milk_hunger = register(registry, id, "milk_hunger", false);
-		ModAttributes.milk_delay = register(registry, id, "milk_delay", true);
+		ModAttributes.fluid_weight = register(registry, id, "fluid_weight", false);
+		ModAttributes.fluid_amount = register(registry, id, "fluid_amount", false);
 		ModAttributes.wool_hunger = register(registry, id, "wool_hunger", false);
 		ModAttributes.wool_delay = register(registry, id, "wool_delay", true);
 		registry.registerAttribute("generic.maxHealth", SharedMonsterAttributes.MAX_HEALTH, false);

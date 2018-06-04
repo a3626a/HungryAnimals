@@ -32,3 +32,5 @@ minecraft.cow.milk=우유
 minecraft.chicken.egg=달걀
 minecraft.llama.milk=우유
 minecraft.mooshroom.milk=수프
+
+fluid.milk=우유

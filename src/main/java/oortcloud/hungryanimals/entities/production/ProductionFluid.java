@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,6 +35,9 @@ import net.minecraftforge.items.IItemHandler;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketEntityClient;
 import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
 public class ProductionFluid implements IProductionInteraction, IProductionTickable, ISyncable, IProductionTOP {
@@ -41,16 +45,20 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 	private String name;
 	private EntityAnimal animal;
 	private FluidTank tank;
-	private FluidStack fluid;
+	private Fluid fluid;
+	private double amount;
+	private double weight;
 	private Predicate<EntityAgeable> condition;
 
 	private int prevAmount;
 
-	public ProductionFluid(String name, EntityAnimal animal, Predicate<EntityAgeable> condition, FluidStack fluid) {
+	public ProductionFluid(String name, EntityAnimal animal, Predicate<EntityAgeable> condition, Fluid fluid, int capacity, double amount, double weight) {
 		this.name = name;
 		this.animal = animal;
-		tank = new FluidTank(1000);
+		tank = new FluidTank(capacity);
 		this.fluid = fluid;
+		this.amount = amount;
+		this.weight = weight;
 		this.condition = condition;
 	}
 
@@ -107,8 +115,23 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 	@Override
 	public void update() {
 		if (condition.apply(animal)) {
-			tank.fill(fluid, true);
-
+			IAttributeInstance fluid_amount = animal.getEntityAttribute(ModAttributes.fluid_amount);
+			if (fluid_amount != null) {
+				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getAttributeValue() * amount)), true);
+				
+				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+				if (capHungry != null) {
+					IAttributeInstance fluid_weight = animal.getEntityAttribute(ModAttributes.fluid_weight);
+					if (fluid_weight != null) {
+						capHungry.addWeight(-inserted*fluid_weight.getAttributeValue()*weight/1000.0);
+					} else {
+						HungryAnimals.logger.warn("{} doesn't have attribute {}. Weight consumption is skipped", animal, ModAttributes.fluid_weight);
+					}
+				}
+			} else {
+				HungryAnimals.logger.warn("{} doesn't have attribute {}. Fluid production canceled", animal, ModAttributes.fluid_amount);
+			}
+			
 			int currAmount = tank.getFluidAmount();
 			if (prevAmount != currAmount) {
 				sync();
@@ -142,9 +165,11 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 		String name = JsonUtils.getString(jsonObj, "name");
 		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		Fluid fluid = FluidRegistry.getFluid(JsonUtils.getString(jsonObj, "fluid"));
-		int amount = JsonUtils.getInt(jsonObj, "amount");
-
-		return (animal) -> new ProductionFluid(name, animal, condition, new FluidStack(fluid, amount));
+		int capacity = JsonUtils.getInt(jsonObj, "capacity");
+		double amount = JsonUtils.getFloat(jsonObj, "amount");
+		double weight = JsonUtils.getFloat(jsonObj, "weight");
+		
+		return (animal) -> new ProductionFluid(name, animal, condition, fluid, capacity, amount, weight);
 	}
 
 }

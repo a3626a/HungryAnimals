@@ -13,8 +13,8 @@
 	"hungryanimals.taming_factor_near_tamed" : 0.999,
 	"hungryanimals.taming_factor_near_wild" : 0.9975,
     "hungryanimals.taming_factor_food" : 0.002,
-	"hungryanimals.milk_delay" : 6000,
-	"hungryanimals.milk_hunger" : 25,
+	"hungryanimals.fluid_amount" : 3,
+	"hungryanimals.fluid_weight" : 1,
 	"generic.maxHealth" : 30,
 	"generic.movementSpeed" : 0.2,
 	"generic.attackDamage" : 4.0

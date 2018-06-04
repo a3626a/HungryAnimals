@@ -27,8 +27,8 @@ public class ModAttributes implements IAttributeRegistry {
 	public static IAttribute taming_factor_food;
 	public static IAttribute taming_factor_near_wild;
 	public static IAttribute taming_factor_near_tamed;
-	public static IAttribute milk_hunger;
-	public static IAttribute milk_delay;
+	public static IAttribute fluid_weight;
+	public static IAttribute fluid_amount;
 	public static IAttribute wool_hunger;
 	public static IAttribute wool_delay;
 

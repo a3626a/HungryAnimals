@@ -2,17 +2,21 @@ package oortcloud.hungryanimals.core.proxy;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +27,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +37,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
+import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.network.HandlerEntityClient;
 import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
 import oortcloud.hungryanimals.core.network.PacketEntityClient;
@@ -42,6 +48,7 @@ import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
 import oortcloud.hungryanimals.entities.render.RenderEntitySlingShotBall;
 import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
+import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.items.gui.DebugOverlayHandler;
 import oortcloud.hungryanimals.items.render.ModelItemBola;
@@ -105,8 +112,46 @@ public class ClientProxy extends CommonProxy {
 		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
 		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal,
 				ModelItemSlingshot.modelresourcelocation_shooting);
+		
+		registerFluidModels();
     }
 	
+    ////////////////////////////////
+    ////CHOONSTER-MINECRAFT-MODS////
+    ////////////////////////////////
+    
+	private static void registerFluidModels() {
+		ModFluids.MOD_FLUID_BLOCKS.forEach(ClientProxy::registerFluidModel);
+	}
+
+	private static void registerFluidModel(IFluidBlock fluidBlock) {
+		final Item item = Item.getItemFromBlock((Block) fluidBlock);
+		assert item != null;
+
+		ModelBakery.registerItemVariants(item);
+
+		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(References.MODID+":fluid", fluidBlock.getFluid().getName());
+
+		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				return modelResourceLocation;
+			}
+		});
+
+		ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return modelResourceLocation;
+			}
+		});
+	}
+	
+    ////////////////////////////////
+    ////CHOONSTER-MINECRAFT-MODS////
+    ////////////////////////////////
+    
+    
     @SubscribeEvent
 	public static void registerCustomBakedModel(ModelBakeEvent event) {
 		IBakedModel bola_normal = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);

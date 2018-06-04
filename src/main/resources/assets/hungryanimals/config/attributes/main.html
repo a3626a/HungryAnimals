@@ -42,7 +42,7 @@
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Introduction</h1>
-      <p>'attributes/modid#animal.json' registers, or modifies attributes of the animal.</p>
+      <p>'attributes/modid/animal.json' registers, or modifies attributes of the animal.</p>
     </div>
   </div>
 
@@ -73,6 +73,8 @@
     "hungryanimals.taming_factor_near_tamed" |
     "hungryanimals.taming_factor_near_wild" |
     "hungryanimals.taming_factor_food" |
+    "hungryanimals.fluid_amount" |
+    "hungryanimals.fluid_weight" |
     "generic.maxHealth" |
     "generic.movementSpeed" |
     "generic.knockbackResistance" |
@@ -113,9 +115,9 @@
 <p>Then, assigned <code><a class="ha-replacement">double</a></code> value is used as <code>"value"</code> field, and default <code>"should_register"</code> of the <code><a href="#attribute" class="ha-replacement">attribute</a></code> is used.
 This default values work very well, but there's a exception.
 In case of <code>"generic.attackDamage"</code>,
-    <code>"should_register"</code> should be false for <code>"minecraft#wolf"</code>, (because <code>"generic.attackDamage"</code> is registered by Minecraft)
-    <code>"should_register"</code> should be true for <code>"minecraft#cow"</code>,
-Therefore, default value of <code>"should_register"</code> for <code>"minecraft#wolf"</code> will crash Minecraft.<br/><br/>
+    <code>"should_register"</code> should be false for <code>"minecraft/wolf"</code>, (because <code>"generic.attackDamage"</code> is registered by Minecraft)
+    <code>"should_register"</code> should be true for <code>"minecraft/cow"</code>,
+Therefore, default value of <code>"should_register"</code> for <code>"minecraft/wolf"</code> will crash Minecraft.<br/><br/>
 
 The default <code>"should_register"</code> values are :<br/>
 <code>"hungryanimals.*"</code> : true <small>(every attributes added by Hungry Animals)</small><br/>

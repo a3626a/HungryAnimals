@@ -1,21 +1,14 @@
 [
     {
-        "type" : "milk",
+        "type" : "fluid",
         "name" : "minecraft.cow.milk",
-        "delay" : {
-            "min" : 300,
-            "max" : 400
-        },
         "condition" : {
         	"age" : "adult",
         	"sex" : "female"
         },
-        "disable_sound" : false,
-        "input" : {
-        	"item" : "minecraft:bucket"
-        },
-        "output" : {
-        	"item" : "minecraft:milk_bucket"
-        }
+        "fluid" : "milk",
+        "capacity" : 3000,
+        "amount" : 1,
+        "weight" : 1
     }
 ]
