@@ -3,6 +3,8 @@ package oortcloud.hungryanimals.entities.capability;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -50,7 +52,7 @@ public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 	}
 
 	@Override
-	public EnumActionResult interact(EntityInteract event, EnumHand hand, ItemStack itemstack) {
+	public EnumActionResult interact(EntityInteract event, EnumHand hand, @Nonnull ItemStack itemstack) {
 		for (IProductionInteraction i : interactions) {
 			EnumActionResult result = i.interact(event, hand, itemstack);
 			if (result != EnumActionResult.PASS) {
