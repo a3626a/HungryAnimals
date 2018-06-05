@@ -16,7 +16,8 @@ import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.EntityAIAttackMeleeCustom;
 import oortcloud.hungryanimals.entities.ai.EntityAIAvoidPlayer;
-import oortcloud.hungryanimals.entities.ai.EntityAIFollowParentFixed;
+import oortcloud.hungryanimals.entities.ai.EntityAIDrinkMilk;
+import oortcloud.hungryanimals.entities.ai.EntityAIFollowParent;
 import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
 import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
 import oortcloud.hungryanimals.entities.ai.EntityAIHurtByPlayer;
@@ -56,12 +57,13 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("herbivore", "attack_melee", EntityAIAttackMeleeCustom::parse);
 		registry.registerAIContainerModifier("herbivore", "avoid_player", EntityAIAvoidPlayer::parse);
 		registry.registerAIContainerModifier("herbivore", "mate", EntityAIMateModified::parse);
+		registry.registerAIContainerModifier("herbivore", "drink_milk", EntityAIDrinkMilk::parse);
 		registry.registerAIContainerModifier("herbivore", "trough", EntityAIMoveToTrough::parse);
 		registry.registerAIContainerModifier("herbivore", "tempt", EntityAITemptIngredient::parse);
 		registry.registerAIContainerModifier("herbivore", "tempt_edible", EntityAITemptEdibleItem::parse);
 		registry.registerAIContainerModifier("herbivore", "eat_item", EntityAIMoveToEatItem::parse);
 		registry.registerAIContainerModifier("herbivore", "eat_block", EntityAIMoveToEatBlock::parse);
-		registry.registerAIContainerModifier("herbivore", "follow_parent", EntityAIFollowParentFixed::parse);
+		registry.registerAIContainerModifier("herbivore", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("herbivore", "hurt_by_player", EntityAIHurtByPlayer::parse);
 		
 		registry.registerAIContainer("rabbit", (jsonEle) -> {
@@ -74,22 +76,24 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("rabbit", "attack_melee", EntityAIAttackMeleeCustom::parse);
 		registry.registerAIContainerModifier("rabbit", "avoid_player", EntityAIAvoidPlayer::parse);
 		registry.registerAIContainerModifier("rabbit", "mate", EntityAIMateModified::parse);
+		registry.registerAIContainerModifier("rabbit", "drink_milk", EntityAIDrinkMilk::parse);
 		registry.registerAIContainerModifier("rabbit", "trough", EntityAIMoveToTrough::parse);
 		registry.registerAIContainerModifier("rabbit", "tempt", EntityAITemptIngredient::parse);
 		registry.registerAIContainerModifier("rabbit", "tempt_edible", EntityAITemptEdibleItem::parse);
 		registry.registerAIContainerModifier("rabbit", "eat_item", EntityAIMoveToEatItem::parse);
 		registry.registerAIContainerModifier("rabbit", "eat_block", EntityAIMoveToEatBlock::parse);
-		registry.registerAIContainerModifier("rabbit", "follow_parent", EntityAIFollowParentFixed::parse);
+		registry.registerAIContainerModifier("rabbit", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("rabbit", "hurt_by_player", EntityAIHurtByPlayer::parse);
 		
 		registry.registerAIContainer("wolf", AIContainerWolf::parse);
 		registry.registerAIContainerModifier("wolf", "mate", EntityAIMateModified::parse);
+		registry.registerAIContainerModifier("wolf", "drink_milk", EntityAIDrinkMilk::parse);
 		registry.registerAIContainerModifier("wolf", "trough", EntityAIMoveToTrough::parse);
 		registry.registerAIContainerModifier("wolf", "tempt", EntityAITemptIngredient::parse);
 		registry.registerAIContainerModifier("wolf", "tempt_edible", EntityAITemptEdibleItem::parse);
 		registry.registerAIContainerModifier("wolf", "eat_item", EntityAIMoveToEatItem::parse);
 		registry.registerAIContainerModifier("wolf", "eat_block", EntityAIMoveToEatBlock::parse);
-		registry.registerAIContainerModifier("wolf", "follow_parent", EntityAIFollowParentFixed::parse);
+		registry.registerAIContainerModifier("wolf", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("wolf", "hunt", EntityAIHunt::parse);
 		registry.registerAIContainerModifier("wolf", "hunt_non_tamed", EntityAIHuntNonTamed::parse);
 	}

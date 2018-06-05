@@ -197,7 +197,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed);
 		aiContainer.getTask().after(EntityAISwimming.class)
 					 		 .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParentFixed.class)
+		                     .before(EntityAIFollowParent.class)
 		                     .before(EntityAIWanderAvoidWater.class)
 							 .put(factory);
 	}

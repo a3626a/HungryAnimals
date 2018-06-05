@@ -1,0 +1,167 @@
+package oortcloud.hungryanimals.entities.ai;
+
+import java.util.Collections;
+import java.util.List;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.util.JsonUtils;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
+import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
+import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityProducingAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderProducingAnimal;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
+import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
+import oortcloud.hungryanimals.entities.production.IProduction;
+import oortcloud.hungryanimals.entities.production.ProductionFluid;
+
+public class EntityAIDrinkMilk extends EntityAIFollowParent {
+
+	private ICapabilityHungryAnimal childHungry;
+	private IFluidHandler tank;
+	private IFoodPreference<FluidStack> pref;
+	private boolean noMilk;
+	
+	private int drinkCounter;
+	private static final int DRINK = 10;
+
+	private int searchCounter;
+	private static final int SEARCH = 100;
+
+	private FluidStack fluid;
+	
+	public EntityAIDrinkMilk(EntityAnimal animal, double speed, FluidStack fluid) {
+		super(animal, speed);
+		this.fluid = fluid;
+		childHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+		pref = FoodPreferences.getInstance().REGISTRY_FLUID.get(animal.getClass());
+	}
+
+	public boolean shouldExecute() {
+		if (this.childAnimal.getGrowingAge() >= 0) {
+			return false;
+		} else if (childHungry.getStomach() >= childHungry.getMaxStomach()) {
+			return false;
+		} else {
+			if (--searchCounter <= 0) {
+				searchCounter = SEARCH;
+				
+				EntityAnimal entityanimal = findMother();
+
+				if (entityanimal == null) {
+					return false;
+				} else {
+					this.parentAnimal = entityanimal;
+					return true;
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+
+	protected EntityAnimal findMother() {
+		List<EntityAnimal> list = this.childAnimal.world.<EntityAnimal>getEntitiesWithinAABB(this.childAnimal.getClass(),
+				this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
+		EntityAnimal entityanimal = null;
+
+		Collections.shuffle(list);
+
+		for (EntityAnimal entityanimal1 : list) {
+			ICapabilityProducingAnimal capProducing = entityanimal1.getCapability(ProviderProducingAnimal.CAP, null);
+
+			if (capProducing != null) {
+				for (IProduction i : capProducing.getProductions()) {
+					if (i instanceof ProductionFluid) {
+						ProductionFluid iFluid = (ProductionFluid) i;
+						IFluidHandler fluidHandler = iFluid.getFluidHandler();
+						FluidStack drain = fluidHandler.drain(fluid, false);
+						if (drain != null && drain.amount == fluid.amount) {
+							tank = fluidHandler;
+							return entityanimal1;
+						}
+					}
+				}
+			}
+		}
+
+		return entityanimal;
+	}
+
+	public boolean shouldContinueExecuting() {
+		if (this.childAnimal.getGrowingAge() >= 0) {
+			return false;
+		} else if (!this.parentAnimal.isEntityAlive()) {
+			return false;
+		} else if (childHungry.getStomach() >= childHungry.getMaxStomach()) {
+			return false;
+		} else {
+			return !noMilk;
+		}
+	}
+
+	@Override
+	public void startExecuting() {
+		super.startExecuting();
+		drinkCounter = 0;
+		noMilk = false;
+	}
+
+	@Override
+	public void updateTask() {
+		super.updateTask();
+		if (--drinkCounter <= 0) {
+			if (childAnimal.getEntityBoundingBox().grow(1.0).intersects(parentAnimal.getEntityBoundingBox())) {
+				if (childHungry.getStomach() < childHungry.getMaxStomach()) {
+					FluidStack drain = tank.drain(fluid, true);
+					if (drain != null && drain.amount > 0) {
+						childHungry.addNutrient(pref.getNutrient(drain));
+						childHungry.addStomach(pref.getStomach(drain));
+					}
+					
+					if (drain == null || drain.amount < fluid.amount) {
+						noMilk = true;
+					}
+				}
+
+				this.drinkCounter = DRINK;
+			}
+		}
+	}
+	
+	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
+		if (!(jsonEle instanceof JsonObject)) {
+			HungryAnimals.logger.error("AI Drink Milk must be an object.");
+			throw new JsonSyntaxException(jsonEle.toString());
+		}
+
+		JsonObject jsonObject = (JsonObject) jsonEle;
+
+		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		Fluid fluid = FluidRegistry.getFluid(JsonUtils.getString(jsonObject, "fluid"));
+		int amount = JsonUtils.getInt(jsonObject, "amount");
+		
+		AIFactory factory = (entity) -> new EntityAIDrinkMilk(entity, speed, new FluidStack(fluid, amount));
+		aiContainer.getTask().after(EntityAISwimming.class)
+	                         .after(EntityAIAvoidPlayer.class)
+	                         .after(EntityAIMateModified.class)
+		                     .before(EntityAIWanderAvoidWater.class)
+		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(EntityAIMoveToTrough.class)
+		                     .put(factory);
+	}
+
+}

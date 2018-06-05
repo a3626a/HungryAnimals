@@ -256,7 +256,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 
 		AIFactory factory = (entity) -> new EntityAIMoveToEatBlock(entity, speed);
 		aiContainer.getTask().after(EntityAISwimming.class)
-					         .before(EntityAIFollowParentFixed.class)
+					         .before(EntityAIFollowParent.class)
 				 	         .before(EntityAIWanderAvoidWater.class)
 		                     .put(factory);
 	}

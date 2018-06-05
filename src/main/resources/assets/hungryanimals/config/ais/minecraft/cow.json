@@ -12,6 +12,11 @@
     "mate" : {
         "speed" : 2.0
     },
+    "drink_milk" : {
+        "speed" : 1.5,
+        "fluid" : "milk",
+        "amount" : 5
+    },
     "trough" : {
         "speed" : 1.0
     },

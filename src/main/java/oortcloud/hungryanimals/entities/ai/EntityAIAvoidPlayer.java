@@ -77,7 +77,7 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		                     .before(EntityAITemptEdibleItem.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParentFixed.class)
+		                     .before(EntityAIFollowParent.class)
 		                     .before(EntityAIWanderAvoidWater.class)
 		                     .put(factory);
 	}

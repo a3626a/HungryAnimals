@@ -66,7 +66,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 		                     .before(EntityAITemptEdibleItem.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParentFixed.class)
+		                     .before(EntityAIFollowParent.class)
 		                     .before(EntityAIWanderAvoidWater.class)
 		                     .put(factory);
 	}

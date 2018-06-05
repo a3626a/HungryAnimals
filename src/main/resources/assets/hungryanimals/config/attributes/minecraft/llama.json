@@ -14,5 +14,5 @@
 	"hungryanimals.taming_factor_near_wild" : 0.9975,
     "hungryanimals.taming_factor_food" : 0.002,
 	"hungryanimals.fluid_amount" : 2,
-	"hungryanimals.fluid_weight" : 1
+	"hungryanimals.fluid_weight" : 2
 }

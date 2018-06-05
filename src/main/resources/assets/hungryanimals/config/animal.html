@@ -59,7 +59,7 @@
       <h1 class="w3-text-teal">Grammar</h1>
 
 <pre>
-<code class="ha-replacement">"attributes/modid#animal.json"</code> : 
+<code class="ha-replacement">"attributes/modid/animal.json"</code> : 
     [
         <a href="#hungry_animal_entry" class="ha-replacement">hungry_animal_entry</a>,
         <a href="#hungry_animal_entry" class="ha-replacement">hungry_animal_entry</a>,
@@ -72,8 +72,9 @@
     |
     {
         "name" : <a class="ha-replacement">string</a>,
-        "disable_taming" : <a class="ha-replacement">boolean</a>,
-        "model_growing" : <a class="ha-replacement">boolean</a>
+        "tamable" : <a class="ha-replacement">boolean</a>,
+        "model_growing" : <a class="ha-replacement">boolean</a>,
+        "sexual" : <a class="ha-replacement">boolean</a>
     }
 </pre>
     </div>
@@ -81,14 +82,16 @@
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Usage</h1>
-      <p>if <code>"disable_taming"</code> is true, then taming is disabled for the animal.<br/>
-      <p>if <code>"model_growing"</code> is true, then animals's size grows depends on their weight. Default value is true.<br/>
+      <p>if <code>"tamable"</code> is false, then taming is disabled for the animals. Default value is true.<br/>
+      <p>if <code>"model_growing"</code> is true, then animals's sizes grow depending on their weight. Default value is true.<br/>
+      <p>if <code>"sexual"</code> is false, then animals become asexual. Default value is true.<br/>
+      
       Example)</p>
 <pre>
 [
     {
         "name" : "minecraft:cow"
-        "disable_taming" : true,
+        "tamable" : false,
         "model_growing" : true
     },
     "minecraft:chicken"

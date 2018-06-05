@@ -252,6 +252,6 @@ public class EntityAIMateModified extends EntityAIBase {
 		AIFactory factory = (entity) -> new EntityAIMateModified(entity, speed);
 		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(EntityAITemptIngredient.class)
 				.before(EntityAITemptEdibleItem.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
-				.before(EntityAIFollowParentFixed.class).before(EntityAIWanderAvoidWater.class).put(factory);
+				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);
 	}
 }

@@ -50,6 +50,7 @@ import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
+import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceFluid;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredient.FoodPreferenceIngredientEntry;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
@@ -75,6 +76,7 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSONAnimal foodPreferencesBlock;
 	private static ConfigurationHandlerJSONAnimal foodPreferencesItem;
 	private static ConfigurationHandlerJSONAnimal foodPreferencesEntity;
+	private static ConfigurationHandlerJSONAnimal foodPreferencesFluid;
 	private static ConfigurationHandlerJSONAnimal attributes;
 	private static ConfigurationHandlerJSONAnimal lootTables;
 	private static ConfigurationHandlerJSONAnimal ais;
@@ -109,8 +111,8 @@ public class ConfigurationHandler {
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
 				HashBlockState state = HashBlockState.parse(jsonObj.getAsJsonObject("block"));
-				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
-				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
+				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
+				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
 				map.put(state, new Pair<Double, Double>(nutrient, stomach));
 			}
 			FoodPreferences.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
@@ -122,8 +124,8 @@ public class ConfigurationHandler {
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
 				Ingredient ing = ModJsonUtils.getIngredient(jsonObj.get("item"));
-				double nutrient = jsonObj.getAsJsonPrimitive("nutrient").getAsDouble();
-				double stomach = jsonObj.getAsJsonPrimitive("stomach").getAsDouble();
+				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
+				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
 				list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
 			}
 			FoodPreferences.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
@@ -142,6 +144,19 @@ public class ConfigurationHandler {
 				}
 			}
 			FoodPreferences.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
+		});
+		foodPreferencesFluid = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/fluid", (jsonElement, animal) -> {
+			JsonArray jsonArr = (JsonArray) jsonElement;
+
+			Map<String, Pair<Double, Double>> map = new HashMap<String, Pair<Double, Double>>();
+			for (JsonElement i : jsonArr) {
+				JsonObject jsonObj = i.getAsJsonObject();
+				String fluid = JsonUtils.getString(jsonObj, "fluid");
+				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
+				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
+				map.put(fluid, new Pair<Double, Double>(nutrient, stomach));
+			}
+			FoodPreferences.getInstance().REGISTRY_FLUID.put(animal, new FoodPreferenceFluid(map));
 		});
 		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (jsonElement, animal) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
@@ -335,6 +350,7 @@ public class ConfigurationHandler {
 		foodPreferencesBlock.sync();
 		foodPreferencesItem.sync();
 		foodPreferencesEntity.sync();
+		foodPreferencesFluid.sync();
 		attributes.sync();
 		lootTables.sync();
 		ais.sync();

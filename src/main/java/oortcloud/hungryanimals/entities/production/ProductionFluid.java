@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -49,7 +50,7 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 	private double amount;
 	private double weight;
 	private Predicate<EntityAgeable> condition;
-
+	
 	private int prevAmount;
 
 	public ProductionFluid(String name, EntityAnimal animal, Predicate<EntityAgeable> condition, Fluid fluid, int capacity, double amount, double weight) {
@@ -159,6 +160,10 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 
 	}
 
+	public IFluidHandler getFluidHandler() {
+		return tank;
+	}
+	
 	public static Function<EntityAnimal, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
