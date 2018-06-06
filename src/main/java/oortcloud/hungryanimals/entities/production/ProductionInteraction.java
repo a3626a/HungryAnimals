@@ -10,8 +10,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducingInteraction;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
 
 abstract public class ProductionInteraction implements IProductionInteraction, IProductionTickable, ISyncable, IProductionTOP {
@@ -68,9 +68,7 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) animal.getEntityWorld();
 			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(animal)) {
-				PacketEntityClient packet = new PacketEntityClient(SyncIndex.PRODUCTION_SYNC, animal);
-				packet.setString(getName());
-				packet.setInt(cooldown);
+				PacketClientSyncProducingInteraction packet = new PacketClientSyncProducingInteraction(animal, getName(), cooldown);
 				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 			}
 		}
@@ -78,16 +76,14 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 
 	public void syncTo(EntityPlayerMP target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketEntityClient packet = new PacketEntityClient(SyncIndex.PRODUCTION_SYNC, animal);
-			packet.setString(getName());
-			packet.setInt(cooldown);
+			PacketClientSyncProducingInteraction packet = new PacketClientSyncProducingInteraction(animal, getName(), cooldown);
 			HungryAnimals.simpleChannel.sendTo(packet, target);
 		}
 	}
 
 	@Override
-	public void readFrom(PacketEntityClient message) {
-		cooldown = message.getInt();
+	public void readFrom(PacketClientSyncProducing message) {
+		cooldown = ((PacketClientSyncProducingInteraction)message).cooldown;
 	}
 
 	public int getCooldown() {

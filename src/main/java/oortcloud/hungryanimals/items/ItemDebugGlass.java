@@ -14,8 +14,7 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.core.network.PacketPlayerServer;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketServerDGSet;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -37,8 +36,7 @@ public class ItemDebugGlass extends Item {
 		if (playerIn.getEntityWorld().isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
-				PacketPlayerServer msg = new PacketPlayerServer(SyncIndex.DEBUG_SETTARGET, playerIn.getName());
-				msg.setInt(entity.getEntityId());
+				PacketServerDGSet msg = new PacketServerDGSet(playerIn, entity);
 				HungryAnimals.simpleChannel.sendToServer(msg);
 				return true;
 			}

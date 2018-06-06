@@ -81,6 +81,12 @@
         "speed" : <a class="ha-replacement">double</a>
     }
     |
+    "drink_milk" :{
+        "speed" : <a class="ha-replacement">double</a>,
+        "fluid" : <a class="ha-replacement">string</a>,
+        "amount" : <a class="ha-replacement">integer</a>
+    }
+    |
     "trough" : {
         "speed" : <a class="ha-replacement">double</a>
     }
@@ -141,6 +147,7 @@
           <th><code>"hunt_non_tamed"</code></th>
           <th><code>"hunt"</code></th>
           <th><code>"mate"</code></th>
+          <th><code>"drink_milk"</code></th>
           <th><code>"trough"</code></th>
           <th><code>"tempt"</code></th>
           <th><code>"tempt_edible"</code></th>
@@ -155,6 +162,7 @@
           <td>O</td>
           <td>X</td>
           <td>X</td>
+          <td>O</td>
           <td>O</td>
           <td>O</td>
           <td>O</td>
@@ -177,6 +185,7 @@
           <td>O</td>
           <td>O</td>
           <td>O</td>
+          <td>O</td>
         </tr>
         <tr>
           <th><code>"wolf"</code></th>
@@ -192,12 +201,14 @@
           <td>O</td>
           <td>O</td>
           <td>O</td>
+          <td>O</td>
         </tr>
       </table>
       <p>Each <a href="#ai_modifier" class="ha-replacement">ai_modifier</a> has parameters, to indicate details like speed, and conditions. Following lists are explanations of <a href="#ai_modifier" class="ha-replacement">ai_modifier</a>s and their parameters.</p>
       <p><code>"attack_melee"</code> : The animal attacks target while moving at <code>"speed"</code>. This AI requires another targeting AI like <code>"hurt_by_player"</code>. If <code>"use_long_memory"</code> is true, the animals will keep attacking target even if the animals can not reach the target.</p>
       <p><code>"avoid_player"</code> : The animal flees from player when the animal is wild. it flees when distance to the player is less than <code>"radius"</code>. It moves at <code>"farspeed"</code> if distance to the player is more than 7m, at <code>"nearspeed"</code> otherwise.</p>
       <p><code>"mate"</code> : The animal mates with other animal while moving at <code>"speed"</code>.</p>
+      <p><code>"drink_milk"</code> : The baby animal drinks <code>"fluid"</code> from any other animal which produces <code>"fluid"</code>. The baby animal movies at <code>"speed"</code>. <code>"amount"</code> decides how fast the baby drinks.</p>
       <p><code>"trough"</code> : The animal eats item inside trough while moving at <code>"speed"</code>.</p>
       <p><code>"tempt"</code> : The animal is tempted by <code>"items"</code> while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>
       <p><code>"tempt_edible"</code> : The animal is tempted by edible items (food preferences) while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>

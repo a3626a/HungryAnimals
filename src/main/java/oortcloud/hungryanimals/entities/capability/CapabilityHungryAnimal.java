@@ -1,28 +1,19 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
-import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
 import oortcloud.hungryanimals.potion.ModPotions;
 
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
-	public static Method setScale = ReflectionHelper.findMethod(EntityAgeable.class, "setScale", "func_98055_j", float.class);
-	
 	private double excretion;
 	private double stomach; 
 	private double nutrient;
@@ -133,27 +124,11 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		
 		int currWeight = (int) getWeight();
 		if (currWeight != prevWeight) {
-			updateSize();
 			sync();
 		}
 		prevWeight = currWeight;
 		
 		return oldWeight;
-	}
-	
-	private void updateSize() {
-		float ratio = (float) RenderEntityWeight.getRatio(entity);
-		
-		if (entity.getGrowingAge() < 0) {
-			ratio *= 0.5;
-		}
-		
-		try {
-			setScale.invoke(entity, ratio);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			HungryAnimals.logger.warn("Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
@@ -207,9 +182,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) entity.getEntityWorld();
 			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(entity)) {
-				PacketEntityClient packet = new PacketEntityClient(SyncIndex.HUNGRY_SYNC, entity);
-				packet.setDouble(getStomach());
-				packet.setDouble(getWeight());
+				PacketClientSyncHungry packet = new PacketClientSyncHungry(entity, getStomach(), getWeight());
 				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 			}
 		}
@@ -217,9 +190,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	public void syncTo(EntityPlayerMP target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketEntityClient packet = new PacketEntityClient(SyncIndex.HUNGRY_SYNC, entity);
-			packet.setDouble(getStomach());
-			packet.setDouble(getWeight());
+			PacketClientSyncHungry packet = new PacketClientSyncHungry(entity, getStomach(), getWeight());
 			HungryAnimals.simpleChannel.sendTo(packet, target);
 		}
 	}

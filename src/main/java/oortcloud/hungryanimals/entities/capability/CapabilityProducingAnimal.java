@@ -13,7 +13,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
 import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.IProductionInteraction;
 import oortcloud.hungryanimals.entities.production.IProductionTickable;
@@ -77,8 +77,8 @@ public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 		}
 	}
 	
-	public void readFrom(PacketEntityClient message) {
-		String name = message.getString();
+	public void readFrom(PacketClientSyncProducing message) {
+		String name = message.name;
 		for (IProduction i : productions) {
 			if (i instanceof ISyncable) {
 				if (name.equals(i.getName())) {

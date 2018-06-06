@@ -34,8 +34,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -45,6 +45,7 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 
 	private String name;
 	private EntityAnimal animal;
+	@Nonnull
 	private FluidTank tank;
 	private Fluid fluid;
 	private double amount;
@@ -91,9 +92,7 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) animal.getEntityWorld();
 			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(animal)) {
-				PacketEntityClient packet = new PacketEntityClient(SyncIndex.PRODUCTION_SYNC, animal);
-				packet.setString(getName());
-				packet.setTag(tank.writeToNBT(new NBTTagCompound()));
+				PacketClientSyncProducingFluid packet = new PacketClientSyncProducingFluid(animal, getName(), tank);
 				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 			}
 		}
@@ -101,16 +100,14 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 
 	public void syncTo(EntityPlayerMP target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketEntityClient packet = new PacketEntityClient(SyncIndex.PRODUCTION_SYNC, animal);
-			packet.setString(getName());
-			packet.setTag(tank.writeToNBT(new NBTTagCompound()));
+			PacketClientSyncProducingFluid packet = new PacketClientSyncProducingFluid(animal, getName(), tank);
 			HungryAnimals.simpleChannel.sendTo(packet, target);
 		}
 	}
 
 	@Override
-	public void readFrom(PacketEntityClient message) {
-		tank.readFromNBT(message.getTag());
+	public void readFrom(PacketClientSyncProducing message) {
+		tank = ((PacketClientSyncProducingFluid)message).tank;
 	}
 
 	@Override

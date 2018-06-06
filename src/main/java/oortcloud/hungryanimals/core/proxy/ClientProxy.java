@@ -38,10 +38,22 @@ import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.network.HandlerEntityClient;
-import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.PacketGeneralClient;
+import oortcloud.hungryanimals.core.network.HandlerClientSpawnParticle;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncHungry;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncProducingFluid;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncProducingInteraction;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncTamable;
+import oortcloud.hungryanimals.core.network.HandlerServerDGEditDouble;
+import oortcloud.hungryanimals.core.network.HandlerServerDGEditInt;
+import oortcloud.hungryanimals.core.network.HandlerServerDGSet;
+import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
+import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducingInteraction;
+import oortcloud.hungryanimals.core.network.PacketClientSyncTamable;
+import oortcloud.hungryanimals.core.network.PacketServerDGEditDouble;
+import oortcloud.hungryanimals.core.network.PacketServerDGEditInt;
+import oortcloud.hungryanimals.core.network.PacketServerDGSet;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
@@ -206,9 +218,14 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerPacketHandler() {
-		super.registerPacketHandler();
-		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 2, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 3, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGEditInt.class, PacketServerDGEditInt.class, 0, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGEditDouble.class, PacketServerDGEditDouble.class, 1, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGSet.class, PacketServerDGSet.class, 2, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSpawnParticle.class, PacketClientSpawnParticle.class, 3, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncTamable.class, PacketClientSyncTamable.class, 4, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncHungry.class, PacketClientSyncHungry.class, 5, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncProducingFluid.class, PacketClientSyncProducingFluid.class, 6, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncProducingInteraction.class, PacketClientSyncProducingInteraction.class, 7, Side.CLIENT);
 	}
-
+	
 }

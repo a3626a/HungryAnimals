@@ -13,15 +13,13 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.network.PacketGeneralClient;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
@@ -44,7 +42,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	private static final int DRINK = 10;
 
 	private int searchCounter;
-	private static final int SEARCH = 100;
+	private static final int SEARCH = 200;
 
 	private FluidStack fluid;
 	
@@ -138,11 +136,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 						
 						WorldServer world = (WorldServer) childAnimal.getEntityWorld();
 						for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
-							PacketGeneralClient packet = new PacketGeneralClient(SyncIndex.SPAWN_MILK_PARTICLE);
-							Vec3d center = childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox()).getCenter();
-							packet.setDouble(center.x);
-							packet.setDouble(center.y);
-							packet.setDouble(center.z);
+							PacketClientSpawnParticle packet = new PacketClientSpawnParticle(childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox()).getCenter());
 							HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 						}
 					}
