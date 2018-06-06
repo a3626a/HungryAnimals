@@ -8,7 +8,6 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -82,7 +81,7 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 	@Override
 	public String getMessage() {
 		if (condition.apply(animal)) {
-			return String.format("%s : %d / %d", I18n.format(name), tank.getFluidAmount(), tank.getCapacity());
+			return String.format("%s : %d / %d", name, tank.getFluidAmount(), tank.getCapacity());
 		} else {
 			return null;
 		}

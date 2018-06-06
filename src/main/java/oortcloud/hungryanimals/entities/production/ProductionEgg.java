@@ -6,7 +6,6 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.init.SoundEvents;
@@ -119,9 +118,9 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	public String getMessage() {
 		if (condition.apply(animal)) {
 			if (cooldown < 0) {
-				return String.format("%s now", I18n.format(name));
+				return String.format("%s now", name);
 			}
-			return String.format("%s after %d seconds", I18n.format(name), cooldown);
+			return String.format("%s after %d seconds", name, cooldown);
 		} else {
 			return null;
 		}
