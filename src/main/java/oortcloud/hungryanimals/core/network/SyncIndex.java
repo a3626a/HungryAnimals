@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.core.network;
 public class SyncIndex {
 	//HandlerGeneralClient
 	public static final int HERBICIDE_SETBLOCK = 0;
+	public static final int SPAWN_MILK_PARTICLE = 1;
 	
 	//HandlerGeneralServer
 	public static final int ENTITYOVERLAY_SYNC = 0;

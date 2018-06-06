@@ -10,12 +10,18 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.PacketGeneralClient;
+import oortcloud.hungryanimals.core.network.SyncIndex;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
@@ -123,12 +129,22 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	public void updateTask() {
 		super.updateTask();
 		if (--drinkCounter <= 0) {
-			if (childAnimal.getEntityBoundingBox().grow(1.0).intersects(parentAnimal.getEntityBoundingBox())) {
+			if (childAnimal.getEntityBoundingBox().grow(0.5).intersects(parentAnimal.getEntityBoundingBox())) {
 				if (childHungry.getStomach() < childHungry.getMaxStomach()) {
 					FluidStack drain = tank.drain(fluid, true);
 					if (drain != null && drain.amount > 0) {
 						childHungry.addNutrient(pref.getNutrient(drain));
 						childHungry.addStomach(pref.getStomach(drain));
+						
+						WorldServer world = (WorldServer) childAnimal.getEntityWorld();
+						for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
+							PacketGeneralClient packet = new PacketGeneralClient(SyncIndex.SPAWN_MILK_PARTICLE);
+							Vec3d center = childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox()).getCenter();
+							packet.setDouble(center.x);
+							packet.setDouble(center.y);
+							packet.setDouble(center.z);
+							HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
+						}
 					}
 					
 					if (drain == null || drain.amount < fluid.amount) {
