@@ -13,11 +13,6 @@ public class Selector {
 		this.selectees = new ArrayList<>();
 	}
 
-	public Selector(String pattern) {
-		this();
-		
-	}
-
 	public Selector get(String key) {
 		if (selectees.size() > 0) {
 			if (selectees.get(0).isJsonArray()) {
