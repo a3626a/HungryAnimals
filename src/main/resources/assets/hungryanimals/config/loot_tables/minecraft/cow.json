@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:leather",
                     "name": "minecraft:leather",
                     "weight": 1,
                     "functions": [
@@ -60,6 +61,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:beef",
                     "name": "minecraft:beef",
                     "weight": 1,
                     "functions": [

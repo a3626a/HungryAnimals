@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:porkchop",
                     "name": "minecraft:porkchop",
                     "weight": 1,
                     "functions": [

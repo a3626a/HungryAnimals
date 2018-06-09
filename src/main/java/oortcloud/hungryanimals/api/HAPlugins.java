@@ -86,7 +86,6 @@ public class HAPlugins {
 			Path myPath = null;
 			if (root.getScheme().equals("jar")) {
 				Map<String, String> options = new HashMap<>();
-				options.put("file.separator", FileSystems.getDefault().getSeparator());
 				FileSystem fileSystem = FileSystems.newFileSystem(root, options);
 				myPath = fileSystem.getPath(injectionPath);
 				fileSystemClose.add(fileSystem);
@@ -182,19 +181,31 @@ public class HAPlugins {
 	}
 
 	public void putJson(Path key, JsonElement value) {
+		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
+			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
+		}
 		mapJson.put(key, value);
 	}
 
 	public void putText(Path key, String value) {
+		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
+			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
+		}
 		mapText.put(key, value);
 	}
 
-	public JsonElement getJson(Path target) {
-		return mapJson.get(target);
+	public JsonElement getJson(Path key) {
+		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
+			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
+		}
+		return mapJson.get(key);
 	}
 
-	public String getText(Path target) {
-		return mapText.get(target);
+	public String getText(Path key) {
+		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
+			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
+		}
+		return mapText.get(key);
 	}
 
 	public static List<IHAPlugin> getModPlugins(ASMDataTable asmDataTable) {

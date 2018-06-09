@@ -20,7 +20,6 @@ import net.minecraft.world.storage.loot.functions.LootFunction.Serializer;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -71,13 +70,13 @@ public class ModLootTables implements ILootTableRegistry {
 	}
 
 	@SuppressWarnings("unchecked")
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void LootTableLoadEventCancel(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
+	@SubscribeEvent
+	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
 		LootTable table = tables.get(event.getName());
 		if (table == null) {
 			return;
 		}
-
+		HungryAnimals.logger.info("LootTableLoadEvent");
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
 			if (iEntries.size() == 1) {
@@ -89,6 +88,7 @@ public class ModLootTables implements ILootTableRegistry {
 						if (jEntries.size() == 1) {
 							LootEntry jEntry = jEntries.get(0);
 							if (jEntry instanceof LootEntryItem) {
+								HungryAnimals.logger.info("{} ==? {}", iEntry.getEntryName(), jEntry.getEntryName());
 								if (iEntry.getEntryName().equals(jEntry.getEntryName())) {
 									toRemove = j;
 									break;
@@ -98,6 +98,7 @@ public class ModLootTables implements ILootTableRegistry {
 					}
 				}
 				if (toRemove != null) {
+					HungryAnimals.logger.info(toRemove);
 					event.getTable().removePool(toRemove.getName());
 				}
 			}

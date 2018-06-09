@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:rabbit_hide",
                     "name": "minecraft:rabbit_hide",
                     "weight": 1,
                     "functions": [
@@ -33,6 +34,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:rabbit",
                     "name": "minecraft:rabbit",
                     "weight": 1,
                     "functions": [
@@ -72,6 +74,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:rabbit_foot",
                     "name": "minecraft:rabbit_foot",
                     "weight": 1
                 }

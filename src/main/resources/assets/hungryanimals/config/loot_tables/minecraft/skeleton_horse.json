@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:bone",
                     "name": "minecraft:bone",
                     "weight": 1,
                     "functions": [

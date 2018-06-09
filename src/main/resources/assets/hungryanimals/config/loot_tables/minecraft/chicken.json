@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:feather",
                     "name": "minecraft:feather",
                     "weight": 1,
                     "functions": [
@@ -33,6 +34,7 @@
             "entries": [
                 {
                     "type": "item",
+                    "entryName": "minecraft:chicken",
                     "name": "minecraft:chicken",
                     "weight": 1,
                     "functions": [

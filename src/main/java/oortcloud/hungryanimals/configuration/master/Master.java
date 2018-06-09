@@ -54,7 +54,7 @@ public class Master {
 					JsonObject iObj = (JsonObject) i;
 					if (domain.equals("all") || domain.equals(JsonUtils.getString(iObj, "domain"))) {
 						list.add(new Pair<Predicate<Path>, UnaryOperator<JsonElement>>(parsePattern(JsonUtils.getString(iObj, "pattern")),
-								parseModifier(JsonUtils.getJsonObject(iObj, "modifier"))));
+								parseModifier(iObj.get("modifier"))));
 					} else {
 						continue;
 					}

@@ -1,24 +1,2 @@
 [
-	{
-		"domain": "default",
-		"pattern": "attributes/minecraft/*.json",
-		"modifier": {
-			"hungryanimals.hunger_weight_bmr": {
-				"operation": "*",
-				"value": 2
-			}
-		}
-	},
-	{
-		"domain": "default",
-		"pattern": "ais/minecraft/*.json",
-		"modifier": {
-			"mate": {
-				"speed": {
-					"operation": "*",
-					"value": 2
-				}
-			}
-		}
-	}
 ]
