@@ -44,10 +44,16 @@ import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
+import oortcloud.hungryanimals.configuration.master.Master;
+import oortcloud.hungryanimals.configuration.master.Node;
+import oortcloud.hungryanimals.configuration.master.NodeCache;
+import oortcloud.hungryanimals.configuration.master.NodeModifier;
+import oortcloud.hungryanimals.configuration.master.NodeOverride;
+import oortcloud.hungryanimals.configuration.master.NodePath;
+import oortcloud.hungryanimals.configuration.master.NodePlugin;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
-import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceBlockState;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceEntity;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceFluid;
@@ -70,6 +76,7 @@ import oortcloud.hungryanimals.potion.PotionOvereat;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.utils.HashBlockState;
 import oortcloud.hungryanimals.utils.ModJsonUtils;
+import oortcloud.hungryanimals.utils.Pair;
 
 public class ConfigurationHandler {
 
@@ -91,20 +98,29 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON overeat;
 	private static ConfigurationHandlerJSON slingshot;
 	
+	public static Node baked;
+	public static NodeCache example;
+	public static Node master;
+	public static Map<Path, JsonElement> map;
+	
+	public static Path exampleFolder;
+	public static Path baseFolder;
+	
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
-		Path basefolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID);
-		Path examplefolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID+"_example");
+		baseFolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID);
+		exampleFolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID+"_example");
 
-		// Create Example Config Folder
-		try {
-			createExample(examplefolder);
-		} catch (URISyntaxException | IOException e1) {
-			HungryAnimals.logger.error("Couldn\'t create config examples\n{}", e1);
-		}
+		// Master Config Graph
+		master = new NodeOverride(new NodePath(baseFolder.resolve("master")), 
+				                  new NodePlugin(Paths.get("master")));
+		
+		// Config Graph
+		example = new NodeCache(new NodeModifier(new NodePlugin(), Master.get(master, "default")));
+		baked = new NodeOverride(new NodeModifier(new NodePath(baseFolder), Master.get(master, "custom")), example);
 
-		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/block", (jsonElement, animal) -> {
+		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/block", (jsonElement, animal) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			Map<HashBlockState, Pair<Double, Double>> map = new HashMap<HashBlockState, Pair<Double, Double>>();
@@ -117,7 +133,7 @@ public class ConfigurationHandler {
 			}
 			FoodPreferences.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
 		});
-		foodPreferencesItem = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/item", (jsonElement, animal) -> {
+		foodPreferencesItem = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/item", (jsonElement, animal) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			List<FoodPreferenceIngredientEntry> list = new ArrayList<FoodPreferenceIngredientEntry>();
@@ -130,7 +146,7 @@ public class ConfigurationHandler {
 			}
 			FoodPreferences.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
-		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/entity", (jsonElement, animal) -> {
+		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/entity", (jsonElement, animal) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			Set<Class<? extends EntityLiving>> set = new HashSet<Class<? extends EntityLiving>>();
@@ -145,7 +161,7 @@ public class ConfigurationHandler {
 			}
 			FoodPreferences.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
 		});
-		foodPreferencesFluid = new ConfigurationHandlerJSONAnimal(basefolder, "food_preferences/fluid", (jsonElement, animal) -> {
+		foodPreferencesFluid = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/fluid", (jsonElement, animal) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			Map<String, Pair<Double, Double>> map = new HashMap<String, Pair<Double, Double>>();
@@ -158,7 +174,7 @@ public class ConfigurationHandler {
 			}
 			FoodPreferences.getInstance().REGISTRY_FLUID.put(animal, new FoodPreferenceFluid(map));
 		});
-		attributes = new ConfigurationHandlerJSONAnimal(basefolder, "attributes", (jsonElement, animal) -> {
+		attributes = new ConfigurationHandlerJSONAnimal(baseFolder, "attributes", (jsonElement, animal) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
 			for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
@@ -176,14 +192,14 @@ public class ConfigurationHandler {
 			}
 		});
 
-		lootTables = new ConfigurationHandlerJSONAnimal(basefolder, "loot_tables", (jsonElement, animal) -> {
+		lootTables = new ConfigurationHandlerJSONAnimal(baseFolder, "loot_tables", (jsonElement, animal) -> {
 			ModLootTables.register(EntityList.getKey(animal), jsonElement);
 		});
-		ais = new ConfigurationHandlerJSONAnimal(basefolder, "ais", (jsonElement, animal) -> {
+		ais = new ConfigurationHandlerJSONAnimal(baseFolder, "ais", (jsonElement, animal) -> {
 			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().parse(jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
-		productions = new ConfigurationHandlerJSONAnimal(basefolder, "productions", (jsonElement, animal) -> {
+		productions = new ConfigurationHandlerJSONAnimal(baseFolder, "productions", (jsonElement, animal) -> {
 			JsonArray jsonArr = jsonElement.getAsJsonArray();
 			
 			for (JsonElement i : jsonArr) {
@@ -197,7 +213,7 @@ public class ConfigurationHandler {
 		});
 		
 		
-		recipes = new ConfigurationHandlerJSON(basefolder, "recipes/animalglue", (jsonElement) -> {
+		recipes = new ConfigurationHandlerJSON(baseFolder, "recipes/animalglue", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement i : jsonArr) {
@@ -207,7 +223,7 @@ public class ConfigurationHandler {
 				RecipeAnimalGlue.addRecipe(ing, count);
 			}
 		});
-		world = new ConfigurationHandlerJSON(basefolder, "world", (jsonElement) -> {
+		world = new ConfigurationHandlerJSON(baseFolder, "world", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
 			BlockExcreta.diseaseProbability = jsonObj.getAsJsonPrimitive("disease_probability").getAsDouble();
@@ -217,12 +233,12 @@ public class ConfigurationHandler {
 			BlockExcreta.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
 			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
-		cures = new ConfigurationHandlerJSON(basefolder, "cures", (jsonElement) -> {
+		cures = new ConfigurationHandlerJSON(baseFolder, "cures", (jsonElement) -> {
 			List<Ingredient> ingredients = ModJsonUtils.getIngredients(jsonElement);
 			for (Ingredient i : ingredients)
 				Cures.getInstance().register(i);
 		});
-		inheat = new ConfigurationHandlerJSON(basefolder, "inheat", (jsonElement) -> {
+		inheat = new ConfigurationHandlerJSON(baseFolder, "inheat", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {
@@ -232,7 +248,7 @@ public class ConfigurationHandler {
 				InHeats.getInstance().register(inheat, inheatDuration);
 			}
 		});
-		generators = new ConfigurationHandlerJSON(basefolder, "generators", (jsonElement) -> {
+		generators = new ConfigurationHandlerJSON(baseFolder, "generators", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {
@@ -264,7 +280,7 @@ public class ConfigurationHandler {
 
 			}
 		});
-		animal = new ConfigurationHandlerJSON(basefolder, "animal", (jsonElement) -> {
+		animal = new ConfigurationHandlerJSON(baseFolder, "animal", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
 			for (JsonElement jsonEle : jsonArr) {
@@ -313,19 +329,19 @@ public class ConfigurationHandler {
 				}
 			}
 		});
-		disease = new ConfigurationHandlerJSON(basefolder, "disease", (jsonElement) -> {
+		disease = new ConfigurationHandlerJSON(baseFolder, "disease", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
 			PotionDisease.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
 			PotionDisease.multiplyWeightBMR = JsonUtils.getFloat(jsonObj, "multiply_weight_bmr");
 		});
-		overeat = new ConfigurationHandlerJSON(basefolder, "overeat", (jsonElement) -> {
+		overeat = new ConfigurationHandlerJSON(baseFolder, "overeat", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
 			PotionOvereat.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
 		});
 
-		slingshot = new ConfigurationHandlerJSON(basefolder, "slingshot", (jsonElement) -> {
+		slingshot = new ConfigurationHandlerJSON(baseFolder, "slingshot", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 			
 			JsonElement ammos = jsonObj.get("ammos");
@@ -337,30 +353,35 @@ public class ConfigurationHandler {
 			((ItemSlingShot)ModItems.slingshot).damage = JsonUtils.getFloat(jsonObj, "damage");
 		});
 		
-		ModLootTables.init(basefolder);
+		ModLootTables.init(baseFolder);
 	}
 
 	public static void syncPre() {
-		disease.sync();
-		overeat.sync();
+		map = baked.build();
+		
+		createDirectories(baseFolder, example.cached);
+		createExample(exampleFolder, example.cached);
+		
+		disease.sync(map);
+		overeat.sync(map);
 	}
 
 	public static void sync() {
-		animal.sync();
-		foodPreferencesBlock.sync();
-		foodPreferencesItem.sync();
-		foodPreferencesEntity.sync();
-		foodPreferencesFluid.sync();
-		attributes.sync();
-		lootTables.sync();
-		ais.sync();
-		recipes.sync();
-		world.sync();
-		cures.sync();
-		inheat.sync();
-		generators.sync();
-		productions.sync();
-		slingshot.sync();
+		animal.sync(map);
+		foodPreferencesBlock.sync(map);
+		foodPreferencesItem.sync(map);
+		foodPreferencesEntity.sync(map);
+		foodPreferencesFluid.sync(map);
+		attributes.sync(map);
+		lootTables.sync(map);
+		ais.sync(map);
+		recipes.sync(map);
+		world.sync(map);
+		cures.sync(map);
+		inheat.sync(map);
+		generators.sync(map);
+		productions.sync(map);
+		slingshot.sync(map);
 	}
 
 	public static void syncPost() {
@@ -401,9 +422,48 @@ public class ConfigurationHandler {
 		return new ResourceLocation(location.replace('#', ':').replace('@', '/'));
 	}
 
-	private static void createExample(Path basefolder) throws IOException, URISyntaxException {
-		HAPlugins.getInstance().walkPlugins((path, jsonElement) -> {
+	private static void createDirectories(Path basefolder, Map<Path, JsonElement> map) {
+		for (Entry<Path, JsonElement> i : map.entrySet()) {
 			Path parent;
+			Path path = i.getKey();
+			if (path.getParent() != null) {
+				parent = basefolder.resolve(path.getParent());
+			} else {
+				parent = basefolder;
+			}
+			try {
+				Files.createDirectories(parent);
+			} catch (FileAlreadyExistsException e) {
+			} catch (IOException e) {
+				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
+			}
+		}
+		
+		try {
+			HAPlugins.getInstance().walkPlugins(null, (path, txt) -> {
+				Path parent;
+				if (path.getParent() != null) {
+					parent = basefolder.resolve(path.getParent());
+				} else {
+					parent = basefolder;
+				}
+				try {
+					Files.createDirectories(parent);
+				} catch (FileAlreadyExistsException e) {
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
+				}
+			});
+		} catch (IOException | URISyntaxException e) {
+			HungryAnimals.logger.warn("Problem occured durin creating example config folder.");
+			e.printStackTrace();
+		}
+	}
+	
+	private static void createExample(Path basefolder, Map<Path, JsonElement> map) {
+		for (Entry<Path, JsonElement> i : map.entrySet()) {
+			Path parent;
+			Path path = i.getKey();
 			if (path.getParent() != null) {
 				parent = basefolder.resolve(path.getParent());
 			} else {
@@ -424,38 +484,45 @@ public class ConfigurationHandler {
 				HungryAnimals.logger.error("Couldn\'t create file {}\n{}", target, e);
 			}
 			try {
-				String beautiful = new GsonBuilder().setPrettyPrinting().create().toJson(jsonElement);
+				String beautiful = new GsonBuilder().setPrettyPrinting().create().toJson(i.getValue());
 				Files.write(target, Lists.newArrayList(beautiful));
 			} catch (IOException e) {
 				HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
 			}
-		}, (path, txt) -> {
-			Path parent;
-			if (path.getParent() != null) {
-				parent = basefolder.resolve(path.getParent());
-			} else {
-				parent = basefolder;
-			}
-			try {
-				Files.createDirectories(parent);
-			} catch (FileAlreadyExistsException e) {
-			} catch (IOException e) {
-				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
-			}
+		}
+		
+		try {
+			HAPlugins.getInstance().walkPlugins(null, (path, txt) -> {
+				Path parent;
+				if (path.getParent() != null) {
+					parent = basefolder.resolve(path.getParent());
+				} else {
+					parent = basefolder;
+				}
+				try {
+					Files.createDirectories(parent);
+				} catch (FileAlreadyExistsException e) {
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
+				}
 
-			Path target = basefolder.resolve(path);
-			try {
-				Files.createFile(target);
-			} catch (FileAlreadyExistsException e) {
-			} catch (IOException e) {
-				HungryAnimals.logger.error("Couldn\'t create file {}\n{}", target, e);
-			}
-			try {
-				Files.write(target, Lists.newArrayList(txt));
-			} catch (IOException e) {
-				HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
-			}
-		});
+				Path target = basefolder.resolve(path);
+				try {
+					Files.createFile(target);
+				} catch (FileAlreadyExistsException e) {
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create file {}\n{}", target, e);
+				}
+				try {
+					Files.write(target, Lists.newArrayList(txt));
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
+				}
+			});
+		} catch (IOException | URISyntaxException e) {
+			HungryAnimals.logger.warn("Problem occured durin creating example config folder.");
+			e.printStackTrace();
+		}
 	}
 
 }

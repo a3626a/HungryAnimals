@@ -4,7 +4,7 @@ import java.util.Map;
 
 import net.minecraftforge.fluids.FluidStack;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
+import oortcloud.hungryanimals.utils.Pair;
 
 public class FoodPreferenceFluid implements IFoodPreference<FluidStack> {
 

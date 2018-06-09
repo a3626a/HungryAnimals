@@ -4,8 +4,8 @@ import java.util.Map;
 
 import net.minecraft.block.state.IBlockState;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.utils.HashBlockState;
+import oortcloud.hungryanimals.utils.Pair;
 
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 

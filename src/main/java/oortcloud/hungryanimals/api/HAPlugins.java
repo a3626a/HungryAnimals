@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,13 +39,13 @@ public class HAPlugins {
 	private static HAPlugins INSTANCE;
 
 	private List<IHAPlugin> plugins;
-	private Map<String, JsonElement> mapJson;
-	private Map<String, String> mapText;
+	private Map<Path, JsonElement> mapJson;
+	private Map<Path, String> mapText;
 
 	public HAPlugins() {
 		plugins = new ArrayList<IHAPlugin>();
-		mapJson = new HashMap<String, JsonElement>();
-		mapText = new HashMap<String, String>();
+		mapJson = new HashMap<Path, JsonElement>();
+		mapText = new HashMap<Path, String>();
 	}
 
 	public static HAPlugins getInstance() {
@@ -79,14 +78,16 @@ public class HAPlugins {
 		List<FileSystem> fileSystemClose = new ArrayList<>();
 		List<Stream<Path>> walkClose = new ArrayList<>();
 
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		Map<Path, List<String>> map = new HashMap<Path, List<String>>();
 
 		for (IHAPlugin i : plugins) {
 			String injectionPath = i.getJsonInjectionPath();
 			URI root = i.getClass().getResource(injectionPath).toURI();
 			Path myPath = null;
 			if (root.getScheme().equals("jar")) {
-				FileSystem fileSystem = FileSystems.newFileSystem(root, Collections.<String, Object>emptyMap());
+				Map<String, String> options = new HashMap<>();
+				options.put("file.separator", FileSystems.getDefault().getSeparator());
+				FileSystem fileSystem = FileSystems.newFileSystem(root, options);
 				myPath = fileSystem.getPath(injectionPath);
 				fileSystemClose.add(fileSystem);
 			} else {
@@ -101,16 +102,16 @@ public class HAPlugins {
 				if (!Files.isDirectory(j)) {
 					String text = new String(Files.readAllBytes(j));
 					Path relative = myPath.relativize(j);
-					if (!map.containsKey(path2Str(relative))) {
-						map.put(path2Str(relative), new ArrayList<>());
+					if (!map.containsKey(relative)) {
+						map.put(relative, new ArrayList<>());
 					}
-					map.get(path2Str(relative)).add(text);
+					map.get(relative).add(text);
 				}
 			}
 		}
 
-		for (Entry<String, List<String>> i : map.entrySet()) {
-			if (i.getKey().endsWith(".json")) {
+		for (Entry<Path, List<String>> i : map.entrySet()) {
+			if (i.getKey().toString().endsWith(".json")) {
 				JsonArray jsonArray = null;
 				JsonObject jsonObject = null;
 				for (String j : i.getValue()) {
@@ -138,12 +139,12 @@ public class HAPlugins {
 				} else if (jsonObject != null) {
 					putJson(i.getKey(), jsonObject);
 				} else {
-					// TODO Warn or Error
+					HungryAnimals.logger.warn("{} is neither json object nor json array.", i.getKey());
 				}
 			} else {
 				boolean isSupportingExtension = false;
 				for (String ext : EXTENTIONS) {
-					if (i.getKey().endsWith(ext)) {
+					if (i.getKey().toString().endsWith(ext)) {
 						isSupportingExtension = true;
 						break;
 					}
@@ -168,42 +169,32 @@ public class HAPlugins {
 	}
 
 	public void walkPlugins(BiConsumer<Path, JsonElement> onjson, BiConsumer<Path, String> ontxt) throws IOException, URISyntaxException {
-		for (Entry<String, JsonElement> i : mapJson.entrySet()) {
-			onjson.accept(Paths.get(i.getKey()), i.getValue());
+		if (onjson != null) {
+			for (Entry<Path, JsonElement> i : mapJson.entrySet()) {
+				onjson.accept(i.getKey(), i.getValue());
+			}
 		}
-		for (Entry<String, String> i : mapText.entrySet()) {
-			ontxt.accept(Paths.get(i.getKey()), i.getValue());
+		if (ontxt != null) {
+			for (Entry<Path, String> i : mapText.entrySet()) {
+				ontxt.accept(i.getKey(), i.getValue());
+			}
 		}
-	}
-
-	private static String path2Str(Path key) {
-		return key.toString().replace('\\', '/');
 	}
 
 	public void putJson(Path key, JsonElement value) {
-		putJson(path2Str(key), value);
-	}
-
-	public void putJson(String key, JsonElement value) {
 		mapJson.put(key, value);
 	}
 
-	public void putTxt(Path key, String value) {
-		putText(path2Str(key), value);
-	}
-
-	public void putText(String key, String value) {
+	public void putText(Path key, String value) {
 		mapText.put(key, value);
 	}
 
 	public JsonElement getJson(Path target) {
-		// TODO OMG Help me I don't want this replacement TT
-		return mapJson.get(path2Str(target));
+		return mapJson.get(target);
 	}
 
-	public String getTxt(Path target) {
-		// TODO OMG Help me I don't want this replacement TT
-		return mapText.get(path2Str(target));
+	public String getText(Path target) {
+		return mapText.get(target);
 	}
 
 	public static List<IHAPlugin> getModPlugins(ASMDataTable asmDataTable) {

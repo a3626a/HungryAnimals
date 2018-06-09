@@ -52,6 +52,7 @@ import oortcloud.hungryanimals.entities.handler.Cures;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.handler.InHeats;
 import oortcloud.hungryanimals.potion.ModPotions;
+import oortcloud.hungryanimals.utils.Pair;
 import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityEventHandler {
@@ -493,17 +494,6 @@ public class EntityEventHandler {
 				}
 				tag.setBoolean("isNatural", true);
 			}
-		}
-	}
-
-	public static class Pair<A, B> {
-
-		public A left;
-		public B right;
-
-		public Pair(A left, B right) {
-			this.left = left;
-			this.right = right;
 		}
 	}
 }

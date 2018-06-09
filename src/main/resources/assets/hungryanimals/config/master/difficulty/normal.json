@@ -1,0 +1,12 @@
+[
+	{
+		"domain": "default",
+		"pattern": "attributes/minecraft/*.json",
+		"modifier": {
+			"generic.maxHealth": {
+				"operation": "*",
+				"value": 2
+			}
+		}
+	}
+]

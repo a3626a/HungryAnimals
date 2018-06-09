@@ -1,18 +1,14 @@
 package oortcloud.hungryanimals.configuration;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
@@ -32,30 +28,17 @@ public class ConfigurationHandlerJSONAnimal extends ConfigurationHandlerJSON {
 		this.descriptor = descriptor;
 	}
 
-	public void sync() {
-		checkDirectory();
-
+	public void sync(Map<Path, JsonElement> map) {
 		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			Path path = ConfigurationHandler.resourceLocationToPath(EntityList.getKey(i), "json");
-			Path configPath = directory.resolve(path);
-
-			try {
-				JsonElement json = null;
-				if (Files.notExists(configPath)) {
-					// Config file not exist, so use default(internal)
-					json = HAPlugins.getInstance().getJson(Paths.get(descriptor).resolve(path));
-					
-					if (json == null)
-						continue;
-				} else {
-					json = (new JsonParser()).parse(new String(Files.readAllBytes(configPath)));
-				}
-				this.read.read(json, i);
-			} catch (JsonSyntaxException | IOException e) {
-				HungryAnimals.logger.error("Couldn\'t load {} {} of {}\n{}", new Object[] { this.descriptor, configPath, i, e });
+			path = Paths.get(descriptor).resolve(path);
+			
+			if (map.containsKey(path)) {
+				read.read(map.get(path), i);
+			} else {
+				HungryAnimals.logger.warn("couldn\'t load {}. this could be intended.", path);
 			}
 		}
-
 	}
 
 	@FunctionalInterface
