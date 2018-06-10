@@ -76,7 +76,6 @@ public class ModLootTables implements ILootTableRegistry {
 		if (table == null) {
 			return;
 		}
-		HungryAnimals.logger.info("LootTableLoadEvent");
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
 			if (iEntries.size() == 1) {
@@ -88,7 +87,6 @@ public class ModLootTables implements ILootTableRegistry {
 						if (jEntries.size() == 1) {
 							LootEntry jEntry = jEntries.get(0);
 							if (jEntry instanceof LootEntryItem) {
-								HungryAnimals.logger.info("{} ==? {}", iEntry.getEntryName(), jEntry.getEntryName());
 								if (iEntry.getEntryName().equals(jEntry.getEntryName())) {
 									toRemove = j;
 									break;
@@ -98,7 +96,6 @@ public class ModLootTables implements ILootTableRegistry {
 					}
 				}
 				if (toRemove != null) {
-					HungryAnimals.logger.info(toRemove);
 					event.getTable().removePool(toRemove.getName());
 				}
 			}
