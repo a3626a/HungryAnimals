@@ -122,6 +122,8 @@ public class Master {
 			return new JsonPrimitive(modifiee.getAsFloat() + value);
 		} else if (operation.equals("*")) {
 			return new JsonPrimitive(modifiee.getAsFloat() * value);
+		} else if (operation.equals("=")) {
+			return new JsonPrimitive(value);
 		} else {
 			throw new JsonParseException("Unsupported operation " + operation + ".");
 		}

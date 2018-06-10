@@ -1,2 +1,89 @@
 [
+	{
+		"domain": "default",
+		"pattern": "attributes/minecraft/*.json",
+		"modifier": {
+		    "hungryanimals.hunger_weight_bmr": {
+				"operation": "*",
+				"value": 2
+			},
+			"hungryanimals.hunger_stomach_digest": {
+				"operation": "*",
+				"value": 2
+			},
+			"hungryanimals.hunger_stomach_max": {
+				"operation": "*",
+				"value": 2
+			},
+			"hungryanimals.child_delay": {
+				"operation": "*",
+				"value": 0.5
+			},
+			"hungryanimals.excretion_factor": {
+				"operation": "*",
+				"value": 0.5
+			},
+			"hungryanimals.child_growing_length": {
+				"operation": "*",
+				"value": 0.5
+			},
+			"hungryanimals.taming_factor_food": {
+				"operation": "*",
+				"value": 0.5
+			},
+			"hungryanimals.fluid_weight": {
+				"operation": "*",
+				"value": 2
+			}
+		}
+	},
+	{
+		"domain": "default",
+		"pattern": "food_preferences/block/minecraft/*.json",
+		"modifier": [
+			{
+				"nutrient": {"operation": "*","value": 2},
+				"stomach": {"operation": "*","value": 2}
+    	    }
+		]
+	},
+	{
+		"domain": "default",
+		"pattern": "food_preferences/fluid/minecraft/*.json",
+		"modifier": [
+			{
+				"nutrient": {"operation": "*","value": 2},
+				"stomach": {"operation": "*","value": 2}
+    	    }
+		]
+	},
+	{
+		"domain": "default",
+		"pattern": "food_preferences/item/minecraft/*.json",
+		"modifier": [
+			{
+				"nutrient": {"operation": "*","value": 2},
+				"stomach": {"operation": "*","value": 2}
+    	    }
+		]
+	},
+	{
+		"domain": "default",
+		"pattern": "loot_tables/minecraft/*.json",
+		"modifier": {
+		    "pools": [
+		        {
+		            "entries": [
+		                {
+		                    "functions": [
+		                        {
+		                            "weight_per_meat" : {"operation": "*","value": 2}
+		                        }
+		                    ]
+		                }
+		            ]
+		        }
+		    ]
+		}
+	}
 ]
