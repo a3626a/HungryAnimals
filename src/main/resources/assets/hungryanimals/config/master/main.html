@@ -30,7 +30,7 @@
     <i class="fa fa-remove"></i>
   </a>
   <h4 class="w3-bar-item"><b>Menu</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">productions</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="#">master</a>
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -82,39 +82,61 @@
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Usage</h1>
-      <p>A type of production like <a href="#milk" class="ha-replacement">milk</a>, <a href="#egg" class="ha-replacement">egg</a>, or <a href="#shear" class="ha-replacement">shear</a> is distinguished by <code>"type"</code> field. Every production must have <code>"name"</code> which is used to save data to disc. This <code>"name"</code> must be unique. <code>"condition"</code> is a requirement for the production. <a href="#condition" class="ha-replacement">condition</a> has two fields which can be omitted. If <code>"sex"</code> is omitted, then animals can produce regardless of sex.</p>
-      <p><a href="#milk" class="ha-replacement">milk</a> production is way of producing milk like Cow. You can specify "bucket" as <code>"input"</code>, "milk" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"disable_sound"</code>.<br>* <code>"input"</code>/<code>"output"</code> don't have to be buckets, you can specify anything.</p>
-      <p><a href="#egg" class="ha-replacement">egg</a> production is way of producing egg like Chicken. You can specify "egg" as <code>"output"</code>. Additionally, you can also set <code>"delay"</code>, <code>"disable_sound"</code>.<br>* There's no limitation on <code>"output"</code>, you can specify anything.</p>
-      <p><a href="#shear" class="ha-replacement">shear</a> production is way of producing wool like Sheep. You can specify "wool" as <code>"output"</code>, "shears" as <code>"input"</code>. <code>"damage"</code> determines durability cost per shearing.<br>* There's no limitation on <code>"output"</code>, you can specify anything. For <code>"input"</code>, it must be damagable, like tools or equipments.</p>
-      <p><a href="#fluid" class="ha-replacement">fluid</a> production is way of producing any fluid. You can specify <code>"fluid"</code> to indicate what to produce. Without any mod, <code>"water"</code>, <code>"lava"</code> and <code>"milk"</code> are possible. <code>"capacity"</code> is an amount of fluid in mB(milli-bucket) that an animal can store maximally. An animal produces <code>"hungryanimals.fluid_amount" * "amount"</code> mB of the fluid every second. <code>"hungryanimals.fluid_amount"</code> is an attribute. An animal consumes <code>"hungryanimals.fluid_weight" * "weight"</code>kg of its weight every time it produces 1000mB of the fluid.</p>
-      <p><a href="#range" class="ha-replacement">range</a> determines delay or cooldown of productions. <a href="#range" class="ha-replacement">range</a> with one <a class="ha-replacement">integer</a> value always has fixed cooldown in <a class="ha-replacement">integer</a> seconds. <a href="#range" class="ha-replacement">range</a> with <code>"min"</code> and <code>"max"</code> field has random cooldown between <code>"min"</code> and <code>"max"</code> seconds.</p>
+      <p><code>"domain"</code> determines where this <a href="#modifier" class="ha-replacement">modifier</a> is applied. <code>"default"</code> means built-in custom config which is generated inside <code>"config/hungryanimals_example"</code>, <code>"custom"</code> means user created custom config. <code>"all"</code> means both. </p>
+      <p><code>"pattern"</code> determines config files to modify. <code>*</code> is wild-card character. </p>
+      <p><code>"modifier"</code> selects values inside json and modifies them. <a href="#modifier" class="ha-replacement">modifier</a> recursively traverses config files, until it gets <a href="#operator" class="ha-replacement">operator</a>.</p>
     </div>
   </div>
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
       <h1 class="w3-text-teal">Example</h1>
 <pre>
-    {
-        "type" : "shear",
-        "name" : "minecraft.llama.shear",
-        "delay" : {
-            "min" : 15,
-            "max" : 30
-        },
-        "condition" : {
-            "age" : "adult"
-        }
-        "disable_sound" : false,
-        "damage" : 2,
-        "input" : {
-            "item" : "minecraft:shears"
-        },
-        "output" : {
-            "item" : "minecraft:string"
+{
+    "domain": "default",
+    "pattern": "attributes/minecraft/*.json",
+    "modifier": {
+        "generic.maxHealth": {
+            "operation": "+",
+            "value": 10
         }
     }
+}
 </pre>
-      <p>This production above, produces string from llama by using shears.</p>
+      <p>This <a id="modifier" class="ha-replacement">modifier</a> above will increase max health of every animals 5 hearts (10 points).</p>
+<pre>
+{
+	...,
+	"generic.maxHealth" : 30,
+	...
+}
+</pre>
+      <p>This is a part of <code>"attributes/minecraft/cow.json"</code>. <code>"modifier"</code> field of above example is created by substituting <code>30</code> by <a href="#operator" class="ha-replacement">operator</a>. Additionally, if you want to modify multiple fields at the same time, you can simply substitute fields of target json file like the example following.</p>
+<pre>
+{
+    "generic.maxHealth": {
+        "operation": "+",
+        "value": 10
+    },
+    "hungryanimals.hunger_weight_normal": {
+        "operation": "*",
+        "value": 1.2
+    }
+}
+</pre>
+ 
+<pre>
+{
+    "domain": "default",
+    "pattern": "food_preferences/block/minecraft/*.json",
+    "modifier": [
+        {
+            "nutrient": {"operation": "*","value": 1.3},
+            "stomach": {"operation": "*","value": 1.3}
+        }
+    ]
+}
+</pre>
+      <p>This <a id="modifier" class="ha-replacement">modifier</a> above will increase <code>"nutrient"</code> and <code>"stomach"</code> of all block-like foods 30%. When the <code>"modifier"</code> contains an json array, it will be applied to every elements of the array.</p>
     </div>
   </div>
 </div>
