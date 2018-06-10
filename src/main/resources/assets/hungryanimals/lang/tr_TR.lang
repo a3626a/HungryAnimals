@@ -1,36 +1,36 @@
 itemGroup.tabHungryAnimals=Hungry Animals
 
-tile.hungryanimals.excreta.name=DÄ±ÅŸkÄ±
+tile.hungryanimals.excreta.name=Dışkı
 tile.hungryanimals.niterbed.name=Tezek
 tile.hungryanimals.trough.name=Yalak
-tile.hungryanimals.trapcover.name=Tuzak KaplamasÄ±
-tile.hungryanimals.floorcoverleaf.name=YapraklÄ± Zemin KaplamasÄ±
-tile.hungryanimals.floorcoverwool.name=YÃ¼nlÃ¼ Zemin KaplamasÄ±
-tile.hungryanimals.floorcoverhay.name=SamanlÄ± Zemin KaplamasÄ±
-item.hungryanimals.manure.name=Kuru DÄ±ÅŸkÄ±
-item.hungryanimals.woodash.name=Tahta KÃ¼lÃ¼
-item.hungryanimals.saltpeter.name=GÃ¼herÃ§ile
+tile.hungryanimals.trapcover.name=Tuzak Kaplaması
+tile.hungryanimals.floorcoverleaf.name=Yapraklı Zemin Kaplaması
+tile.hungryanimals.floorcoverwool.name=Yünlü Zemin Kaplaması
+tile.hungryanimals.floorcoverhay.name=Samanlı Zemin Kaplaması
+item.hungryanimals.manure.name=Kuru Dışkı
+item.hungryanimals.woodash.name=Tahta Külü
+item.hungryanimals.saltpeter.name=Güherçile
 item.hungryanimals.trough.name=Yalak
 item.hungryanimals.slingshot.name=Sapan
 item.hungryanimals.bola.name=Bola
-item.hungryanimals.herbicide.name=Herbisit - Bitki Ã¶ldÃ¼rÃ¼cÃ¼
+item.hungryanimals.herbicide.name=Herbisit - Bitki öldürücü
 item.hungryanimals.tendon.name=Tendon
-item.hungryanimals.debugglass.name=Hata AyÄ±klama Aleti
-item.hungryanimals.animalglue.name=Hayvan TutkalÄ±
+item.hungryanimals.debugglass.name=Hata Ayıklama Aleti
+item.hungryanimals.animalglue.name=Hayvan Tutkalı
 item.hungryanimals.compositewood.name=Kompozit Odun
 
-hungryanimals.jei.animalglue=Hayvan TutkalÄ±
-hungryanimals.jei.animalglue.description=Hayvan tutkalÄ±, belirli maddeler ile doldurulmuÅŸ bir kazana saÄŸ tÄ±klayarak  elde edilebilir. Bu iÅŸlem, kazandaki suyun Ã¼Ã§te birini harcayacaktÄ±r.
+hungryanimals.jei.animalglue=Hayvan Tutkalı
+hungryanimals.jei.animalglue.description=Hayvan tutkalı, belirli maddeler ile doldurulmuş bir kazana sağ tıklayarak  elde edilebilir. Bu işlem, kazandaki suyun üçte birini harcayacaktır.
 
-potion.growth=HÄ±zlÄ± YetiÅŸme
-potion.disease=HastalÄ±k
-potion.inheat=KÄ±zma DÃ¶nemi
-potion.young=GenÃ§
+potion.growth=Hızlı Yetişme
+potion.disease=Hastalık
+potion.inheat=Kızma Dönemi
+potion.young=Genç
 potion.overeat=Oburluk
 
-minecraft.cow.milk=SÃ¼t
+minecraft.cow.milk=Süt
 minecraft.chicken.egg=Yumurta
-minecraft.llama.milk=SÃ¼t
-minecraft.mooshroom.milk=GÃ¼veÃ§
+minecraft.llama.milk=Süt
+minecraft.mooshroom.milk=Güveç
 
-fluid.milk=SÃ¼t
+fluid.milk=Süt
