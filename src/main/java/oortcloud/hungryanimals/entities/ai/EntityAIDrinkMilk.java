@@ -7,9 +7,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
@@ -46,7 +46,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 
 	private FluidStack fluid;
 	
-	public EntityAIDrinkMilk(EntityAnimal animal, double speed, FluidStack fluid) {
+	public EntityAIDrinkMilk(EntityLiving animal, double speed, FluidStack fluid) {
 		super(animal, speed);
 		this.fluid = fluid;
 		childHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
@@ -54,19 +54,22 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	}
 
 	public boolean shouldExecute() {
-		if (this.childAnimal.getGrowingAge() >= 0) {
+		if (ageable == null) {
+			return false;
+		} else if (ageable.getAge() >= 0) {
 			return false;
 		} else if (childHungry.getStomach() >= childHungry.getMaxStomach()) {
 			return false;
 		} else {
 			if (--searchCounter <= 0) {
 				searchCounter = SEARCH;
-				
-				EntityAnimal entityanimal = findMother();
+				EntityLiving entityanimal = findMother();
 
 				if (entityanimal == null) {
+					HungryAnimals.logger.info("can't find mom");
 					return false;
 				} else {
+					HungryAnimals.logger.info("found mom");
 					this.parentAnimal = entityanimal;
 					return true;
 				}
@@ -76,14 +79,14 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		}
 	}
 
-	protected EntityAnimal findMother() {
-		List<EntityAnimal> list = this.childAnimal.world.<EntityAnimal>getEntitiesWithinAABB(this.childAnimal.getClass(),
+	protected EntityLiving findMother() {
+		List<EntityLiving> list = this.childAnimal.world.<EntityLiving>getEntitiesWithinAABB(this.childAnimal.getClass(),
 				this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
-		EntityAnimal entityanimal = null;
+		EntityLiving entityanimal = null;
 
 		Collections.shuffle(list);
 
-		for (EntityAnimal entityanimal1 : list) {
+		for (EntityLiving entityanimal1 : list) {
 			ICapabilityProducingAnimal capProducing = entityanimal1.getCapability(ProviderProducingAnimal.CAP, null);
 
 			if (capProducing != null) {
@@ -105,7 +108,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	}
 
 	public boolean shouldContinueExecuting() {
-		if (this.childAnimal.getGrowingAge() >= 0) {
+		if (ageable.getAge() >= 0) {
 			return false;
 		} else if (!this.parentAnimal.isEntityAlive()) {
 			return false;

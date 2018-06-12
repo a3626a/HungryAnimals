@@ -196,14 +196,14 @@ public class ConfigurationHandler {
 			ModLootTables.register(EntityList.getKey(animal), jsonElement);
 		});
 		ais = new ConfigurationHandlerJSONAnimal(baseFolder, "ais", (jsonElement, animal) -> {
-			IAIContainer<EntityAnimal> aiContainer = AIContainers.getInstance().parse(jsonElement);
+			IAIContainer<EntityLiving> aiContainer = AIContainers.getInstance().parse(jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
 		productions = new ConfigurationHandlerJSONAnimal(baseFolder, "productions", (jsonElement, animal) -> {
 			JsonArray jsonArr = jsonElement.getAsJsonArray();
 			
 			for (JsonElement i : jsonArr) {
-				Function<EntityAnimal, IProduction> factory = Productions.getInstance().parse(i);
+				Function<EntityLiving, IProduction> factory = Productions.getInstance().parse(i);
 				if (factory != null) {
 					API.registerProduction(animal, factory);
 				} else {
@@ -293,19 +293,19 @@ public class ConfigurationHandler {
 					name = JsonUtils.getString(jsonObj, "name");
 					if (jsonObj.has("disable_taming")) {
 						// Backward compatibility
-						entry.setTamable(!JsonUtils.getBoolean(jsonObj, "disable_taming"));
+						entry.isTamable = !JsonUtils.getBoolean(jsonObj, "disable_taming");
 					} else if (jsonObj.has("tamable")) {
-						entry.setTamable(JsonUtils.getBoolean(jsonObj, "tamable"));
+						entry.isTamable = JsonUtils.getBoolean(jsonObj, "tamable");
 					}
-					
 					if (jsonObj.has("model_growing")) {
-						entry.setModelGrowing(JsonUtils.getBoolean(jsonObj, "model_growing"));
+						entry.isModelGrowing = JsonUtils.getBoolean(jsonObj, "model_growing");
 					}
-					
 					if (jsonObj.has("sexual")) {
-						entry.setSexual(JsonUtils.getBoolean(jsonObj, "sexual"));
+						entry.isSexual = JsonUtils.getBoolean(jsonObj, "sexual");
 					}
-					
+					if (jsonObj.has("ageable")) {
+						entry.isAgeable = JsonUtils.getBoolean(jsonObj, "ageable");
+					}
 				} else {
 					name = jsonEle.getAsString();
 				}

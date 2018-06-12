@@ -8,33 +8,37 @@ import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 
-public class RenderEntityWeight extends Render<EntityAnimal> {
+public class RenderEntityWeight extends Render<EntityLiving> {
 
-	protected Render<EntityAnimal> originalRender;
+	protected Render<EntityLiving> originalRender;
 
-	public RenderEntityWeight(Render<EntityAnimal> render, RenderManager renderManager) {
+	public RenderEntityWeight(Render<EntityLiving> render, RenderManager renderManager) {
 		super(renderManager);
 		this.originalRender = render;
 	}
 
+	@Override
 	public void setRenderOutlines(boolean renderOutlinesIn) {
 		originalRender.setRenderOutlines(renderOutlinesIn);
 	}
 
-	public boolean shouldRender(EntityAnimal livingEntity, ICamera camera, double camX, double camY, double camZ) {
+	@Override
+	public boolean shouldRender(EntityLiving livingEntity, ICamera camera, double camX, double camY, double camZ) {
 		return originalRender.shouldRender(livingEntity, camera, camX, camY, camZ);
 	}
 
 	/**
 	 * Renders the desired {@code T} type Entity.
 	 */
-	public void doRender(EntityAnimal entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	@Override
+	public void doRender(EntityLiving entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		double ratio = getRatio(entity);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
@@ -43,6 +47,7 @@ public class RenderEntityWeight extends Render<EntityAnimal> {
 		GlStateManager.popMatrix();
 	}
 
+	@Override
 	public void bindTexture(ResourceLocation location) {
 		originalRender.bindTexture(location);
 	}
@@ -50,6 +55,7 @@ public class RenderEntityWeight extends Render<EntityAnimal> {
 	/**
 	 * Renders the entity's shadow and fire (if its on fire). Args: entity, x, y, z, yaw, partialTickTime
 	 */
+	@Override
 	public void doRenderShadowAndFire(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
 		double ratio = getRatio(entity);
 		GlStateManager.pushMatrix();
@@ -62,19 +68,23 @@ public class RenderEntityWeight extends Render<EntityAnimal> {
 	/**
 	 * Returns the font renderer from the set render manager
 	 */
+	@Override
 	public FontRenderer getFontRendererFromRenderManager() {
 		return originalRender.getFontRendererFromRenderManager();
 	}
 
+	@Override
 	public RenderManager getRenderManager() {
 		return originalRender.getRenderManager();
 	}
 
+	@Override
 	public boolean isMultipass() {
 		return originalRender.isMultipass();
 	}
 
-	public void renderMultipass(EntityAnimal entity, double x, double y, double z, float yaw, float partialTicks) {
+	@Override
+	public void renderMultipass(EntityLiving entity, double x, double y, double z, float yaw, float partialTicks) {
 		double ratio = getRatio(entity);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
@@ -85,7 +95,7 @@ public class RenderEntityWeight extends Render<EntityAnimal> {
 
 	@Override
 	@Nullable
-	protected ResourceLocation getEntityTexture(EntityAnimal entity) {
+	protected ResourceLocation getEntityTexture(EntityLiving entity) {
 		return null;
 	}
 

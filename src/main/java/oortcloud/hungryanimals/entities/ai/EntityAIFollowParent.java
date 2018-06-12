@@ -6,24 +6,29 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 
 public class EntityAIFollowParent extends EntityAIBase {
 	/** The child that is following its parent. */
-	protected EntityAnimal childAnimal;
-	protected EntityAnimal parentAnimal;
+	protected EntityLiving childAnimal;
+	protected EntityLiving parentAnimal;
 	double moveSpeed;
 	private int delayCounter;
 
-	public EntityAIFollowParent(EntityAnimal animal, double speed) {
+	protected ICapabilityAgeable ageable;
+	
+	public EntityAIFollowParent(EntityLiving animal, double speed) {
 		this.childAnimal = animal;
+		this.ageable = childAnimal.getCapability(ProviderAgeable.CAP, null);
 		this.moveSpeed = speed;
 
 		setMutexBits(3);
@@ -33,15 +38,17 @@ public class EntityAIFollowParent extends EntityAIBase {
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	public boolean shouldExecute() {
-		if (this.childAnimal.getGrowingAge() >= 0) {
+		if (ageable == null) {
+			return false;
+		} else if (ageable.getAge() >= 0) {
 			return false;
 		} else {
-			List<EntityAnimal> list = this.childAnimal.world.<EntityAnimal>getEntitiesWithinAABB(this.childAnimal.getClass(),
+			List<EntityLiving> list = this.childAnimal.world.<EntityLiving>getEntitiesWithinAABB(this.childAnimal.getClass(),
 					this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
-			EntityAnimal entityanimal = null;
+			EntityLiving entityanimal = null;
 			double d0 = Double.MAX_VALUE;
 
-			for (EntityAnimal entityanimal1 : list) {
+			for (EntityLiving entityanimal1 : list) {
 				double d1 = this.childAnimal.getDistanceSq(entityanimal1);
 
 				if (d1 <= d0) {
@@ -61,15 +68,16 @@ public class EntityAIFollowParent extends EntityAIBase {
 		}
 	}
 
-	protected boolean isParent(EntityAnimal parent) {
-		return parent.getGrowingAge() >= 0;
+	protected boolean isParent(EntityLiving parent) {
+		ICapabilityAgeable age = parent.getCapability(ProviderAgeable.CAP, null);
+		return age == null || age.getAge() >= 0;
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	public boolean shouldContinueExecuting() {
-		if (this.childAnimal.getGrowingAge() >= 0) {
+		if (ageable.getAge() >= 0) {
 			return false;
 		} else if (!this.parentAnimal.isEntityAlive()) {
 			return false;

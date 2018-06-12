@@ -6,8 +6,7 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -26,14 +25,14 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	private int cooldown;
 	private IRange delay;
 	private ItemStack stack;
-	private Predicate<EntityAgeable> condition;
+	private Predicate<EntityLiving> condition;
 	private boolean disableSound;
-	protected EntityAnimal animal;
+	protected EntityLiving animal;
 
 	private String name;
 
-	public ProductionEgg(String name, EntityAnimal animal, IRange delay, ItemStack stack,
-			Predicate<EntityAgeable> condition, boolean disableSound) {
+	public ProductionEgg(String name, EntityLiving animal, IRange delay, ItemStack stack,
+			Predicate<EntityLiving> condition, boolean disableSound) {
 		this.name = name;
 		this.delay = delay;
 		this.animal = animal;
@@ -88,7 +87,7 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		return name;
 	}
 
-	public static Function<EntityAnimal, IProduction> parse(JsonElement jsonEle) {
+	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
@@ -104,7 +103,7 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		}
 		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"),
 				new JsonContext(References.MODID));
-		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
+		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 
 		return (animal) -> new ProductionEgg(name, animal, delay, stack, condition, disableSound);

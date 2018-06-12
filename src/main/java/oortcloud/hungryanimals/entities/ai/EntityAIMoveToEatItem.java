@@ -10,7 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
@@ -24,8 +24,10 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
@@ -35,7 +37,7 @@ import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMoveToEatItem extends EntityAIBase {
 
-	private EntityAgeable entity;
+	private EntityLiving entity;
 	private World worldObj;
 	private double speed;
 	private EntityItem target;
@@ -44,6 +46,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	private ICapabilityHungryAnimal capHungry;
 	@Nullable
 	private ICapabilityTamableAnimal capTaming;
+	@Nullable
+	private ICapabilityAgeable capAgeable;
 	private int delayCounter;
 	private static int delay = 100;
 
@@ -67,7 +71,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		}
 	};
 
-	public EntityAIMoveToEatItem(EntityAgeable entity, double speed) {
+	public EntityAIMoveToEatItem(EntityLiving entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 
 		this.entity = entity;
@@ -76,6 +80,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+		this.capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
 		this.setMutexBits(1);
 	}
 
@@ -167,7 +172,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		double stomach = pref.getStomach(item);
 		capHungry.addStomach(stomach);
 
-		if (entity.getGrowingAge() < 0) {
+		if (capAgeable != null && capAgeable.getAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());

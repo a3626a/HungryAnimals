@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
@@ -69,7 +70,14 @@ public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
 		double farspeed = JsonUtils.getFloat(jsonObject, "farspeed");
 		double nearspeed = JsonUtils.getFloat(jsonObject, "nearspeed");
 		
-		AIFactory factory =  (entity) -> new EntityAIAvoidPlayer(entity, radius, farspeed, nearspeed);
+		AIFactory factory =  (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAIAvoidPlayer((EntityCreature) entity, radius, farspeed, nearspeed);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Avoid Player must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTask().after(EntityAISwimming.class)
 		                     .before(EntityAIMateModified.class)
 		                     .before(EntityAIMoveToTrough.class)

@@ -5,10 +5,10 @@ import java.util.function.Function;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntityAnimal;
 
-public class AIContainer implements IAIContainer<EntityAnimal> {
+public class AIContainer implements IAIContainer<EntityLiving> {
 	
 	private AIContainerTask task;
 	private AIContainerTarget target;
@@ -27,7 +27,7 @@ public class AIContainer implements IAIContainer<EntityAnimal> {
 	}
 	
 	@Override
-	public void registerAI(EntityAnimal entity) {
+	public void registerAI(EntityLiving entity) {
 		task.registerAI(entity);
 		target.registerAI(entity);
 	}

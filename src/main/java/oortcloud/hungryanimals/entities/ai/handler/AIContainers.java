@@ -10,7 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAIRegistry;
@@ -19,13 +19,13 @@ public class AIContainers implements IAIRegistry {
 
 	private static AIContainers INSTANCE;
 
-	private Map<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>> REGISTRY;
-	private Map<String, Function<JsonElement, IAIContainer<EntityAnimal>>> AICONTAINERS;
+	private Map<Class<? extends EntityLiving>, IAIContainer<EntityLiving>> REGISTRY;
+	private Map<String, Function<JsonElement, IAIContainer<EntityLiving>>> AICONTAINERS;
 	private Map<String, Map<String, BiConsumer<JsonElement, AIContainer>>> MODIFIERS;
 
 	private AIContainers() {
-		REGISTRY = new HashMap<Class<? extends EntityAnimal>, IAIContainer<EntityAnimal>>();
-		AICONTAINERS = new HashMap<String, Function<JsonElement, IAIContainer<EntityAnimal>>>();
+		REGISTRY = new HashMap<Class<? extends EntityLiving>, IAIContainer<EntityLiving>>();
+		AICONTAINERS = new HashMap<String, Function<JsonElement, IAIContainer<EntityLiving>>>();
 		MODIFIERS = new HashMap<String, Map<String, BiConsumer<JsonElement, AIContainer>>>();
 	}
 
@@ -36,11 +36,11 @@ public class AIContainers implements IAIRegistry {
 		return INSTANCE;
 	}
 
-	public IAIContainer<EntityAnimal> register(Class<? extends EntityAnimal> animal, IAIContainer<EntityAnimal> aiContainer) {
+	public IAIContainer<EntityLiving> register(Class<? extends EntityLiving> animal, IAIContainer<EntityLiving> aiContainer) {
 		return REGISTRY.put(animal, aiContainer);
 	}
 
-	public void register(String name, Function<JsonElement, IAIContainer<EntityAnimal>> parser) {
+	public void register(String name, Function<JsonElement, IAIContainer<EntityLiving>> parser) {
 		AICONTAINERS.put(name, parser);
 	}
 
@@ -51,11 +51,11 @@ public class AIContainers implements IAIRegistry {
 		MODIFIERS.get(nameType).put(nameModifier, modifier);
 	}
 
-	public void apply(EntityAnimal animal) {
+	public void apply(EntityLiving animal) {
 		REGISTRY.get(animal.getClass()).registerAI(animal);
 	}
 
-	public IAIContainer<EntityAnimal> parse(JsonElement jsonEle) {
+	public IAIContainer<EntityLiving> parse(JsonElement jsonEle) {
 		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI container must an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -65,7 +65,7 @@ public class AIContainers implements IAIRegistry {
 		String aiType = JsonUtils.getString(jsonObj, "type");
 		jsonObj.remove("type");
 
-		IAIContainer<EntityAnimal> aiContainer = AICONTAINERS.get(aiType).apply(jsonObj);
+		IAIContainer<EntityLiving> aiContainer = AICONTAINERS.get(aiType).apply(jsonObj);
 
 		for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 			if (aiContainer instanceof AIContainer) {
@@ -84,7 +84,7 @@ public class AIContainers implements IAIRegistry {
 	}
 
 	@Override
-	public void registerAIContainer(String type, Function<JsonElement, IAIContainer<EntityAnimal>> aiContainer) {
+	public void registerAIContainer(String type, Function<JsonElement, IAIContainer<EntityLiving>> aiContainer) {
 		register(type, aiContainer);
 	}
 

@@ -24,14 +24,17 @@ import oortcloud.hungryanimals.core.network.PacketServerDGEditInt;
 import oortcloud.hungryanimals.core.network.PacketServerDGSet;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
+import oortcloud.hungryanimals.entities.capability.CapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.CapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.CapabilityProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.CapabilitySexual;
 import oortcloud.hungryanimals.entities.capability.CapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilitySexual;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.StorageAgeable;
 import oortcloud.hungryanimals.entities.capability.StorageHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.StorageProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.StorageSexual;
@@ -58,6 +61,7 @@ public class CommonProxy {
 		CapabilityManager.INSTANCE.register(ICapabilityTamableAnimal.class, new StorageTamableAnimal(), CapabilityTamableAnimal::new);
 		CapabilityManager.INSTANCE.register(ICapabilityProducingAnimal.class, new StorageProducingAnimal(), CapabilityProducingAnimal::new);
 		CapabilityManager.INSTANCE.register(ICapabilitySexual.class, new StorageSexual(), CapabilitySexual::new);
+		CapabilityManager.INSTANCE.register(ICapabilityAgeable.class, new StorageAgeable(), CapabilityAgeable::new);
 	}
 
 	public void registerColors() {

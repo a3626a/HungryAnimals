@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
@@ -22,11 +22,11 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	private boolean prevIsFull;
 	private int prevWeight;
 	
-	private EntityAnimal entity;
+	private EntityLiving entity;
 
 	public CapabilityHungryAnimal() {}
 	
-	public CapabilityHungryAnimal(EntityAnimal entity) {
+	public CapabilityHungryAnimal(EntityLiving entity) {
 		this.entity = entity;
 		setStomach(0.0);
 		setNutrient(0.0);
@@ -142,7 +142,12 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		if (entity.getEntityWorld() == null) {
 			age = 0;
 		} else {
-			age = entity.getGrowingAge();
+			ICapabilityAgeable capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
+			if (capAgeable == null) {
+				age = 0;
+			} else {
+				age = capAgeable.getAge();
+			}
 		}
 		double hungerWeightNormal = entity.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
 		if (age < 0) {

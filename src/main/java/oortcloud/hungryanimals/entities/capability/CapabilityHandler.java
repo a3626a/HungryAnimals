@@ -1,8 +1,9 @@
 package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -19,18 +20,19 @@ public class CapabilityHandler {
 	public static final ResourceLocation CAP_TAMABLEANIMALS = new ResourceLocation(References.MODID, "tamableanimal");
 	public static final ResourceLocation CAP_PRODUCINGANIMALS = new ResourceLocation(References.MODID, "producinganimal");
 	public static final ResourceLocation CAP_SEXUAL = new ResourceLocation(References.MODID, "sexual");
+	public static final ResourceLocation CAP_AGEABLE = new ResourceLocation(References.MODID, "ageable");
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-		if (!(event.getObject() instanceof EntityAnimal))
+		if (!(event.getObject() instanceof EntityLiving))
 			return;
 
-		EntityAnimal animal = (EntityAnimal) event.getObject();
+		EntityLiving animal = (EntityLiving) event.getObject();
 		if (HungryAnimalManager.getInstance().isRegistered(animal.getClass())) {
 			event.addCapability(CAP_HUNGRYANIMALS, new ProviderHungryAnimal(animal));
 
-			boolean disabledTaming = HungryAnimalManager.getInstance().isDisabledTaming(animal.getClass());
-			if (!disabledTaming) {
+			boolean isTamable = HungryAnimalManager.getInstance().isTamable(animal.getClass());
+			if (isTamable) {
 				if (animal instanceof AbstractHorse) {
 					event.addCapability(CAP_TAMABLEANIMALS, new ProviderTamableAnimal((AbstractHorse) animal));
 				} else {
@@ -45,6 +47,15 @@ public class CapabilityHandler {
 			boolean isSexual = HungryAnimalManager.getInstance().isSexual(animal.getClass());
 			if (isSexual) {
 				event.addCapability(CAP_SEXUAL, new ProviderSexual(animal));
+			}
+			
+			boolean isAgeable = HungryAnimalManager.getInstance().isAgeable(animal.getClass());
+			if (isAgeable) {
+				if (animal instanceof EntityAgeable) {
+					event.addCapability(CAP_AGEABLE, new ProviderAgeable((EntityAgeable)animal));
+				} else {
+					event.addCapability(CAP_AGEABLE, new ProviderAgeable(animal));
+				}
 			}
 		}
 	}

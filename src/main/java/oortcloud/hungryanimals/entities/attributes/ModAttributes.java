@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAttributeRegistry;
 
@@ -34,11 +34,11 @@ public class ModAttributes implements IAttributeRegistry {
 
 	private static ModAttributes INSTANCE;
 
-	private Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
+	private Map<Class<? extends EntityLiving>, List<IAttributeEntry>> REGISTRY;
 	private Map<String, AttributePair> ATTRIBUTES;
 
 	private ModAttributes() {
-		REGISTRY = new HashMap<Class<? extends EntityAnimal>, List<IAttributeEntry>>();
+		REGISTRY = new HashMap<Class<? extends EntityLiving>, List<IAttributeEntry>>();
 		ATTRIBUTES = new HashMap<String, AttributePair>();
 	}
 
@@ -49,7 +49,7 @@ public class ModAttributes implements IAttributeRegistry {
 		return INSTANCE;
 	}
 
-	public boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val) {
+	public boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val) {
 		if (!ATTRIBUTES.containsKey(name)) {
 			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
 			return false;
@@ -64,7 +64,7 @@ public class ModAttributes implements IAttributeRegistry {
 		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
 	}
 
-	public boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val, boolean shouldRegister) {
+	public boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val, boolean shouldRegister) {
 		if (!ATTRIBUTES.containsKey(name)) {
 			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
 			return false;

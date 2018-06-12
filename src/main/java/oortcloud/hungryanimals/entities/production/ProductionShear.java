@@ -8,8 +8,7 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -35,10 +34,10 @@ public class ProductionShear extends ProductionInteraction {
 	private ItemStack input;
 	private ItemStack output;
 	private int damage;
-	private Predicate<EntityAgeable> condition;
+	private Predicate<EntityLiving> condition;
 	private boolean disableSound;
 
-	public ProductionShear(String name, EntityAnimal animal, IRange delay, ItemStack tool, ItemStack wool, int damage, Predicate<EntityAgeable> condition,
+	public ProductionShear(String name, EntityLiving animal, IRange delay, ItemStack tool, ItemStack wool, int damage, Predicate<EntityLiving> condition,
 			boolean disableSound) {
 		super(name, animal, delay);
 		this.input = tool;
@@ -69,7 +68,7 @@ public class ProductionShear extends ProductionInteraction {
 		return EnumActionResult.PASS;
 	}
 
-	public static Function<EntityAnimal, IProduction> parse(JsonElement jsonEle) {
+	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
@@ -84,7 +83,7 @@ public class ProductionShear extends ProductionInteraction {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
 		int damage = JsonUtils.getInt(jsonObj, "damage");
-		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
+		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));

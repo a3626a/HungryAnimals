@@ -9,6 +9,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -112,7 +113,14 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
 		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
 		
-		AIFactory factory = (entity) -> new EntityAIHunt(entity, chance, checkSight, onlyNearby, herding);
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAIHunt((EntityCreature) entity, chance, checkSight, onlyNearby, herding);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Hunt must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTarget().putLast(factory);
 	}
 	

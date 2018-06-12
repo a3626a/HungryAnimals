@@ -8,9 +8,8 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -43,17 +42,17 @@ import oortcloud.hungryanimals.entities.production.condition.Conditions;
 public class ProductionFluid implements IProductionInteraction, IProductionTickable, ISyncable, IProductionTOP {
 
 	private String name;
-	private EntityAnimal animal;
+	private EntityLiving animal;
 	@Nonnull
 	private FluidTank tank;
 	private Fluid fluid;
 	private double amount;
 	private double weight;
-	private Predicate<EntityAgeable> condition;
+	private Predicate<EntityLiving> condition;
 	
 	private int prevAmount;
 
-	public ProductionFluid(String name, EntityAnimal animal, Predicate<EntityAgeable> condition, Fluid fluid, int capacity, double amount, double weight) {
+	public ProductionFluid(String name, EntityLiving animal, Predicate<EntityLiving> condition, Fluid fluid, int capacity, double amount, double weight) {
 		this.name = name;
 		this.animal = animal;
 		tank = new FluidTank(capacity);
@@ -160,11 +159,11 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 		return tank;
 	}
 	
-	public static Function<EntityAnimal, IProduction> parse(JsonElement jsonEle) {
+	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
-		Predicate<EntityAgeable> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
+		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		Fluid fluid = FluidRegistry.getFluid(JsonUtils.getString(jsonObj, "fluid"));
 		int capacity = JsonUtils.getInt(jsonObj, "capacity");
 		double amount = JsonUtils.getFloat(jsonObj, "amount");

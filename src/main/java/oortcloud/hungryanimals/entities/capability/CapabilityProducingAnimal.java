@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -21,14 +21,14 @@ import oortcloud.hungryanimals.entities.production.ISyncable;
 
 public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 
-	protected EntityAnimal entity;
+	protected EntityLiving entity;
 	private List<IProductionInteraction> interactions;
 	private List<IProductionTickable> tickables;
 	private List<IProduction> productions;
 	
 	public CapabilityProducingAnimal() {}
 	
-	public CapabilityProducingAnimal(EntityAnimal entity, List<IProduction> productions) {
+	public CapabilityProducingAnimal(EntityLiving entity, List<IProduction> productions) {
 		this.entity = entity;
 		this.interactions = new ArrayList<>();
 		this.tickables = new ArrayList<>();

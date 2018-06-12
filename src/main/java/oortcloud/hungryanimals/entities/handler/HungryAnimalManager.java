@@ -3,38 +3,25 @@ package oortcloud.hungryanimals.entities.handler;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 
 public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
-	private Map<Class<? extends EntityAnimal>, HungryAnimalEntry> REGISTRY;
+	private Map<Class<? extends EntityLiving>, HungryAnimalEntry> REGISTRY;
 	
 	public static class HungryAnimalEntry {
 		public boolean isTamable;
 		public boolean isModelGrowing;
 		public boolean isSexual;
+		public boolean isAgeable;
 		
 		public HungryAnimalEntry() {
-			isTamable = false;
+			isTamable = true;
 			isModelGrowing = true;
 			isSexual = true;
-		}
-		
-		public HungryAnimalEntry setTamable(boolean isTamable) {
-			this.isTamable = isTamable;
-			return this;
-		}
-		
-		public HungryAnimalEntry setModelGrowing(boolean isModelGrowing) {
-			this.isModelGrowing = isModelGrowing;
-			return this;
-		}
-		
-		public HungryAnimalEntry setSexual(boolean isSexual) {
-			this.isSexual = isSexual;
-			return this;
+			isAgeable = true;
 		}
 		
 	}
@@ -50,11 +37,11 @@ public class HungryAnimalManager {
 		REGISTRY = new HashMap<>();
 	}
 
-	public boolean register(Class<? extends EntityAnimal> animal) {
+	public boolean register(Class<? extends EntityLiving> animal) {
 		return register(animal, new HungryAnimalEntry());
 	}
 
-	public boolean register(Class<? extends EntityAnimal> animal, HungryAnimalEntry entry) {
+	public boolean register(Class<? extends EntityLiving> animal, HungryAnimalEntry entry) {
 		if (!REGISTRY.containsKey(animal)) {
 			REGISTRY.put(animal, entry);
 			return true;
@@ -62,31 +49,38 @@ public class HungryAnimalManager {
 		return false;
 	}
 	
-	public Iterable<Class<? extends EntityAnimal>> getRegisteredAnimal() {
+	public Iterable<Class<? extends EntityLiving>> getRegisteredAnimal() {
 		return REGISTRY.keySet();
 	}
 
-	public boolean isRegistered(Class<? extends EntityAnimal> animal) {
+	public boolean isRegistered(Class<? extends EntityLiving> animal) {
 		return REGISTRY.containsKey(animal);
 	}
 
-	public boolean isDisabledTaming(Class<? extends EntityAnimal> animal) {
+	public boolean isTamable(Class<? extends EntityLiving> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isTamable;
 		}
-		return true;
+		return false;
 	}
 	
-	public boolean isModelGrowing(Class<? extends EntityAnimal> animal) {
+	public boolean isModelGrowing(Class<? extends EntityLiving> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isModelGrowing;
 		}
 		return false;
 	}
 	
-	public boolean isSexual(Class<? extends EntityAnimal> animal) {
+	public boolean isSexual(Class<? extends EntityLiving> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isSexual;
+		}
+		return false;
+	}
+	
+	public boolean isAgeable(Class<? extends EntityLiving> animal) {
+		if (REGISTRY.containsKey(animal)) {
+			return REGISTRY.get(animal).isAgeable;
 		}
 		return false;
 	}

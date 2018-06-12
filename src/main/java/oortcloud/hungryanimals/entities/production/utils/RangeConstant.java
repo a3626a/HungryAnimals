@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.production.utils;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 
 public class RangeConstant implements IRange {
 
@@ -10,7 +10,7 @@ public class RangeConstant implements IRange {
 		this.constant = constant;
 	}
 	
-	public int get(EntityAnimal animal) {
+	public int get(EntityLiving animal) {
 		return constant;
 	}
 	

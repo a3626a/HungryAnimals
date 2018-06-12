@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
-import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.utils.graph.Graph;
 import oortcloud.hungryanimals.utils.graph.GraphSolver;
 import oortcloud.hungryanimals.utils.graph.Vertex;
@@ -18,7 +18,7 @@ import oortcloud.hungryanimals.utils.graph.Vertex;
 public class AIContainerTarget extends AIContainerTask {
 
 	@Override
-	public void registerAI(EntityAnimal entity) {
+	public void registerAI(EntityLiving entity) {
 		if (removeAll) {
 			entity.targetTasks.taskEntries.clear();
 		} else {

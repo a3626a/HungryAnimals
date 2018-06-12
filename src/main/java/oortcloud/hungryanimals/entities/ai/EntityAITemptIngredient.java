@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
@@ -62,7 +63,14 @@ public class EntityAITemptIngredient extends EntityAITempt {
 		boolean scaredBy = JsonUtils.getBoolean(jsonObject, "scared_by");
 		List<Ingredient> items = ModJsonUtils.getIngredients(jsonObject.get("items"));
 		
-		AIFactory factory = (entity) -> new EntityAITemptIngredient(entity, speed, scaredBy, items);
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAITemptIngredient((EntityCreature) entity, speed, scaredBy, items);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Tempt Ingredient must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTask().after(EntityAISwimming.class)
 		                     .before(EntityAITemptEdibleItem.class)
 		                     .before(EntityAIMoveToEatItem.class)

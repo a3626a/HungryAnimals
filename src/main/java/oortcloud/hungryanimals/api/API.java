@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.google.gson.JsonElement;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.biome.Biome;
@@ -47,11 +48,11 @@ public class API {
 	 * @param shouldRegistered
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val, boolean shouldRegistered) {
+	public static boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val, boolean shouldRegistered) {
 		return ModAttributes.getInstance().registerAttribute(animalclass, name, val, shouldRegistered);
 	}
 	
-	public static boolean registerAttribute(Class<? extends EntityAnimal> animalclass, String name, double val) {
+	public static boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val) {
 		return ModAttributes.getInstance().registerAttribute(animalclass, name, val);
 	}
 	
@@ -75,15 +76,15 @@ public class API {
 	 * @param ai
 	 * @return true if registration failed, otherwise false
 	 */
-	public static IAIContainer<EntityAnimal> registerAIContainer(Class<? extends EntityAnimal> animalclass, AIContainer aiContainer) {
+	public static IAIContainer<EntityLiving> registerAIContainer(Class<? extends EntityLiving> animalclass, AIContainer aiContainer) {
 		return AIContainers.getInstance().register(animalclass, aiContainer);
 	}
 	
-	public static boolean registerProduction(Class<? extends EntityAnimal> animal, Function<EntityAnimal, IProduction> factory) {
+	public static boolean registerProduction(Class<? extends EntityLiving> animal, Function<EntityLiving, IProduction> factory) {
 		return Productions.getInstance().registerProduction(animal, factory);
 	}
 	
-	public static void registerParser(String type, Function<JsonElement, Function<EntityAnimal, IProduction>> parser) {
+	public static void registerParser(String type, Function<JsonElement, Function<EntityLiving, IProduction>> parser) {
 		Productions.getInstance().registerParser(type, parser);
 	}
 	
