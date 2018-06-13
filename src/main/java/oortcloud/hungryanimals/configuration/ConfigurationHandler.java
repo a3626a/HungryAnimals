@@ -30,7 +30,6 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -311,11 +310,11 @@ public class ConfigurationHandler {
 				}
 				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(name));
 				if (entityClass != null) {
-					if (EntityAnimal.class.isAssignableFrom(entityClass)
-							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityAnimal.class))) {
+					if (EntityLiving.class.isAssignableFrom(entityClass)
+							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityLiving.class))) {
 						ResourceLocation resource = EntityList.getKey(entityClass);
 						HungryAnimals.logger.info("[Configuration] registered " + resource);
-						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityAnimal.class), entry);
+						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityLiving.class), entry);
 					}
 				}
 			}
@@ -323,7 +322,7 @@ public class ConfigurationHandler {
 			HungryAnimals.logger.info("[Configuration] following entities are compatible, but not registered");
 			for (ResourceLocation key : EntityList.getEntityNameList()) {
 				Class<? extends Entity> i = EntityList.getClass(key);
-				if (i != null && EntityAnimal.class.isAssignableFrom(i) && !HungryAnimalManager.getInstance().isRegistered(i.asSubclass(EntityAnimal.class))) {
+				if (i != null && EntityLiving.class.isAssignableFrom(i) && !HungryAnimalManager.getInstance().isRegistered(i.asSubclass(EntityLiving.class))) {
 					// Lightening bolt is null
 					HungryAnimals.logger.info("[Configuration] " + key.toString());
 				}

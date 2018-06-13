@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -41,7 +42,14 @@ public class EntityAIHuntNonTamed extends EntityAIHunt {
 		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
 		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
 		
-		AIFactory factory = (entity) -> new EntityAIHuntNonTamed((EntityTameable) entity, chance, checkSight, onlyNearby, herding);
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityTameable) {
+				return new EntityAIHuntNonTamed((EntityTameable) entity, chance, checkSight, onlyNearby, herding);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Hunt Non Tamed must extend EntityTamable. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTarget().putLast(factory);
 	}
 	

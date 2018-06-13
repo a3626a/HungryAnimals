@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -19,7 +18,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreferenceSimple;
@@ -39,8 +40,9 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
 
 				// DON'T EAT BABY
-				if (input instanceof EntityAgeable) {
-					int age = ((EntityAgeable) input).getGrowingAge();
+				ICapabilityAgeable ageable = input.getCapability(ProviderAgeable.CAP, null);
+				if (ageable != null) {
+					int age = ageable.getAge();
 					if (age < 0)
 						return false;
 				}

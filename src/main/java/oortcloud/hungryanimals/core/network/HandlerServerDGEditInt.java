@@ -1,12 +1,14 @@
 package oortcloud.hungryanimals.core.network;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 
 public class HandlerServerDGEditInt implements IMessageHandler<PacketServerDGEditInt, IMessage> {
 
@@ -20,12 +22,16 @@ public class HandlerServerDGEditInt implements IMessageHandler<PacketServerDGEdi
 
 				if (worldserver != null) {
 					Entity entity = worldserver.getEntityByID(id3);
-					if (entity != null && entity instanceof EntityAnimal) {
-						EntityAnimal animal = (EntityAnimal) entity;
+					if (entity != null && entity instanceof EntityLiving) {
+						EntityLiving animal = (EntityLiving) entity;
 
 						switch (message.target) {
-						case "age":
-							animal.setGrowingAge(message.value);
+						case "age": {
+							ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP, null);
+							if (ageable != null) {
+								ageable.setAge(message.value);
+							}
+						}
 						}
 					}
 				}

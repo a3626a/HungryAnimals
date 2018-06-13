@@ -19,7 +19,8 @@ import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
 
 public class HandlerClientSyncHungry implements IMessageHandler<PacketClientSyncHungry, IMessage> {
 
-	public static Method setScale = ReflectionHelper.findMethod(EntityAgeable.class, "setScale", "func_98055_j", float.class);
+	public static Method setScale = ReflectionHelper.findMethod(EntityAgeable.class, "setScale", "func_98055_j",
+			float.class);
 
 	@Override
 	public IMessage onMessage(PacketClientSyncHungry message, MessageContext ctx) {
@@ -29,26 +30,27 @@ public class HandlerClientSyncHungry implements IMessageHandler<PacketClientSync
 				return;
 
 			Entity entity = world.getEntityByID(message.id);
-			if (entity == null)
+			if (entity == null || !(entity instanceof EntityAgeable))
 				return;
 
+			// TODO : Expand this function to EntityLiving, currently setScale is required.
+			
 			ICapabilityHungryAnimal cap2 = entity.getCapability(ProviderHungryAnimal.CAP, null);
 			if (cap2 != null) {
 				cap2.setStomach(message.stomach);
 				cap2.setWeight(message.weight);
-				
+
 				float ratio = (float) RenderEntityWeight.getRatio(entity);
 
-				if (entity instanceof EntityAgeable) {
-					if (((EntityAgeable) entity).getGrowingAge() < 0) {
-						ratio *= 0.5;
-					}
+				if (((EntityAgeable) entity).getGrowingAge() < 0) {
+					ratio *= 0.5;
 				}
 
 				try {
 					setScale.invoke(entity, ratio);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					HungryAnimals.logger.warn("Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
+					HungryAnimals.logger.warn(
+							"Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
 					e.printStackTrace();
 				}
 			}

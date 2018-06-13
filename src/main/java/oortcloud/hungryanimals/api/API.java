@@ -30,7 +30,7 @@ public class API {
 	 * @param animalclass
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAnimal(Class<? extends EntityAnimal> animalclass) {
+	public static boolean registerAnimal(Class<? extends EntityLiving> animalclass) {
 		return HungryAnimalManager.getInstance().register(animalclass);
 	}
 	

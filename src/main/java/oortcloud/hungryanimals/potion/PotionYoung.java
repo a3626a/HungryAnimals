@@ -1,11 +1,12 @@
 package oortcloud.hungryanimals.potion;
 
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 
 public class PotionYoung extends PotionHungryAnimals {
 	public static ResourceLocation textureLocation = new ResourceLocation(References.MODID, "textures/potions/potionyoung.png");
@@ -25,10 +26,9 @@ public class PotionYoung extends PotionHungryAnimals {
 	
 	@Override
 	public void performEffect(EntityLivingBase entity, int amplifier) {
-		if (entity instanceof EntityAgeable) {
-			EntityAgeable animal = (EntityAgeable)entity;
-			
-			if (animal.getGrowingAge() >= 0) {
+		ICapabilityAgeable ageable =  entity.getCapability(ProviderAgeable.CAP, null);
+		if (ageable != null) {
+			if (ageable.getAge() >= 0) {
 				entity.removePotionEffect(this);
 			}
 		} else {

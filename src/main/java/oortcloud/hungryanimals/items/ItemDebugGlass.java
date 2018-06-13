@@ -2,9 +2,9 @@ package oortcloud.hungryanimals.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,8 +15,10 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.core.network.PacketServerDGSet;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 
@@ -51,10 +53,10 @@ public class ItemDebugGlass extends Item {
 			if (tag != null && tag.hasKey("target")) {
 				Entity target = worldIn.getEntityByID(tag.getInteger("target"));
 				if (target != null) {
-					if (!(target instanceof EntityAnimal))
+					if (!(target instanceof EntityLiving))
 						return;
 
-					EntityAnimal animal = (EntityAnimal) target;
+					EntityLiving animal = (EntityLiving) target;
 
 					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					if (capHungry != null) {
@@ -68,7 +70,11 @@ public class ItemDebugGlass extends Item {
 					if (capTaming != null) {
 						tag.setDouble("taming", capTaming.getTaming());
 					}
-					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
+					
+					ICapabilityAgeable capAgeable = animal.getCapability(ProviderAgeable.CAP, null);
+					if (capAgeable != null) {
+						tag.setInteger("age", capAgeable.getAge());
+					}
 					
 					int index = 0;
 					for (EntityAITaskEntry i : animal.tasks.taskEntries) {

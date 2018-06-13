@@ -9,7 +9,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -118,8 +117,6 @@ public class DebugOverlayHandler extends Gui {
 			if (resource != null) {
 				String text = (String) resource.toString();
 				if (text != null) {
-					if (entity instanceof EntityAnimal)
-						text += " (Compatible)";
 					this.drawString(mc.fontRenderer, text, 0, START_Y - FONTHEIGHT, 0xFFFFFF);
 				}
 			}

@@ -9,10 +9,11 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 
 public class RenderEntityWeight extends Render<EntityLiving> {
@@ -53,7 +54,8 @@ public class RenderEntityWeight extends Render<EntityLiving> {
 	}
 
 	/**
-	 * Renders the entity's shadow and fire (if its on fire). Args: entity, x, y, z, yaw, partialTickTime
+	 * Renders the entity's shadow and fire (if its on fire). Args: entity, x, y, z,
+	 * yaw, partialTickTime
 	 */
 	@Override
 	public void doRenderShadowAndFire(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
@@ -100,11 +102,11 @@ public class RenderEntityWeight extends Render<EntityLiving> {
 	}
 
 	public static double getRatio(Entity entity) {
-		if (!(entity instanceof EntityAnimal)) {
+		if (!(entity instanceof EntityLiving)) {
 			return 1;
 		}
-		EntityAnimal animal = (EntityAnimal)entity;
-		
+		EntityLiving animal = (EntityLiving) entity;
+
 		ICapabilityHungryAnimal cap = animal.getCapability(ProviderHungryAnimal.CAP, null);
 
 		if (cap != null) {
@@ -112,17 +114,22 @@ public class RenderEntityWeight extends Render<EntityLiving> {
 			if (animal.getEntityWorld() == null) {
 				age = 0;
 			} else {
-				age = animal.getGrowingAge();
+				ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP, null);
+				if (ageable != null) {
+					age = ageable.getAge();
+				} else {
+					age = 0;
+				}
 			}
-			
+
 			double standardWeight = animal.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
 			if (age < 0) {
 				return Math.pow(cap.getWeight() / (standardWeight / 4.0), 1 / 3.0);
 			} else {
-				
+
 				return Math.pow(cap.getWeight() / standardWeight, 1 / 3.0);
 			}
-			
+
 		} else {
 			return 1;
 		}

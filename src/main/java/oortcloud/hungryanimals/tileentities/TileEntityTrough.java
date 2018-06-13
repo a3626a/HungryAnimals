@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.tileentities;
 
 import java.util.ArrayList;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -46,8 +46,8 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getWorld().getWorldTime() % TileEntityTrough.period == 0 && !this.stack.isEmpty()) {
-			ArrayList<EntityAnimal> list = (ArrayList<EntityAnimal>) this.getWorld().getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
-			for (EntityAnimal i : list) {
+			ArrayList<EntityLiving> list = (ArrayList<EntityLiving>) this.getWorld().getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
+			for (EntityLiving i : list) {
 				if (i.hasCapability(ProviderHungryAnimal.CAP, null)) {
 					ICapabilityHungryAnimal capHungry = i.getCapability(ProviderHungryAnimal.CAP, null);
 					ICapabilityTamableAnimal capTaming = i.getCapability(ProviderTamableAnimal.CAP, null);

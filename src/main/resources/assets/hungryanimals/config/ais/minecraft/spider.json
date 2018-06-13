@@ -1,0 +1,12 @@
+{
+	"type" : "wolf",
+    "eat_item" : {
+        "speed" : 1.5
+    },
+    "hunt" : {
+        "chance" : 10,
+        "check_sight" : false,
+        "only_nearby" : false,
+        "herding" : false
+    }
+}
