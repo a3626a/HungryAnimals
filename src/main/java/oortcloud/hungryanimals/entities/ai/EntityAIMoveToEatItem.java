@@ -41,6 +41,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 	private World worldObj;
 	private double speed;
 	private EntityItem target;
+	private boolean onlyNatural;
 
 	private IFoodPreference<ItemStack> pref;
 	private ICapabilityHungryAnimal capHungry;
@@ -71,12 +72,13 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		}
 	};
 
-	public EntityAIMoveToEatItem(EntityLiving entity, double speed) {
+	public EntityAIMoveToEatItem(EntityLiving entity, double speed, boolean onlyNatural) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 
 		this.entity = entity;
 		this.worldObj = this.entity.getEntityWorld();
 		this.speed = speed;
+		this.onlyNatural = onlyNatural;
 		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
@@ -95,21 +97,24 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		} else {
 			float radius = 16.0F;
 
-			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().grow(radius),
-					Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
+					entity.getEntityBoundingBox().grow(radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
-			}
-			if (entity.getRNG().nextInt(executeProbability()) != 0) {
-				return false;
 			}
 
-			list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class, entity.getEntityBoundingBox().grow(radius), EAT_EDIBLE);
-			if (!list.isEmpty()) {
-				this.target = list.get(0);
-				return true;
+			if (!onlyNatural) {
+				if (entity.getRNG().nextInt(executeProbability()) == 0) {
+					list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
+							entity.getEntityBoundingBox().grow(radius), EAT_EDIBLE);
+					if (!list.isEmpty()) {
+						this.target = list.get(0);
+						return true;
+					}
+				}
 			}
+			
 			return false;
 		}
 	}
@@ -174,7 +179,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (capAgeable != null && capAgeable.getAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
+				int duration = (int) (nutrient
+						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
@@ -183,7 +189,8 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			if (capTaming != null) {
-				capTaming.addTaming(taming_factor / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+				capTaming.addTaming(taming_factor
+						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
 			}
 		}
 	}
@@ -197,12 +204,9 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-
-		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class)
-					 		 .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParent.class)
-		                     .before(EntityAIWanderAvoidWater.class)
-							 .put(factory);
+		boolean onlyNatural = JsonUtils.getBoolean(jsonObject, "only_natural", false);
+		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed, onlyNatural);
+		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToEatBlock.class)
+				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);
 	}
 }

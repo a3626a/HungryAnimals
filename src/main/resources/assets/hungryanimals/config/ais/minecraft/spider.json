@@ -1,7 +1,8 @@
 {
 	"type" : "wolf",
     "eat_item" : {
-        "speed" : 1.5
+        "speed" : 1.5,
+        "only_natural" : true
     },
     "hunt" : {
         "chance" : 10,
