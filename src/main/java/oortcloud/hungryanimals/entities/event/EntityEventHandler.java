@@ -86,15 +86,18 @@ public class EntityEventHandler {
 			// Should be used as "After Constructor Code Block"
 			entity.setHealth(entity.getMaxHealth());
 
+			ICapabilityHungryAnimal hungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+			if (hungry != null) {
 			ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
 			if (ageable != null && ageable.getAge() < 0) {
 				// Baby created
-				ICapabilityHungryAnimal childHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
-				if (childHungry != null) {
-					childHungry.setWeight(childHungry.getNormalWeight());
-				}
+				hungry.setWeight(hungry.getNormalWeight());
+			}		
+				double stomach = hungry.getMaxStomach() / 2.0;
+				hungry.setStomach(stomach);
+				hungry.setNutrient(stomach * 0.35);
 			}
-
+			
 			entity.getEntityData().setBoolean(References.MODID + ".isInitialized", true);
 		}
 

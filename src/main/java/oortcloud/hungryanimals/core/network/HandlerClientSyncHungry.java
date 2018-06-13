@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -30,28 +31,29 @@ public class HandlerClientSyncHungry implements IMessageHandler<PacketClientSync
 				return;
 
 			Entity entity = world.getEntityByID(message.id);
-			if (entity == null || !(entity instanceof EntityAgeable))
+			if (entity == null || !(entity instanceof EntityLiving))
 				return;
 
-			// TODO : Expand this function to EntityLiving, currently setScale is required.
-			
 			ICapabilityHungryAnimal cap2 = entity.getCapability(ProviderHungryAnimal.CAP, null);
 			if (cap2 != null) {
 				cap2.setStomach(message.stomach);
 				cap2.setWeight(message.weight);
 
-				float ratio = (float) RenderEntityWeight.getRatio(entity);
+				if (entity instanceof EntityAgeable) {
+					// TODO : Expand this function to EntityLiving, currently setScale is required.
+					float ratio = (float) RenderEntityWeight.getRatio(entity);
 
-				if (((EntityAgeable) entity).getGrowingAge() < 0) {
-					ratio *= 0.5;
-				}
+					if (((EntityAgeable) entity).getGrowingAge() < 0) {
+						ratio *= 0.5;
+					}
 
-				try {
-					setScale.invoke(entity, ratio);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					HungryAnimals.logger.warn(
-							"Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
-					e.printStackTrace();
+					try {
+						setScale.invoke(entity, ratio);
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						HungryAnimals.logger.warn(
+								"Problem occured during change entity bounding box. Please report to mod author(oortcloud).");
+						e.printStackTrace();
+					}
 				}
 			}
 		});
