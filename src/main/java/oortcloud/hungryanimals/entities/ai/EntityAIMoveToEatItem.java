@@ -126,8 +126,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 			return false;
 		}
 		if (entity.getNavigator().noPath()) {
-			float distanceSq = 2;
-			if (entity.getPosition().distanceSq(target.getPosition()) < distanceSq) {
+			if (entity.getEntityBoundingBox().grow(0.5).intersects(target.getEntityBoundingBox())) {
 				ItemStack foodStack = target.getItem();
 				while (!foodStack.isEmpty() && pref.canEat(capHungry, foodStack)) {
 					// This Code Run At Most 64

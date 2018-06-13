@@ -5,7 +5,6 @@ import java.util.function.Function;
 import com.google.gson.JsonElement;
 
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.biome.Biome;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
