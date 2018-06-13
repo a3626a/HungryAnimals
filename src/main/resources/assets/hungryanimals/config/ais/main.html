@@ -103,7 +103,8 @@
     }
     |
     "eat_item" : {
-        "speed" : <a class="ha-replacement">double</a>
+        "speed" : <a class="ha-replacement">double</a>,
+        "only_natural" : <a class="ha-replacement">boolean</a>
     }
     |
     "eat_block" : {
@@ -212,7 +213,7 @@
       <p><code>"trough"</code> : The animal eats item inside trough while moving at <code>"speed"</code>.</p>
       <p><code>"tempt"</code> : The animal is tempted by <code>"items"</code> while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>
       <p><code>"tempt_edible"</code> : The animal is tempted by edible items (food preferences) while moving at <code>"speed"</code>. If <code>"scared_by"</code> is true, the animal stop to be tempted when the player moves.</p>
-      <p><code>"eat_item"</code> : The animal eats fallen items while moving at <code>"speed"</code>.</p>
+      <p><code>"eat_item"</code> : The animal eats fallen items while moving at <code>"speed"</code>. If <code>"only_natural" : true</code>, the animal only eats items gathered by itself (like hunting).</p>
       <p><code>"eat_block"</code> : The animal eats blocks while moving at <code>"speed"</code>.</p>
       <p><code>"follow_parent"</code> : The animal follows its parent while moving at <code>"speed"</code>.</p>
       <p><code>"hurt_by_player"</code> : The animal targets the attacker (player only), this target is used by <code>"attack_melee"</code>. If <code>"call_help"</code> is true, animals nearby target the attacker, too.</p>
