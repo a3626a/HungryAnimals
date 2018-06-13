@@ -8,6 +8,8 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -84,8 +86,18 @@ public class ProductionMilk extends ProductionInteraction {
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
 		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
+		return new ProductionFactory() {
+			@Override
+			public IProduction apply(EntityLiving animal) {
+				return new ProductionMilk(name, animal, delay, input, output, condition, disableSound);
+			}
 
-		return (animal) -> new ProductionMilk(name, animal, delay, input, output, condition, disableSound);
+			@Override
+			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
+				ingredients.setInput(ItemStack.class, input);
+				ingredients.setInput(ItemStack.class, output);
+			}
+		};
 	}
 	
 	@Override
@@ -96,4 +108,5 @@ public class ProductionMilk extends ProductionInteraction {
 			return null;
 		}
 	}
+
 }

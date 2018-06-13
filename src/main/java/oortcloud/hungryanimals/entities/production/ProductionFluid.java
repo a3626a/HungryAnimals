@@ -8,6 +8,8 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +41,8 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
-public class ProductionFluid implements IProductionInteraction, IProductionTickable, ISyncable, IProductionTOP {
+public class ProductionFluid
+		implements IProductionInteraction, IProductionTickable, ISyncable, IProductionTOP {
 
 	private String name;
 	private EntityLiving animal;
@@ -49,10 +52,11 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 	private double amount;
 	private double weight;
 	private Predicate<EntityLiving> condition;
-	
+
 	private int prevAmount;
 
-	public ProductionFluid(String name, EntityLiving animal, Predicate<EntityLiving> condition, Fluid fluid, int capacity, double amount, double weight) {
+	public ProductionFluid(String name, EntityLiving animal, Predicate<EntityLiving> condition, Fluid fluid,
+			int capacity, double amount, double weight) {
 		this.name = name;
 		this.animal = animal;
 		tank = new FluidTank(capacity);
@@ -105,7 +109,7 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 
 	@Override
 	public void readFrom(PacketClientSyncProducing message) {
-		tank = ((PacketClientSyncProducingFluid)message).tank;
+		tank = ((PacketClientSyncProducingFluid) message).tank;
 	}
 
 	@Override
@@ -113,21 +117,24 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 		if (condition.apply(animal)) {
 			IAttributeInstance fluid_amount = animal.getEntityAttribute(ModAttributes.fluid_amount);
 			if (fluid_amount != null) {
-				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getAttributeValue() * amount)), true);
-				
+				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getAttributeValue() * amount)),
+						true);
+
 				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 				if (capHungry != null) {
 					IAttributeInstance fluid_weight = animal.getEntityAttribute(ModAttributes.fluid_weight);
 					if (fluid_weight != null) {
-						capHungry.addWeight(-inserted*fluid_weight.getAttributeValue()*weight/1000.0);
+						capHungry.addWeight(-inserted * fluid_weight.getAttributeValue() * weight / 1000.0);
 					} else {
-						HungryAnimals.logger.warn("{} doesn't have attribute {}. Weight consumption is skipped", animal, ModAttributes.fluid_weight);
+						HungryAnimals.logger.warn("{} doesn't have attribute {}. Weight consumption is skipped", animal,
+								ModAttributes.fluid_weight);
 					}
 				}
 			} else {
-				HungryAnimals.logger.warn("{} doesn't have attribute {}. Fluid production canceled", animal, ModAttributes.fluid_amount);
+				HungryAnimals.logger.warn("{} doesn't have attribute {}. Fluid production canceled", animal,
+						ModAttributes.fluid_amount);
 			}
-			
+
 			int currAmount = tank.getFluidAmount();
 			if (prevAmount != currAmount) {
 				sync();
@@ -144,7 +151,8 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 		if (!heldItem.isEmpty()) {
 			IItemHandler playerInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			if (playerInventory != null) {
-				FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(heldItem, tank, playerInventory, Integer.MAX_VALUE, player);
+				FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(heldItem, tank, playerInventory,
+						Integer.MAX_VALUE, player);
 				if (fluidActionResult.isSuccess()) {
 					player.setHeldItem(hand, fluidActionResult.getResult());
 					return EnumActionResult.SUCCESS;
@@ -158,7 +166,7 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 	public IFluidHandler getFluidHandler() {
 		return tank;
 	}
-	
+
 	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
@@ -168,8 +176,18 @@ public class ProductionFluid implements IProductionInteraction, IProductionTicka
 		int capacity = JsonUtils.getInt(jsonObj, "capacity");
 		double amount = JsonUtils.getFloat(jsonObj, "amount");
 		double weight = JsonUtils.getFloat(jsonObj, "weight");
-		
-		return (animal) -> new ProductionFluid(name, animal, condition, fluid, capacity, amount, weight);
+
+		return new ProductionFactory() {
+			@Override
+			public IProduction apply(EntityLiving animal) {
+				return new ProductionFluid(name, animal, condition, fluid, capacity, amount, weight);
+			}
+
+			@Override
+			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
+				ingredients.setOutput(FluidStack.class, new FluidStack(fluid, 0));
+			}
+		};
 	}
 
 }

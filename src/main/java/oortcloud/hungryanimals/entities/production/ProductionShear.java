@@ -8,6 +8,8 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -26,6 +28,7 @@ import oortcloud.hungryanimals.entities.production.utils.RangeRandom;
 
 /**
  * This Production is different from IShearable
+ * 
  * @author LeeChangHwan
  *
  */
@@ -37,8 +40,8 @@ public class ProductionShear extends ProductionInteraction {
 	private Predicate<EntityLiving> condition;
 	private boolean disableSound;
 
-	public ProductionShear(String name, EntityLiving animal, IRange delay, ItemStack tool, ItemStack wool, int damage, Predicate<EntityLiving> condition,
-			boolean disableSound) {
+	public ProductionShear(String name, EntityLiving animal, IRange delay, ItemStack tool, ItemStack wool, int damage,
+			Predicate<EntityLiving> condition, boolean disableSound) {
 		super(name, animal, delay);
 		this.input = tool;
 		this.output = wool;
@@ -85,10 +88,22 @@ public class ProductionShear extends ProductionInteraction {
 		int damage = JsonUtils.getInt(jsonObj, "damage");
 		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
-		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"), new JsonContext(References.MODID));
-		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"), new JsonContext(References.MODID));
+		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"),
+				new JsonContext(References.MODID));
+		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"),
+				new JsonContext(References.MODID));
+		return new ProductionFactory() {
+			@Override
+			public IProduction apply(EntityLiving animal) {
+				return new ProductionShear(name, animal, delay, input, output, damage, condition, disableSound);
+			}
 
-		return (animal) -> new ProductionShear(name, animal, delay, input, output, damage, condition, disableSound);
+			@Override
+			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
+				ingredients.setInput(ItemStack.class, input);
+				ingredients.setOutput(ItemStack.class, output);
+			}
+		};
 	}
 
 	@Override
@@ -99,4 +114,5 @@ public class ProductionShear extends ProductionInteraction {
 			return null;
 		}
 	}
+
 }

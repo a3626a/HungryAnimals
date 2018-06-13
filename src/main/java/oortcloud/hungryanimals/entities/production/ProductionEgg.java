@@ -6,6 +6,8 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -14,6 +16,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
@@ -87,6 +90,22 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		return name;
 	}
 
+	public int getCooldown() {
+		return cooldown;
+	}
+
+	@Override
+	public String getMessage() {
+		if (condition.apply(animal)) {
+			if (cooldown < 0) {
+				return String.format("%s now", name);
+			}
+			return String.format("%s after %d seconds", name, cooldown);
+		} else {
+			return null;
+		}
+	}
+
 	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
@@ -106,23 +125,18 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 
-		return (animal) -> new ProductionEgg(name, animal, delay, stack, condition, disableSound);
-	}
-
-	public int getCooldown() {
-		return cooldown;
-	}
-
-	@Override
-	public String getMessage() {
-		if (condition.apply(animal)) {
-			if (cooldown < 0) {
-				return String.format("%s now", name);
+		return new ProductionFactory() {
+			@Override
+			public IProduction apply(EntityLiving animal) {
+				return new ProductionEgg(name, animal, delay, stack, condition, disableSound);
 			}
-			return String.format("%s after %d seconds", name, cooldown);
-		} else {
-			return null;
-		}
+
+			@Override
+			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
+				ingredients.setOutput(ItemStack.class, stack);
+				HungryAnimals.logger.info(stack.toString());
+			}
+		};
 	}
 
 }

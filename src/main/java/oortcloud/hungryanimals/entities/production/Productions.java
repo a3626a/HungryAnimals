@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.JsonUtils;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
@@ -64,6 +65,21 @@ public class Productions implements IProductionRegistry {
 		for (Function<EntityLiving, IProduction> i : functions) {
 			productions.add(i.apply(animal));
 		}
+		return productions;
+	}
+
+	@Nullable
+	public List<IProductionJEI> apply(Class<? extends EntityLiving> classEntity) {
+		List<Function<EntityLiving, IProduction>> functions = REGISTRY.get(classEntity);
+		if (functions == null)
+			return null;
+		List<IProductionJEI> productions = new ArrayList<>();
+		for (Function<EntityLiving, IProduction> i : functions) {
+			if (i instanceof IProductionJEI) {
+				productions.add((IProductionJEI)i);
+			}
+		}
+		
 		return productions;
 	}
 	
