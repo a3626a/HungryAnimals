@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 
-public class RecipeCategoryFoodPreference implements IRecipeCategory<RecipeWrapperFoodPreference> {
+public class RecipeCategoryFoodPreference implements IRecipeCategory<RecipeWrapperFoodPreferenceItem> {
 
 	public static final String UID = "hungryanimals.food_preference";
 	
@@ -45,14 +45,20 @@ public class RecipeCategoryFoodPreference implements IRecipeCategory<RecipeWrapp
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, RecipeWrapperFoodPreference recipeWrapper, IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, RecipeWrapperFoodPreferenceItem recipeWrapper, IIngredients ingredients) {
 		recipeLayout.getItemStacks().init(0, false, 72, 0);
 		recipeLayout.getItemStacks().set(0, ingredients.getOutputs(ItemStack.class).get(0));
 		
 		for (int i = 0 ; i < ingredients.getInputs(ItemStack.class).size(); i++) {
-			recipeLayout.getItemStacks().init(1+i, true, 0+18*i, 22);
-			recipeLayout.getItemStacks().set(1+i, ingredients.getInputs(ItemStack.class).get(i));		
+			int index = i+1;
+			int row = i/9;
+			int col = i%9;
+			recipeLayout.getItemStacks().init(index, true, 0+18*col, 22+22*row);
+			recipeLayout.getItemStacks().set(index, ingredients.getInputs(ItemStack.class).get(i));		
 		}
+		
+		recipeLayout.getItemStacks().addTooltipCallback(recipeWrapper);
 	}
 
+	
 }

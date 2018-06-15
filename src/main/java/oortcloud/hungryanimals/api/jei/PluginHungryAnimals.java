@@ -1,7 +1,10 @@
 package oortcloud.hungryanimals.api.jei;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
 
 import com.google.common.collect.Lists;
 
@@ -22,7 +25,8 @@ import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeCategoryAnimalGlue;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeWrapperAnimalGlue;
 import oortcloud.hungryanimals.api.jei.food_preference.RecipeCategoryFoodPreference;
-import oortcloud.hungryanimals.api.jei.food_preference.RecipeWrapperFoodPreference;
+import oortcloud.hungryanimals.api.jei.food_preference.RecipeWrapperFoodPreferenceItem;
+import oortcloud.hungryanimals.api.jei.food_preference.RecipeWrapperFoodPreferenceBlock;
 import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProduction;
 import oortcloud.hungryanimals.api.jei.production.RecipeWrapperProduction;
 import oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe.RecipeWrapperShapedDistinctOreRecipe;
@@ -75,18 +79,26 @@ public class PluginHungryAnimals implements IModPlugin {
 			return new RecipeWrapperProduction(registry.getJeiHelpers(), (Class<? extends EntityLiving>)pair.left, (IProductionJEI)pair.right);
 		}, RecipeCategoryProduction.UID);
 		
-		registry.addRecipes(Lists.newArrayList(HungryAnimalManager.getInstance().getRegisteredAnimal()), RecipeCategoryFoodPreference.UID);
-		registry.handleRecipes(Class.class, (classEntity) -> {
-			return new RecipeWrapperFoodPreference(registry.getJeiHelpers(), classEntity);
-		}, RecipeCategoryFoodPreference.UID);
+		// Food Preference
+		List<RecipeWrapperFoodPreferenceItem> foodPreferences = new ArrayList<>();
+		for (Class<? extends EntityLiving> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+			foodPreferences.add(new RecipeWrapperFoodPreferenceItem(registry.getJeiHelpers(), i));
+			foodPreferences.add(new RecipeWrapperFoodPreferenceBlock(registry.getJeiHelpers(), i));
+		}
+		registry.addRecipes(foodPreferences, RecipeCategoryFoodPreference.UID);
 	}
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
 	}
 
-	public List<Pair<Class<? extends EntityLiving>, IProductionJEI>> buildProductions(Class<? extends EntityLiving> entityClass) {
-		return Productions.getInstance().apply(entityClass).stream().map((x)->new Pair<Class<? extends EntityLiving>, IProductionJEI>(entityClass, x)).collect(Collectors.toList());
+	public List<Pair<Class<? extends EntityLiving>, IProductionJEI>> buildProductions(@Nonnull Class<? extends EntityLiving> entityClass) {
+		List<IProductionJEI> productions = Productions.getInstance().apply(entityClass);
+		if (productions != null) {
+			return productions.stream().map((x)->new Pair<Class<? extends EntityLiving>, IProductionJEI>(entityClass, x)).collect(Collectors.toList());
+		} else {
+			return Lists.newArrayList();
+		}
 	}
 	
 }

@@ -172,7 +172,7 @@ public class EntityEventHandler {
 
 		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
 		
-		if (ageable.getAge() < 0) {
+		if (ageable != null && ageable.getAge() < 0) {
 			// Child
 			// Childhood growth acceleration
 			if (cap.getWeight() < cap.getNormalWeight()) {

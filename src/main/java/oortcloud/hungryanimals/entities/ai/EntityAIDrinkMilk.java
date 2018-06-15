@@ -66,10 +66,8 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 				EntityLiving entityanimal = findMother();
 
 				if (entityanimal == null) {
-					HungryAnimals.logger.info("can't find mom");
 					return false;
 				} else {
-					HungryAnimals.logger.info("found mom");
 					this.parentAnimal = entityanimal;
 					return true;
 				}

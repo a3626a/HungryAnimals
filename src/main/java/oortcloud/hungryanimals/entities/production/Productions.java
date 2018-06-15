@@ -14,7 +14,6 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.JsonUtils;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
@@ -79,7 +78,6 @@ public class Productions implements IProductionRegistry {
 				productions.add((IProductionJEI)i);
 			}
 		}
-		
 		return productions;
 	}
 	

@@ -39,6 +39,9 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
 				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
 
+				if (input == null)
+					return false;
+				
 				// DON'T EAT BABY
 				ICapabilityAgeable ageable = input.getCapability(ProviderAgeable.CAP, null);
 				if (ageable != null) {

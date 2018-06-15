@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.entity.EntityList;
@@ -16,12 +17,12 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferenceIngredien
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
-public class RecipeWrapperFoodPreference implements IRecipeWrapper {
+public class RecipeWrapperFoodPreferenceItem implements IRecipeWrapper, ITooltipCallback<ItemStack> {
 
-	private Class<? extends EntityLiving> entityClass;
-	private IJeiHelpers jeiHelpers;
+	protected Class<? extends EntityLiving> entityClass;
+	protected IJeiHelpers jeiHelpers;
 
-	public RecipeWrapperFoodPreference(IJeiHelpers jeiHelpers, Class<? extends EntityLiving> entityClass) {
+	public RecipeWrapperFoodPreferenceItem(IJeiHelpers jeiHelpers, Class<? extends EntityLiving> entityClass) {
 		this.jeiHelpers = jeiHelpers;
 		this.entityClass = entityClass;
 	}
@@ -37,6 +38,14 @@ public class RecipeWrapperFoodPreference implements IRecipeWrapper {
 			List<FoodPreferenceIngredientEntry> list = ((FoodPreferenceIngredient) pref).getList();
 			ingredients.setInputLists(ItemStack.class, jeiHelpers.getStackHelper().expandRecipeItemStackInputs(list.stream().map((entry)->entry.ingredient).collect(Collectors.toList())));
 		}
+	}
+
+	@Override
+	public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
+		double nutrient = FoodPreferences.getInstance().REGISTRY_ITEM.get(entityClass).getNutrient(ingredient);
+		double stomach = FoodPreferences.getInstance().REGISTRY_ITEM.get(entityClass).getStomach(ingredient);
+		tooltip.add(String.format("nutrient : %.2fkg", nutrient));
+		tooltip.add(String.format("stomach : %.2fkg", stomach));
 	}
 
 }
