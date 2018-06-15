@@ -5,4 +5,5 @@ import mezz.jei.api.ingredients.IIngredients;
 
 public interface IProductionJEI {
 	public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients);
+	public String getCategoryUid();
 }

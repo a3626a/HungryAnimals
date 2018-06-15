@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionFluid;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
@@ -185,7 +186,12 @@ public class ProductionFluid
 
 			@Override
 			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
-				ingredients.setOutput(FluidStack.class, new FluidStack(fluid, 0));
+				ingredients.setOutput(FluidStack.class, new FluidStack(fluid, 1000));
+			}
+			
+			@Override
+			public String getCategoryUid() {
+				return RecipeCategoryProductionFluid.UID;
 			}
 		};
 	}

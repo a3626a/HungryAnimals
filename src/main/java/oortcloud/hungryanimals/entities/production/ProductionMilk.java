@@ -97,6 +97,11 @@ public class ProductionMilk extends ProductionInteraction {
 				ingredients.setInput(ItemStack.class, input);
 				ingredients.setInput(ItemStack.class, output);
 			}
+			
+			@Override
+			public String getCategoryUid() {
+				return "";
+			}
 		};
 	}
 	

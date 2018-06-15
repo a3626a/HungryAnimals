@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
-import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionEgg;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
@@ -134,7 +134,11 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 			@Override
 			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
 				ingredients.setOutput(ItemStack.class, stack);
-				HungryAnimals.logger.info(stack.toString());
+			}
+			
+			@Override
+			public String getCategoryUid() {
+				return RecipeCategoryProductionEgg.UID;
 			}
 		};
 	}

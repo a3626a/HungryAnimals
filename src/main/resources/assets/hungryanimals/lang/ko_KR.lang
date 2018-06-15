@@ -22,6 +22,8 @@ item.hungryanimals.compositewood.name=합성 목재
 hungryanimals.jei.animalglue=아교 제작
 hungryanimals.jei.animalglue.description=아교는 도가니를 특정 아이템을 든 상태로 우클릭하여 얻을 수 있습니다. 이 과정에서 도가니에 담긴 물 1/3이 사용됩니다.
 hungryanimals.jei.food_preference=먹이
+hungryanimals.jei.production.egg=계란 생산
+hungryanimals.jei.production.fluid=액체 생산
 
 potion.growth=성장 촉진
 potion.disease=감염

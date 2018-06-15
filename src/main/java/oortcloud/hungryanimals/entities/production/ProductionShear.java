@@ -103,6 +103,11 @@ public class ProductionShear extends ProductionInteraction {
 				ingredients.setInput(ItemStack.class, input);
 				ingredients.setOutput(ItemStack.class, output);
 			}
+			
+			@Override
+			public String getCategoryUid() {
+				return "";
+			}
 		};
 	}
 

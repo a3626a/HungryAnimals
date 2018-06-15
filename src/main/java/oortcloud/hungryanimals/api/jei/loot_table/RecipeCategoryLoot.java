@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.api.jei.production;
+package oortcloud.hungryanimals.api.jei.loot_table;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 
-public class RecipeCategoryProduction implements IRecipeCategory<RecipeWrapperProduction> {
+public class RecipeCategoryLoot implements IRecipeCategory<RecipeWrapperLoot> {
 
 	public static final String UID = "hungryanimals.production";
 	
@@ -18,7 +18,7 @@ public class RecipeCategoryProduction implements IRecipeCategory<RecipeWrapperPr
 	
 	private IDrawable background;
 	
-	public RecipeCategoryProduction(IGuiHelper guiHelper) {
+	public RecipeCategoryLoot(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation(References.MODID, "textures/gui/animalglue.png");
 		background = guiHelper.createDrawable(location, 55, 30, 81, 25, 10, 10, 0, 0);
 		localizedName = I18n.format("hungryanimals.jei.production");
@@ -45,7 +45,7 @@ public class RecipeCategoryProduction implements IRecipeCategory<RecipeWrapperPr
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, RecipeWrapperProduction recipeWrapper, IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, RecipeWrapperLoot recipeWrapper, IIngredients ingredients) {
 		//recipeLayout.getItemStacks().init(0, true, 0, 14);
 		//recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
 		recipeLayout.getItemStacks().init(1, true, 60, 14);
