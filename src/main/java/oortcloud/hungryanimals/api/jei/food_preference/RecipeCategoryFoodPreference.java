@@ -6,6 +6,7 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
@@ -17,11 +18,18 @@ public class RecipeCategoryFoodPreference implements IRecipeCategory<RecipeWrapp
 	private String localizedName;
 	
 	private IDrawable background;
+	private IDrawable icon;
 	
 	public RecipeCategoryFoodPreference(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation(References.MODID, "textures/gui/food_preference.png");
 		background = guiHelper.createDrawable(location, 7, 53, 162, 106, 0, 0, 0, 0);
 		localizedName = I18n.format("hungryanimals.jei.food_preference");
+		icon = guiHelper.createDrawableIngredient(new ItemStack(Items.WHEAT));
+	}
+	
+	@Override
+	public IDrawable getIcon() {
+		return icon;
 	}
 	
 	@Override

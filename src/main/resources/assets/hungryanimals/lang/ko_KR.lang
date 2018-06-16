@@ -24,6 +24,8 @@ hungryanimals.jei.animalglue.description=아교는 도가니를 특정 아이템을 든 상태로
 hungryanimals.jei.food_preference=먹이
 hungryanimals.jei.production.egg=계란 생산
 hungryanimals.jei.production.fluid=액체 생산
+hungryanimals.jei.production.milk=우유 생산
+hungryanimals.jei.production.shear=양털 생산
 
 potion.growth=성장 촉진
 potion.disease=감염

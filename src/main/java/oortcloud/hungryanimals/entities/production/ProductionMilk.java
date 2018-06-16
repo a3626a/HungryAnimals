@@ -20,6 +20,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionMilk;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
@@ -95,12 +96,12 @@ public class ProductionMilk extends ProductionInteraction {
 			@Override
 			public void getIngredients(IJeiHelpers jeiHelpers, IIngredients ingredients) {
 				ingredients.setInput(ItemStack.class, input);
-				ingredients.setInput(ItemStack.class, output);
+				ingredients.setOutput(ItemStack.class, output);
 			}
 			
 			@Override
 			public String getCategoryUid() {
-				return "";
+				return RecipeCategoryProductionMilk.UID;
 			}
 		};
 	}

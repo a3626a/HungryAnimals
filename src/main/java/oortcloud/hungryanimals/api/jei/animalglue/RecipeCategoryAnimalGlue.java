@@ -12,6 +12,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.items.ModItems;
 
 public class RecipeCategoryAnimalGlue implements IRecipeCategory<RecipeWrapperAnimalGlue> {
 
@@ -21,12 +22,14 @@ public class RecipeCategoryAnimalGlue implements IRecipeCategory<RecipeWrapperAn
 	
 	private IDrawableAnimated progress;
 	private IDrawable background;
+	private IDrawable icon;
 	
 	public RecipeCategoryAnimalGlue(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation(References.MODID, "textures/gui/animalglue.png");
 		background = guiHelper.createDrawable(location, 55, 30, 81, 25, 10, 10, 0, 0);
 		localizedName = I18n.format("hungryanimals.jei.animalglue");
 		progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(location, 176, 0, 16, 20, 13, 0, 29, 0), 64, StartDirection.TOP, false);
+		icon = guiHelper.createDrawableIngredient(new ItemStack(ModItems.animalGlue));
 	}
 	
 	@Override
@@ -60,7 +63,7 @@ public class RecipeCategoryAnimalGlue implements IRecipeCategory<RecipeWrapperAn
 	
 	@Override
 	public IDrawable getIcon() {
-		return null;
+		return icon;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,12 +23,19 @@ public class RecipeCategoryProductionFluid implements IRecipeCategory<RecipeWrap
 	
 	private IDrawableAnimated progress;
 	private IDrawable background;
+	private IDrawable icon;
 	
 	public RecipeCategoryProductionFluid(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation(References.MODID, "textures/gui/1_to_1.png");
 		background = guiHelper.createDrawable(location, 0, 0, 82, 26, 0, 0, 0, 0);
 		localizedName = I18n.format("hungryanimals.jei.production.fluid");
 		progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(location, 0, 26, 24, 16, 5, 0, 24, 0), 64, StartDirection.LEFT, false);
+		icon = guiHelper.createDrawableIngredient(new ItemStack(Items.MILK_BUCKET));
+	}
+	
+	@Override
+	public IDrawable getIcon() {
+		return icon;
 	}
 	
 	@Override

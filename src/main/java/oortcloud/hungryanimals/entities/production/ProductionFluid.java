@@ -153,7 +153,7 @@ public class ProductionFluid
 			IItemHandler playerInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			if (playerInventory != null) {
 				FluidActionResult fluidActionResult = FluidUtil.tryFillContainerAndStow(heldItem, tank, playerInventory,
-						Integer.MAX_VALUE, player);
+						Integer.MAX_VALUE, player, true);
 				if (fluidActionResult.isSuccess()) {
 					player.setHeldItem(hand, fluidActionResult.getResult());
 					return EnumActionResult.SUCCESS;

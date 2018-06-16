@@ -20,6 +20,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionShear;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
@@ -106,7 +107,7 @@ public class ProductionShear extends ProductionInteraction {
 			
 			@Override
 			public String getCategoryUid() {
-				return "";
+				return RecipeCategoryProductionShear.UID;
 			}
 		};
 	}

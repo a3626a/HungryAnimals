@@ -20,8 +20,12 @@ import oortcloud.hungryanimals.api.jei.food_preference.RecipeWrapperFoodPreferen
 import oortcloud.hungryanimals.api.jei.food_preference.RecipeWrapperFoodPreferenceItem;
 import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionEgg;
 import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionFluid;
+import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionMilk;
+import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionShear;
 import oortcloud.hungryanimals.api.jei.production.RecipeWrapperProductionEgg;
 import oortcloud.hungryanimals.api.jei.production.RecipeWrapperProductionFluid;
+import oortcloud.hungryanimals.api.jei.production.RecipeWrapperProductionMilk;
+import oortcloud.hungryanimals.api.jei.production.RecipeWrapperProductionShear;
 import oortcloud.hungryanimals.api.jei.shapeddistinctorerecipe.RecipeWrapperShapedDistinctOreRecipe;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.production.IProductionJEI;
@@ -49,6 +53,8 @@ public class PluginHungryAnimals implements IModPlugin {
 		registry.addRecipeCategories(new RecipeCategoryAnimalGlue(registry.getJeiHelpers().getGuiHelper()));
 		registry.addRecipeCategories(new RecipeCategoryProductionEgg(registry.getJeiHelpers().getGuiHelper()));
 		registry.addRecipeCategories(new RecipeCategoryProductionFluid(registry.getJeiHelpers().getGuiHelper()));
+		registry.addRecipeCategories(new RecipeCategoryProductionMilk(registry.getJeiHelpers().getGuiHelper()));
+		registry.addRecipeCategories(new RecipeCategoryProductionShear(registry.getJeiHelpers().getGuiHelper()));
 		registry.addRecipeCategories(new RecipeCategoryFoodPreference(registry.getJeiHelpers().getGuiHelper()));
 	}
 
@@ -66,6 +72,8 @@ public class PluginHungryAnimals implements IModPlugin {
 
 		List<RecipeWrapperProductionEgg> productionEggs = new ArrayList<>();
 		List<RecipeWrapperProductionFluid> productionFluids = new ArrayList<>();
+		List<RecipeWrapperProductionMilk> productionMilks = new ArrayList<>();
+		List<RecipeWrapperProductionShear> productionShears = new ArrayList<>();
 		for (Class<? extends EntityLiving> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			List<IProductionJEI> productions = Productions.getInstance().apply(i);
 			if (productions != null) {
@@ -74,12 +82,18 @@ public class PluginHungryAnimals implements IModPlugin {
 						productionEggs.add(new RecipeWrapperProductionEgg(registry.getJeiHelpers(), i, j));
 					} else if (j.getCategoryUid().equals(RecipeCategoryProductionFluid.UID)) {
 						productionFluids.add(new RecipeWrapperProductionFluid(registry.getJeiHelpers(), i, j));
+					} else if (j.getCategoryUid().equals(RecipeCategoryProductionMilk.UID)) {
+						productionMilks.add(new RecipeWrapperProductionMilk(registry.getJeiHelpers(), i, j));
+					} else if (j.getCategoryUid().equals(RecipeCategoryProductionShear.UID)) {
+						productionShears.add(new RecipeWrapperProductionShear(registry.getJeiHelpers(), i, j));
 					}
 				}
 			}
 		}
 		registry.addRecipes(productionEggs, RecipeCategoryProductionEgg.UID);
 		registry.addRecipes(productionFluids, RecipeCategoryProductionFluid.UID);
+		registry.addRecipes(productionMilks, RecipeCategoryProductionMilk.UID);
+		registry.addRecipes(productionShears, RecipeCategoryProductionShear.UID);
 		
 		// Food Preference
 		List<RecipeWrapperFoodPreferenceItem> foodPreferences = new ArrayList<>();

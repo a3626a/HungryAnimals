@@ -12,7 +12,7 @@ import oortcloud.hungryanimals.core.lib.References;
 
 public class RecipeCategoryLoot implements IRecipeCategory<RecipeWrapperLoot> {
 
-	public static final String UID = "hungryanimals.production";
+	public static final String UID = "hungryanimals.loot";
 	
 	private String localizedName;
 	
@@ -21,7 +21,7 @@ public class RecipeCategoryLoot implements IRecipeCategory<RecipeWrapperLoot> {
 	public RecipeCategoryLoot(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation(References.MODID, "textures/gui/animalglue.png");
 		background = guiHelper.createDrawable(location, 55, 30, 81, 25, 10, 10, 0, 0);
-		localizedName = I18n.format("hungryanimals.jei.production");
+		localizedName = I18n.format("hungryanimals.jei.loot");
 	}
 	
 	@Override
@@ -46,8 +46,9 @@ public class RecipeCategoryLoot implements IRecipeCategory<RecipeWrapperLoot> {
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, RecipeWrapperLoot recipeWrapper, IIngredients ingredients) {
-		//recipeLayout.getItemStacks().init(0, true, 0, 14);
-		//recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
+		recipeLayout.getItemStacks().init(0, false, 72, 0);
+		recipeLayout.getItemStacks().set(0, ingredients.getOutputs(ItemStack.class).get(0));
+		
 		recipeLayout.getItemStacks().init(1, true, 60, 14);
 		recipeLayout.getItemStacks().set(1, ingredients.getOutputs(ItemStack.class).get(0));		
 	}
