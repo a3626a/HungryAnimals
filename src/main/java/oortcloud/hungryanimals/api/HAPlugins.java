@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,6 +32,7 @@ import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
 import oortcloud.hungryanimals.entities.production.Productions;
 import oortcloud.hungryanimals.generation.Conditions;
+import oortcloud.hungryanimals.utils.R;
 
 public class HAPlugins {
 
@@ -39,13 +41,13 @@ public class HAPlugins {
 	private static HAPlugins INSTANCE;
 
 	private List<IHAPlugin> plugins;
-	private Map<Path, JsonElement> mapJson;
-	private Map<Path, String> mapText;
+	private Map<R, JsonElement> mapJson;
+	private Map<R, String> mapText;
 
 	public HAPlugins() {
-		plugins = new ArrayList<IHAPlugin>();
-		mapJson = new HashMap<Path, JsonElement>();
-		mapText = new HashMap<Path, String>();
+		plugins = new ArrayList<>();
+		mapJson = new HashMap<>();
+		mapText = new HashMap<>();
 	}
 
 	public static HAPlugins getInstance() {
@@ -78,15 +80,14 @@ public class HAPlugins {
 		List<FileSystem> fileSystemClose = new ArrayList<>();
 		List<Stream<Path>> walkClose = new ArrayList<>();
 
-		Map<Path, List<String>> map = new HashMap<Path, List<String>>();
+		Map<R, List<String>> map = new HashMap<>();
 
 		for (IHAPlugin i : plugins) {
 			String injectionPath = i.getJsonInjectionPath();
 			URI root = i.getClass().getResource(injectionPath).toURI();
 			Path myPath = null;
 			if (root.getScheme().equals("jar")) {
-				Map<String, String> options = new HashMap<>();
-				FileSystem fileSystem = FileSystems.newFileSystem(root, options);
+				FileSystem fileSystem = FileSystems.newFileSystem(root, Maps.newHashMap());
 				myPath = fileSystem.getPath(injectionPath);
 				fileSystemClose.add(fileSystem);
 			} else {
@@ -101,15 +102,16 @@ public class HAPlugins {
 				if (!Files.isDirectory(j)) {
 					String text = new String(Files.readAllBytes(j));
 					Path relative = myPath.relativize(j);
-					if (!map.containsKey(relative)) {
-						map.put(relative, new ArrayList<>());
+					R key = R.get(relative);
+					if (!map.containsKey(key)) {
+						map.put(key, new ArrayList<>());
 					}
-					map.get(relative).add(text);
+					map.get(key).add(text);
 				}
 			}
 		}
 
-		for (Entry<Path, List<String>> i : map.entrySet()) {
+		for (Entry<R, List<String>> i : map.entrySet()) {
 			if (i.getKey().toString().endsWith(".json")) {
 				JsonArray jsonArray = null;
 				JsonObject jsonObject = null;
@@ -167,44 +169,32 @@ public class HAPlugins {
 		}
 	}
 
-	public void walkPlugins(BiConsumer<Path, JsonElement> onjson, BiConsumer<Path, String> ontxt) throws IOException, URISyntaxException {
+	public void walkPlugins(BiConsumer<R, JsonElement> onjson, BiConsumer<R, String> ontxt) throws IOException, URISyntaxException {
 		if (onjson != null) {
-			for (Entry<Path, JsonElement> i : mapJson.entrySet()) {
+			for (Entry<R, JsonElement> i : mapJson.entrySet()) {
 				onjson.accept(i.getKey(), i.getValue());
 			}
 		}
 		if (ontxt != null) {
-			for (Entry<Path, String> i : mapText.entrySet()) {
+			for (Entry<R, String> i : mapText.entrySet()) {
 				ontxt.accept(i.getKey(), i.getValue());
 			}
 		}
 	}
 
-	public void putJson(Path key, JsonElement value) {
-		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
-			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
-		}
+	public void putJson(R key, JsonElement value) {
 		mapJson.put(key, value);
 	}
 
-	public void putText(Path key, String value) {
-		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
-			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
-		}
+	public void putText(R key, String value) {
 		mapText.put(key, value);
 	}
 
-	public JsonElement getJson(Path key) {
-		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
-			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
-		}
+	public JsonElement getJson(R key) {
 		return mapJson.get(key);
 	}
 
-	public String getText(Path key) {
-		if (!key.getFileSystem().getSeparator().equals(FileSystems.getDefault().getSeparator())) {
-			key = Paths.get(key.toString().replace(key.getFileSystem().getSeparator(), FileSystems.getDefault().getSeparator()));
-		}
+	public String getText(R key) {
 		return mapText.get(key);
 	}
 

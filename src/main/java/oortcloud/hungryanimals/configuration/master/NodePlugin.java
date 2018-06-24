@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.HAPlugins;
+import oortcloud.hungryanimals.utils.R;
 
 public class NodePlugin extends Node {
 
@@ -24,12 +25,12 @@ public class NodePlugin extends Node {
 	}
 	
 	@Override
-	public Map<Path, JsonElement> build() {
-		Map<Path, JsonElement> map = new HashMap<>();
+	public Map<R, JsonElement> build() {
+		Map<R, JsonElement> map = new HashMap<>();
 		try {
 			HAPlugins.getInstance().walkPlugins((path, jsonElement)->{
 				if (base != null) {
-					if (path.startsWith(base)) {
+					if (path.toString().startsWith(base.toString())) {
 						map.put(path, jsonElement);
 					}
 				} else {

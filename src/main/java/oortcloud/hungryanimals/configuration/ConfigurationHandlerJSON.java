@@ -1,13 +1,13 @@
 package oortcloud.hungryanimals.configuration;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import com.google.gson.JsonElement;
 
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.utils.R;
 
 public class ConfigurationHandlerJSON {
 
@@ -27,8 +27,8 @@ public class ConfigurationHandlerJSON {
 		this.read = read;
 	}
 
-	public void sync(Map<Path, JsonElement> map) {
-		Path path = Paths.get(descriptor + ".json");
+	public void sync(Map<R, JsonElement> map) {
+		R path = R.get(descriptor + ".json");
 
 		if (map.containsKey(path)) {
 			read.accept(map.get(path));

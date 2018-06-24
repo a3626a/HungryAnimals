@@ -47,6 +47,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 public class CommonProxy {
 
 	public void registerTileEntities() {
+		// TODO deprecation try new ResourceLocation(Strings.blockTroughName);
 		GameRegistry.registerTileEntity(TileEntityTrough.class, References.MODID+"."+Strings.blockTroughName);
 	}
 

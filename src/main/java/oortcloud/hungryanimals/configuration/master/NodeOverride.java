@@ -1,10 +1,11 @@
 package oortcloud.hungryanimals.configuration.master;
 
-import java.nio.file.Path;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
+
+import oortcloud.hungryanimals.utils.R;
 
 public class NodeOverride extends Node {
 
@@ -16,11 +17,11 @@ public class NodeOverride extends Node {
 		this.overridee = overridee;
 	}
 	
-	public Map<Path, JsonElement> build() {
-		Map<Path, JsonElement> mapOverrider = overrider.build();
-		Map<Path, JsonElement> mapOverridee = overridee.build();
+	public Map<R, JsonElement> build() {
+		Map<R, JsonElement> mapOverrider = overrider.build();
+		Map<R, JsonElement> mapOverridee = overridee.build();
 		
-		for (Entry<Path, JsonElement> i : mapOverrider.entrySet()) {
+		for (Entry<R, JsonElement> i : mapOverrider.entrySet()) {
 			mapOverridee.put(i.getKey(), i.getValue());
 		}
 		

@@ -2,7 +2,6 @@ package oortcloud.hungryanimals.configuration;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +39,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.API;
-import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.configuration.master.Master;
@@ -76,6 +74,7 @@ import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 import oortcloud.hungryanimals.utils.HashBlockState;
 import oortcloud.hungryanimals.utils.ModJsonUtils;
 import oortcloud.hungryanimals.utils.Pair;
+import oortcloud.hungryanimals.utils.R;
 
 public class ConfigurationHandler {
 
@@ -100,7 +99,7 @@ public class ConfigurationHandler {
 	public static Node baked;
 	public static NodeCache example;
 	public static Node master;
-	public static Map<Path, JsonElement> map;
+	public static Map<R, JsonElement> map;
 	
 	public static Path exampleFolder;
 	public static Path baseFolder;
@@ -417,65 +416,43 @@ public class ConfigurationHandler {
 		return Paths.get(domain, paths);
 	}
 
-	public static ResourceLocation stringToResourceLocation(String location) {
-		return new ResourceLocation(location.replace('#', ':').replace('@', '/'));
-	}
-
-	private static void createDirectories(Path basefolder, Map<Path, JsonElement> map) {
-		for (Entry<Path, JsonElement> i : map.entrySet()) {
-			Path parent;
-			Path path = i.getKey();
-			if (path.getParent() != null) {
-				parent = basefolder.resolve(path.getParent());
+	private static void createDirectories(Path rootDirectory, Map<R, JsonElement> map) {
+		for (Entry<R, JsonElement> i : map.entrySet()) {
+			Path directory;
+			R path = i.getKey();
+			R parent = path.getParent();
+			if (parent != null) {
+				directory = rootDirectory.resolve(parent.toString());
 			} else {
-				parent = basefolder;
+				directory = rootDirectory;
 			}
 			try {
-				Files.createDirectories(parent);
+				Files.createDirectories(directory);
 			} catch (FileAlreadyExistsException e) {
 			} catch (IOException e) {
-				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
+				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", directory, e);
 			}
-		}
-		
-		try {
-			HAPlugins.getInstance().walkPlugins(null, (path, txt) -> {
-				Path parent;
-				if (path.getParent() != null) {
-					parent = basefolder.resolve(path.getParent());
-				} else {
-					parent = basefolder;
-				}
-				try {
-					Files.createDirectories(parent);
-				} catch (FileAlreadyExistsException e) {
-				} catch (IOException e) {
-					HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
-				}
-			});
-		} catch (IOException | URISyntaxException e) {
-			HungryAnimals.logger.warn("Problem occured durin creating example config folder.");
-			e.printStackTrace();
 		}
 	}
 	
-	private static void createExample(Path basefolder, Map<Path, JsonElement> map) {
-		for (Entry<Path, JsonElement> i : map.entrySet()) {
-			Path parent;
-			Path path = i.getKey();
-			if (path.getParent() != null) {
-				parent = basefolder.resolve(path.getParent());
+	private static void createExample(Path rootDirectory, Map<R, JsonElement> map) {
+		for (Entry<R, JsonElement> i : map.entrySet()) {
+			Path directory;
+			R path = i.getKey();
+			R parent = path.getParent();
+			if (parent != null) {
+				directory = rootDirectory.resolve(parent.toString());
 			} else {
-				parent = basefolder;
+				directory = rootDirectory;
 			}
 			try {
-				Files.createDirectories(parent);
+				Files.createDirectories(directory);
 			} catch (FileAlreadyExistsException e) {
 			} catch (IOException e) {
-				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
+				HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", directory, e);
 			}
 
-			Path target = basefolder.resolve(path);
+			Path target = rootDirectory.resolve(path.toString());
 			try {
 				Files.createFile(target);
 			} catch (FileAlreadyExistsException e) {
@@ -488,39 +465,6 @@ public class ConfigurationHandler {
 			} catch (IOException e) {
 				HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
 			}
-		}
-		
-		try {
-			HAPlugins.getInstance().walkPlugins(null, (path, txt) -> {
-				Path parent;
-				if (path.getParent() != null) {
-					parent = basefolder.resolve(path.getParent());
-				} else {
-					parent = basefolder;
-				}
-				try {
-					Files.createDirectories(parent);
-				} catch (FileAlreadyExistsException e) {
-				} catch (IOException e) {
-					HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
-				}
-
-				Path target = basefolder.resolve(path);
-				try {
-					Files.createFile(target);
-				} catch (FileAlreadyExistsException e) {
-				} catch (IOException e) {
-					HungryAnimals.logger.error("Couldn\'t create file {}\n{}", target, e);
-				}
-				try {
-					Files.write(target, Lists.newArrayList(txt));
-				} catch (IOException e) {
-					HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
-				}
-			});
-		} catch (IOException | URISyntaxException e) {
-			HungryAnimals.logger.warn("Problem occured durin creating example config folder.");
-			e.printStackTrace();
 		}
 	}
 

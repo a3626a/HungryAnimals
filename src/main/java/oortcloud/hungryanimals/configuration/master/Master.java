@@ -1,7 +1,5 @@
 package oortcloud.hungryanimals.configuration.master;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,19 +19,20 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.Pair;
+import oortcloud.hungryanimals.utils.R;
 
 public class Master {
 
-	public static Supplier<List<Pair<Predicate<Path>, UnaryOperator<JsonElement>>>> get(Node node, String domain) {
+	public static Supplier<List<Pair<Predicate<R>, UnaryOperator<JsonElement>>>> get(Node node, String domain) {
 		return () -> {
-			List<Pair<Predicate<Path>, UnaryOperator<JsonElement>>> ret = new ArrayList<>();
-			Map<Path, JsonElement> map = node.build();
+			List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> ret = new ArrayList<>();
+			Map<R, JsonElement> map = node.build();
 			
-			JsonElement master = map.get(Paths.get("master", "master.json"));
+			JsonElement master = map.get(R.get("master", "master.json"));
 			if (master.isJsonObject()) {
 				JsonObject jsonObj = (JsonObject) master;
-				JsonElement difficulty = map.get(Paths.get("master", "difficulty", JsonUtils.getString(jsonObj, "difficulty") + ".json"));
-				JsonElement tempo = map.get(Paths.get("master", "tempo", JsonUtils.getString(jsonObj, "tempo") + ".json"));
+				JsonElement difficulty = map.get(R.get("master", "difficulty", JsonUtils.getString(jsonObj, "difficulty") + ".json"));
+				JsonElement tempo = map.get(R.get("master", "tempo", JsonUtils.getString(jsonObj, "tempo") + ".json"));
 				ret.addAll(parse(difficulty, domain));
 				ret.addAll(parse(tempo, domain));
 				// TODO custom master config
@@ -44,8 +43,8 @@ public class Master {
 		};
 	}
 
-	public static List<Pair<Predicate<Path>, UnaryOperator<JsonElement>>> parse(JsonElement jsonEle, String domain) {
-		List<Pair<Predicate<Path>, UnaryOperator<JsonElement>>> list = new ArrayList<>();
+	public static List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> parse(JsonElement jsonEle, String domain) {
+		List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> list = new ArrayList<>();
 
 		if (jsonEle.isJsonArray()) {
 			JsonArray jsonArray = (JsonArray) jsonEle;
@@ -53,7 +52,7 @@ public class Master {
 				if (i.isJsonObject()) {
 					JsonObject iObj = (JsonObject) i;
 					if (domain.equals("all") || domain.equals(JsonUtils.getString(iObj, "domain"))) {
-						list.add(new Pair<Predicate<Path>, UnaryOperator<JsonElement>>(parsePattern(JsonUtils.getString(iObj, "pattern")),
+						list.add(new Pair<Predicate<R>, UnaryOperator<JsonElement>>(parsePattern(JsonUtils.getString(iObj, "pattern")),
 								parseModifier(iObj.get("modifier"))));
 					} else {
 						continue;
@@ -68,7 +67,7 @@ public class Master {
 		}
 	}
 
-	private static Predicate<Path> parsePattern(String pattern) {
+	private static Predicate<R> parsePattern(String pattern) {
 		// File seperator must be replaced into /, because RE considers \ as special character.
 		pattern = pattern.replace("\\", "/");
 		pattern = pattern.replace("*", ".*");

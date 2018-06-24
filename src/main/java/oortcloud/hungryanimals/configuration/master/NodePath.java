@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.utils.R;
 
 public class NodePath extends Node {
 
@@ -22,14 +23,14 @@ public class NodePath extends Node {
 	}
 
 	@Override
-	public Map<Path, JsonElement> build() {
-		Map<Path, JsonElement> map = new HashMap<>();
+	public Map<R, JsonElement> build() {
+		Map<R, JsonElement> map = new HashMap<>();
 		try (Stream<Path> stream = Files.walk(base)) {
 			stream.forEach((Path path) -> {
 				if (Files.isRegularFile(path)) {
 					if (path.toString().endsWith(".json")) {
 						try {
-							map.put(base.relativize(path), (new JsonParser()).parse(new String(Files.readAllBytes(path))));
+							map.put(R.get(base.relativize(path)), (new JsonParser()).parse(new String(Files.readAllBytes(path))));
 						} catch (JsonSyntaxException e) {
 							HungryAnimals.logger.warn("{} is not a valid json file.", path);
 						} catch (IOException e) {
