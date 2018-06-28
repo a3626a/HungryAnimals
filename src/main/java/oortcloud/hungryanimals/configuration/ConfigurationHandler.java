@@ -95,25 +95,24 @@ public class ConfigurationHandler {
 	private static ConfigurationHandlerJSON disease;
 	private static ConfigurationHandlerJSON overeat;
 	private static ConfigurationHandlerJSON slingshot;
-	
+
 	public static Node baked;
 	public static NodeCache example;
 	public static Node master;
 	public static Map<R, JsonElement> map;
-	
+
 	public static Path exampleFolder;
 	public static Path baseFolder;
-	
+
 	public static Gson GSON_INSTANCE_ITEM_STACK = new GsonBuilder().registerTypeAdapter(ItemStack.class, new ConfigurationHandler.Serializer()).create();
 
 	public static void init(FMLPreInitializationEvent event) {
 		baseFolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID);
-		exampleFolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID+"_example");
+		exampleFolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID + "_example");
 
 		// Master Config Graph
-		master = new NodeOverride(new NodePath(baseFolder.resolve("master")), 
-				                  new NodePlugin(Paths.get("master")));
-		
+		master = new NodeOverride(new NodePath(baseFolder.resolve("master")), new NodePlugin(Paths.get("master")));
+
 		// Config Graph
 		example = new NodeCache(new NodeModifier(new NodePlugin(), Master.get(master, "default")));
 		baked = new NodeOverride(new NodeModifier(new NodePath(baseFolder), Master.get(master, "custom")), example);
@@ -199,7 +198,7 @@ public class ConfigurationHandler {
 		});
 		productions = new ConfigurationHandlerJSONAnimal(baseFolder, "productions", (jsonElement, animal) -> {
 			JsonArray jsonArr = jsonElement.getAsJsonArray();
-			
+
 			for (JsonElement i : jsonArr) {
 				Function<EntityLiving, IProduction> factory = Productions.getInstance().parse(i);
 				if (factory != null) {
@@ -209,8 +208,7 @@ public class ConfigurationHandler {
 				}
 			}
 		});
-		
-		
+
 		recipes = new ConfigurationHandlerJSON(baseFolder, "recipes/animalglue", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
@@ -284,7 +282,7 @@ public class ConfigurationHandler {
 			for (JsonElement jsonEle : jsonArr) {
 
 				String name;
-				
+
 				HungryAnimalEntry entry = new HungryAnimalEntry();
 				if (jsonEle.isJsonObject()) {
 					JsonObject jsonObj = jsonEle.getAsJsonObject();
@@ -341,48 +339,65 @@ public class ConfigurationHandler {
 
 		slingshot = new ConfigurationHandlerJSON(baseFolder, "slingshot", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
-			
+
 			JsonElement ammos = jsonObj.get("ammos");
 			List<Ingredient> ingredients = ModJsonUtils.getIngredients(ammos);
 			for (Ingredient i : ingredients)
-				((ItemSlingShot)ModItems.slingshot).ammos.add(i);
-			
+				((ItemSlingShot) ModItems.slingshot).ammos.add(i);
 
-			((ItemSlingShot)ModItems.slingshot).damage = JsonUtils.getFloat(jsonObj, "damage");
+			((ItemSlingShot) ModItems.slingshot).damage = JsonUtils.getFloat(jsonObj, "damage");
 		});
-		
+
 		ModLootTables.init(baseFolder);
 	}
 
 	public static void syncPre() {
-		map = baked.build();
-		
-		createDirectories(baseFolder, example.cached);
-		createExample(exampleFolder, example.cached);
-		
-		disease.sync(map);
-		overeat.sync(map);
+		try {
+			map = baked.build();
+		} catch (RuntimeException e) {
+			HungryAnimals.logger.error(
+					"An error occured while preparing configruation system." +
+			        "Loading configuration is aborted." +
+			        "Please read following error log and resolve the problem.");
+			e.printStackTrace();
+
+			// map is already null though, explicitly set to null.
+			map = null;
+		}
+
+		if (map != null) {
+			createDirectories(baseFolder, example.cached);
+			createExample(exampleFolder, example.cached);
+
+			disease.sync(map);
+			overeat.sync(map);
+		}
 	}
 
 	public static void sync() {
-		animal.sync(map);
-		foodPreferencesBlock.sync(map);
-		foodPreferencesItem.sync(map);
-		foodPreferencesEntity.sync(map);
-		foodPreferencesFluid.sync(map);
-		attributes.sync(map);
-		lootTables.sync(map);
-		ais.sync(map);
-		recipes.sync(map);
-		world.sync(map);
-		cures.sync(map);
-		inheat.sync(map);
-		generators.sync(map);
-		productions.sync(map);
-		slingshot.sync(map);
+		if (map != null) {
+			animal.sync(map);
+			foodPreferencesBlock.sync(map);
+			foodPreferencesItem.sync(map);
+			foodPreferencesEntity.sync(map);
+			foodPreferencesFluid.sync(map);
+			attributes.sync(map);
+			lootTables.sync(map);
+			ais.sync(map);
+			recipes.sync(map);
+			world.sync(map);
+			cures.sync(map);
+			inheat.sync(map);
+			generators.sync(map);
+			productions.sync(map);
+			slingshot.sync(map);
+		}
 	}
 
 	public static void syncPost() {
+		if (map != null) {
+			
+		}
 	}
 
 	public static class Serializer implements JsonDeserializer<ItemStack> {
@@ -412,7 +427,7 @@ public class ConfigurationHandler {
 		String domain = location.getResourceDomain();
 		String path = location.getResourcePath();
 		String[] paths = path.split("/");
-		paths[paths.length-1] += "."+ext;
+		paths[paths.length - 1] += "." + ext;
 		return Paths.get(domain, paths);
 	}
 
@@ -434,7 +449,7 @@ public class ConfigurationHandler {
 			}
 		}
 	}
-	
+
 	private static void createExample(Path rootDirectory, Map<R, JsonElement> map) {
 		for (Entry<R, JsonElement> i : map.entrySet()) {
 			Path directory;

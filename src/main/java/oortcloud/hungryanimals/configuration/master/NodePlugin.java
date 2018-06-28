@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.google.gson.JsonElement;
 
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.utils.R;
 
@@ -38,7 +37,7 @@ public class NodePlugin extends Node {
 				}
 			}, null);
 		} catch (IOException | URISyntaxException e) {
-			HungryAnimals.logger.error("Failed to load default json files.");
+			throw new RuntimeException("An error occured while parsing default(built-in) configuration files. Please report to mod author.", e);
 		}
 		return map;
 	}

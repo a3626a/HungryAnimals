@@ -8,10 +8,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.R;
 
 public class NodePath extends Node {
@@ -31,16 +30,14 @@ public class NodePath extends Node {
 					if (path.toString().endsWith(".json")) {
 						try {
 							map.put(R.get(base.relativize(path)), (new JsonParser()).parse(new String(Files.readAllBytes(path))));
-						} catch (JsonSyntaxException e) {
-							HungryAnimals.logger.warn("{} is not a valid json file.", path);
-						} catch (IOException e) {
-							HungryAnimals.logger.warn("{} is corrupted.", path);
+						} catch (JsonParseException | IOException e) {
+							throw new RuntimeException(String.format("An error occured while parsing %s.", path.toString()), e);
 						}
 					}
 				}
 			});
 		} catch (IOException e) {
-			// called when base doesn't exist. No problem.
+			throw new RuntimeException(String.format("An error occured while traversing %s.", base.toString()), e);
 		}
 
 		return map;
