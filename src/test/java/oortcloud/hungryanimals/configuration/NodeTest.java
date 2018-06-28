@@ -58,8 +58,7 @@ public class NodeTest {
 	}
 	
 	@Test
-	public void NodeOverride_Build_Overrideen() {
-		
+	public void NodeOverride_Build() {
 		Map<R, JsonElement> map1 = new NodeOverride(new NodePath(directory1), new NodePath(directory2)).build();
 		assertEquals(1, map1.get(R.get("a.json")).getAsJsonObject().get("field1").getAsInt());
 		assertEquals(2, map1.get(R.get("b.json")).getAsJsonObject().get("field1").getAsInt());
@@ -67,7 +66,6 @@ public class NodeTest {
 		Map<R, JsonElement> map2 = new NodeOverride(new NodePath(directory2), new NodePath(directory1)).build();
 		assertEquals(3, map2.get(R.get("a.json")).getAsJsonObject().get("field1").getAsInt());
 		assertEquals(2, map2.get(R.get("b.json")).getAsJsonObject().get("field1").getAsInt());
-		
 	}
 	
 }
