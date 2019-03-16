@@ -37,7 +37,7 @@ public class NodePath extends Node {
 				}
 			});
 		} catch (IOException e) {
-			throw new RuntimeException(String.format("An error occured while traversing %s.", base.toString()), e);
+			// When there's no configuration folder. 100% Ok.
 		}
 
 		return map;

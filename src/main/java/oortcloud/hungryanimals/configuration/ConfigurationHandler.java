@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.configuration;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.URISyntaxException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,6 +40,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.API;
+import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.configuration.master.Master;
@@ -356,8 +358,8 @@ public class ConfigurationHandler {
 			map = baked.build();
 		} catch (RuntimeException e) {
 			HungryAnimals.logger.error(
-					"An error occured while preparing configruation system." +
-			        "Loading configuration is aborted." +
+					"An error occured while preparing configruation system. " +
+			        "Loading configuration is aborted. " +
 			        "Please read following error log and resolve the problem.");
 			e.printStackTrace();
 
@@ -480,6 +482,40 @@ public class ConfigurationHandler {
 			} catch (IOException e) {
 				HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
 			}
+		}
+		
+		try {
+			HAPlugins.getInstance().walkPlugins(null, (path, txt) -> {
+				Path directory;
+				R parent = path.getParent();
+				if (parent != null) {
+					directory = rootDirectory.resolve(parent.toString());
+				} else {
+					directory = rootDirectory;
+				}
+				try {
+					Files.createDirectories(directory);
+				} catch (FileAlreadyExistsException e) {
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create folder {}\n{}", parent, e);
+				}
+
+				Path target = rootDirectory.resolve(path.toString());
+				try {
+					Files.createFile(target);
+				} catch (FileAlreadyExistsException e) {
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create file {}\n{}", target, e);
+				}
+				try {
+					Files.write(target, Lists.newArrayList(txt));
+				} catch (IOException e) {
+					HungryAnimals.logger.error("Couldn\'t create write {}\n{}", target, e);
+				}
+			});
+		} catch (IOException | URISyntaxException e) {
+			HungryAnimals.logger.warn("Problem occured durin creating example config folder.");
+			e.printStackTrace();
 		}
 	}
 
