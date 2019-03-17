@@ -158,8 +158,10 @@ public class ConfigurationHandler {
 					HungryAnimals.logger.error("cannot find the animal {}", resourceLocation);
 				}
 			}
-			FoodPreferences.getInstance().REGISTRY_ENTITY.put(animal, new FoodPreferenceEntity(set));
+			FoodPreferences.getInstance().getRegistryEntity().put(animal, new FoodPreferenceEntity(set));
 		});
+		
+		
 		foodPreferencesFluid = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/fluid", (jsonElement, animal) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
@@ -373,6 +375,8 @@ public class ConfigurationHandler {
 
 			disease.sync(map);
 			overeat.sync(map);
+			
+			FoodPreferences.getInstance().setRegistryEntityLoader(()->foodPreferencesEntity.sync(map));
 		}
 	}
 
@@ -381,7 +385,6 @@ public class ConfigurationHandler {
 			animal.sync(map);
 			foodPreferencesBlock.sync(map);
 			foodPreferencesItem.sync(map);
-			foodPreferencesEntity.sync(map);
 			foodPreferencesFluid.sync(map);
 			attributes.sync(map);
 			lootTables.sync(map);

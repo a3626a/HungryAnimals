@@ -37,7 +37,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 			@Override
 			public boolean apply(@Nullable EntityLiving input) {
 				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
-				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
+				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
 
 				if (input == null)
 					return false;
@@ -53,7 +53,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 				return pref.canEat(cap, input);
 			}
 		});
-		pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
+		pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
 		cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
 		this.herding = herding;
 	}
