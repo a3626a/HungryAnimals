@@ -73,8 +73,13 @@ public class ModLootTables implements ILootTableRegistry {
 	@SubscribeEvent
 	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
 		LootTable table = tables.get(event.getName());
-		if (table == null) {
+		if (table == null) { 
 			return;
+		} else {
+			if (event.getTable().isFrozen()) {
+				HungryAnimals.logger.warn("Loot table for {} is frozen. Therefore, HungryAnimals can't modify it.", event.getName());
+				return;
+			}
 		}
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
