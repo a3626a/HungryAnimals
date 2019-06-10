@@ -9,10 +9,10 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -20,9 +20,8 @@ import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
 
 public class HandlerClientSyncHungry implements IMessageHandler<PacketClientSyncHungry, IMessage> {
 
-	public static Method setScale = ReflectionHelper.findMethod(EntityAgeable.class, "setScale", "func_98055_j",
-			float.class);
-
+	public static Method setScale = ObfuscationReflectionHelper.findMethod(EntityAgeable.class, "func_98055_j", void.class, float.class);
+	
 	@Override
 	public IMessage onMessage(PacketClientSyncHungry message, MessageContext ctx) {
 		Minecraft.getMinecraft().addScheduledTask(() -> {
