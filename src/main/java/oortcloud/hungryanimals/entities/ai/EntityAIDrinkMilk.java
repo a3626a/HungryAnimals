@@ -13,6 +13,8 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -137,7 +139,13 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 						
 						WorldServer world = (WorldServer) childAnimal.getEntityWorld();
 						for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
-							PacketClientSpawnParticle packet = new PacketClientSpawnParticle(childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox()).getCenter());
+							AxisAlignedBB boxMilking = childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox());
+							Vec3d pointMilking = new Vec3d(
+									(boxMilking.maxX + boxMilking.minX) * 0.5D,
+									(boxMilking.maxY + boxMilking.minY) * 0.5D,
+									(boxMilking.maxZ + boxMilking.minZ) * 0.5D
+							);
+							PacketClientSpawnParticle packet = new PacketClientSpawnParticle(pointMilking);
 							HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 						}
 					}
