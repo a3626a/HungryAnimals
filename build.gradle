@@ -11,36 +11,33 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-targetCompatibility=8
-sourceCompatibility=8
+targetCompatibility = 8
+sourceCompatibility = 8
 
 version = "${mc_version}-${mod_version}"
-group= "com.oortcloud.hungryanimals"
+group = "com.oortcloud.hungryanimals"
 archivesBaseName = "hungryanimals"
 
 minecraft {
     version = "${mc_version}-14.23.5.2838"
     runDir = "run"
-    
-	replace "@VERSION@", project.version
+
+    replace "@VERSION@", project.version
     replaceIn "References.java"
-	
+
     mappings = "snapshot_20171003"
 }
 
-dependencies {}
-
-processResources
-{
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
-        
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
@@ -69,12 +66,12 @@ repositories {
 
 dependencies {
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11"
-    
+
     // compile against the JEI API but do not include it at runtime
     deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-    
+
     // JUnit
     compile "junit:junit:4.11"
 }
