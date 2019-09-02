@@ -25,12 +25,16 @@ public class ModJsonUtils {
 			JsonArray jsonArr = (JsonArray) jsonEle;
 			for (JsonElement jsonObj : jsonArr) {
 				Ingredient ing = getIngredient(jsonObj);
-				list.add(ing);
+				if (ing != null) {
+					list.add(ing);
+				}
 			}
 		} else {
 			// parse one
 			Ingredient ing = getIngredient(jsonEle);
-			list.add(ing);
+			if (ing != null) {
+				list.add(ing);
+			}
 		}
 
 		return list;
