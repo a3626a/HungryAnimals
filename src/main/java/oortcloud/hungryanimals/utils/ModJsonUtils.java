@@ -14,6 +14,8 @@ import net.minecraftforge.common.crafting.JsonContext;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 
+import javax.annotation.Nullable;
+
 public class ModJsonUtils {
 
 	public static List<Ingredient> getIngredients(JsonElement jsonEle) {
@@ -34,6 +36,7 @@ public class ModJsonUtils {
 		return list;
 	}
 
+	@Nullable
 	public static Ingredient getIngredient(JsonElement jsonEle) {
 		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("Ingredient must be an object.");
@@ -41,7 +44,12 @@ public class ModJsonUtils {
 		}
 
 		JsonObject jsonObj = (JsonObject) jsonEle;
-		Ingredient ing = CraftingHelper.getIngredient(jsonObj, new JsonContext(References.MODID));
+		Ingredient ing = null;
+		try {
+			ing = CraftingHelper.getIngredient(jsonObj, new JsonContext(References.MODID));
+		} catch (JsonSyntaxException e) {
+			HungryAnimals.logger.error("Failed to read ingredient while parsing {}", jsonObj);
+		}
 
 		return ing;
 	}

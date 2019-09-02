@@ -220,7 +220,12 @@ public class ConfigurationHandler {
 				JsonObject jsonObj = i.getAsJsonObject();
 				Ingredient ing = ModJsonUtils.getIngredient(jsonObj.get("item"));
 				int count = jsonObj.getAsJsonPrimitive("count").getAsInt();
-				RecipeAnimalGlue.addRecipe(ing, count);
+
+				if (ing != null) {
+					RecipeAnimalGlue.addRecipe(ing, count);
+				} else {
+					HungryAnimals.logger.error("{} is not a valid animal glue recipe", i);
+				}
 			}
 		});
 		world = new ConfigurationHandlerJSON(baseFolder, "world", (jsonElement) -> {
