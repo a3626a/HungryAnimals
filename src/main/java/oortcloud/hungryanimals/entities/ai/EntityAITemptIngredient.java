@@ -62,7 +62,15 @@ public class EntityAITemptIngredient extends EntityAITempt {
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 		boolean scaredBy = JsonUtils.getBoolean(jsonObject, "scared_by");
 		List<Ingredient> items = ModJsonUtils.getIngredients(jsonObject.get("items"));
-		
+
+		if (items.isEmpty()) {
+			HungryAnimals.logger.error(
+					"items can't be empty for EntityAITemptIngredient. {} is not a valid AI modifier.",
+					jsonEle
+			);
+			return;
+		}
+
 		AIFactory factory = (entity) -> {
 			if (entity instanceof EntityCreature) {
 				return new EntityAITemptIngredient((EntityCreature) entity, speed, scaredBy, items);
