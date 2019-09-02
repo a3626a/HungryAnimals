@@ -141,7 +141,12 @@ public class ConfigurationHandler {
 				Ingredient ing = ModJsonUtils.getIngredient(jsonObj.get("item"));
 				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
 				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
-				list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
+
+				if (ing != null) {
+					list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
+				} else {
+					HungryAnimals.logger.error("{} is not a valid item food preference", i);
+				}
 			}
 			FoodPreferences.getInstance().REGISTRY_ITEM.put(animal, new FoodPreferenceIngredient(list));
 		});
@@ -246,11 +251,16 @@ public class ConfigurationHandler {
 		inheat = new ConfigurationHandlerJSON(baseFolder, "inheat", (jsonElement) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
-			for (JsonElement jsonEle : jsonArr) {
-				JsonElement item = jsonEle.getAsJsonObject().get("item");
-				Ingredient inheat = ModJsonUtils.getIngredient(item);
-				int inheatDuration = JsonUtils.getInt(jsonEle.getAsJsonObject(), "duration");
-				InHeats.getInstance().register(inheat, inheatDuration);
+			for (JsonElement i : jsonArr) {
+				JsonObject obj = i.getAsJsonObject();
+				Ingredient ing = ModJsonUtils.getIngredient(obj.get("item"));
+				int inheatDuration = JsonUtils.getInt(obj, "duration");
+
+				if (ing != null) {
+					InHeats.getInstance().register(ing, inheatDuration);
+				} else {
+					HungryAnimals.logger.error("{} is not a valid inheat item", i);
+				}
 			}
 		});
 		generators = new ConfigurationHandlerJSON(baseFolder, "generators", (jsonElement) -> {
