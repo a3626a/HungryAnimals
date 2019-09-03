@@ -37,6 +37,8 @@ public class EntityBola extends Entity implements IProjectile {
     {
         public boolean apply(@Nullable Entity entity)
         {
+        	if (entity == null)
+        		return false;
             return entity.canBeCollidedWith();
         }
     });

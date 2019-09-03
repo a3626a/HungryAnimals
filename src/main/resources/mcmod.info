@@ -14,7 +14,7 @@
     "screenshots": [],
     "parent": "",
     "requiredMods": [ "forge" ],
-    "dependencies": ["theoneprobe"],
+    "dependencies": ["theoneprobe", "wolfarmor", "betterwithmods"],
     "dependants": [],
     "useDependencyInformation": true
   }]

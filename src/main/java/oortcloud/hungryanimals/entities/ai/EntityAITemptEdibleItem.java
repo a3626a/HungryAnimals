@@ -1,13 +1,16 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -20,6 +23,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAITemptEdibleItem extends EntityAITempt {
 	/** The entity using this AI that is tempted by the player. */
@@ -27,6 +31,7 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 	private IFoodPreference<ItemStack> pref;
 
 	private ICapabilityHungryAnimal capHungry;
+	@Nullable
 	private ICapabilityTamableAnimal capTaming;
 	
 	public EntityAITemptEdibleItem(EntityCreature temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn) {
@@ -40,7 +45,7 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && capTaming.getTamingLevel() == TamingLevel.TAMED;
+		return super.shouldExecute() && Tamings.getLevel(capTaming) == TamingLevel.TAMED;
 	}
 
 	@Override
@@ -59,11 +64,19 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
 		boolean scaredBy = JsonUtils.getBoolean(jsonObject, "scared_by");
 		
-		AIFactory factory = (entity) -> new EntityAITemptEdibleItem(entity, speed, scaredBy);
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAITemptEdibleItem((EntityCreature) entity, speed, scaredBy);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Tempt Item must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTask().after(EntityAISwimming.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
+		                     .before(EntityAIWanderAvoidWater.class)
 		                     .put(factory);
 	}
 }

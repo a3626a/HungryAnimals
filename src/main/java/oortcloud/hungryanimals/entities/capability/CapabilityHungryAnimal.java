@@ -1,15 +1,16 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.potion.ModPotions;
 
 public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
@@ -19,12 +20,13 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	private double weight; 
 	
 	private boolean prevIsFull;
+	private int prevWeight;
 	
-	private EntityAnimal entity;
+	private EntityLiving entity;
 
 	public CapabilityHungryAnimal() {}
 	
-	public CapabilityHungryAnimal(EntityAnimal entity) {
+	public CapabilityHungryAnimal(EntityLiving entity) {
 		this.entity = entity;
 		setStomach(0.0);
 		setNutrient(0.0);
@@ -80,10 +82,15 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 			this.stomach = stomach;
 		}
 		boolean currIsFull = getStomach() >= getMaxStomach();
+		
 		if (currIsFull != prevIsFull) {
 			sync();
+			if (currIsFull && !entity.isPotionActive(ModPotions.potionOvereat)) {
+				entity.addPotionEffect(new PotionEffect(ModPotions.potionOvereat, Integer.MAX_VALUE, 0, false, false));
+			}
 		}
 		prevIsFull = currIsFull;
+		
 		return oldStomach;
 	}
 
@@ -114,6 +121,13 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		} else {
 			this.weight = weight;
 		}
+		
+		int currWeight = (int) getWeight();
+		if (currWeight != prevWeight) {
+			sync();
+		}
+		prevWeight = currWeight;
+		
 		return oldWeight;
 	}
 	
@@ -124,7 +138,17 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	
 	@Override
 	public double getNormalWeight() {
-		int age = entity.getGrowingAge();
+		int age;
+		if (entity.getEntityWorld() == null) {
+			age = 0;
+		} else {
+			ICapabilityAgeable capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
+			if (capAgeable == null) {
+				age = 0;
+			} else {
+				age = capAgeable.getAge();
+			}
+		}
 		double hungerWeightNormal = entity.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
 		if (age < 0) {
 			age = -age;
@@ -163,8 +187,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) entity.getEntityWorld();
 			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(entity)) {
-				PacketEntityClient packet = new PacketEntityClient(SyncIndex.STOMACH_SYNC, entity);
-				packet.setDouble(getStomach());
+				PacketClientSyncHungry packet = new PacketClientSyncHungry(entity, getStomach(), getWeight());
 				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 			}
 		}
@@ -172,8 +195,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	public void syncTo(EntityPlayerMP target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketEntityClient packet = new PacketEntityClient(SyncIndex.STOMACH_SYNC, entity);
-			packet.setDouble(getStomach());
+			PacketClientSyncHungry packet = new PacketClientSyncHungry(entity, getStomach(), getWeight());
 			HungryAnimals.simpleChannel.sendTo(packet, target);
 		}
 	}

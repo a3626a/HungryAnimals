@@ -1,0 +1,36 @@
+itemGroup.tabHungryAnimals=Hungry Animals
+
+tile.hungryanimals.excreta.name=Dışkı
+tile.hungryanimals.niterbed.name=Tezek
+tile.hungryanimals.trough.name=Yalak
+tile.hungryanimals.trapcover.name=Tuzak Kaplaması
+tile.hungryanimals.floorcoverleaf.name=Yapraklı Zemin Kaplaması
+tile.hungryanimals.floorcoverwool.name=Yünlü Zemin Kaplaması
+tile.hungryanimals.floorcoverhay.name=Samanlı Zemin Kaplaması
+item.hungryanimals.manure.name=Kuru Dışkı
+item.hungryanimals.woodash.name=Tahta Külü
+item.hungryanimals.saltpeter.name=Güherçile
+item.hungryanimals.trough.name=Yalak
+item.hungryanimals.slingshot.name=Sapan
+item.hungryanimals.bola.name=Bola
+item.hungryanimals.herbicide.name=Herbisit - Bitki öldürücü
+item.hungryanimals.tendon.name=Tendon
+item.hungryanimals.debugglass.name=Hata Ayıklama Aleti
+item.hungryanimals.animalglue.name=Hayvan Tutkalı
+item.hungryanimals.compositewood.name=Kompozit Odun
+
+hungryanimals.jei.animalglue=Hayvan Tutkalı
+hungryanimals.jei.animalglue.description=Hayvan tutkalı, belirli maddeler ile doldurulmuş bir kazana sağ tıklayarak  elde edilebilir. Bu işlem, kazandaki suyun üçte birini harcayacaktır.
+
+potion.growth=Hızlı Yetişme
+potion.disease=Hastalık
+potion.inheat=Kızma Dönemi
+potion.young=Genç
+potion.overeat=Oburluk
+
+minecraft.cow.milk=Süt
+minecraft.chicken.egg=Yumurta
+minecraft.llama.milk=Süt
+minecraft.mooshroom.milk=Güveç
+
+fluid.milk=Süt

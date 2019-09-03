@@ -2,8 +2,9 @@ package oortcloud.hungryanimals.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,10 +14,11 @@ import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.core.network.PacketPlayerServer;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketServerDGSet;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 
@@ -32,18 +34,17 @@ public class ItemDebugGlass extends Item {
 	}
 
 	@Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
 		if (playerIn.getEntityWorld().isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
-				PacketPlayerServer msg = new PacketPlayerServer(SyncIndex.DEBUG_SETTARGET, playerIn.getName());
-				msg.setInt(entity.getEntityId());
+				PacketServerDGSet msg = new PacketServerDGSet(playerIn, entity);
 				HungryAnimals.simpleChannel.sendToServer(msg);
 				return true;
 			}
 		}
 		return false;
-    }
+	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -52,25 +53,41 @@ public class ItemDebugGlass extends Item {
 			if (tag != null && tag.hasKey("target")) {
 				Entity target = worldIn.getEntityByID(tag.getInteger("target"));
 				if (target != null) {
-					if (!(target instanceof EntityAnimal))
+					if (!(target instanceof EntityLiving))
 						return;
 
-					EntityAnimal entity = (EntityAnimal) target;
+					EntityLiving animal = (EntityLiving) target;
 
-					if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
-						ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+					if (capHungry != null) {
 						tag.setDouble("weight", capHungry.getWeight());
 						tag.setDouble("nutrient", capHungry.getNutrient());
 						tag.setDouble("stomach", capHungry.getStomach());
 						tag.setDouble("excretion", capHungry.getExcretion());
 					}
-					
-					if (entity.hasCapability(ProviderTamableAnimal.CAP, null)) {
-						ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+
+					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
+					if (capTaming != null) {
 						tag.setDouble("taming", capTaming.getTaming());
 					}
 					
-					tag.setInteger("age", ((EntityAnimal) target).getGrowingAge());
+					ICapabilityAgeable capAgeable = animal.getCapability(ProviderAgeable.CAP, null);
+					if (capAgeable != null) {
+						tag.setInteger("age", capAgeable.getAge());
+					}
+					
+					int index = 0;
+					for (EntityAITaskEntry i : animal.tasks.taskEntries) {
+						NBTTagCompound iTag = new NBTTagCompound();
+						String name = i.action.getClass().toString();
+						name = name.substring(name.lastIndexOf(".")+1);
+						iTag.setString("name", name);
+						iTag.setInteger("priority", i.priority);
+						iTag.setBoolean("using", i.using);
+						tag.setTag("ais."+index, iTag);
+						index += 1;
+					}
+					tag.setInteger("ais.length", index);
 				}
 			}
 		}

@@ -1,11 +1,13 @@
 package oortcloud.hungryanimals.entities.food_preferences;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
-import oortcloud.hungryanimals.entities.event.EntityEventHandler.Pair;
 import oortcloud.hungryanimals.utils.HashBlockState;
+import oortcloud.hungryanimals.utils.Pair;
 
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
@@ -58,4 +60,8 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 		return map.toString();
 	}
 
+	public List<IBlockState> getKeys() {
+		return map.keySet().stream().map((x)->x.toBlockState()).collect(Collectors.toList());
+	}
+	
 }

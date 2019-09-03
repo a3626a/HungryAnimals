@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
-import net.minecraft.entity.passive.EntityAnimal;
 import oortcloud.hungryanimals.utils.graph.Graph;
 import oortcloud.hungryanimals.utils.graph.GraphSolver;
 import oortcloud.hungryanimals.utils.graph.Vertex;
 
-public class AIContainerTask implements IAIContainer<EntityAnimal> {
+public class AIContainerTask implements IAIContainer<EntityLiving> {
 
 	protected LinkedList<AIFactoryGraph> factoriesGraph;
 	protected LinkedList<AIFactory> factoriesFirst;
@@ -47,7 +47,7 @@ public class AIContainerTask implements IAIContainer<EntityAnimal> {
 	}
 
 	@Override
-	public void registerAI(EntityAnimal entity) {
+	public void registerAI(EntityLiving entity) {
 		if (removeAll) {
 			entity.tasks.taskEntries.clear();
 		} else {
@@ -218,7 +218,7 @@ public class AIContainerTask implements IAIContainer<EntityAnimal> {
 			this.posterior = posterior;
 		}
 
-		public Vertex<EntityAIBase> addVertex(Graph<EntityAIBase> g, EntityAnimal entity) {
+		public Vertex<EntityAIBase> addVertex(Graph<EntityAIBase> g, EntityLiving entity) {
 			this.v = new Vertex<EntityAIBase>(aiFactory.apply(entity));
 			g.vertices.add(v);
 			return v;

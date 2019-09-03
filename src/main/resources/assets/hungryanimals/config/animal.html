@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<title>Hungry Animals Config Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="style.css">
+<body>
+
+<!-- Navbar -->
+<div id="nav-bar" class="w3-top">
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Menu</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="animal.html">Animal Registry</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="cures.html">Cure Registry</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="inheat.html">Inheat Item Registry</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="disease.html">Disease Effect</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="overeat.html">Overeat Effect</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="slingshot.html">Slingshot</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="generators.html">Grass Generation</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="world.html">Block Options</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="miscellaneous.html">Miscellaneous</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Introduction</h1>
+      <p>'animal.json' contains list of the names of animals that will be registered to Hungry Animals.</p>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Grammar</h1>
+
+<pre>
+<code class="ha-replacement">"attributes/modid/animal.json"</code> : 
+    [
+        <a href="#hungry_animal_entry" class="ha-replacement">hungry_animal_entry</a>,
+        <a href="#hungry_animal_entry" class="ha-replacement">hungry_animal_entry</a>,
+        ...
+    ]
+</pre>
+<pre>
+<a id="hungry_animal_entry" class="ha-replacement">hungry_animal_entry</a> :
+    <a class="ha-replacement">string</a>
+    |
+    {
+        "name" : <a class="ha-replacement">string</a>,
+        "tamable" : <a class="ha-replacement">boolean</a>,
+        "model_growing" : <a class="ha-replacement">boolean</a>,
+        "sexual" : <a class="ha-replacement">boolean</a>
+    }
+</pre>
+    </div>
+  </div>
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Usage</h1>
+      <p>if <code>"tamable"</code> is false, then taming is disabled for the animals. Default value is true.<br/>
+      <p>if <code>"model_growing"</code> is true, then animals's sizes grow depending on their weight. Default value is true.<br/>
+      <p>if <code>"sexual"</code> is false, then animals become asexual. Default value is true.<br/>
+      
+      Example)</p>
+<pre>
+[
+    {
+        "name" : "minecraft:cow"
+        "tamable" : false,
+        "model_growing" : true
+    },
+    "minecraft:chicken"
+]
+</pre>
+      <p>Cow and Chicken are registered, but cow's taming is disabled. "Disabling taming" is to consider cow as tamed always. Read console logs, or use Debug Glass in game to get name of an animal.</p>
+    </div>
+  </div>
+
+
+
+
+
+    </div>
+  </div>
+
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+document.getElementById("nav-bar").innerHTML='<object type="text/html" data="nav-bar.html" ></object>';
+</script>
+
+</body>
+</html>

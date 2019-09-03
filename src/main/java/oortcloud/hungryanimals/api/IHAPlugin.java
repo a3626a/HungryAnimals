@@ -8,5 +8,6 @@ public interface IHAPlugin {
 	public void registerGrassGenerators(IGrassGeneratorRegistry registry);
 	public void registerLootTables(ILootTableRegistry registry);
 	public void registerAttributes(IAttributeRegistry registry);
+	public void registerProductions(IProductionRegistry registry);
 	
 }

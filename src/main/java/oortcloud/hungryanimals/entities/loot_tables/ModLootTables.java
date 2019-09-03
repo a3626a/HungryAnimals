@@ -1,13 +1,14 @@
 package oortcloud.hungryanimals.entities.loot_tables;
 
-import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.passive.EntityAnimal;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -17,12 +18,12 @@ import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.LootFunction.Serializer;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
-import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 /**
  * Loot Table Modification System Details. 
@@ -47,40 +48,39 @@ import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class ModLootTables implements ILootTableRegistry {
 
-	private static LootTableManager manager;
-
+	private static Gson GSON_INSTANCE;
+	
 	private static Map<ResourceLocation, LootTable> tables;
 
 	private static final Field pools = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c");
 	private static final Field lootEntries = ReflectionHelper.findField(LootPool.class, "lootEntries", "field_186453_a");
 
-	public static void init(File file) {
-		manager = new LootTableManager(file);
+	public static void init(Path path) {
 		tables = new HashMap<ResourceLocation, LootTable>();
+		try {
+			GSON_INSTANCE = (Gson) ReflectionHelper.findField(LootTableManager.class, "GSON_INSTANCE", "field_186526_b").get(null);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			HungryAnimals.logger.error("Java Reflection problem occured at ModLootTables. Please report this to author(oortcloud)");
+			e.printStackTrace();
+		}
 	}
 
-	public static <T extends LootFunction> void register(LootFunction.Serializer <? extends T > serializer) {
+	public static <T extends LootFunction> void register(LootFunction.Serializer<? extends T> serializer) {
 		LootFunctionManager.registerFunction(serializer);
-	}
-	
-	public static void sync() {
-		for (Class<? extends EntityAnimal> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
-			ResourceLocation key = EntityList.getKey(i);
-			String domain = key.getResourceDomain();
-			String name = key.getResourcePath();
-			
-			ResourceLocation keyTable = new ResourceLocation(domain, "entities/"+name);
-			ResourceLocation valueTable = new ResourceLocation(References.MODID, "entities/"+domain+"#"+name);
-			tables.put(keyTable, manager.getLootTableFromLocation(valueTable));
-		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void LootTableLoadEvent(LootTableLoadEvent event) throws IllegalArgumentException, IllegalAccessException {
 		LootTable table = tables.get(event.getName());
-		if (table == null)
+		if (table == null) { 
 			return;
+		} else {
+			if (event.getTable().isFrozen()) {
+				HungryAnimals.logger.warn("Loot table for {} is frozen. Therefore, HungryAnimals can't modify it.", event.getName());
+				return;
+			}
+		}
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
 			if (iEntries.size() == 1) {
@@ -112,5 +112,15 @@ public class ModLootTables implements ILootTableRegistry {
 	public <T extends LootFunction> void registerFunction(Serializer<? extends T> serializer) {
 		register(serializer);
 	}
-
+	
+	public static void register(ResourceLocation resource, JsonElement jsonElement) {
+		LootTable table = ForgeHooks.loadLootTable(GSON_INSTANCE, resource, jsonElement.toString(), true, null);
+		if (table != null) {
+			resource = new ResourceLocation(resource.getResourceDomain(), "entities/"+resource.getResourcePath());
+			tables.put(resource, table);
+		} else {
+			HungryAnimals.logger.warn("cannot register loot table for {}.", resource);
+		}
+	}
+	
 }

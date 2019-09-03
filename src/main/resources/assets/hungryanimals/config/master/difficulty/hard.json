@@ -1,0 +1,32 @@
+[
+	{
+		"domain": "default",
+		"pattern": "food_preferences/block/minecraft/*.json",
+		"modifier": [
+			{
+				"nutrient": {"operation": "*","value": 0.7},
+				"stomach": {"operation": "*","value": 0.7}
+    	    }
+		]
+	},
+	{
+		"domain": "default",
+		"pattern": "food_preferences/fluid/minecraft/*.json",
+		"modifier": [
+			{
+				"nutrient": {"operation": "*","value": 0.7},
+				"stomach": {"operation": "*","value": 0.7}
+    	    }
+		]
+	},
+	{
+		"domain": "default",
+		"pattern": "food_preferences/item/minecraft/*.json",
+		"modifier": [
+			{
+				"nutrient": {"operation": "*","value": 0.7},
+				"stomach": {"operation": "*","value": 0.7}
+    	    }
+		]
+	}
+]

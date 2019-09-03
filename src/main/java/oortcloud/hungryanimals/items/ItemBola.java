@@ -54,7 +54,6 @@ public class ItemBola extends Item {
 				bola.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f, 1.0F);
 				world.spawnEntity(bola);
 
-				// TODO check sound
 				world.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
 						SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 

@@ -1,14 +1,16 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -22,8 +24,10 @@ import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.TamingLevel;
@@ -31,23 +35,28 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMoveToTrough extends EntityAIBase {
 
-	private EntityAnimal entity;
+	private EntityLiving entity;
 	private double speed;
 	private World world;
 	public BlockPos pos;
 	private int delayCounter;
 	private static int delay = 100;
 	private ICapabilityHungryAnimal capHungry;
+	@Nullable
 	private ICapabilityTamableAnimal capTaming;
+	@Nullable
+	private ICapabilityAgeable capAgeable;
 	private IFoodPreference<ItemStack> pref;
 
-	public EntityAIMoveToTrough(EntityAnimal entity, double speed) {
+	public EntityAIMoveToTrough(EntityLiving entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+		this.capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
 		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		this.entity = entity;
@@ -68,7 +77,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
-				if (this.capTaming.getTamingLevel() == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
+				if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
 					return !trough.stack.isEmpty() && pref.canEat(capHungry, trough.stack);
 				} else {
@@ -118,7 +127,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		double stomach = pref.getStomach(item);
 		capHungry.addStomach(stomach);
 
-		if (this.entity.getGrowingAge() < 0) {
+		if (capAgeable != null && capAgeable.getAge() < 0) {
 			NBTTagCompound tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
@@ -128,7 +137,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-			this.capTaming.addTaming(0.0002 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			if (this.capTaming != null) {
+				this.capTaming.addTaming(0.0002 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+			}
 		}
 
 	}
@@ -139,15 +150,15 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
-		if (! (jsonEle instanceof JsonObject)) {
+		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Trough must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
 		}
-		
-		JsonObject jsonObject = (JsonObject)jsonEle ;
-		
+
+		JsonObject jsonObject = (JsonObject) jsonEle;
+
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		
+
 		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
 		aiContainer.getTask().after(EntityAISwimming.class)
 		                     .before(EntityAITemptIngredient.class)
@@ -155,7 +166,8 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
+		                     .before(EntityAIWanderAvoidWater.class)
 		                     .put(factory);
 	}
-	
+
 }

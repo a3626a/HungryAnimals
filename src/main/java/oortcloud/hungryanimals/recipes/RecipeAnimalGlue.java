@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 
+import javax.annotation.Nonnull;
+
 public class RecipeAnimalGlue {
 
 	private static List<RecipeAnimalGlueEntry> recipe;
@@ -27,7 +29,7 @@ public class RecipeAnimalGlue {
 		recipe = new ArrayList<RecipeAnimalGlueEntry>();
 	}
 
-	public static void addRecipe(Ingredient input, int output) {
+	public static void addRecipe(@Nonnull Ingredient input, int output) {
 		recipe.add(new RecipeAnimalGlueEntry(input, output));
 	}
 

@@ -1,12 +1,14 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -16,7 +18,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreferenceSimple;
@@ -31,13 +35,17 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 	public EntityAIHunt(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(creature, EntityLiving.class, chance, checkSight, onlyNearby, new Predicate<EntityLiving>() {
 			@Override
-			public boolean apply(EntityLiving input) {
+			public boolean apply(@Nullable EntityLiving input) {
 				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
-				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
+				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
 
+				if (input == null)
+					return false;
+				
 				// DON'T EAT BABY
-				if (input instanceof EntityAgeable) {
-					int age = ((EntityAgeable) input).getGrowingAge();
+				ICapabilityAgeable ageable = input.getCapability(ProviderAgeable.CAP, null);
+				if (ageable != null) {
+					int age = ageable.getAge();
 					if (age < 0)
 						return false;
 				}
@@ -45,7 +53,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 				return pref.canEat(cap, input);
 			}
 		});
-		pref = FoodPreferences.getInstance().REGISTRY_ENTITY.get(creature.getClass());
+		pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
 		cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
 		this.herding = herding;
 	}
@@ -110,7 +118,14 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
 		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
 		
-		AIFactory factory = (entity) -> new EntityAIHunt(entity, chance, checkSight, onlyNearby, herding);
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAIHunt((EntityCreature) entity, chance, checkSight, onlyNearby, herding);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Hunt must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTarget().putLast(factory);
 	}
 	

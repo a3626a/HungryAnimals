@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.passive.EntityAnimal;
+import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAttributeRegistry;
 
 public class ModAttributes implements IAttributeRegistry {
@@ -24,19 +25,20 @@ public class ModAttributes implements IAttributeRegistry {
 	public static IAttribute child_delay;
 	public static IAttribute child_growing_length;
 	public static IAttribute taming_factor_food;
-	public static IAttribute taming_factor_near;
-	public static IAttribute milk_hunger;
-	public static IAttribute milk_delay;
+	public static IAttribute taming_factor_near_wild;
+	public static IAttribute taming_factor_near_tamed;
+	public static IAttribute fluid_weight;
+	public static IAttribute fluid_amount;
 	public static IAttribute wool_hunger;
 	public static IAttribute wool_delay;
-	
+
 	private static ModAttributes INSTANCE;
 
-	private Map<Class<? extends EntityAnimal>, List<IAttributeEntry>> REGISTRY;
-	public Map<String, AttributePair> ATTRIBUTES;
+	private Map<Class<? extends EntityLiving>, List<IAttributeEntry>> REGISTRY;
+	private Map<String, AttributePair> ATTRIBUTES;
 
 	private ModAttributes() {
-		REGISTRY = new HashMap<Class<? extends EntityAnimal>, List<IAttributeEntry>>();
+		REGISTRY = new HashMap<Class<? extends EntityLiving>, List<IAttributeEntry>>();
 		ATTRIBUTES = new HashMap<String, AttributePair>();
 	}
 
@@ -47,37 +49,63 @@ public class ModAttributes implements IAttributeRegistry {
 		return INSTANCE;
 	}
 
-	public boolean register(Class<? extends EntityAnimal> animalclass, IAttribute attribute, double val, boolean shouldRegistered) {
+	public boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val) {
+		if (!ATTRIBUTES.containsKey(name)) {
+			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
+			return false;
+		}
+
 		if (!REGISTRY.containsKey(animalclass)) {
 			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
 		}
-		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegistered, val));
+
+		IAttribute attribute = ATTRIBUTES.get(name).attribute;
+		boolean shouldRegister = ATTRIBUTES.get(name).shouldRegister;
+		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
 	}
-	
-	public void register(String name, IAttribute attribute, boolean shouldRegister) {
+
+	public boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val, boolean shouldRegister) {
+		if (!ATTRIBUTES.containsKey(name)) {
+			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
+			return false;
+		}
+
+		if (!REGISTRY.containsKey(animalclass)) {
+			REGISTRY.put(animalclass, new ArrayList<IAttributeEntry>());
+		}
+
+		IAttribute attribute = ATTRIBUTES.get(name).attribute;
+		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
+	}
+
+	public void registerName(String name, IAttribute attribute, boolean shouldRegister) {
 		ATTRIBUTES.put(name, pair(attribute, shouldRegister));
 	}
-	
 
 	/**
 	 * called EntityJoinWorldEvent
+	 * It is called after entity construction
 	 * 
 	 * @param entity
 	 */
 	public void applyAttributes(EntityLivingBase entity) {
-		for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
-			i.apply(entity);
+		if (REGISTRY.containsKey(entity.getClass())) {
+			for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
+				i.apply(entity);
+			}
 		}
 	}
 
 	/**
 	 * called EntityConstructing
-	 * 
+	 * It is called before applyEntityAttributes and attachCapabilities
 	 * @param entity
 	 */
 	public void registerAttributes(EntityLivingBase entity) {
-		for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
-			i.register(entity);
+		if (REGISTRY.containsKey(entity.getClass())) {
+			for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
+				i.register(entity);
+			}
 		}
 	}
 
@@ -97,6 +125,6 @@ public class ModAttributes implements IAttributeRegistry {
 
 	@Override
 	public void registerAttribute(String name, IAttribute attribute, boolean shouldRegister) {
-		register(name, attribute, shouldRegister);
+		registerName(name, attribute, shouldRegister);
 	}
 }

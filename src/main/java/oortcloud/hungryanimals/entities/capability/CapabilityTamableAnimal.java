@@ -7,8 +7,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.SyncIndex;
+import oortcloud.hungryanimals.core.network.PacketClientSyncTamable;
 
 public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 
@@ -61,8 +60,7 @@ public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) entity.getEntityWorld();
 			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(entity)) {
-				PacketEntityClient packet = new PacketEntityClient(SyncIndex.TAMING_LEVEL_SYNC, entity);
-				packet.setDouble(getTaming());
+				PacketClientSyncTamable packet = new PacketClientSyncTamable(entity, getTaming());
 				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
 			}
 		}
@@ -70,8 +68,7 @@ public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 
 	public void syncTo(EntityPlayerMP target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketEntityClient packet = new PacketEntityClient(SyncIndex.TAMING_LEVEL_SYNC, entity);
-			packet.setDouble(getTaming());
+			PacketClientSyncTamable packet = new PacketClientSyncTamable(entity, getTaming());
 			HungryAnimals.simpleChannel.sendTo(packet, target);
 		}
 	}

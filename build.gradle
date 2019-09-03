@@ -19,7 +19,7 @@ group = "com.oortcloud.hungryanimals"
 archivesBaseName = "hungryanimals"
 
 minecraft {
-    version = "${mc_version}-14.23.1.2582"
+    version = "${mc_version}-14.23.5.2838"
     runDir = "run"
 
     replace "@VERSION@", project.version
@@ -53,15 +53,26 @@ repositories {
         url "http://maven.covers1624.net/"
     }
     maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
     }
 }
 
 dependencies {
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11"
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    deobfCompile "cofh:RedstoneFlux:1.12-2.0.1.2:universal"
+    // compile against the JEI API but do not include it at runtime
+    deobfProvided "mezz.jei:jei_${mc_version}:${jei_version}:api"
+    // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+
+    // JUnit
+    compile "junit:junit:4.11"
 }
 
 

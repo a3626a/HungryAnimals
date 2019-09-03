@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.JsonUtils;
@@ -33,7 +34,14 @@ public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
 		
 		boolean callHelp = JsonUtils.getBoolean(jsonObject, "call_help");
 		
-		AIFactory factory = (entity) -> new EntityAIHurtByPlayer(entity, callHelp);
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAIHurtByPlayer((EntityCreature) entity, callHelp);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Hunt By Player must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
 		aiContainer.getTarget().putLast(factory);
 	}
 	

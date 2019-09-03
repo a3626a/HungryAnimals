@@ -2,14 +2,21 @@ package oortcloud.hungryanimals.core.proxy;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +27,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -29,14 +37,30 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.blocks.render.RenderTileEntityTrough;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
-import oortcloud.hungryanimals.core.network.HandlerEntityClient;
-import oortcloud.hungryanimals.core.network.HandlerGeneralClient;
-import oortcloud.hungryanimals.core.network.PacketEntityClient;
-import oortcloud.hungryanimals.core.network.PacketGeneralClient;
+import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.core.network.HandlerClientSpawnParticle;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncHungry;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncProducingFluid;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncProducingInteraction;
+import oortcloud.hungryanimals.core.network.HandlerClientSyncTamable;
+import oortcloud.hungryanimals.core.network.HandlerServerDGEditDouble;
+import oortcloud.hungryanimals.core.network.HandlerServerDGEditInt;
+import oortcloud.hungryanimals.core.network.HandlerServerDGSet;
+import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
+import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
+import oortcloud.hungryanimals.core.network.PacketClientSyncProducingInteraction;
+import oortcloud.hungryanimals.core.network.PacketClientSyncTamable;
+import oortcloud.hungryanimals.core.network.PacketServerDGEditDouble;
+import oortcloud.hungryanimals.core.network.PacketServerDGEditInt;
+import oortcloud.hungryanimals.core.network.PacketServerDGSet;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.render.RenderEntityBola;
 import oortcloud.hungryanimals.entities.render.RenderEntitySlingShotBall;
+import oortcloud.hungryanimals.entities.render.RenderEntityWeight;
+import oortcloud.hungryanimals.fluids.ModFluids;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.items.gui.DebugOverlayHandler;
 import oortcloud.hungryanimals.items.render.ModelItemBola;
@@ -52,6 +76,18 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySlingShotBall.class, RenderEntitySlingShotBall::new);
 	}
 
+	@SuppressWarnings("unchecked")
+	public void injectRender() {
+		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		for (Class<? extends EntityLiving> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+			if (HungryAnimalManager.getInstance().isModelGrowing(i)) {
+				Render<EntityLiving> render = (Render<EntityLiving>) renderManager.entityRenderMap.get(i);
+				renderManager.entityRenderMap.put(i, new RenderEntityWeight(render, Minecraft.getMinecraft().getRenderManager()));
+			}
+		}
+		
+	}
+	
 	public void registerTileEntityRendering() {
 		ClientRegistry.<TileEntityTrough>bindTileEntitySpecialRenderer(TileEntityTrough.class, new RenderTileEntityTrough());
 	}
@@ -88,8 +124,46 @@ public class ClientProxy extends CommonProxy {
 		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
 		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal,
 				ModelItemSlingshot.modelresourcelocation_shooting);
+		
+		registerFluidModels();
     }
 	
+    ////////////////////////////////
+    ////CHOONSTER-MINECRAFT-MODS////
+    ////////////////////////////////
+    
+	private static void registerFluidModels() {
+		ModFluids.MOD_FLUID_BLOCKS.forEach(ClientProxy::registerFluidModel);
+	}
+
+	private static void registerFluidModel(IFluidBlock fluidBlock) {
+		final Item item = Item.getItemFromBlock((Block) fluidBlock);
+		assert item != null;
+
+		ModelBakery.registerItemVariants(item);
+
+		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(References.MODID+":fluid", fluidBlock.getFluid().getName());
+
+		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				return modelResourceLocation;
+			}
+		});
+
+		ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return modelResourceLocation;
+			}
+		});
+	}
+	
+    ////////////////////////////////
+    ////CHOONSTER-MINECRAFT-MODS////
+    ////////////////////////////////
+    
+    
     @SubscribeEvent
 	public static void registerCustomBakedModel(ModelBakeEvent event) {
 		IBakedModel bola_normal = event.getModelRegistry().getObject(ModelItemBola.modelresourcelocation_normal);
@@ -144,9 +218,14 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerPacketHandler() {
-		super.registerPacketHandler();
-		HungryAnimals.simpleChannel.registerMessage(HandlerGeneralClient.class, PacketGeneralClient.class, 2, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage(HandlerEntityClient.class, PacketEntityClient.class, 3, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGEditInt.class, PacketServerDGEditInt.class, 0, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGEditDouble.class, PacketServerDGEditDouble.class, 1, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGSet.class, PacketServerDGSet.class, 2, Side.SERVER);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSpawnParticle.class, PacketClientSpawnParticle.class, 3, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncTamable.class, PacketClientSyncTamable.class, 4, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncHungry.class, PacketClientSyncHungry.class, 5, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncProducingFluid.class, PacketClientSyncProducingFluid.class, 6, Side.CLIENT);
+		HungryAnimals.simpleChannel.registerMessage(HandlerClientSyncProducingInteraction.class, PacketClientSyncProducingInteraction.class, 7, Side.CLIENT);
 	}
-
+	
 }

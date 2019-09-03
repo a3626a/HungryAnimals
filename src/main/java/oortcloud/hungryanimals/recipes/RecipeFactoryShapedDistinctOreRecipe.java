@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -62,6 +64,8 @@ public class RecipeFactoryShapedDistinctOreRecipe implements IRecipeFactory {
         
         ShapedPrimerDistinct primer = ShapedDistinctOreRecipe.parse(mirrored, Arrays.asList(pattern), ingMap, oreMap);
 
+        @SuppressWarnings("null")
+		@Nonnull
         ItemStack result = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
         
         return new ShapedDistinctOreRecipe(name, result, primer);

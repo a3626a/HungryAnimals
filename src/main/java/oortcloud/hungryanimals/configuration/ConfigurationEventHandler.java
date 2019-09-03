@@ -8,7 +8,9 @@ public class ConfigurationEventHandler {
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		if (event.getModID().equals(References.MODID)) {
+			ConfigurationHandler.syncPre();
 			ConfigurationHandler.sync();
+			ConfigurationHandler.syncPost();
 		}
 	}
 }

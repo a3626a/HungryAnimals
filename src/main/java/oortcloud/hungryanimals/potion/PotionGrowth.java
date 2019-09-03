@@ -1,11 +1,11 @@
 package oortcloud.hungryanimals.potion;
 
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
+import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 
 public class PotionGrowth extends PotionHungryAnimals {
 
@@ -20,12 +20,12 @@ public class PotionGrowth extends PotionHungryAnimals {
 	@Override
 	public void performEffect(EntityLivingBase entity, int level) {
 		if (!entity.getEntityWorld().isRemote) {
-			if (entity.hasCapability(ProviderHungryAnimal.CAP, null)) {
-				EntityAgeable entityAgealbe = ((EntityAgeable) entity);
-				int j = entityAgealbe.getGrowingAge();
+			ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
+			if (ageable != null) {
+				int j = ageable.getAge();
 				if (j < 0) {
 					j += (level) * entity.getRNG().nextInt(2);
-					entityAgealbe.setGrowingAge(j);
+					ageable.setAge(j);
 				}
 			}
 		}

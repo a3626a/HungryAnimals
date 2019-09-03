@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -22,7 +23,6 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.items.ModItems;
-import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.recipes.CraftingHandler;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
@@ -46,6 +46,10 @@ public class HungryAnimals {
 
 	public static Logger logger;
 
+	static {
+	    FluidRegistry.enableUniversalBucket();
+	}
+	
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
@@ -55,7 +59,6 @@ public class HungryAnimals {
 		RecipeAnimalGlue.init();
 		ModBlocks.init();
 		ModItems.init();
-		ModPotions.init();
 		proxy.registerEntities();
 		proxy.registerEntityRendering();
 		proxy.registerTileEntities();
@@ -66,6 +69,8 @@ public class HungryAnimals {
 		proxy.registerPacketHandler();
 		HungryAnimalManager.getInstance().init();
 
+		ConfigurationHandler.syncPre();
+		
 		if (Loader.isModLoaded("theoneprobe"))
 			proxy.initTOP();
 	}
@@ -81,7 +86,8 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
-		ConfigurationHandler.postSync();
+		ConfigurationHandler.syncPost();
+		proxy.injectRender();
 	}
 
 }

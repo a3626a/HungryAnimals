@@ -31,14 +31,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntitySlingShotBall extends Entity implements IProjectile {
 
 	@SuppressWarnings("unchecked")
-	private static final Predicate<Entity> SLING_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
-    {
-        public boolean apply(@Nullable Entity entity)
-        {
-            return entity.canBeCollidedWith();
-        }
-    });
-	
+	private static final Predicate<Entity> SLING_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
+		public boolean apply(@Nullable Entity entity) {
+			if (entity == null)
+				return false;
+			return entity.canBeCollidedWith();
+		}
+	});
+
 	private Entity shootingEntity;
 	private int ticksInAir;
 
@@ -53,92 +53,84 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 	}
 
 	public EntitySlingShotBall(World world, EntityLivingBase shooter) {
-		this(world, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - 0.1, shooter.posZ);
+		this(world, shooter.posX, shooter.posY + (double) shooter.getEyeHeight() - 0.1, shooter.posZ);
 		this.shootingEntity = shooter;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-    public boolean isInRangeToRenderDist(double distance)
-    {
-        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+	public boolean isInRangeToRenderDist(double distance) {
+		double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
 
-        if (Double.isNaN(d0))
-        {
-            d0 = 1.0D;
-        }
+		if (Double.isNaN(d0)) {
+			d0 = 1.0D;
+		}
 
-        d0 = d0 * 64.0D * getRenderDistanceWeight();
-        return distance < d0 * d0;
-    }
+		d0 = d0 * 64.0D * getRenderDistanceWeight();
+		return distance < d0 * d0;
+	}
 
 	@Override
 	protected void entityInit() {
 	}
-	
-    public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy)
-    {
-        float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-        float f1 = -MathHelper.sin(pitch * 0.017453292F);
-        float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
-        this.shoot((double)f, (double)f1, (double)f2, velocity, inaccuracy);
-        this.motionX += shooter.motionX;
-        this.motionZ += shooter.motionZ;
 
-        if (!shooter.onGround)
-        {
-            this.motionY += shooter.motionY;
-        }
-    }
-	
-    @Override
-    public void shoot(double x, double y, double z, float velocity, float inaccuracy)
-    {
-        float f = MathHelper.sqrt(x * x + y * y + z * z);
-        x = x / (double)f;
-        y = y / (double)f;
-        z = z / (double)f;
-        x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-        y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-        z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-        x = x * (double)velocity;
-        y = y * (double)velocity;
-        z = z * (double)velocity;
-        this.motionX = x;
-        this.motionY = y;
-        this.motionZ = z;
-        float f1 = MathHelper.sqrt(x * x + z * z);
-        this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
-        this.rotationPitch = (float)(MathHelper.atan2(y, (double)f1) * (180D / Math.PI));
-        this.prevRotationYaw = this.rotationYaw;
-        this.prevRotationPitch = this.rotationPitch;
-    }
-	
-    @SideOnly(Side.CLIENT)
-    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
-    {
-        this.setPosition(x, y, z);
-        this.setRotation(yaw, pitch);
-    }
+	public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy) {
+		float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+		float f1 = -MathHelper.sin(pitch * 0.017453292F);
+		float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+		this.shoot((double) f, (double) f1, (double) f2, velocity, inaccuracy);
+		this.motionX += shooter.motionX;
+		this.motionZ += shooter.motionZ;
 
-    @SideOnly(Side.CLIENT)
-    public void setVelocity(double x, double y, double z)
-    {
-        this.motionX = x;
-        this.motionY = y;
-        this.motionZ = z;
+		if (!shooter.onGround) {
+			this.motionY += shooter.motionY;
+		}
+	}
 
-        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
-        {
-            float f = MathHelper.sqrt(x * x + z * z);
-            this.rotationPitch = (float)(MathHelper.atan2(y, (double)f) * (180D / Math.PI));
-            this.rotationYaw = (float)(MathHelper.atan2(x, z) * (180D / Math.PI));
-            this.prevRotationPitch = this.rotationPitch;
-            this.prevRotationYaw = this.rotationYaw;
-            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-        }
-    }
-    
+	@Override
+	public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+		float f = MathHelper.sqrt(x * x + y * y + z * z);
+		x = x / (double) f;
+		y = y / (double) f;
+		z = z / (double) f;
+		x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		x = x * (double) velocity;
+		y = y * (double) velocity;
+		z = z * (double) velocity;
+		this.motionX = x;
+		this.motionY = y;
+		this.motionZ = z;
+		float f1 = MathHelper.sqrt(x * x + z * z);
+		this.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
+		this.rotationPitch = (float) (MathHelper.atan2(y, (double) f1) * (180D / Math.PI));
+		this.prevRotationYaw = this.rotationYaw;
+		this.prevRotationPitch = this.rotationPitch;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
+		this.setPosition(x, y, z);
+		this.setRotation(yaw, pitch);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void setVelocity(double x, double y, double z) {
+		this.motionX = x;
+		this.motionY = y;
+		this.motionZ = z;
+
+		if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
+			float f = MathHelper.sqrt(x * x + z * z);
+			this.rotationPitch = (float) (MathHelper.atan2(y, (double) f) * (180D / Math.PI));
+			this.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
+			this.prevRotationPitch = this.rotationPitch;
+			this.prevRotationYaw = this.rotationYaw;
+			this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+		}
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -160,54 +152,49 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 			raytraceresult = new RayTraceResult(entity);
 		}
 
-		if (raytraceresult != null && raytraceresult.entityHit instanceof EntityPlayer)
-        {
-            EntityPlayer entityplayer = (EntityPlayer)raytraceresult.entityHit;
+		if (raytraceresult != null && raytraceresult.entityHit instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) raytraceresult.entityHit;
 
-            if (this.shootingEntity instanceof EntityPlayer && !((EntityPlayer)this.shootingEntity).canAttackPlayer(entityplayer))
-            {
-                raytraceresult = null;
-            }
-        }
+			if (this.shootingEntity instanceof EntityPlayer && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
+				raytraceresult = null;
+			}
+		}
 
 		if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
 			this.onHit(raytraceresult);
 		}
-		
+
 		this.posX += this.motionX;
 		this.posY += this.motionY;
 		this.posZ += this.motionZ;
-		
+
 		double g = 0.05;
 		double f = 0.99;
 
-		if (this.isInWater())
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
-            }
+		if (this.isInWater()) {
+			for (int i = 0; i < 4; ++i) {
+				this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D,
+						this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+			}
 
-            f = 0.6F;
-        }
+			f = 0.6F;
+		}
 
 		this.motionX *= f;
 		this.motionY *= f;
 		this.motionZ *= f;
 
-		if (!this.hasNoGravity())
-        {
-            this.motionY -= g;
-        }
-		
+		if (!this.hasNoGravity()) {
+			this.motionY -= g;
+		}
+
 		this.setPosition(posX, posY, posZ);
 		this.doBlockCollisions();
 	}
-	
-	protected void onHit(RayTraceResult raytraceResultIn)
-    {
+
+	protected void onHit(RayTraceResult raytraceResultIn) {
 		Entity entity = raytraceResultIn.entityHit;
-		
+
 		if (entity != null) {
 			DamageSource damagesource;
 
@@ -217,68 +204,62 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 				damagesource = DamageSource.causeThrownDamage(this, this.shootingEntity);
 			}
 
-			if (entity.attackEntityFrom(damagesource, 2.0F)) {
+			if (entity.attackEntityFrom(damagesource, getEntityData().getFloat("hungryanimals.damage"))) {
 				if (entity instanceof EntityLivingBase) {
-					EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
-					
-					if (this.shootingEntity instanceof EntityLivingBase)
-                    {
-                        EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
-                        EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase)this.shootingEntity, entitylivingbase);
-                    }
-					
-					//TODO reveal what does  SPacketChangeGameState(6, 0.0F) do
-					if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
-	                {
-	                    ((EntityPlayerMP)this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
-	                }
+					EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
+
+					if (this.shootingEntity instanceof EntityLivingBase) {
+						EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
+						EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) this.shootingEntity, entitylivingbase);
+					}
+
+					// TODO reveal what does SPacketChangeGameState(6, 0.0F) do
+					if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof EntityPlayer
+							&& this.shootingEntity instanceof EntityPlayerMP) {
+						((EntityPlayerMP) this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
+					}
 				}
 
 				this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
-                if (!(entity instanceof EntityEnderman))
-                {
-                    this.setDead();
-                }
+				if (!(entity instanceof EntityEnderman)) {
+					this.setDead();
+				}
 			}
 		} else {
 			// Hit the ground
 			this.setDead();
 		}
-    }
-	
+	}
+
 	@Nullable
-    protected Entity findEntityOnPath(Vec3d start, Vec3d end)
-    {
-        Entity entity = null;
-        List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), SLING_TARGETS);
-        double d0 = 0.0D;
+	protected Entity findEntityOnPath(Vec3d start, Vec3d end) {
+		Entity entity = null;
+		List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this,
+				this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), SLING_TARGETS);
+		double d0 = 0.0D;
 
-        for (int i = 0; i < list.size(); ++i)
-        {
-            Entity entity1 = list.get(i);
+		for (int i = 0; i < list.size(); ++i) {
+			Entity entity1 = list.get(i);
 
-            if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
-            {
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.3);
-                RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
+			if (entity1 != this.shootingEntity || this.ticksInAir >= 5) {
+				AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.3);
+				RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 
-                if (raytraceresult != null)
-                {
-                    double d1 = start.squareDistanceTo(raytraceresult.hitVec);
+				if (raytraceresult != null) {
+					double d1 = start.squareDistanceTo(raytraceresult.hitVec);
 
-                    if (d1 < d0 || d0 == 0.0D)
-                    {
-                        entity = entity1;
-                        d0 = d1;
-                    }
-                }
-            }
-        }
+					if (d1 < d0 || d0 == 0.0D) {
+						entity = entity1;
+						d0 = d1;
+					}
+				}
+			}
+		}
 
-        return entity;
-    }
-	
+		return entity;
+	}
+
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 	}
@@ -286,24 +267,20 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 	}
-	
-	@Override
-    protected boolean canTriggerWalking()
-    {
-        return false;
-    }
 
 	@Override
-    public boolean canBeAttackedWithItem()
-    {
-        return false;
-    }
-	
-	@Override
-    public float getEyeHeight()
-    {
-        return 0.0F;
-    }
+	protected boolean canTriggerWalking() {
+		return false;
+	}
 
-	
+	@Override
+	public boolean canBeAttackedWithItem() {
+		return false;
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return 0.0F;
+	}
+
 }

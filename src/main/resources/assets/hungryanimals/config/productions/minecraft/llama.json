@@ -1,0 +1,14 @@
+[
+    {
+        "type" : "fluid",
+        "name" : "minecraft.llama.milk",
+        "condition" : {
+        	"age" : "adult",
+        	"sex" : "female"
+        },
+        "fluid" : "milk",
+        "capacity" : 1000,
+        "amount" : 1,
+        "weight" : 1
+    }
+]

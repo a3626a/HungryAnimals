@@ -6,15 +6,19 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,13 +31,17 @@ import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ICapabilitySexual;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
+import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
+import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMateModified extends EntityAIBase {
 	private EntityAnimal animal;
 	private ICapabilityHungryAnimal theAnimalCapHungry;
+	@Nullable
 	private ICapabilityTamableAnimal theAnimalCapTamable;
 	World theWorld;
 	private EntityAnimal targetMate;
@@ -95,14 +103,32 @@ public class EntityAIMateModified extends EntityAIBase {
 		double d0 = Double.MAX_VALUE;
 		EntityAnimal entityanimal = null;
 
-		for (EntityAnimal entityanimal1 : list) {
-			if (this.animal.canMateWith(entityanimal1) && this.animal.getDistanceSq(entityanimal1) < d0) {
-				entityanimal = entityanimal1;
-				d0 = this.animal.getDistanceSq(entityanimal1);
+		ICapabilitySexual sexual = animal.getCapability(ProviderSexual.CAP, null);
+
+		if (sexual != null) {
+			for (EntityAnimal entityanimal1 : list) {
+				if (this.animal.canMateWith(entityanimal1)) {
+					ICapabilitySexual sexual1 = entityanimal1.getCapability(ProviderSexual.CAP, null);
+					if (sexual1 != null && sexual.getSex() != sexual1.getSex() && this.animal.getDistanceSq(entityanimal1) < d0) {
+						entityanimal = entityanimal1;
+						d0 = this.animal.getDistanceSq(entityanimal1);
+					}
+				}
+			}
+		} else {
+			for (EntityAnimal entityanimal1 : list) {
+				if (this.animal.canMateWith(entityanimal1) && !entityanimal1.hasCapability(ProviderSexual.CAP, null)
+						&& this.animal.getDistanceSq(entityanimal1) < d0) {
+					entityanimal = entityanimal1;
+					d0 = this.animal.getDistanceSq(entityanimal1);
+				}
 			}
 		}
-
 		return entityanimal;
+	}
+
+	private static double calculateBabyTaming(ICapabilityTamableAnimal parent1, ICapabilityTamableAnimal parent2) {
+		return (Tamings.get(parent1) + Tamings.get(parent2)) / 2.0;
 	}
 
 	/**
@@ -133,15 +159,18 @@ public class EntityAIMateModified extends EntityAIBase {
 
 		if (entityageable != null) {
 			ICapabilityTamableAnimal childTamable = entityageable.getCapability(ProviderTamableAnimal.CAP, null);
-			ICapabilityHungryAnimal childHungry = entityageable.getCapability(ProviderHungryAnimal.CAP, null);
-			
+
 			// Pay Hunger
 			double weight_child = entityageable.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
-			targetMateCapHungry.addWeight(-weight_child/2);
-			theAnimalCapHungry.addWeight(-weight_child/2);
-			
-			childHungry.setWeight(weight_child);
-			childTamable.setTaming((theAnimalCapTamable.getTaming() + targetMateCapTamable.getTaming()) / 2.0);
+			if (targetMateCapHungry != null) {
+				targetMateCapHungry.addWeight(-weight_child / 2);
+			}
+			theAnimalCapHungry.addWeight(-weight_child / 2);
+
+			double childTaming = calculateBabyTaming(theAnimalCapTamable, targetMateCapTamable);
+			if (childTamable != null) {
+				childTamable.setTaming(childTaming);
+			}
 
 			EntityPlayerMP entityplayermp = this.animal.getLoveCause();
 
@@ -211,25 +240,27 @@ public class EntityAIMateModified extends EntityAIBase {
 		}
 		return null;
 	}
-	
+
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
-		if (! (jsonEle instanceof JsonObject)) {
+		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI Mate must be an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
 		}
-		
-		JsonObject jsonObject = (JsonObject)jsonEle ;
-		
+
+		JsonObject jsonObject = (JsonObject) jsonEle;
+
 		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		
-		AIFactory factory =  (entity) -> new EntityAIMateModified(entity, speed);
-		aiContainer.getTask().after(EntityAISwimming.class)
-		                     .before(EntityAIMoveToTrough.class)
-		                     .before(EntityAITemptIngredient.class)
-		                     .before(EntityAITemptEdibleItem.class)
-		                     .before(EntityAIMoveToEatItem.class)
-		                     .before(EntityAIMoveToEatBlock.class)
-		                     .before(EntityAIFollowParent.class)
-		                     .put(factory);
+
+		AIFactory factory = (entity) -> {
+			if (entity instanceof EntityCreature) {
+				return new EntityAIMateModified((EntityAnimal) entity, speed);
+			} else {
+				HungryAnimals.logger.error("Animals which uses AI Mate must extend EntityAnimal. {} don't.", EntityList.getKey(entity));
+				return null;
+			}
+		};
+		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(EntityAITemptIngredient.class)
+				.before(EntityAITemptEdibleItem.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
+				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);
 	}
 }

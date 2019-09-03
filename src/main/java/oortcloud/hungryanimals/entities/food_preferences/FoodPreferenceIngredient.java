@@ -8,7 +8,6 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
 public class FoodPreferenceIngredient implements IFoodPreference<ItemStack> {
 
-	// Left : nutrient, Right : stomach
 	private List<FoodPreferenceIngredientEntry> list;
 	
 	public static class FoodPreferenceIngredientEntry {
@@ -61,6 +60,10 @@ public class FoodPreferenceIngredient implements IFoodPreference<ItemStack> {
 	@Override
 	public String toString() {
 		return list.toString();
+	}
+	
+	public List<FoodPreferenceIngredientEntry> getList() {
+		return list;
 	}
 	
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.Block;
@@ -16,7 +18,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -74,6 +75,14 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
+	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (face == EnumFacing.DOWN) {
+			return true;
+		}
+		return super.doesSideBlockRendering(state, world, pos, face);
+	}
+
+	@Override
 	public boolean isFullCube(IBlockState state) {
 		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man == 4;
 	}
@@ -82,9 +91,15 @@ public class BlockExcreta extends BlockFalling {
 	public boolean isOpaqueCube(IBlockState state) {
 		return isFullCube(state);
 	}
-	
+
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	public boolean causesSuffocation(IBlockState state) {
+		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man >= 3;
+	}
+
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer,
+			EnumHand hand) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0));
 	}
 
@@ -145,7 +160,7 @@ public class BlockExcreta extends BlockFalling {
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
-	
+
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (!worldIn.isRemote) {
@@ -222,12 +237,15 @@ public class BlockExcreta extends BlockFalling {
 
 		if (random.nextDouble() < BlockExcreta.diseaseProbability / 3.0 * Math.max(0, exc - 1)) {
 			Predicate<Entity> hungryAnimalSelector = new Predicate<Entity>() {
-				public boolean apply(Entity entityIn) {
+				public boolean apply(@Nullable Entity entityIn) {
+					if (entityIn == null) {
+						return false;
+					}
 					return entityIn.hasCapability(ProviderHungryAnimal.CAP, null);
 				}
 			};
 
-			for (Object i : world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
+			for (Object i : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
 					pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
 				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 0));
 			}
@@ -258,20 +276,30 @@ public class BlockExcreta extends BlockFalling {
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (!worldIn.isRemote && entityIn instanceof EntityFallingBlock && ((EntityFallingBlock) entityIn).getBlock().getBlock() == this
-				&& ((EntityFallingBlock) entityIn).fallTime > 1 && !entityIn.isDead) {
+		if (!worldIn.isRemote) {
+			if (entityIn instanceof EntityFallingBlock) {
+				EntityFallingBlock entityFall = (EntityFallingBlock) entityIn;
+				IBlockState stateFall = entityFall.getBlock();
+				if (stateFall != null && stateFall.getBlock() == this && entityFall.fallTime > 1 && !entityIn.isDead) {
+					entityIn.setDead();
 
-			entityIn.setDead();
+					IBlockState metaBot = worldIn.getBlockState(pos);
+					IBlockState metaTop = ((EntityFallingBlock) entityIn).getBlock();
 
-			IBlockState metaBot = worldIn.getBlockState(pos);
-			IBlockState metaTop = ((EntityFallingBlock) entityIn).getBlock();
-
-			this.stackBlock(worldIn, pos, metaTop, metaBot, false);
+					this.stackBlock(worldIn, pos, metaTop, metaBot, false);
+				}
+			}
 		}
+		// TODO configurable
+		int volume = ((EnumType) state.getValue(CONTENT)).exc+((EnumType) state.getValue(CONTENT)).man;
+		entityIn.motionX *= (1-0.2*volume);
+		entityIn.motionY *= (1-0.2*volume);
+		entityIn.motionZ *= (1-0.2*volume);
 	}
-	
+
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX,
+			float hitY, float hitZ) {
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;
 		if (exc + man >= 4)
