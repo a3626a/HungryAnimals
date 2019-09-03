@@ -7,7 +7,7 @@
 ## Grammar
 
 {% code-tabs %}
-{% code-tabs-item title="attributes/modid/animal.json" %}
+{% code-tabs-item title="animal.json" %}
 ```text
 [
   hungry_animal_entry,
