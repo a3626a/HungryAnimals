@@ -18,3 +18,9 @@
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
+{% hint style="info" %}
+For _ingredient_, follow this page
+
+{% page-ref page="miscellaneous.md" %}
+{% endhint %}
+
