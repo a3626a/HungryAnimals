@@ -2,3 +2,7 @@
 
 * [Home](README.md)
 
+## Basics
+
+* [Animal Registry](basics/animal-registry.md)
+
