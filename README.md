@@ -7,4 +7,4 @@ This mod basically adds hunger mechanics to minecraft animals, also provides lot
 
 
 ## More on Configuration
-https://github.com/a3626a/HungryAnimals/wiki/Configuration-System
+https://a3626a.gitbook.io/hungryanimals/basics/miscellaneous
