@@ -4,6 +4,7 @@
 
 ## Basics
 
+* [Master Config](basics/master-config.md)
 * [Animal Registry](basics/animal-registry.md)
 * [Cure Registry](basics/cure-registry.md)
 * [Inheat Item Registry](basics/inheat-item-registry.md)
