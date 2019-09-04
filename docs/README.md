@@ -29,7 +29,9 @@ This file is inside "example folder", so editing it won't affect Minecraft. Copy
 
 `"tempo"` can be one of `"fast"`, `"normal"`, and `"slow"`. Animals in `"fast"` will grow and create babies faster. Animals eat same amount of food regardless of `"tempo"`, so they will drop less meat in `"fast"`. In other words, wheat to meat conversion rate is constant.
 
-## Further Reading
+## Detailed Config And Examples
 
-You can find detailed documentations in this wiki, version by version.
+`'config/hungryanimals_example'` folder does not affect Minecraft gameplay. All files under this directory are examples for server admins and modpack creators.
+
+By default, there are no files under `'config/hungryanimals'`, there are only directories. Then, all missing configurations are loaded from internals of Hungry Animals.\(which are the same files as under example folder\) If you want to adjust json files, just save json file under `'config/hungryanimals'`, this changes will be applied to Hungry Animals.
 

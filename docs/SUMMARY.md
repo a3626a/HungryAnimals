@@ -14,3 +14,27 @@
 * [Block Options](basics/block-options.md)
 * [Miscellaneous](basics/miscellaneous.md)
 
+## Attributes
+
+* [Attributes](attributes/attributes.md)
+
+## AIs
+
+* [AIs](ais/ais.md)
+
+## Productions
+
+* [Productions](productions/productions.md)
+
+## Food Preferences
+
+* [Introduction](food-preferences/introduction.md)
+* [Block](food-preferences/block.md)
+* [Item](food-preferences/item.md)
+* [Entity](food-preferences/entity.md)
+* [Fluid](food-preferences/fluid.md)
+
+## Recipes
+
+* [Animal Glue](recipes/animal-glue.md)
+
