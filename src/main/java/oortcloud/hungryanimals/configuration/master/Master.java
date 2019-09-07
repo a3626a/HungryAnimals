@@ -23,6 +23,12 @@ import oortcloud.hungryanimals.utils.R;
 
 public class Master {
 
+	/**
+	 *
+	 * @param node : Node where to load modifiers.
+	 * @param domain : Value testing the modifiers. It selects modifiers whose domain value is equal to itself, or 'all'.
+	 * @return
+	 */
 	public static Supplier<List<Pair<Predicate<R>, UnaryOperator<JsonElement>>>> get(Node node, String domain) {
 		return () -> {
 			List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> ret = new ArrayList<>();
@@ -114,6 +120,7 @@ public class Master {
 	public static JsonElement operate(JsonElement modifier, JsonElement modifiee) {
 		JsonObject jsonObj = (JsonObject) modifier;
 		String operation = JsonUtils.getString(jsonObj, "operation");
+
 		float value = JsonUtils.getFloat(jsonObj, "value");
 		if (operation.equals("+")) {
 			return new JsonPrimitive(modifiee.getAsFloat() + value);

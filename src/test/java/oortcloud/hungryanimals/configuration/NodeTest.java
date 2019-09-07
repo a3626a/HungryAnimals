@@ -69,7 +69,7 @@ public class NodeTest {
     }
 
     @Test
-    public void NodPath_Build() throws IOException {
+    public void NodePath_Build() throws IOException {
 		Path directory3 = null;
 		Path directory4 = null;
 
