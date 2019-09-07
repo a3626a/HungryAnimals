@@ -16,15 +16,27 @@ import oortcloud.hungryanimals.utils.R;
 public class NodePath extends Node {
 
 	private Path base;
+	private Path directory;
+
+	/**
+	 *
+	 * @param base : The base path to calculate R. (resource name)
+	 *               Resource name is calculated by relative path from base to the resource.
+	 * @param directory : The directory to load json files.
+	 */
+	public NodePath(Path base, Path directory) {
+		this.base = base;
+		this.directory = directory;
+	}
 
 	public NodePath(Path base) {
-		this.base = base;
+		this(base, base);
 	}
 
 	@Override
 	public Map<R, JsonElement> build() {
 		Map<R, JsonElement> map = new HashMap<>();
-		try (Stream<Path> stream = Files.walk(base)) {
+		try (Stream<Path> stream = Files.walk(directory)) {
 			stream.forEach((Path path) -> {
 				if (Files.isRegularFile(path)) {
 					if (path.toString().endsWith(".json")) {
