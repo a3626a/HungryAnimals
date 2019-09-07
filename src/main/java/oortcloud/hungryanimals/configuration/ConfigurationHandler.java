@@ -113,7 +113,7 @@ public class ConfigurationHandler {
 		exampleFolder = event.getModConfigurationDirectory().toPath().resolve(References.MODID + "_example");
 
 		// Master Config Graph
-		master = new NodeOverride(new NodePath(baseFolder.resolve("master")), new NodePlugin(Paths.get("master")));
+		master = new NodeOverride(new NodePath(baseFolder, baseFolder.resolve("master")), new NodePlugin(Paths.get("master")));
 
 		// Config Graph
 		example = new NodeCache(new NodeModifier(new NodePlugin(), Master.get(master, "default")));

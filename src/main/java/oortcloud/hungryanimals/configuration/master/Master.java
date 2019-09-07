@@ -81,9 +81,7 @@ public class Master {
 	}
 
 	public static UnaryOperator<JsonElement> parseModifier(JsonElement modifier) {
-		return (modifiee) -> {
-			return traverse(modifier, modifiee);
-		};
+		return (modifiee) -> traverse(modifier, modifiee);
 	}
 
 	public static JsonElement traverse(JsonElement modifier, JsonElement modifiee) {
