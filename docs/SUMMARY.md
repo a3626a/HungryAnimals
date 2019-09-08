@@ -39,3 +39,7 @@
 
 * [Animal Glue](recipes/animal-glue.md)
 
+## TUTORIALS
+
+* [Changing Mob Drops](tutorials/changing-mob-drops.md)
+
