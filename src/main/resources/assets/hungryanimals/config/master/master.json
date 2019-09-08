@@ -1,4 +1,5 @@
 {
     "difficulty" : "normal",
-    "tempo" : "slow"
+    "tempo" : "slow",
+    "custom" : []
 }

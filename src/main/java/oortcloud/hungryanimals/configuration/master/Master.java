@@ -21,6 +21,9 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.Pair;
 import oortcloud.hungryanimals.utils.R;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class Master {
 
 	/**
@@ -39,9 +42,14 @@ public class Master {
 				JsonObject jsonObj = (JsonObject) master;
 				JsonElement difficulty = map.get(R.get("master", "difficulty", JsonUtils.getString(jsonObj, "difficulty") + ".json"));
 				JsonElement tempo = map.get(R.get("master", "tempo", JsonUtils.getString(jsonObj, "tempo") + ".json"));
+				JsonElement custom = jsonObj.get("custom");
 				ret.addAll(parse(difficulty, domain));
 				ret.addAll(parse(tempo, domain));
-				// TODO custom master config
+				if (custom == null) {
+					HungryAnimals.logger.warn("can't find custom master config.");
+				} else {
+					ret.addAll(parse(custom, domain));
+				}
 				return ret;
 			} else {
 				throw new JsonParseException("master/master.json is not an json object.");
@@ -49,7 +57,7 @@ public class Master {
 		};
 	}
 
-	public static List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> parse(JsonElement jsonEle, String domain) {
+	public static List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> parse(@Nonnull JsonElement jsonEle, String domain) {
 		List<Pair<Predicate<R>, UnaryOperator<JsonElement>>> list = new ArrayList<>();
 
 		if (jsonEle.isJsonArray()) {
