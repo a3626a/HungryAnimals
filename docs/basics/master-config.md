@@ -6,6 +6,8 @@ Master config is an json config file which modifies other config settings. Maste
 
 Easy config is implemented using master config. `master/master.json` selects master json file to apply according to its field values. There are master config files inside `master/difficulty` and `master/tempo`.
 
+`master/master.json` also provides `custom` field. `modifier`s inside this field are also applied along with easy configs like `difficulty` and `tempo`.
+
 ## Grammar
 
 {% code-tabs %}
@@ -13,14 +15,19 @@ Easy config is implemented using master config. `master/master.json` selects mas
 ```text
 [
   "difficulty" : "easy" | "normal" | "hard",
-  "tempo" : "fast" | "normal" | "slow"
+  "tempo" : "fast" | "normal" | "slow",
+  "custom" : [
+    modifier,
+    modifier,
+    ...
+  ]
 ]
 ```
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
 {% code-tabs %}
-{% code-tabs-item title="master/custom/\*.json" %}
+{% code-tabs-item title="master/{difficulty\|tempo}/\*.json" %}
 ```text
 [
   modifier,
