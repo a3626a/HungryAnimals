@@ -40,6 +40,7 @@ import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMateModified extends EntityAIBase {
 	private EntityAnimal animal;
+	@Nullable
 	private ICapabilityHungryAnimal theAnimalCapHungry;
 	@Nullable
 	private ICapabilityTamableAnimal theAnimalCapTamable;
@@ -148,8 +149,7 @@ public class EntityAIMateModified extends EntityAIBase {
 			Method createChild = animal.getClass().getDeclaredMethod("createChild", EntityAgeable.class);
 			if (createChild != null)
 				createChildDeclared = true;
-		} catch (NoSuchMethodException e) {
-		} catch (SecurityException e) {
+		} catch (NoSuchMethodException | SecurityException ignored) {
 		}
 
 		// Create Child 2
@@ -165,7 +165,9 @@ public class EntityAIMateModified extends EntityAIBase {
 			if (targetMateCapHungry != null) {
 				targetMateCapHungry.addWeight(-weight_child / 2);
 			}
-			theAnimalCapHungry.addWeight(-weight_child / 2);
+			if (theAnimalCapHungry != null) {
+				theAnimalCapHungry.addWeight(-weight_child / 2);
+			}
 
 			double childTaming = calculateBabyTaming(theAnimalCapTamable, targetMateCapTamable);
 			if (childTamable != null) {
