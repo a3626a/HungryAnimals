@@ -27,7 +27,8 @@ string
   "name" : string,
   "tamable" : boolean,
   "model_growing" : boolean,
-  "sexual" : boolean
+  "sexual" : boolean,
+  "ageabe" : bollean
 }
 ```
 {% endcode-tabs-item %}
@@ -40,6 +41,8 @@ if `"tamable"` is false, then taming is disabled for the animals. Default value 
 if `"model_growing"` is true, then animals's sizes grow depending on their weight. Default value is true.
 
 if `"sexual"` is false, then animals become asexual. Default value is true.
+
+if `"ageable"` is false, then animals are always adult.
 
 ### Example
 
