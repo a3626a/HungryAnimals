@@ -321,6 +321,9 @@ public class ConfigurationHandler {
 					if (jsonObj.has("ageable")) {
 						entry.isAgeable = JsonUtils.getBoolean(jsonObj, "ageable");
 					}
+					if (jsonObj.has("hungry")) {
+						entry.isHungry = JsonUtils.getBoolean(jsonObj, "hungry");
+					}
 				} else {
 					name = jsonEle.getAsString();
 				}
