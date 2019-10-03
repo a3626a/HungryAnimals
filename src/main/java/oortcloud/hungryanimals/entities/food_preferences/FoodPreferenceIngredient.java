@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
+import javax.annotation.Nonnull;
+
 public class FoodPreferenceIngredient implements IFoodPreference<ItemStack> {
 
 	private List<FoodPreferenceIngredientEntry> list;
@@ -47,7 +49,7 @@ public class FoodPreferenceIngredient implements IFoodPreference<ItemStack> {
 	
 
 	@Override
-	public boolean canEat(ICapabilityHungryAnimal cap, ItemStack food) {
+	public boolean canEat(@Nonnull ICapabilityHungryAnimal cap, ItemStack food) {
 		double stomach = getStomach(food);
 		return stomach > 0 && shouldEat(cap);
 	}

@@ -6,6 +6,8 @@ import net.minecraftforge.fluids.FluidStack;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.utils.Pair;
 
+import javax.annotation.Nonnull;
+
 public class FoodPreferenceFluid implements IFoodPreference<FluidStack> {
 
 	private Map<String, Pair<Double, Double>> map;
@@ -15,7 +17,7 @@ public class FoodPreferenceFluid implements IFoodPreference<FluidStack> {
 	}
 	
 	@Override
-	public boolean canEat(ICapabilityHungryAnimal cap, FluidStack food) {
+	public boolean canEat(@Nonnull ICapabilityHungryAnimal cap, FluidStack food) {
 		double stomach = getStomach(food);
 		return stomach > 0 && shouldEat(cap);
 	}

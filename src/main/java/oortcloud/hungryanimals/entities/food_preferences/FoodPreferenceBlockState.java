@@ -9,6 +9,8 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.utils.HashBlockState;
 import oortcloud.hungryanimals.utils.Pair;
 
+import javax.annotation.Nonnull;
+
 public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 
 	private Map<HashBlockState, Pair<Double, Double>> map;
@@ -44,7 +46,7 @@ public class FoodPreferenceBlockState implements IFoodPreference<IBlockState> {
 	}
 
 	@Override
-	public boolean canEat(ICapabilityHungryAnimal cap, IBlockState food) {
+	public boolean canEat(@Nonnull ICapabilityHungryAnimal cap, IBlockState food) {
 		double stomach = getStomach(food);
 		return stomach > 0 && shouldEat(cap);
 	}

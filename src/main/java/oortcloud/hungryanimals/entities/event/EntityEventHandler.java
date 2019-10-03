@@ -387,7 +387,7 @@ public class EntityEventHandler {
 		int heat = 0;
 		Item item = itemstack.getItem();
 		TamingLevel tamingLevel = Tamings.getLevel(capTaming);
-		if (prefItem.canEat(capHungry, itemstack) && tamingLevel == TamingLevel.TAMED) {
+		if (capHungry != null && prefItem.canEat(capHungry, itemstack) && tamingLevel == TamingLevel.TAMED) {
 			flagEat = true;
 		}
 		if (entity.isPotionActive(ModPotions.potionDisease) && tamingLevel == TamingLevel.TAMED) {
@@ -420,11 +420,11 @@ public class EntityEventHandler {
 			}
 		}
 
-		return cancelEvent(item, itemstack, entity, tamingLevel);
+		return cancelEvent(item, itemstack, entity, capHungry, tamingLevel);
 	}
 
 	private Pair<Boolean, EnumActionResult> cancelEvent(Item item, ItemStack itemstack, EntityLiving entity,
-			TamingLevel tamingLevel) {
+			ICapabilityHungryAnimal capHungry, TamingLevel tamingLevel) {
 		// Skip Event. TODO Too Dirty Here.
 		// For horses, they do not implement isBreedingItem properly
 		if (entity.getClass() == EntityCow.class) {
@@ -472,7 +472,7 @@ public class EntityEventHandler {
 			 */
 		}
 		// Skipping Event to Entity
-		if (entity instanceof EntityAnimal) {
+		if (capHungry != null && entity instanceof EntityAnimal) {
 			if (((EntityAnimal)entity).isBreedingItem(itemstack)) {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
@@ -482,7 +482,7 @@ public class EntityEventHandler {
 
 	private void eatFoodBonus(EntityLiving entity, ICapabilityHungryAnimal capHungry,
 			ICapabilityTamableAnimal capTaming, ItemStack item) {
-		// TODO It must merged with AI's eatFoodBonus to increase maintainance
+		// TODO It must merged with AI's eatFoodBonus for better maintenance
 		if (item.isEmpty())
 			return;
 

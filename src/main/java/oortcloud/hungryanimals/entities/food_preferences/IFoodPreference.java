@@ -2,9 +2,11 @@ package oortcloud.hungryanimals.entities.food_preferences;
 
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
+import javax.annotation.Nonnull;
+
 public interface IFoodPreference<T> extends IFoodPreferenceSimple<T> {
 
-	public boolean canEat(ICapabilityHungryAnimal cap, T food);
+	public boolean canEat(@Nonnull ICapabilityHungryAnimal cap, T food);
 	public double getNutrient(T food);
 	public double getStomach(T food);
 	
