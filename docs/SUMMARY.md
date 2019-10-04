@@ -42,4 +42,5 @@
 ## TUTORIALS
 
 * [Changing Mob Drops](tutorials/changing-mob-drops.md)
+* [Supporting Animania](tutorials/supporting-animania.md)
 
