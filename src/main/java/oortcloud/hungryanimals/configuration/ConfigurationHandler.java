@@ -202,7 +202,7 @@ public class ConfigurationHandler {
 			ModLootTables.register(EntityList.getKey(animal), jsonElement);
 		});
 		ais = new ConfigurationHandlerJSONAnimal(baseFolder, "ais", (jsonElement, animal) -> {
-			IAIContainer<EntityLiving> aiContainer = AIContainers.getInstance().parse(jsonElement);
+			IAIContainer<EntityLiving> aiContainer = AIContainers.getInstance().parse(animal, jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
 		productions = new ConfigurationHandlerJSONAnimal(baseFolder, "productions", (jsonElement, animal) -> {
