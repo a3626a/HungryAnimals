@@ -16,12 +16,14 @@ public class HungryAnimalManager {
 		public boolean isModelGrowing;
 		public boolean isSexual;
 		public boolean isAgeable;
-		
+		public boolean isHungry;
+
 		public HungryAnimalEntry() {
 			isTamable = true;
 			isModelGrowing = true;
 			isSexual = true;
 			isAgeable = true;
+			isHungry = true;
 		}
 		
 	}
@@ -84,6 +86,14 @@ public class HungryAnimalManager {
 		}
 		return false;
 	}
+
+	public boolean isHungry(Class<? extends EntityLiving> animal) {
+		if (REGISTRY.containsKey(animal)) {
+			return REGISTRY.get(animal).isHungry;
+		}
+		return false;
+	}
+
 	
 	public void init() {
 

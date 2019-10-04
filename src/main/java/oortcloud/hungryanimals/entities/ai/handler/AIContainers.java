@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.google.gson.JsonElement;
@@ -20,13 +21,13 @@ public class AIContainers implements IAIRegistry {
 	private static AIContainers INSTANCE;
 
 	private Map<Class<? extends EntityLiving>, IAIContainer<EntityLiving>> REGISTRY;
-	private Map<String, Function<JsonElement, IAIContainer<EntityLiving>>> AICONTAINERS;
+	private Map<String, BiFunction<Class<? extends EntityLiving>, JsonElement, IAIContainer<EntityLiving>>> AICONTAINERS;
 	private Map<String, Map<String, BiConsumer<JsonElement, AIContainer>>> MODIFIERS;
 
 	private AIContainers() {
-		REGISTRY = new HashMap<Class<? extends EntityLiving>, IAIContainer<EntityLiving>>();
-		AICONTAINERS = new HashMap<String, Function<JsonElement, IAIContainer<EntityLiving>>>();
-		MODIFIERS = new HashMap<String, Map<String, BiConsumer<JsonElement, AIContainer>>>();
+		REGISTRY = new HashMap<>();
+		AICONTAINERS = new HashMap<>();
+		MODIFIERS = new HashMap<>();
 	}
 
 	public static AIContainers getInstance() {
@@ -40,13 +41,13 @@ public class AIContainers implements IAIRegistry {
 		return REGISTRY.put(animal, aiContainer);
 	}
 
-	public void register(String name, Function<JsonElement, IAIContainer<EntityLiving>> parser) {
+	public void register(String name, BiFunction<Class<? extends EntityLiving>, JsonElement, IAIContainer<EntityLiving>> parser) {
 		AICONTAINERS.put(name, parser);
 	}
 
 	public void register(String nameType, String nameModifier, BiConsumer<JsonElement, AIContainer> modifier) {
 		if (!MODIFIERS.containsKey(nameType)) {
-			MODIFIERS.put(nameType, new HashMap<String, BiConsumer<JsonElement, AIContainer>>());
+			MODIFIERS.put(nameType, new HashMap<>());
 		}
 		MODIFIERS.get(nameType).put(nameModifier, modifier);
 	}
@@ -55,7 +56,7 @@ public class AIContainers implements IAIRegistry {
 		REGISTRY.get(animal.getClass()).registerAI(animal);
 	}
 
-	public IAIContainer<EntityLiving> parse(JsonElement jsonEle) {
+	public IAIContainer<EntityLiving> parse(Class<? extends EntityLiving> entityClass, JsonElement jsonEle) {
 		if (!(jsonEle instanceof JsonObject)) {
 			HungryAnimals.logger.error("AI container must an object.");
 			throw new JsonSyntaxException(jsonEle.toString());
@@ -65,7 +66,7 @@ public class AIContainers implements IAIRegistry {
 		String aiType = JsonUtils.getString(jsonObj, "type");
 		jsonObj.remove("type");
 
-		IAIContainer<EntityLiving> aiContainer = AICONTAINERS.get(aiType).apply(jsonObj);
+		IAIContainer<EntityLiving> aiContainer = AICONTAINERS.get(aiType).apply(entityClass, jsonObj);
 
 		for (Entry<String, JsonElement> i : jsonObj.entrySet()) {
 			if (aiContainer instanceof AIContainer) {
@@ -84,7 +85,7 @@ public class AIContainers implements IAIRegistry {
 	}
 
 	@Override
-	public void registerAIContainer(String type, Function<JsonElement, IAIContainer<EntityLiving>> aiContainer) {
+	public void registerAIContainer(String type, BiFunction<Class<? extends EntityLiving>, JsonElement, IAIContainer<EntityLiving>> aiContainer) {
 		register(type, aiContainer);
 	}
 

@@ -33,8 +33,11 @@ import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.ProductionFluid;
 
+import javax.annotation.Nullable;
+
 public class EntityAIDrinkMilk extends EntityAIFollowParent {
 
+	@Nullable
 	private ICapabilityHungryAnimal childHungry;
 	private IFluidHandler tank;
 	private IFoodPreference<FluidStack> pref;
@@ -56,7 +59,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	}
 
 	public boolean shouldExecute() {
-		if (ageable == null) {
+		if (ageable == null || childHungry == null) {
 			return false;
 		} else if (ageable.getAge() >= 0) {
 			return false;
@@ -82,7 +85,6 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	protected EntityLiving findMother() {
 		List<EntityLiving> list = this.childAnimal.world.<EntityLiving>getEntitiesWithinAABB(this.childAnimal.getClass(),
 				this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
-		EntityLiving entityanimal = null;
 
 		Collections.shuffle(list);
 
@@ -104,7 +106,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 			}
 		}
 
-		return entityanimal;
+		return null;
 	}
 
 	public boolean shouldContinueExecuting() {

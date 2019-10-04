@@ -32,6 +32,7 @@ import oortcloud.hungryanimals.entities.ai.handler.AIContainerHerbivore;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainerTask.AIRemoverIsInstance;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainerWolf;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 import oortcloud.hungryanimals.entities.loot_tables.SetCountBaseOnWeight;
 import oortcloud.hungryanimals.entities.production.ProductionEgg;
 import oortcloud.hungryanimals.entities.production.ProductionFluid;
@@ -66,11 +67,13 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("herbivore", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("herbivore", "hurt_by_player", EntityAIHurtByPlayer::parse);
 		
-		registry.registerAIContainer("rabbit", (jsonEle) -> {
-			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(jsonEle);
+		registry.registerAIContainer("rabbit", (entityClass, jsonEle) -> {
+			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(entityClass, jsonEle);
 			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIPanic.class));
 			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIAvoidEntity.class));
-			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIMoveToBlock.class));
+			if (HungryAnimalManager.getInstance().isHungry(entityClass)) {
+				aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIMoveToBlock.class));
+			}
 			return aiContainer;
 		});
 		registry.registerAIContainerModifier("rabbit", "attack_melee", EntityAIAttackMeleeCustom::parse);

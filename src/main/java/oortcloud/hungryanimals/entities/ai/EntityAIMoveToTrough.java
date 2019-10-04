@@ -67,6 +67,9 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
+		if (capHungry == null)
+			return false;
+
 		if (pos == null)
 			return false;
 

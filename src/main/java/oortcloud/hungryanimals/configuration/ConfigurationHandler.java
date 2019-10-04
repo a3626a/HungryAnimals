@@ -202,7 +202,7 @@ public class ConfigurationHandler {
 			ModLootTables.register(EntityList.getKey(animal), jsonElement);
 		});
 		ais = new ConfigurationHandlerJSONAnimal(baseFolder, "ais", (jsonElement, animal) -> {
-			IAIContainer<EntityLiving> aiContainer = AIContainers.getInstance().parse(jsonElement);
+			IAIContainer<EntityLiving> aiContainer = AIContainers.getInstance().parse(animal, jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
 		productions = new ConfigurationHandlerJSONAnimal(baseFolder, "productions", (jsonElement, animal) -> {
@@ -320,6 +320,9 @@ public class ConfigurationHandler {
 					}
 					if (jsonObj.has("ageable")) {
 						entry.isAgeable = JsonUtils.getBoolean(jsonObj, "ageable");
+					}
+					if (jsonObj.has("hungry")) {
+						entry.isHungry = JsonUtils.getBoolean(jsonObj, "hungry");
 					}
 				} else {
 					name = jsonEle.getAsString();

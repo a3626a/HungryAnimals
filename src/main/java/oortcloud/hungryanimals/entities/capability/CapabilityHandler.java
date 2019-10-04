@@ -29,7 +29,10 @@ public class CapabilityHandler {
 
 		EntityLiving animal = (EntityLiving) event.getObject();
 		if (HungryAnimalManager.getInstance().isRegistered(animal.getClass())) {
-			event.addCapability(CAP_HUNGRYANIMALS, new ProviderHungryAnimal(animal));
+			boolean isHungry = HungryAnimalManager.getInstance().isHungry(animal.getClass());
+			if (isHungry) {
+				event.addCapability(CAP_HUNGRYANIMALS, new ProviderHungryAnimal(animal));
+			}
 
 			boolean isTamable = HungryAnimalManager.getInstance().isTamable(animal.getClass());
 			if (isTamable) {

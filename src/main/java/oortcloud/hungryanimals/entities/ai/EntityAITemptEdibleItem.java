@@ -45,6 +45,9 @@ public class EntityAITemptEdibleItem extends EntityAITempt {
 
 	@Override
 	public boolean shouldExecute() {
+		if (capHungry == null)
+			return false;
+		
 		return super.shouldExecute() && Tamings.getLevel(capTaming) == TamingLevel.TAMED;
 	}
 
