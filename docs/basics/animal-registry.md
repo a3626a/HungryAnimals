@@ -28,7 +28,8 @@ string
   "tamable" : boolean,
   "model_growing" : boolean,
   "sexual" : boolean,
-  "ageabe" : bollean
+  "ageabe" : bollean,
+  "hungry" : boolean
 }
 ```
 {% endcode-tabs-item %}
@@ -43,6 +44,8 @@ if `"model_growing"` is true, then animals's sizes grow depending on their weigh
 if `"sexual"` is false, then animals become asexual. Default value is true.
 
 if `"ageable"` is false, then animals are always adult.
+
+if `"hungry"` is false, most of HA's features are disabled. Animals won't drink milk from their mother, move to eat item, move to eat block, and move to trough. They can be bred by vanilla breeding items. The amount of meat dropped becomes vanilla. 
 
 ### Example
 
