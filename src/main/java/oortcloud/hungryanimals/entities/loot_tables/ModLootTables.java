@@ -9,6 +9,9 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -21,9 +24,12 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
+import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 /**
  * Loot Table Modification System Details. 
@@ -81,9 +87,26 @@ public class ModLootTables implements ILootTableRegistry {
 				return;
 			}
 		}
+
+		// Disable loot override for non-hungry animals.
+		boolean shouldOverride = false;
+		ResourceLocation entityResource = new ResourceLocation(
+				event.getName().getResourceDomain(),
+				event.getName().getResourcePath().replace("entities/", "")
+		);
+		Class<? extends Entity> entityClass = EntityList.getClass(entityResource);
+		if (entityClass != null) {
+			if (EntityLiving.class.isAssignableFrom(entityClass)) {
+				Class<? extends EntityLiving> livingClass = entityClass.asSubclass(EntityLiving.class);
+				if (HungryAnimalManager.getInstance().isHungry(livingClass)) {
+					shouldOverride = true;
+				}
+			}
+		}
+
 		for (LootPool i : (List<LootPool>) pools.get(table)) {
 			List<LootEntry> iEntries = (List<LootEntry>) lootEntries.get(i);
-			if (iEntries.size() == 1) {
+			if (shouldOverride && iEntries.size() == 1) {
 				LootEntry iEntry = iEntries.get(0);
 				LootPool toRemove = null;
 				if (iEntry instanceof LootEntryItem) {
