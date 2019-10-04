@@ -60,6 +60,9 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 
 	@Override
 	public boolean shouldExecute() {
+		if (cap == null)
+			return false;
+
 		if (delay > 0) {
 			delay--;
 			return false;

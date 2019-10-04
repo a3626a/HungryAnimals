@@ -68,6 +68,9 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	
 	@Override
 	public boolean shouldExecute() {
+		if (capHungry == null)
+			return false;
+
 		if (!pref.shouldEat(capHungry)) {
 			return false;
 		}
