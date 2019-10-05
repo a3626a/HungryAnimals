@@ -1,0 +1,33 @@
+[
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "tall_grass"
+		},
+		"nutrient": 0.282666667,
+		"stomach": 0.706666667
+	},
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "fern"
+		},
+		"nutrient": 0.282666667,
+		"stomach": 0.706666667
+	},
+	{
+		"block": {
+			"name": "minecraft:wheat",
+			"age": 7
+		},
+		"nutrient": 0.57,
+		"stomach": 0.95
+	},
+	{
+		"block": {
+			"name": "minecraft:hay_block"
+		},
+		"nutrient": 5.13,
+		"stomach": 8.55
+	}
+]
