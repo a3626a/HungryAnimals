@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 buildscript {
     repositories {
         jcenter()
@@ -111,6 +113,26 @@ task copyConfigs() {
     inputs.each { input ->
         copyConfigsOneAnimal(root, dirs, input[0], input[1], input[2])
     }
+
+    def json = []
+    inputs.each { input ->
+        input[1].each { type ->
+            input[2].each { gender ->
+                json.add(
+                        [
+                                name: "animania:"+gender+"_"+type,
+                                tamable: false,
+                                model_growing: false,
+                                sexual: false,
+                                hungry: false,
+                                ageable: false
+                        ]
+                )
+            }
+        }
+    }
+
+    new File(root+"animal/animania/animal.json").write(JsonOutput.toJson(json))
 }
 
 
