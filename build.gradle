@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 buildscript {
     repositories {
         jcenter()
@@ -74,5 +76,64 @@ dependencies {
     // JUnit
     compile "junit:junit:4.11"
 }
+
+ext.copyConfigsOneAnimal = { root, src, dest, dirs, vanilla, types, genders ->
+    dirs.each { dir ->
+        types.each { type ->
+            genders.each { gender ->
+                copy {
+                    from root+dir+src
+                    into root+dir+dest
+                    include '**/'+vanilla+'.json'
+                    rename { String fileName ->
+                        fileName.replace(vanilla, gender+'_'+type)
+                    }
+                }
+            }
+        }
+    }
+}
+
+task copyConfigs() {
+    def root = 'src/main/resources/assets/hungryanimals/config/'
+    def dirs = ["ais/", "attributes/", "food_preferences/block/", "food_preferences/entity/", "food_preferences/fluid/",
+                "food_preferences/item/"]
+    /*
+    def dirs = ["ais/", "attributes/", "food_preferences/block/", "food_preferences/entity/",
+                "food_preferences/fluid/", "food_preferences/item/", "loot_tables/", "productions/"]
+     */
+    def inputs = [
+            ['minecraft','animania','pig',['duroc', 'hampshire', 'large_black', 'large_white', 'old_spot', 'yorkshire'],['sow', 'hog', 'piglet']],
+            ['animania','animania','cow',['angus', 'friesian', 'hereford', 'holstein', 'jersey', 'mooshroom', 'highland', 'longhorn'],['cow', 'bull', 'calf']],
+            ['minecraft','animania','chicken',['leghorn', 'orpington', 'plymouth_rock', 'rhode_island_red', 'wyandotte'],['hen','rooster','chick']],
+            ['minecraft','animania','rabbit',['chinchilla','cottontail','dutch','havana','jack','lop','new_zealand','rex'],['doe','buck','kit']],
+            ['minecraft','animania','sheep',['dorper','dorset','friesian','merino','jacob','suffolk'],['ewe','ram','lamb']]
+    ]
+
+    inputs.each { input ->
+        copyConfigsOneAnimal(root, input[0], input[1], dirs, input[2], input[3], input[4])
+    }
+
+    def json = []
+    inputs.each { input ->
+        input[3].each { type ->
+            input[4].each { gender ->
+                json.add(
+                        [
+                                name: "animania:"+gender+"_"+type,
+                                tamable: false,
+                                model_growing: false,
+                                sexual: false,
+                                hungry: false,
+                                ageable: false
+                        ]
+                )
+            }
+        }
+    }
+
+    new File(root+"animal/animania/animal.json").write(JsonOutput.toJson(json))
+}
+
 
 

@@ -1,0 +1,23 @@
+[
+	{
+		"item": {
+			"item": "minecraft:wheat"
+		},
+		"nutrient": 0.57,
+		"stomach": 0.95
+	},
+	{
+		"item": {
+			"item": "minecraft:hay_block"
+		},
+		"nutrient": 5.13,
+		"stomach": 8.55
+	},
+	{
+		"item": {
+			"item": "minecraft:reeds"
+		},
+		"nutrient": 0.2,
+		"stomach": 0.5
+	}
+]

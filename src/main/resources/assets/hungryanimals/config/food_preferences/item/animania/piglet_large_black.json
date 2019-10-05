@@ -1,0 +1,30 @@
+[
+	{
+		"item": {
+			"item": "minecraft:carrot"
+		},
+		"nutrient": 0.36,
+		"stomach": 0.6
+	},
+	{
+		"item": {
+			"item": "minecraft:potato"
+		},
+		"nutrient": 0.36,
+		"stomach": 0.6
+	},
+	{
+		"item": {
+			"item": "minecraft:beetroot"
+		},
+		"nutrient": 0.48,
+		"stomach": 0.8
+	},
+	{
+		"item": {
+			"item": "minecraft:rotten_flesh"
+		},
+		"nutrient": 0.1,
+		"stomach": 0.5
+	}
+]

@@ -70,9 +70,8 @@ public class HungryAnimals {
 		HungryAnimalManager.getInstance().init();
 
 		ConfigurationHandler.syncPre();
-		
-		if (Loader.isModLoaded("theoneprobe"))
-			proxy.initTOP();
+
+		proxy.initCompt();
 	}
 
 	@Mod.EventHandler

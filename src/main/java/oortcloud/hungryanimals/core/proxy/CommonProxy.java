@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.core.proxy;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -87,6 +88,14 @@ public class CommonProxy {
 	public void registerKeyBindings() {
 	}
 
+	public void initCompt() {
+		if (Loader.isModLoaded("theoneprobe"))
+			initTOP();
+
+		if (Loader.isModLoaded("animania"))
+			initAnimania();
+	}
+
 	public void initNEI() {
 	}
 
@@ -95,8 +104,12 @@ public class CommonProxy {
 		// "oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals.callbackRegister");
 	}
 	
-	public void initTOP() {
+	private void initTOP() {
 		 TOPCompatibility.register();
+	}
+
+	private void initAnimania() {
+
 	}
 
 	public void registerPacketHandler() {

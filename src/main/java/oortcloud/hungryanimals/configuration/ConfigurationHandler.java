@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -43,13 +44,7 @@ import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.BlockExcreta;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
-import oortcloud.hungryanimals.configuration.master.Master;
-import oortcloud.hungryanimals.configuration.master.Node;
-import oortcloud.hungryanimals.configuration.master.NodeCache;
-import oortcloud.hungryanimals.configuration.master.NodeModifier;
-import oortcloud.hungryanimals.configuration.master.NodeOverride;
-import oortcloud.hungryanimals.configuration.master.NodePath;
-import oortcloud.hungryanimals.configuration.master.NodePlugin;
+import oortcloud.hungryanimals.configuration.master.*;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
@@ -116,7 +111,14 @@ public class ConfigurationHandler {
 		master = new NodeOverride(new NodePath(baseFolder, baseFolder.resolve("master")), new NodePlugin(Paths.get("master")));
 
 		// Config Graph
-		example = new NodeCache(new NodeModifier(new NodePlugin(), Master.get(master, "default")));
+		example = new NodeCache(new NodeModifier(
+				new NodeArrayMerger(
+						new NodeModLoaded(new NodePlugin(), Sets.newHashSet("animania")),
+						"animal/minecraft/animal.json",
+						"animal/animania/animal.json",
+						"animal.json"
+				),
+				Master.get(master, "default")));
 		baked = new NodeOverride(new NodeModifier(new NodePath(baseFolder), Master.get(master, "custom")), example);
 
 		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/block", (jsonElement, animal) -> {

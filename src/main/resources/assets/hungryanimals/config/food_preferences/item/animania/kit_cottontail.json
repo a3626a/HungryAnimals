@@ -1,0 +1,24 @@
+[
+	{
+		"item": {
+			"item": "minecraft:carrot"
+		},
+		"nutrient": 0.36,
+		"stomach": 0.6
+	},
+	{
+		"item": {
+			"item": "minecraft:golden_carrot"
+		},
+		"nutrient": 1.6,
+		"stomach": 2
+	},
+	{
+		"item": {
+			"item": "minecraft:yellow_flower",
+			"data": 0
+		},
+		"nutrient": 0.282666667,
+		"stomach": 0.706666667
+	}
+]
