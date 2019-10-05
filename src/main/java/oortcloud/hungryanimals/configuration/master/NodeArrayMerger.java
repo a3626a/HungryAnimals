@@ -41,13 +41,13 @@ public class NodeArrayMerger extends Node {
 
 		JsonArray jsonArr = new JsonArray();
 
-		if (jsonEle1.isJsonArray()) {
+		if (jsonEle1 != null && jsonEle1.isJsonArray()) {
 			JsonArray jsonArr1 = jsonEle1.getAsJsonArray();
 			if (jsonArr1 != null) {
 				jsonArr.addAll(jsonArr1);
 			}
 		}
-		if (jsonEle2.isJsonArray()) {
+		if (jsonEle2 != null && jsonEle2.isJsonArray()) {
 			JsonArray jsonArr2 = jsonEle2.getAsJsonArray();
 			if (jsonArr2 != null) {
 				jsonArr.addAll(jsonArr2);
