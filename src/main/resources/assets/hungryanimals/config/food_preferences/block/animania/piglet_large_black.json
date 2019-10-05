@@ -1,0 +1,34 @@
+[
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "tall_grass"
+		},
+		"nutrient": 0.282666667,
+		"stomach": 0.706666667
+	},
+	{
+		"block": {
+			"name": "minecraft:tallgrass",
+			"type": "fern"
+		},
+		"nutrient": 0.282666667,
+		"stomach": 0.706666667
+	},
+	{
+		"block": {
+			"name": "minecraft:carrots",
+			"age": 7
+		},
+		"nutrient": 0.36,
+		"stomach": 0.6
+	},
+	{
+		"block": {
+			"name": "minecraft:potatoes",
+			"age": 7
+		},
+		"nutrient": 0.36,
+		"stomach": 0.6
+	}
+]
