@@ -116,8 +116,8 @@ task copyConfigs() {
 
     def json = []
     inputs.each { input ->
-        input[1].each { type ->
-            input[2].each { gender ->
+        input[3].each { type ->
+            input[4].each { gender ->
                 json.add(
                         [
                                 name: "animania:"+gender+"_"+type,
