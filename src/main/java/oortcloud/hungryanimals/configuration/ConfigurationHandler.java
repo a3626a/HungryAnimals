@@ -111,7 +111,14 @@ public class ConfigurationHandler {
 		master = new NodeOverride(new NodePath(baseFolder, baseFolder.resolve("master")), new NodePlugin(Paths.get("master")));
 
 		// Config Graph
-		example = new NodeCache(new NodeModifier(new NodeModLoaded(new NodePlugin(), Sets.newHashSet("animania")), Master.get(master, "default")));
+		example = new NodeCache(new NodeModifier(
+				new NodeArrayMerger(
+						new NodeModLoaded(new NodePlugin(), Sets.newHashSet("animania")),
+						"animal/minecraft/animal.json",
+						"animal/animania/animal.json",
+						"animal.json"
+				),
+				Master.get(master, "default")));
 		baked = new NodeOverride(new NodeModifier(new NodePath(baseFolder), Master.get(master, "custom")), example);
 
 		foodPreferencesBlock = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/block", (jsonElement, animal) -> {

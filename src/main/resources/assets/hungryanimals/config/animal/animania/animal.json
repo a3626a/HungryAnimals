@@ -1,0 +1,26 @@
+[
+  {
+    "name": "animania:hog_hampshire",
+    "tamable": false,
+    "model_growing": false,
+    "sexual": false,
+    "hungry": false,
+    "ageable": false
+  },
+  {
+    "name": "animania:sow_hampshire",
+    "tamable": false,
+    "model_growing": false,
+    "sexual": false,
+    "hungry": false,
+    "ageable": false
+  },
+  {
+    "name": "animania:piglet_hampshire",
+    "tamable": false,
+    "model_growing": false,
+    "sexual": false,
+    "hungry": false,
+    "ageable": false
+  }
+]

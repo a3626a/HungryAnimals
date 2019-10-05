@@ -16,7 +16,7 @@ public class NodeModLoaded extends Node {
 
 	private final List<String> PREFIXES = Lists.newArrayList(
 			"ais/", "attributes/", "food_preferences/block", "food_preferences/entity",
-			"food_preferences/fluid", "food_preferences/item", "loot_tables/", "productions/"
+			"food_preferences/fluid", "food_preferences/item", "loot_tables/", "productions/", "animal"
 	);
 
 	private Node parent;
