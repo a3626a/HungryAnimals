@@ -1,0 +1,24 @@
+{
+	"type" : "rabbit",
+    "avoid_player" : {
+        "radius" : 16.0,
+        "farspeed" : 1.0,
+        "nearspeed" : 2.0
+    },
+    "mate" : {
+        "speed" : 2.0
+    },
+    "trough" : {
+        "speed" : 1.0
+    },
+    "tempt_edible" : {
+        "speed" : 1.5,
+        "scared_by" : false
+    },
+    "eat_item" : {
+        "speed" : 1.5
+    },
+    "eat_block" : {
+        "speed" : 1.0
+    }
+}
