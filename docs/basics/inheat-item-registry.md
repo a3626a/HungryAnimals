@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="inheat.json" %}
+{% code title="inheat.json" %}
 ```text
 [
   ingredient,
@@ -15,8 +14,7 @@
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 For _ingredient_, follow this page

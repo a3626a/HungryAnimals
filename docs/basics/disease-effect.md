@@ -6,16 +6,14 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="disease.json" %}
+{% code title="disease.json" %}
 ```text
 {
   "multiply_weight_bmr" : double,
   "multiply_movement_speed" : double
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 

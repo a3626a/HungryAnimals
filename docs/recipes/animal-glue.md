@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="recipes/animalglue.json" %}
+{% code title="recipes/animalglue.json" %}
 ```text
 [
   {
@@ -17,6 +16,5 @@
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

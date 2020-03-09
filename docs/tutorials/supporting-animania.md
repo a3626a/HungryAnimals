@@ -12,8 +12,7 @@ HA loads bunch of internal configurations for Animania. It consists of registrat
 
 Unfortunately, Animania has its own food, taming, and breeding system. So the default configurations turn off HA's feature. Taming, Mating, Weight, and Aging are disabled.
 
-{% code-tabs %}
-{% code-tabs-item title="animal.json" %}
+{% code title="animal.json" %}
 ```text
 [
   ...
@@ -29,8 +28,7 @@ Unfortunately, Animania has its own food, taming, and breeding system. So the de
 ]
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 For the details about `animal.json`, refer this document. 
@@ -76,8 +74,7 @@ HA provides production customization. In this article, we will add milk producti
 
 #### Adding Milk Production
 
-{% code-tabs %}
-{% code-tabs-item title="config/hungryanimals/productions/animania/sow\_hampshire.json" %}
+{% code title="config/hungryanimals/productions/animania/sow\_hampshire.json" %}
 ```text
 [
   {
@@ -92,13 +89,11 @@ HA provides production customization. In this article, we will add milk producti
   }
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 This production entry will make every sow produce milk. Because fluid production requires certain attributes, you should register new attributes to them.
 
-{% code-tabs %}
-{% code-tabs-item title="config/hungryanimals/attributes/animania/sow\_hampshire.json" %}
+{% code title="config/hungryanimals/attributes/animania/sow\_hampshire.json" %}
 ```text
 {
   ...
@@ -106,8 +101,7 @@ This production entry will make every sow produce milk. Because fluid production
   "hungryanimals.fluid_weight": 0.0
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### Loot Tables
 
@@ -125,8 +119,7 @@ Refer `config/hungryanimals_example/ais/minecraft/cows.json`.
 
 To enable this, taming system should be enabled. It is because without taming system, every animals are considered as domesticated. Taming systems from HA and Animania are not compatible now. You should tame animals in both method.
 
-{% code-tabs %}
-{% code-tabs-item title="config/hungryanimals/animal.json" %}
+{% code title="config/hungryanimals/animal.json" %}
 ```text
 [
   ...
@@ -141,6 +134,5 @@ To enable this, taming system should be enabled. It is because without taming sy
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

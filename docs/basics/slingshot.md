@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="slingshot.json" %}
+{% code title="slingshot.json" %}
 ```text
 {
   "ammos" : [
@@ -18,8 +17,7 @@
   "damage" : double
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 For _ingredient_, follow this page

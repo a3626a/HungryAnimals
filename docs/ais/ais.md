@@ -6,8 +6,7 @@ AI of an animal is defined by a AI container and AI modifiers. AI containers dec
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="ais/{modid}/{anima}l.json" %}
+{% code title="ais/{modid}/{anima}l.json" %}
 ```text
 {
   "type" : ai_container,
@@ -16,21 +15,17 @@ AI of an animal is defined by a AI container and AI modifiers. AI containers dec
   ...
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="ai\_container " %}
+{% code title="ai\_container " %}
 ```text
 "herbivore" |
 "rabbit" |
 "wolf"
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="ai\_modifier " %}
+{% code title="ai\_modifier " %}
 ```text
 "attack_melee" : {
   "speed" : double,
@@ -99,8 +94,7 @@ AI of an animal is defined by a AI container and AI modifiers. AI containers dec
   "herding" : boolean
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 

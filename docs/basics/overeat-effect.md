@@ -6,15 +6,13 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="overeat.json" %}
+{% code title="overeat.json" %}
 ```text
 {
   "multiply_movement_speed" : double
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 

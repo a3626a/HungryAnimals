@@ -4,23 +4,19 @@
 
 Most HA features can be disabled by just not to register animals. You can just make `animal.json` empty.
 
-{% code-tabs %}
-{% code-tabs-item title="config/hungryanimals/animal.json" %}
+{% code title="config/hungryanimals/animal.json" %}
 ```text
 []
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Removing Animal Glue Recipe
 
 Animal glue is still craftable. Similarly, animal glue recipe can be disabled by emptying the json file.
 
-{% code-tabs %}
-{% code-tabs-item title="config/hungryanimals/recipes/animal.json" %}
+{% code title="config/hungryanimals/recipes/animal.json" %}
 ```text
 []
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="animal.json" %}
+{% code title="animal.json" %}
 ```text
 [
   hungry_animal_entry,
@@ -15,11 +14,9 @@
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="hungry\_animal\_entry " %}
+{% code title="hungry\_animal\_entry " %}
 ```text
 string
 |
@@ -32,8 +29,7 @@ string
   "hungry" : boolean
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 
