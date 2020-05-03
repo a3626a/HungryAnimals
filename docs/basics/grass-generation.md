@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="generators.json" %}
+{% code title="generators.json" %}
 ```text
 [
   biome_and_generator,
@@ -15,11 +14,9 @@
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="biome\_and\_generator " %}
+{% code title="biome\_and\_generator " %}
 ```text
 {
   "types" : [biome_type, ...],
@@ -35,11 +32,9 @@
   "generator" : generator
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="biome\_type " %}
+{% code title="biome\_type " %}
 ```text
 "HOT" |
 "COLD" |
@@ -73,22 +68,18 @@
 "BEACH" |
 "VOID"
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="generator " %}
+{% code title="generator " %}
 ```text
 {
   "condition" : condition,
   "grass" : block_state | [block_state, ...]
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="condition " %}
+{% code title="condition " %}
 ```text
 {
   "below" : block_state | [block_state, ...],
@@ -96,8 +87,7 @@
   "not_adjacent" : block_state | [block_state, ...]
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 For _block state_, follow this page

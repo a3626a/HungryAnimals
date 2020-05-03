@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="productions/{modid}/{anima}l.json" %}
+{% code title="productions/{modid}/{anima}l.json" %}
 ```text
 [
   production,
@@ -15,11 +14,9 @@
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="production " %}
+{% code title="production " %}
 ```text
 milk
 |
@@ -29,11 +26,9 @@ shear
 |
 fluid
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="milk " %}
+{% code title="milk " %}
 ```text
 {
   "type" : "milk",
@@ -45,11 +40,9 @@ fluid
   "output" : itemstack
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="egg " %}
+{% code title="egg " %}
 ```text
 {
   "type" : "egg",
@@ -60,11 +53,9 @@ fluid
   "output" : itemstack,
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="shear " %}
+{% code title="shear " %}
 ```text
 {
   "type" : "shear",
@@ -77,11 +68,9 @@ fluid
   "output" : itemstack
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="fluid " %}
+{% code title="fluid " %}
 ```text
 {
   "type" : "fluid",
@@ -93,11 +82,9 @@ fluid
   "weight" : double
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="range " %}
+{% code title="range " %}
 ```text
 integer
 |
@@ -106,19 +93,16 @@ integer
   "max" : integer
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="condition " %}
+{% code title="condition " %}
 ```text
 {
   "age" : "baby" | "adult",
   "sex" : "female" | "male",
     }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 {% hint style="info" %}
 For _itemstack_, follow this page

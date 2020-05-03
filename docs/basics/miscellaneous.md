@@ -2,8 +2,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="block\_state" %}
+{% code title="block\_state" %}
 ```text
 {
   "name" : string,
@@ -11,11 +10,9 @@
   ...
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="ingredient" %}
+{% code title="ingredient" %}
 ```text
 {
   "item" : string,
@@ -27,11 +24,9 @@
   "ore" : string
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="itemstack" %}
+{% code title="itemstack" %}
 ```text
 {
   "item" : string,
@@ -39,6 +34,5 @@
   "data" : integer
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

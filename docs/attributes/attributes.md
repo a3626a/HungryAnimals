@@ -6,19 +6,16 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="attributes/{modid}/{animal}.json" %}
+{% code title="attributes/{modid}/{animal}.json" %}
 ```text
 {
   attribute : attribute_value,
   ...
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="attribute " %}
+{% code title="attribute " %}
 ```text
 "hungryanimals.hunger_weight_bmr" |
 "hungryanimals.hunger_weight_normal" |
@@ -47,11 +44,9 @@
 "generic.attackSpeed" |
 "generic.luck"
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="attribute\_value" %}
+{% code title="attribute\_value" %}
 ```text
 {
   "value" : double,
@@ -60,8 +55,7 @@
 |
 double
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 

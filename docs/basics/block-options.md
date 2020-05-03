@@ -6,8 +6,7 @@
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="world.json" %}
+{% code title="world.json" %}
 ```text
 {
   "disease_probability" : double,
@@ -18,8 +17,7 @@
   "ripening_probability" : double
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 

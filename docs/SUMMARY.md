@@ -43,4 +43,5 @@
 
 * [Changing Mob Drops](tutorials/changing-mob-drops.md)
 * [Supporting Animania](tutorials/supporting-animania.md)
+* [Disabling all features but the grass generation](tutorials/disabling-all-features-but-the-grass-generation.md)
 

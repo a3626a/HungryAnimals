@@ -10,10 +10,9 @@ Easy config is implemented using master config. `master/master.json` selects mas
 
 ## Grammar
 
-{% code-tabs %}
-{% code-tabs-item title="master/master.json" %}
+{% code title="master/master.json" %}
 ```text
-[
+{
   "difficulty" : "easy" | "normal" | "hard",
   "tempo" : "fast" | "normal" | "slow",
   "custom" : [
@@ -21,13 +20,11 @@ Easy config is implemented using master config. `master/master.json` selects mas
     modifier,
     ...
   ]
-]
+}
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="master/{difficulty\|tempo}/\*.json" %}
+{% code title="master/{difficulty\|tempo}/\*.json" %}
 ```text
 [
   modifier,
@@ -35,11 +32,9 @@ Easy config is implemented using master config. `master/master.json` selects mas
   ...
 ]
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="modifier " %}
+{% code title="modifier " %}
 ```text
 {
   "domain" : "default" | "custom" | "all",
@@ -47,19 +42,16 @@ Easy config is implemented using master config. `master/master.json` selects mas
   "modifier" : json object,
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="operator" %}
+{% code title="operator" %}
 ```text
 {
   "operation" : "=" | "*" | "+",
   "value" : double
 } 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Usage
 
