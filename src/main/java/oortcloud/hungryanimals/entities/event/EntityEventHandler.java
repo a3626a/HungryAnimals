@@ -436,6 +436,9 @@ public class EntityEventHandler {
 			if (item == Items.BOWL) {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
+			if (item == Items.BUCKET) {
+				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+			}
 		}
 		if (entity instanceof AbstractHorse) {
 			if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK)
