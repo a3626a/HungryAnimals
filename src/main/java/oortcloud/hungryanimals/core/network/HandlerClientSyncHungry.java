@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -30,7 +30,7 @@ public class HandlerClientSyncHungry implements IMessageHandler<PacketClientSync
 				return;
 
 			Entity entity = world.getEntityByID(message.id);
-			if (entity == null || !(entity instanceof EntityLiving))
+			if (entity == null || !(entity instanceof MobEntity))
 				return;
 
 			ICapabilityHungryAnimal cap2 = entity.getCapability(ProviderHungryAnimal.CAP, null);
@@ -39,7 +39,7 @@ public class HandlerClientSyncHungry implements IMessageHandler<PacketClientSync
 				cap2.setWeight(message.weight);
 
 				if (entity instanceof EntityAgeable) {
-					// TODO : Expand this function to EntityLiving, currently setScale is required.
+					// TODO : Expand this function to MobEntity, currently setScale is required.
 					float ratio = (float) RenderEntityWeight.getRatio(entity);
 
 					if (((EntityAgeable) entity).getGrowingAge() < 0) {

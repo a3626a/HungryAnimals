@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -38,11 +38,11 @@ public class ProductionShear extends ProductionInteraction {
 	private ItemStack input;
 	private ItemStack output;
 	private int damage;
-	private Predicate<EntityLiving> condition;
+	private Predicate<MobEntity> condition;
 	private boolean disableSound;
 
-	public ProductionShear(String name, EntityLiving animal, IRange delay, ItemStack tool, ItemStack wool, int damage,
-			Predicate<EntityLiving> condition, boolean disableSound) {
+	public ProductionShear(String name, MobEntity animal, IRange delay, ItemStack tool, ItemStack wool, int damage,
+			Predicate<MobEntity> condition, boolean disableSound) {
 		super(name, animal, delay);
 		this.input = tool;
 		this.output = wool;
@@ -72,7 +72,7 @@ public class ProductionShear extends ProductionInteraction {
 		return EnumActionResult.PASS;
 	}
 
-	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
+	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
@@ -87,7 +87,7 @@ public class ProductionShear extends ProductionInteraction {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
 		int damage = JsonUtils.getInt(jsonObj, "damage");
-		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
+		Predicate<MobEntity> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"),
 				new JsonContext(References.MODID));
@@ -95,7 +95,7 @@ public class ProductionShear extends ProductionInteraction {
 				new JsonContext(References.MODID));
 		return new ProductionFactory() {
 			@Override
-			public IProduction apply(EntityLiving animal) {
+			public IProduction apply(MobEntity animal) {
 				return new ProductionShear(name, animal, delay, input, output, damage, condition, disableSound);
 			}
 

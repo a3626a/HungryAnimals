@@ -10,7 +10,7 @@ import com.google.gson.JsonObject;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,17 +46,17 @@ public class ProductionFluid
 		implements IProductionInteraction, IProductionTickable, ISyncable, IProductionTOP {
 
 	private String name;
-	private EntityLiving animal;
+	private MobEntity animal;
 	@Nonnull
 	private FluidTank tank;
 	private Fluid fluid;
 	private double amount;
 	private double weight;
-	private Predicate<EntityLiving> condition;
+	private Predicate<MobEntity> condition;
 
 	private int prevAmount;
 
-	public ProductionFluid(String name, EntityLiving animal, Predicate<EntityLiving> condition, Fluid fluid,
+	public ProductionFluid(String name, MobEntity animal, Predicate<MobEntity> condition, Fluid fluid,
 			int capacity, double amount, double weight) {
 		this.name = name;
 		this.animal = animal;
@@ -168,11 +168,11 @@ public class ProductionFluid
 		return tank;
 	}
 
-	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
+	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
-		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
+		Predicate<MobEntity> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		Fluid fluid = FluidRegistry.getFluid(JsonUtils.getString(jsonObj, "fluid"));
 		int capacity = JsonUtils.getInt(jsonObj, "capacity");
 		double amount = JsonUtils.getFloat(jsonObj, "amount");
@@ -180,7 +180,7 @@ public class ProductionFluid
 
 		return new ProductionFactory() {
 			@Override
-			public IProduction apply(EntityLiving animal) {
+			public IProduction apply(MobEntity animal) {
 				return new ProductionFluid(name, animal, condition, fluid, capacity, amount, weight);
 			}
 

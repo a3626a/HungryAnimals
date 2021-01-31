@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +51,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 
 	private FluidStack fluid;
 	
-	public EntityAIDrinkMilk(EntityLiving animal, double speed, FluidStack fluid) {
+	public EntityAIDrinkMilk(MobEntity animal, double speed, FluidStack fluid) {
 		super(animal, speed);
 		this.fluid = fluid;
 		childHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
@@ -68,7 +68,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		} else {
 			if (--searchCounter <= 0) {
 				searchCounter = SEARCH;
-				EntityLiving entityanimal = findMother();
+				MobEntity entityanimal = findMother();
 
 				if (entityanimal == null) {
 					return false;
@@ -82,13 +82,13 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		}
 	}
 
-	protected EntityLiving findMother() {
-		List<EntityLiving> list = this.childAnimal.world.<EntityLiving>getEntitiesWithinAABB(this.childAnimal.getClass(),
+	protected MobEntity findMother() {
+		List<MobEntity> list = this.childAnimal.world.<MobEntity>getEntitiesWithinAABB(this.childAnimal.getClass(),
 				this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
 
 		Collections.shuffle(list);
 
-		for (EntityLiving entityanimal1 : list) {
+		for (MobEntity entityanimal1 : list) {
 			ICapabilityProducingAnimal capProducing = entityanimal1.getCapability(ProviderProducingAnimal.CAP, null);
 
 			if (capProducing != null) {

@@ -8,7 +8,7 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMonsterPlacer;
@@ -22,7 +22,7 @@ public class RecipeWrapperFoodPreferenceBlock extends RecipeWrapperFoodPreferenc
 
 	List<Pair<Double, Double>> nutrientAndStomach;
 
-	public RecipeWrapperFoodPreferenceBlock(IJeiHelpers jeiHelpers, Class<? extends EntityLiving> entityClass) {
+	public RecipeWrapperFoodPreferenceBlock(IJeiHelpers jeiHelpers, Class<? extends MobEntity> entityClass) {
 		super(jeiHelpers, entityClass);
 		nutrientAndStomach = new ArrayList<>();
 	}

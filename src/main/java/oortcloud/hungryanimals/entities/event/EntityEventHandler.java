@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -62,10 +62,10 @@ public class EntityEventHandler {
 
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-		if (!(event.getEntity() instanceof EntityLiving))
+		if (!(event.getEntity() instanceof MobEntity))
 			return;
 
-		EntityLiving entity = (EntityLiving) event.getEntity();
+		MobEntity entity = (MobEntity) event.getEntity();
 
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
@@ -105,10 +105,10 @@ public class EntityEventHandler {
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if (!(event.getEntity() instanceof EntityLiving))
+		if (!(event.getEntity() instanceof MobEntity))
 			return;
 
-		EntityLiving entity = (EntityLiving) event.getEntity();
+		MobEntity entity = (MobEntity) event.getEntity();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
@@ -116,11 +116,11 @@ public class EntityEventHandler {
 	}
 
 	@SubscribeEvent
-	public void onLivingEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-		if (!(event.getEntity() instanceof EntityLiving))
+	public void onMobEntityUpdate(LivingEvent.LivingUpdateEvent event) {
+		if (!(event.getEntity() instanceof MobEntity))
 			return;
 
-		EntityLiving animal = (EntityLiving) event.getEntity();
+		MobEntity animal = (MobEntity) event.getEntity();
 
 		if (!HungryAnimalManager.getInstance().isRegistered(animal.getClass()))
 			return;
@@ -160,7 +160,7 @@ public class EntityEventHandler {
 		}
 	}
 
-	private void updateHunger(EntityLiving entity) {
+	private void updateHunger(MobEntity entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
 		if (cap == null)
@@ -199,7 +199,7 @@ public class EntityEventHandler {
 		cap.addWeight(-bmr);
 	}
 
-	private void updateCourtship(EntityLiving entity) {
+	private void updateCourtship(MobEntity entity) {
 		if (!(entity instanceof EntityAnimal))
 			return;
 		
@@ -227,7 +227,7 @@ public class EntityEventHandler {
 		}
 	}
 
-	private void updateExcretion(EntityLiving entity) {
+	private void updateExcretion(MobEntity entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
 		if (cap == null)
@@ -258,7 +258,7 @@ public class EntityEventHandler {
 		}
 	}
 
-	private void updateEnvironmentalEffet(EntityLiving entity) {
+	private void updateEnvironmentalEffet(MobEntity entity) {
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
@@ -286,7 +286,7 @@ public class EntityEventHandler {
 		}
 	}
 
-	private void updateTaming(EntityLiving entity) {
+	private void updateTaming(MobEntity entity) {
 		double radius = 16;
 
 		if (entity.getEntityWorld().getTotalWorldTime() % 200 == 0) {
@@ -314,7 +314,7 @@ public class EntityEventHandler {
 		}
 	}
 
-	private void updateRecovery(EntityLiving entity) {
+	private void updateRecovery(MobEntity entity) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 
 		if (cap == null)
@@ -327,16 +327,16 @@ public class EntityEventHandler {
 		}
 	}
 
-	public void onStarve(EntityLiving entity) {
+	public void onStarve(MobEntity entity) {
 		entity.attackEntityFrom(DamageSource.STARVE, 0.5F);
 	}
 
 	@SubscribeEvent
-	public void onLivingEntityAttackedByPlayer(LivingAttackEvent event) {
-		if (!(event.getEntity() instanceof EntityLiving))
+	public void onMobEntityAttackedByPlayer(LivingAttackEvent event) {
+		if (!(event.getEntity() instanceof MobEntity))
 			return;
 
-		EntityLiving entity = (EntityLiving) event.getEntity();
+		MobEntity entity = (MobEntity) event.getEntity();
 
 		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 
@@ -359,10 +359,10 @@ public class EntityEventHandler {
 	 */
 	@SubscribeEvent
 	public void onInteract(EntityInteract event) {
-		if (!(event.getTarget() instanceof EntityLiving))
+		if (!(event.getTarget() instanceof MobEntity))
 			return;
 
-		EntityLiving entity = (EntityLiving) event.getTarget();
+		MobEntity entity = (MobEntity) event.getTarget();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 		Pair<Boolean, EnumActionResult> result = interact(event, entity);
@@ -370,14 +370,14 @@ public class EntityEventHandler {
 		event.setCancellationResult(result.right);
 	}
 
-	private Pair<Boolean, EnumActionResult> interact(EntityInteract event, EntityLiving entity) {
+	private Pair<Boolean, EnumActionResult> interact(EntityInteract event, MobEntity entity) {
 		if (event.getItemStack().isEmpty())
 			return new Pair<Boolean, EnumActionResult>(false, null);
 		return interact(event, event.getHand(), event.getItemStack(), entity);
 	}
 
 	private Pair<Boolean, EnumActionResult> interact(EntityInteract event, EnumHand hand, ItemStack itemstack,
-			EntityLiving entity) {
+			MobEntity entity) {
 		ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
 		IFoodPreference<ItemStack> prefItem = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
@@ -423,7 +423,7 @@ public class EntityEventHandler {
 		return cancelEvent(item, itemstack, entity, capHungry, tamingLevel);
 	}
 
-	private Pair<Boolean, EnumActionResult> cancelEvent(Item item, ItemStack itemstack, EntityLiving entity,
+	private Pair<Boolean, EnumActionResult> cancelEvent(Item item, ItemStack itemstack, MobEntity entity,
 			ICapabilityHungryAnimal capHungry, TamingLevel tamingLevel) {
 		// Skip Event. TODO Too Dirty Here.
 		// For horses, they do not implement isBreedingItem properly
@@ -483,7 +483,7 @@ public class EntityEventHandler {
 		return new Pair<Boolean, EnumActionResult>(false, null);
 	}
 
-	private void eatFoodBonus(EntityLiving entity, ICapabilityHungryAnimal capHungry,
+	private void eatFoodBonus(MobEntity entity, ICapabilityHungryAnimal capHungry,
 			ICapabilityTamableAnimal capTaming, ItemStack item) {
 		// TODO It must merged with AI's eatFoodBonus for better maintenance
 		if (item.isEmpty())

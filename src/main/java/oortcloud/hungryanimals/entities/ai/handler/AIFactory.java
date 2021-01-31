@@ -1,9 +1,9 @@
 package oortcloud.hungryanimals.entities.ai.handler;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 
 @FunctionalInterface
 public interface AIFactory {
-	public EntityAIBase apply(EntityLiving entity);
+	public Goal apply(MobEntity entity);
 }

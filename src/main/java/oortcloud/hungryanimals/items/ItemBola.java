@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.items;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
@@ -37,10 +37,10 @@ public class ItemBola extends Item {
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
+	public void onPlayerStoppedUsing(ItemStack stack, World world, MobEntityBase MobEntity, int timeLeft) {
 
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+		if (MobEntity instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) MobEntity;
 			boolean flag = entityplayer.capabilities.isCreativeMode;
 
 			int duration = this.getMaxItemUseDuration(stack) - timeLeft;

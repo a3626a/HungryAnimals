@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.core.network;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -22,8 +22,8 @@ public class HandlerServerDGEditInt implements IMessageHandler<PacketServerDGEdi
 
 				if (worldserver != null) {
 					Entity entity = worldserver.getEntityByID(id3);
-					if (entity != null && entity instanceof EntityLiving) {
-						EntityLiving animal = (EntityLiving) entity;
+					if (entity != null && entity instanceof MobEntity) {
+						MobEntity animal = (MobEntity) entity;
 
 						switch (message.target) {
 						case "age": {

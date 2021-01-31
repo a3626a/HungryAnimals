@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
@@ -13,11 +13,11 @@ public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 
 	private double taming;
 	private TamingLevel prevLevel;
-	protected EntityLiving entity;
+	protected MobEntity entity;
 
 	public CapabilityTamableAnimal() {}
 	
-	public CapabilityTamableAnimal(EntityLiving entity) {
+	public CapabilityTamableAnimal(MobEntity entity) {
 		this.entity = entity;
 		setTaming(-2);
 		this.prevLevel = TamingLevel.WILD;

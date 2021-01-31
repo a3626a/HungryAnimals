@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import oortcloud.hungryanimals.utils.graph.Graph;
 import oortcloud.hungryanimals.utils.graph.GraphSolver;
 import oortcloud.hungryanimals.utils.graph.Vertex;
 
-public class AIContainerTask implements IAIContainer<EntityLiving> {
+public class AIContainerTask implements IAIContainer<MobEntity> {
 
 	protected LinkedList<AIFactoryGraph> factoriesGraph;
 	protected LinkedList<AIFactory> factoriesFirst;
@@ -24,8 +24,8 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 	protected List<IAIRemover> toRemove;
 	protected boolean removeAll;
 
-	protected List<Class<? extends EntityAIBase>> prior;
-	protected List<Class<? extends EntityAIBase>> posterior;
+	protected List<Class<? extends Goal>> prior;
+	protected List<Class<? extends Goal>> posterior;
 
 	public AIContainerTask() {
 		this(null);
@@ -47,43 +47,51 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 	}
 
 	@Override
-	public void registerAI(EntityLiving entity) {
+	public void registerAI(MobEntity entity) {
 		if (removeAll) {
-			entity.tasks.taskEntries.clear();
+			entity.goalSelector.goals.forEach(
+					prioritizedGoal -> {
+						entity.goalSelector.removeGoal(prioritizedGoal.getGoal());
+					}
+			);
 		} else {
-			LinkedList<EntityAIBase> removeEntries = new LinkedList<EntityAIBase>();
-			for (EntityAITaskEntry i : entity.tasks.taskEntries) {
+			LinkedList<Goal> removeEntries = new LinkedList<>();
+			for (PrioritizedGoal i : entity.goalSelector.goals) {
 				for (IAIRemover j : toRemove) {
 					if (j.matches(i)) {
-						removeEntries.add(i.action);
+						removeEntries.add(i.getGoal());
 					}
 				}
 			}
-			for (EntityAIBase i : removeEntries) {
-				entity.tasks.removeTask(i);
+			for (Goal i : removeEntries) {
+				entity.goalSelector.removeGoal(i);
 			}
 		}
 
-		List<EntityAIBase> aibases = new ArrayList<EntityAIBase>();
+		List<Goal> aibases = new ArrayList<>();
 
 		// Construct aibases from entity's tasks
-		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.tasks.taskEntries);
-		aitaskentries.sort(new Comparator<EntityAITaskEntry>() {
+		List<PrioritizedGoal> aitaskentries = Lists.newArrayList(entity.goalSelector.goals);
+		aitaskentries.sort(new Comparator<PrioritizedGoal>() {
 			@Override
-			public int compare(EntityAITaskEntry o1, EntityAITaskEntry o2) {
-				return o1.priority - o2.priority;
+			public int compare(PrioritizedGoal o1, PrioritizedGoal o2) {
+				return o1.getPriority() - o2.getPriority();
 			}
 		});
-		for (EntityAITaskEntry i : aitaskentries) {
-			aibases.add(i.action);
+		for (PrioritizedGoal i : aitaskentries) {
+			aibases.add(i.getGoal());
 		}
-		entity.tasks.taskEntries.clear();
+		entity.goalSelector.goals.forEach(
+				prioritizedGoal -> {
+					entity.goalSelector.removeGoal(prioritizedGoal.getGoal());
+				}
+		);
 
-		Graph<EntityAIBase> graph = new Graph<EntityAIBase>();
-		Vertex<EntityAIBase> prev = null;
+		Graph<Goal> graph = new Graph<>();
+		Vertex<Goal> prev = null;
 
-		for (EntityAIBase i : aibases) {
-			Vertex<EntityAIBase> curr = new Vertex<EntityAIBase>(i);
+		for (Goal i : aibases) {
+			Vertex<Goal> curr = new Vertex<>(i);
 			graph.vertices.add(curr);
 			if (prev != null) {
 				prev.childs.add(curr);
@@ -99,15 +107,15 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 			i.addEdge(graph);
 		}
 
-		List<Vertex<EntityAIBase>> sortedVertex = GraphSolver.sortTopological(graph);
-		List<EntityAIBase> sortedAI = sortedVertex.stream().map((vertex) -> vertex.value).collect(Collectors.toList());
+		List<Vertex<Goal>> sortedVertex = GraphSolver.sortTopological(graph);
+		List<Goal> sortedAI = sortedVertex.stream().map((vertex) -> vertex.value).collect(Collectors.toList());
 
 		sortedAI.addAll(0, factoriesFirst.stream().map((factory) -> factory.apply(entity)).collect(Collectors.toList()));
 		sortedAI.addAll(factoriesLast.stream().map((factory) -> factory.apply(entity)).collect(Collectors.toList()));
 		
 		int cnt = 0;
-		for (EntityAIBase i : sortedAI) {
-			entity.tasks.addTask(cnt++, i);
+		for (Goal i : sortedAI) {
+			entity.goalSelector.addGoal(cnt++, i);
 		}
 	}
 
@@ -125,39 +133,39 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 		posterior = null;
 	}
 
-	public AIContainerTask before(Class<? extends EntityAIBase> target) {
+	public AIContainerTask before(Class<? extends Goal> target) {
 		getPrior().add(target);
 		return this;
 	}
 
-	public AIContainerTask before(List<Class<? extends EntityAIBase>> targets) {
+	public AIContainerTask before(List<Class<? extends Goal>> targets) {
 		getPrior().addAll(targets);
 		return this;
 	}
 
-	public AIContainerTask after(Class<? extends EntityAIBase> target) {
+	public AIContainerTask after(Class<? extends Goal> target) {
 		getPosterior().add(target);
 		return this;
 	}
 
-	public AIContainerTask after(List<Class<? extends EntityAIBase>> targets) {
+	public AIContainerTask after(List<Class<? extends Goal>> targets) {
 		getPosterior().addAll(targets);
 		return this;
 	}
 
-	private List<Class<? extends EntityAIBase>> getPrior() {
+	private List<Class<? extends Goal>> getPrior() {
 		if (prior == null)
-			prior = new ArrayList<Class<? extends EntityAIBase>>();
+			prior = new ArrayList<Class<? extends Goal>>();
 		return prior;
 	}
 
-	private List<Class<? extends EntityAIBase>> getPosterior() {
+	private List<Class<? extends Goal>> getPosterior() {
 		if (posterior == null)
-			posterior = new ArrayList<Class<? extends EntityAIBase>>();
+			posterior = new ArrayList<Class<? extends Goal>>();
 		return posterior;
 	}
 
-	public void remove(Class<? extends EntityAIBase> target) {
+	public void remove(Class<? extends Goal> target) {
 		toRemove.add(new AIRemoverByClass(target));
 	}
 
@@ -165,7 +173,7 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 		toRemove.add(remover);
 	}
 
-	public void remove(List<Class<? extends EntityAIBase>> target) {
+	public void remove(List<Class<? extends Goal>> target) {
 		toRemove.addAll(target.stream().map((i) -> new AIRemoverByClass(i)).collect(Collectors.toList()));
 	}
 
@@ -174,32 +182,32 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 	}
 
 	public static interface IAIRemover {
-		public boolean matches(EntityAITaskEntry entry);
+		public boolean matches(PrioritizedGoal goal);
 	}
 
 	public static class AIRemoverByClass implements IAIRemover {
-		private Class<? extends EntityAIBase> target;
+		private Class<? extends Goal> target;
 
-		public AIRemoverByClass(Class<? extends EntityAIBase> target) {
+		public AIRemoverByClass(Class<? extends Goal> target) {
 			this.target = target;
 		}
 
 		@Override
-		public boolean matches(EntityAITaskEntry entry) {
-			return entry.action.getClass() == target;
+		public boolean matches(PrioritizedGoal goal) {
+			return goal.getGoal().getClass() == target;
 		}
 	}
 
 	public static class AIRemoverIsInstance implements IAIRemover {
-		private Class<? extends EntityAIBase> target;
+		private Class<? extends Goal> target;
 
-		public AIRemoverIsInstance(Class<? extends EntityAIBase> target) {
+		public AIRemoverIsInstance(Class<? extends Goal> target) {
 			this.target = target;
 		}
 
 		@Override
-		public boolean matches(EntityAITaskEntry entry) {
-			return target.isInstance(entry.action);
+		public boolean matches(PrioritizedGoal goal) {
+			return target.isInstance(goal.getGoal());
 		}
 	}
 
@@ -207,25 +215,25 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 		
 		// THIS IS NOT THREAD SAFE!
 		
-		public Vertex<EntityAIBase> v;
+		public Vertex<Goal> v;
 		public AIFactory aiFactory;
-		public List<Class<? extends EntityAIBase>> prior;
-		public List<Class<? extends EntityAIBase>> posterior;
+		public List<Class<? extends Goal>> prior;
+		public List<Class<? extends Goal>> posterior;
 
-		public AIFactoryGraph(AIFactory aiFactory, List<Class<? extends EntityAIBase>> prior, List<Class<? extends EntityAIBase>> posterior) {
+		public AIFactoryGraph(AIFactory aiFactory, List<Class<? extends Goal>> prior, List<Class<? extends Goal>> posterior) {
 			this.aiFactory = aiFactory;
 			this.prior = prior;
 			this.posterior = posterior;
 		}
 
-		public Vertex<EntityAIBase> addVertex(Graph<EntityAIBase> g, EntityLiving entity) {
-			this.v = new Vertex<EntityAIBase>(aiFactory.apply(entity));
+		public Vertex<Goal> addVertex(Graph<Goal> g, MobEntity entity) {
+			this.v = new Vertex<Goal>(aiFactory.apply(entity));
 			g.vertices.add(v);
 			return v;
 		}
 
-		public void addEdge(Graph<EntityAIBase> g) {
-			for (Vertex<EntityAIBase> w : g.vertices) {
+		public void addEdge(Graph<Goal> g) {
+			for (Vertex<Goal> w : g.vertices) {
 				if (in(w, prior)) {
 					v.childs.add(w);
 					w.parents.add(v);
@@ -237,8 +245,8 @@ public class AIContainerTask implements IAIContainer<EntityLiving> {
 			}
 		}
 
-		private boolean in(Vertex<EntityAIBase> v, List<Class<? extends EntityAIBase>> list) {
-			for (Class<? extends EntityAIBase> i : list) {
+		private boolean in(Vertex<Goal> v, List<Class<? extends Goal>> list) {
+			for (Class<? extends Goal> i : list) {
 				if (v.value.getClass() == i) {
 					return true;
 				}

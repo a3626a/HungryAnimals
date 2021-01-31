@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -79,9 +79,9 @@ public class ClientProxy extends CommonProxy {
 	@SuppressWarnings("unchecked")
 	public void injectRender() {
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		for (Class<? extends EntityLiving> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+		for (Class<? extends MobEntity> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			if (HungryAnimalManager.getInstance().isModelGrowing(i)) {
-				Render<EntityLiving> render = (Render<EntityLiving>) renderManager.entityRenderMap.get(i);
+				Render<MobEntity> render = (Render<MobEntity>) renderManager.entityRenderMap.get(i);
 				renderManager.entityRenderMap.put(i, new RenderEntityWeight(render, Minecraft.getMinecraft().getRenderManager()));
 			}
 		}

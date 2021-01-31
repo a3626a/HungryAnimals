@@ -7,14 +7,14 @@ import com.google.common.base.Predicates;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.capability.ICapabilitySexual;
 import oortcloud.hungryanimals.entities.capability.ICapabilitySexual.Sex;
 import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 
-public class ConditionSex implements Predicate<EntityLiving> {
+public class ConditionSex implements Predicate<MobEntity> {
 
 	private boolean femaleOnly;
 	
@@ -23,7 +23,7 @@ public class ConditionSex implements Predicate<EntityLiving> {
 	}
 	
 	@Override
-	public boolean apply(@Nullable EntityLiving input) {
+	public boolean apply(@Nullable MobEntity input) {
 		if (input == null)
 			return false;
 		
@@ -39,7 +39,7 @@ public class ConditionSex implements Predicate<EntityLiving> {
 		}
 	}
 	
-	public static Predicate<EntityLiving> parse(JsonElement jsonEle) {
+	public static Predicate<MobEntity> parse(JsonElement jsonEle) {
 		try {
 			String sex = JsonUtils.getString(jsonEle, "sex");
 			if (sex.equals("female")) {

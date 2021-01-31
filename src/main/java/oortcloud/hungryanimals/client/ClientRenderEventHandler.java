@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -97,7 +97,7 @@ public class ClientRenderEventHandler {
 		
 		EntityPlayer player = (EntityPlayer)entity;
 		
-		EntityLivingBase animal = event.getEntity();
+		MobEntityBase animal = event.getEntity();
 		ItemStack stack = player.getHeldItemMainhand();
 		if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
 			NBTTagCompound tag = stack.getTagCompound();

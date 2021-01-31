@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -24,10 +24,10 @@ public class CapabilityHandler {
 	
 	@SubscribeEvent
 	public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-		if (!(event.getObject() instanceof EntityLiving))
+		if (!(event.getObject() instanceof MobEntity))
 			return;
 
-		EntityLiving animal = (EntityLiving) event.getObject();
+		MobEntity animal = (MobEntity) event.getObject();
 		if (HungryAnimalManager.getInstance().isRegistered(animal.getClass())) {
 			boolean isHungry = HungryAnimalManager.getInstance().isHungry(animal.getClass());
 			if (isHungry) {

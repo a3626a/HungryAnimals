@@ -3,13 +3,13 @@ package oortcloud.hungryanimals.entities.handler;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 
 public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
-	private Map<Class<? extends EntityLiving>, HungryAnimalEntry> REGISTRY;
+	private Map<Class<? extends MobEntity>, HungryAnimalEntry> REGISTRY;
 	
 	public static class HungryAnimalEntry {
 		public boolean isTamable;
@@ -39,11 +39,11 @@ public class HungryAnimalManager {
 		REGISTRY = new HashMap<>();
 	}
 
-	public boolean register(Class<? extends EntityLiving> animal) {
+	public boolean register(Class<? extends MobEntity> animal) {
 		return register(animal, new HungryAnimalEntry());
 	}
 
-	public boolean register(Class<? extends EntityLiving> animal, HungryAnimalEntry entry) {
+	public boolean register(Class<? extends MobEntity> animal, HungryAnimalEntry entry) {
 		if (!REGISTRY.containsKey(animal)) {
 			REGISTRY.put(animal, entry);
 			return true;
@@ -51,43 +51,43 @@ public class HungryAnimalManager {
 		return false;
 	}
 	
-	public Iterable<Class<? extends EntityLiving>> getRegisteredAnimal() {
+	public Iterable<Class<? extends MobEntity>> getRegisteredAnimal() {
 		return REGISTRY.keySet();
 	}
 
-	public boolean isRegistered(Class<? extends EntityLiving> animal) {
+	public boolean isRegistered(Class<? extends MobEntity> animal) {
 		return REGISTRY.containsKey(animal);
 	}
 
-	public boolean isTamable(Class<? extends EntityLiving> animal) {
+	public boolean isTamable(Class<? extends MobEntity> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isTamable;
 		}
 		return false;
 	}
 	
-	public boolean isModelGrowing(Class<? extends EntityLiving> animal) {
+	public boolean isModelGrowing(Class<? extends MobEntity> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isModelGrowing;
 		}
 		return false;
 	}
 	
-	public boolean isSexual(Class<? extends EntityLiving> animal) {
+	public boolean isSexual(Class<? extends MobEntity> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isSexual;
 		}
 		return false;
 	}
 	
-	public boolean isAgeable(Class<? extends EntityLiving> animal) {
+	public boolean isAgeable(Class<? extends MobEntity> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isAgeable;
 		}
 		return false;
 	}
 
-	public boolean isHungry(Class<? extends EntityLiving> animal) {
+	public boolean isHungry(Class<? extends MobEntity> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isHungry;
 		}

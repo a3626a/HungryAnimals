@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,7 +15,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 
 	private IFoodPreference<ItemStack> prefItem;
 	
-	public EntityAIMoveToEatBlockChicken(EntityLiving entity, double speed) {
+	public EntityAIMoveToEatBlockChicken(MobEntity entity, double speed) {
 		super(entity, speed);
 		this.prefItem = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 	}

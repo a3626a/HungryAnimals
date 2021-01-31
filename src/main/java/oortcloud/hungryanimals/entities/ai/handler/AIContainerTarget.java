@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import oortcloud.hungryanimals.utils.graph.Graph;
 import oortcloud.hungryanimals.utils.graph.GraphSolver;
@@ -18,11 +18,11 @@ import oortcloud.hungryanimals.utils.graph.Vertex;
 public class AIContainerTarget extends AIContainerTask {
 
 	@Override
-	public void registerAI(EntityLiving entity) {
+	public void registerAI(MobEntity entity) {
 		if (removeAll) {
 			entity.targetTasks.taskEntries.clear();
 		} else {
-			LinkedList<EntityAIBase> removeEntries = new LinkedList<EntityAIBase>();
+			LinkedList<Goal> removeEntries = new LinkedList<Goal>();
 			for (EntityAITaskEntry i : entity.targetTasks.taskEntries) {
 				for (IAIRemover j : toRemove) {
 					if (j.matches(i)) {
@@ -30,12 +30,12 @@ public class AIContainerTarget extends AIContainerTask {
 					}
 				}
 			}
-			for (EntityAIBase i : removeEntries) {
+			for (Goal i : removeEntries) {
 				entity.targetTasks.removeTask(i);
 			}
 		}
 
-		List<EntityAIBase> aibases = new ArrayList<EntityAIBase>();
+		List<Goal> aibases = new ArrayList<Goal>();
 
 		// Construct aibases from entity's tasks
 		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.targetTasks.taskEntries);
@@ -50,11 +50,11 @@ public class AIContainerTarget extends AIContainerTask {
 		}
 		entity.targetTasks.taskEntries.clear();
 
-		Graph<EntityAIBase> graph = new Graph<EntityAIBase>();
-		Vertex<EntityAIBase> prev = null;
+		Graph<Goal> graph = new Graph<Goal>();
+		Vertex<Goal> prev = null;
 
-		for (EntityAIBase i : aibases) {
-			Vertex<EntityAIBase> curr = new Vertex<EntityAIBase>(i);
+		for (Goal i : aibases) {
+			Vertex<Goal> curr = new Vertex<Goal>(i);
 			graph.vertices.add(curr);
 			if (prev != null) {
 				prev.childs.add(curr);
@@ -70,14 +70,14 @@ public class AIContainerTarget extends AIContainerTask {
 			i.addEdge(graph);
 		}
 		
-		List<Vertex<EntityAIBase>> sortedVertex = GraphSolver.sortTopological(graph);
-		List<EntityAIBase> sortedAI = sortedVertex.stream().map((vertex) -> vertex.value).collect(Collectors.toList());
+		List<Vertex<Goal>> sortedVertex = GraphSolver.sortTopological(graph);
+		List<Goal> sortedAI = sortedVertex.stream().map((vertex) -> vertex.value).collect(Collectors.toList());
 		
 		sortedAI.addAll(0, factoriesFirst.stream().map((factory)->factory.apply(entity)).collect(Collectors.toList()));
 		sortedAI.addAll(factoriesLast.stream().map((factory)->factory.apply(entity)).collect(Collectors.toList()));
 		
 		int cnt = 0;
-		for (EntityAIBase i : sortedAI) {
+		for (Goal i : sortedAI) {
 			entity.targetTasks.addTask(cnt++, i);
 		}
 	}

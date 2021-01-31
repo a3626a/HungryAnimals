@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.production.utils;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 
 public class RangeRandom implements IRange {
 	
@@ -13,7 +13,7 @@ public class RangeRandom implements IRange {
 	}
 
 	@Override
-	public int get(EntityLiving animal) {
+	public int get(MobEntity animal) {
 		int rand = animal.getRNG().nextInt(max-min+1);
 		return min+rand;
 	}

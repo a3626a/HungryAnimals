@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.entities.capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +19,7 @@ public class ProviderTamableAnimal implements ICapabilitySerializable<NBTBase> {
 	// Allocating Defuault Instance Here, is it important?
 	protected ICapabilityTamableAnimal instance;
 
-	public ProviderTamableAnimal(EntityLiving entity) {
+	public ProviderTamableAnimal(MobEntity entity) {
 		instance = new CapabilityTamableAnimal(entity);
 	}
 

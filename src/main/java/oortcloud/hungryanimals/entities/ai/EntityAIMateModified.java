@@ -16,7 +16,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -38,7 +38,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIMateModified extends EntityAIBase {
+public class EntityAIMateModified extends Goal {
 	private EntityAnimal animal;
 	@Nullable
 	private ICapabilityHungryAnimal theAnimalCapHungry;
@@ -61,7 +61,7 @@ public class EntityAIMateModified extends EntityAIBase {
 	}
 
 	/**
-	 * Returns whether the EntityAIBase should begin execution.
+	 * Returns whether the Goal should begin execution.
 	 */
 	public boolean shouldExecute() {
 		if (!this.animal.isInLove()) {
@@ -73,7 +73,7 @@ public class EntityAIMateModified extends EntityAIBase {
 	}
 
 	/**
-	 * Returns whether an in-progress EntityAIBase should continue executing
+	 * Returns whether an in-progress Goal should continue executing
 	 */
 	public boolean continueExecuting() {
 		return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
@@ -92,7 +92,7 @@ public class EntityAIMateModified extends EntityAIBase {
 	 */
 	public void updateTask() {
 		this.animal.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.animal.getVerticalFaceSpeed());
-		this.animal.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
+		this.animal.getNavigator().tryMoveToMobEntity(this.targetMate, this.moveSpeed);
 		++this.spawnBabyDelay;
 		if (this.spawnBabyDelay >= 60 && this.animal.getDistanceSq(this.targetMate) < 9.0D) {
 			this.spawnBaby();

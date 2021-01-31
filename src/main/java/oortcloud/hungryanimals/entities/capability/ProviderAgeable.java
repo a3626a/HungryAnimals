@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -18,7 +18,7 @@ public class ProviderAgeable implements ICapabilitySerializable<NBTBase> {
 	
 	private ICapabilityAgeable instance;
 		
-	public ProviderAgeable(EntityLiving entity) {
+	public ProviderAgeable(MobEntity entity) {
 		instance = new CapabilityAgeable(entity);
 	}
 	

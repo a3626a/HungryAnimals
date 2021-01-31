@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.production;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
@@ -17,13 +17,13 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 	
 	private int cooldown;
 	private IRange delay;
-	protected EntityLiving animal;
+	protected MobEntity animal;
 
 	private boolean prevCanProduce;
 
 	protected String name;
 
-	public ProductionInteraction(String name, EntityLiving animal, IRange delay) {
+	public ProductionInteraction(String name, MobEntity animal, IRange delay) {
 		this.name = name;
 		this.animal = animal;
 		this.delay = delay;

@@ -7,7 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -26,7 +26,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 	}
 
 	@Override
-	protected void checkAndPerformAttack(EntityLivingBase target, double distance) {
+	protected void checkAndPerformAttack(MobEntityBase target, double distance) {
 		double d0 = this.getAttackReachSqr(target);
 
 		if (distance <= d0 && this.attackTick <= 0) {

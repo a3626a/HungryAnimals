@@ -11,8 +11,8 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.passive.EntitySheep;
@@ -28,7 +28,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
-public class EntityAIMoveToEatBlock extends EntityAIBase {
+public class EntityAIMoveToEatBlock extends Goal {
 
 	enum State {
 		IDLE, MOVING, EATING
@@ -42,7 +42,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 		}
 	};
 
-	protected EntityLiving entity;
+	protected MobEntity entity;
 	protected World worldObj;
 	private BlockPos bestPos;
 	private double speed;
@@ -56,7 +56,7 @@ public class EntityAIMoveToEatBlock extends EntityAIBase {
 	private State state = State.IDLE;
 	int eatingGrassTimer;
 
-	public EntityAIMoveToEatBlock(EntityLiving entity, double speed) {
+	public EntityAIMoveToEatBlock(MobEntity entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.entity = entity;
 		this.worldObj = this.entity.getEntityWorld();

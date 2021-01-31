@@ -1,8 +1,8 @@
 package oortcloud.hungryanimals.entities.attributes;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 
 public interface IAttributeEntry {
-	public void apply(EntityLivingBase entity);
-	public void register(EntityLivingBase entity);
+	public void apply(MobEntityBase entity);
+	public void register(MobEntityBase entity);
 }

@@ -6,7 +6,7 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
@@ -15,10 +15,10 @@ import oortcloud.hungryanimals.entities.production.IProductionJEI;
 public class RecipeWrapperProductionShear implements IRecipeWrapper {
 
 	private IProductionJEI recipe;
-	private Class<? extends EntityLiving> entityClass;
+	private Class<? extends MobEntity> entityClass;
 	private IJeiHelpers jeiHelpers;
 
-	public RecipeWrapperProductionShear(IJeiHelpers jeiHelpers, Class<? extends EntityLiving> entityClass,
+	public RecipeWrapperProductionShear(IJeiHelpers jeiHelpers, Class<? extends MobEntity> entityClass,
 			IProductionJEI production) {
 		this.jeiHelpers = jeiHelpers;
 		this.entityClass = entityClass;

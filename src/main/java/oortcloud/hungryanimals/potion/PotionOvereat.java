@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.potion;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
@@ -27,7 +27,7 @@ public class PotionOvereat extends PotionHungryAnimals {
 	}
 	
 	@Override
-	public void performEffect(EntityLivingBase entity, int amplifier) {
+	public void performEffect(MobEntityBase entity, int amplifier) {
 		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		if (cap == null)
 			return;

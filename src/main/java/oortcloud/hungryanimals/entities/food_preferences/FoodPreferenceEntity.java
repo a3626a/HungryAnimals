@@ -2,18 +2,18 @@ package oortcloud.hungryanimals.entities.food_preferences;
 
 import java.util.Set;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 
-public class FoodPreferenceEntity implements IFoodPreferenceSimple<EntityLiving> {
+public class FoodPreferenceEntity implements IFoodPreferenceSimple<MobEntity> {
 	
-	private Set<Class<? extends EntityLiving>> entities;
+	private Set<Class<? extends MobEntity>> entities;
 	
-	public FoodPreferenceEntity(Set<Class<? extends EntityLiving>> entities) {
+	public FoodPreferenceEntity(Set<Class<? extends MobEntity>> entities) {
 		this.entities = entities;
 	}
 	
-	public boolean canEat(ICapabilityHungryAnimal cap, EntityLiving food) {
+	public boolean canEat(ICapabilityHungryAnimal cap, MobEntity food) {
 		return shouldEat(cap) && entities.contains(food.getClass());
 	}
 	

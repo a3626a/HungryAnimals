@@ -2,14 +2,14 @@ package oortcloud.hungryanimals.entities.ai.handler;
 
 import com.google.gson.JsonElement;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIMate;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class AIContainerWolf extends AIContainer {
 	
-	public AIContainerWolf(Class<? extends EntityLiving> entityClass) {
+	public AIContainerWolf(Class<? extends MobEntity> entityClass) {
 		getTask().remove(EntityAIMate.class);
 		getTask().remove(EntityAIFollowParent.class);
 
@@ -18,7 +18,7 @@ public class AIContainerWolf extends AIContainer {
 		}
 	}
 	
-	public static IAIContainer<EntityLiving> parse(Class<? extends EntityLiving> entityClass, JsonElement jsonEle) {
+	public static IAIContainer<MobEntity> parse(Class<? extends MobEntity> entityClass, JsonElement jsonEle) {
 		return new AIContainerWolf(entityClass);
 	}
 	

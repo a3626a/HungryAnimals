@@ -7,13 +7,13 @@ import com.google.common.base.Predicates;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 
-public class ConditionAge implements Predicate<EntityLiving> {
+public class ConditionAge implements Predicate<MobEntity> {
 
 	private boolean adult_only;
 	
@@ -22,7 +22,7 @@ public class ConditionAge implements Predicate<EntityLiving> {
 	}
 	
 	@Override
-	public boolean apply(@Nullable EntityLiving input) {
+	public boolean apply(@Nullable MobEntity input) {
 		if (input == null) {
 			return false;
 		}
@@ -39,7 +39,7 @@ public class ConditionAge implements Predicate<EntityLiving> {
 		}
 	}
 
-	public static Predicate<EntityLiving> parse(JsonElement jsonEle) {
+	public static Predicate<MobEntity> parse(JsonElement jsonEle) {
 		try {
 			String age = JsonUtils.getString(jsonEle, "age");
 			if (age.equals("baby")) {

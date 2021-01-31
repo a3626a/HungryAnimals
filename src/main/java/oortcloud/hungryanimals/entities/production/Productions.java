@@ -12,15 +12,15 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
 public class Productions implements IProductionRegistry {
 
-	private Map<Class<? extends EntityLiving>, List<Function<EntityLiving, IProduction>>> REGISTRY;
-	private Map<String, Function<JsonElement, Function<EntityLiving, IProduction>>> PARSER;
+	private Map<Class<? extends MobEntity>, List<Function<MobEntity, IProduction>>> REGISTRY;
+	private Map<String, Function<JsonElement, Function<MobEntity, IProduction>>> PARSER;
 	
 	private static Productions INSTANCE;
 	
@@ -36,44 +36,44 @@ public class Productions implements IProductionRegistry {
 		return INSTANCE;
 	}
 
-	public boolean registerProduction(Class<? extends EntityLiving> animal, Function<EntityLiving, IProduction> factory) {
+	public boolean registerProduction(Class<? extends MobEntity> animal, Function<MobEntity, IProduction> factory) {
 		if (!REGISTRY.containsKey(animal)) {
 			REGISTRY.put(animal, new ArrayList<>());
 		}
 		return REGISTRY.get(animal).add(factory);
 	}
 	
-	public void registerParser(String type, Function<JsonElement, Function<EntityLiving, IProduction>> parser) {
+	public void registerParser(String type, Function<JsonElement, Function<MobEntity, IProduction>> parser) {
 		PARSER.put(type, parser);
 	}
 	
-	public boolean hasProduction(Class<? extends EntityLiving> animal) {
+	public boolean hasProduction(Class<? extends MobEntity> animal) {
 		return REGISTRY.containsKey(animal);
 	}
 	
-	public boolean hasProduction(EntityLiving animal) {
+	public boolean hasProduction(MobEntity animal) {
 		return hasProduction(animal.getClass());
 	}
 	
 	@Nullable
-	public List<IProduction> apply(EntityLiving animal) {
-		List<Function<EntityLiving, IProduction>> functions = REGISTRY.get(animal.getClass());
+	public List<IProduction> apply(MobEntity animal) {
+		List<Function<MobEntity, IProduction>> functions = REGISTRY.get(animal.getClass());
 		if (functions == null)
 			return null;
 		List<IProduction> productions = new ArrayList<>();
-		for (Function<EntityLiving, IProduction> i : functions) {
+		for (Function<MobEntity, IProduction> i : functions) {
 			productions.add(i.apply(animal));
 		}
 		return productions;
 	}
 
 	@Nullable
-	public List<IProductionJEI> apply(Class<? extends EntityLiving> classEntity) {
-		List<Function<EntityLiving, IProduction>> functions = REGISTRY.get(classEntity);
+	public List<IProductionJEI> apply(Class<? extends MobEntity> classEntity) {
+		List<Function<MobEntity, IProduction>> functions = REGISTRY.get(classEntity);
 		if (functions == null)
 			return null;
 		List<IProductionJEI> productions = new ArrayList<>();
-		for (Function<EntityLiving, IProduction> i : functions) {
+		for (Function<MobEntity, IProduction> i : functions) {
 			if (i instanceof IProductionJEI) {
 				productions.add((IProductionJEI)i);
 			}
@@ -82,7 +82,7 @@ public class Productions implements IProductionRegistry {
 	}
 	
 	@Nullable
-	public Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
+	public Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 		
 		String type = JsonUtils.getString(jsonObj, "type");
@@ -95,7 +95,7 @@ public class Productions implements IProductionRegistry {
 	}
 
 	@Override
-	public void registerCondition(String name, Function<JsonElement, Predicate<EntityLiving>> parser) {
+	public void registerCondition(String name, Function<JsonElement, Predicate<MobEntity>> parser) {
 		Conditions.getInstance().register(name, parser);
 	}
 	

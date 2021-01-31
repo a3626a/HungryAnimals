@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -28,14 +28,14 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	private int cooldown;
 	private IRange delay;
 	private ItemStack stack;
-	private Predicate<EntityLiving> condition;
+	private Predicate<MobEntity> condition;
 	private boolean disableSound;
-	protected EntityLiving animal;
+	protected MobEntity animal;
 
 	private String name;
 
-	public ProductionEgg(String name, EntityLiving animal, IRange delay, ItemStack stack,
-			Predicate<EntityLiving> condition, boolean disableSound) {
+	public ProductionEgg(String name, MobEntity animal, IRange delay, ItemStack stack,
+			Predicate<MobEntity> condition, boolean disableSound) {
 		this.name = name;
 		this.delay = delay;
 		this.animal = animal;
@@ -106,7 +106,7 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		}
 	}
 
-	public static Function<EntityLiving, IProduction> parse(JsonElement jsonEle) {
+	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
 		String name = JsonUtils.getString(jsonObj, "name");
@@ -122,12 +122,12 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 		}
 		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"),
 				new JsonContext(References.MODID));
-		Predicate<EntityLiving> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
+		Predicate<MobEntity> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
 		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
 
 		return new ProductionFactory() {
 			@Override
-			public IProduction apply(EntityLiving animal) {
+			public IProduction apply(MobEntity animal) {
 				return new ProductionEgg(name, animal, delay, stack, condition, disableSound);
 			}
 

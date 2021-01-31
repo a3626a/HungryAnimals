@@ -8,7 +8,7 @@ import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
@@ -56,10 +56,10 @@ public class TOPCompatibility {
 				@Override
 				public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity,
 						IProbeHitEntityData data) {
-					if (!(entity instanceof EntityLiving))
+					if (!(entity instanceof MobEntity))
 						return;
 
-					EntityLiving animal = (EntityLiving) entity;
+					MobEntity animal = (MobEntity) entity;
 
 					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					ICapabilityTamableAnimal capTaming = animal.getCapability(ProviderTamableAnimal.CAP, null);
@@ -84,9 +84,9 @@ public class TOPCompatibility {
 					}
 					if (capSexual != null) {
 						if (capSexual.getSex() == Sex.MALE) {
-							probeInfo.horizontal().text("SEX: MALE ¡Î");
+							probeInfo.horizontal().text("SEX: MALE ï¿½ï¿½");
 						} else if (capSexual.getSex() == Sex.FEMALE) {
-							probeInfo.horizontal().text("SEX: FEMALE ¡Ï");
+							probeInfo.horizontal().text("SEX: FEMALE ï¿½ï¿½");
 						}
 					}
 					if (capProducing != null) {

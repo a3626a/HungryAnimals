@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.entities.capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -17,7 +17,7 @@ public class ProviderHungryAnimal implements ICapabilitySerializable<NBTBase> {
 	
 	private ICapabilityHungryAnimal instance;
 	
-	public ProviderHungryAnimal(EntityLiving entity) {
+	public ProviderHungryAnimal(MobEntity entity) {
 		instance = new CapabilityHungryAnimal(entity);
 	}
 	

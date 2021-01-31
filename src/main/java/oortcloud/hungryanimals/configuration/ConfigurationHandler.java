@@ -30,7 +30,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -155,12 +155,12 @@ public class ConfigurationHandler {
 		foodPreferencesEntity = new ConfigurationHandlerJSONAnimal(baseFolder, "food_preferences/entity", (jsonElement, animal) -> {
 			JsonArray jsonArr = (JsonArray) jsonElement;
 
-			Set<Class<? extends EntityLiving>> set = new HashSet<Class<? extends EntityLiving>>();
+			Set<Class<? extends MobEntity>> set = new HashSet<Class<? extends MobEntity>>();
 			for (JsonElement i : jsonArr) {
 				String resourceLocation = i.getAsString();
 				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(resourceLocation));
 				if (entityClass != null) {
-					set.add(entityClass.asSubclass(EntityLiving.class));
+					set.add(entityClass.asSubclass(MobEntity.class));
 				} else {
 					HungryAnimals.logger.error("cannot find the animal {}", resourceLocation);
 				}
@@ -204,14 +204,14 @@ public class ConfigurationHandler {
 			ModLootTables.register(EntityList.getKey(animal), jsonElement);
 		});
 		ais = new ConfigurationHandlerJSONAnimal(baseFolder, "ais", (jsonElement, animal) -> {
-			IAIContainer<EntityLiving> aiContainer = AIContainers.getInstance().parse(animal, jsonElement);
+			IAIContainer<MobEntity> aiContainer = AIContainers.getInstance().parse(animal, jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
 		});
 		productions = new ConfigurationHandlerJSONAnimal(baseFolder, "productions", (jsonElement, animal) -> {
 			JsonArray jsonArr = jsonElement.getAsJsonArray();
 
 			for (JsonElement i : jsonArr) {
-				Function<EntityLiving, IProduction> factory = Productions.getInstance().parse(i);
+				Function<MobEntity, IProduction> factory = Productions.getInstance().parse(i);
 				if (factory != null) {
 					API.registerProduction(animal, factory);
 				} else {
@@ -331,11 +331,11 @@ public class ConfigurationHandler {
 				}
 				Class<? extends Entity> entityClass = EntityList.getClass(new ResourceLocation(name));
 				if (entityClass != null) {
-					if (EntityLiving.class.isAssignableFrom(entityClass)
-							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(EntityLiving.class))) {
+					if (MobEntity.class.isAssignableFrom(entityClass)
+							&& !HungryAnimalManager.getInstance().isRegistered(entityClass.asSubclass(MobEntity.class))) {
 						ResourceLocation resource = EntityList.getKey(entityClass);
 						HungryAnimals.logger.info("[Configuration] registered " + resource);
-						HungryAnimalManager.getInstance().register(entityClass.asSubclass(EntityLiving.class), entry);
+						HungryAnimalManager.getInstance().register(entityClass.asSubclass(MobEntity.class), entry);
 					}
 				}
 			}
@@ -343,7 +343,7 @@ public class ConfigurationHandler {
 			HungryAnimals.logger.info("[Configuration] following entities are compatible, but not registered");
 			for (ResourceLocation key : EntityList.getEntityNameList()) {
 				Class<? extends Entity> i = EntityList.getClass(key);
-				if (i != null && EntityLiving.class.isAssignableFrom(i) && !HungryAnimalManager.getInstance().isRegistered(i.asSubclass(EntityLiving.class))) {
+				if (i != null && MobEntity.class.isAssignableFrom(i) && !HungryAnimalManager.getInstance().isRegistered(i.asSubclass(MobEntity.class))) {
 					// Lightening bolt is null
 					HungryAnimals.logger.info("[Configuration] " + key.toString());
 				}

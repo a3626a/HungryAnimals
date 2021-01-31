@@ -9,8 +9,8 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.JsonUtils;
@@ -25,19 +25,19 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreferenceSimple;
 
-public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> {
+public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 
 	private ICapabilityHungryAnimal cap;
-	private IFoodPreferenceSimple<EntityLiving> pref;
+	private IFoodPreferenceSimple<MobEntity> pref;
 	private boolean herding;
     private int delay;
 	
 	public EntityAIHunt(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
-		super(creature, EntityLiving.class, chance, checkSight, onlyNearby, new Predicate<EntityLiving>() {
+		super(creature, MobEntity.class, chance, checkSight, onlyNearby, new Predicate<MobEntity>() {
 			@Override
-			public boolean apply(@Nullable EntityLiving input) {
+			public boolean apply(@Nullable MobEntity input) {
 				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
-				IFoodPreferenceSimple<EntityLiving> pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
+				IFoodPreferenceSimple<MobEntity> pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
 
 				if (input == null)
 					return false;
@@ -104,8 +104,8 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<EntityLiving> 
 		}
 	}
 
-	protected void setEntityAttackTarget(EntityCreature creatureIn, EntityLivingBase entityLivingBaseIn) {
-		creatureIn.setAttackTarget(entityLivingBaseIn);
+	protected void setEntityAttackTarget(EntityCreature creatureIn, MobEntityBase MobEntityBaseIn) {
+		creatureIn.setAttackTarget(MobEntityBaseIn);
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {

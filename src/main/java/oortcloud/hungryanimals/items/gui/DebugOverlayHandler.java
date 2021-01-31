@@ -8,7 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -72,8 +72,8 @@ public class DebugOverlayHandler extends Gui {
 		if (event.phase == TickEvent.Phase.START) {
 			if (!this.isEnabled) {
 				Entity entity = mc.getRenderViewEntity();
-				if (entity != null && entity instanceof EntityLivingBase) {
-					EntityLivingBase living = (EntityLivingBase) entity;
+				if (entity != null && entity instanceof MobEntityBase) {
+					MobEntityBase living = (MobEntityBase) entity;
 					ItemStack stack = getDebugGlass(living);
 					if (!stack.isEmpty()) {
 						this.setOpened(true);
@@ -83,8 +83,8 @@ public class DebugOverlayHandler extends Gui {
 				}
 			} else {
 				Entity entity = mc.getRenderViewEntity();
-				if (entity != null && entity instanceof EntityLivingBase) {
-					EntityLivingBase living = (EntityLivingBase) entity;
+				if (entity != null && entity instanceof MobEntityBase) {
+					MobEntityBase living = (MobEntityBase) entity;
 					ItemStack stack = getDebugGlass(living);
 					if (stack.isEmpty()) {
 						this.setOpened(false);
@@ -154,7 +154,7 @@ public class DebugOverlayHandler extends Gui {
 		}
 	}
 
-	private ItemStack getDebugGlass(EntityLivingBase player) {
+	private ItemStack getDebugGlass(MobEntityBase player) {
 		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
 		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
 			return stack;

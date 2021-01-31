@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.item.ItemStack;
@@ -37,9 +37,9 @@ import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIMoveToTrough extends EntityAIBase {
+public class EntityAIMoveToTrough extends Goal {
 
-	private EntityLiving entity;
+	private MobEntity entity;
 	private double speed;
 	private World world;
 	public BlockPos pos;
@@ -52,7 +52,7 @@ public class EntityAIMoveToTrough extends EntityAIBase {
 	private ICapabilityAgeable capAgeable;
 	private IFoodPreference<ItemStack> pref;
 
-	public EntityAIMoveToTrough(EntityLiving entity, double speed) {
+	public EntityAIMoveToTrough(MobEntity entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);

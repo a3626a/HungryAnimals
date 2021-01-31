@@ -6,11 +6,11 @@ import java.util.function.Function;
 
 import com.google.gson.JsonElement;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.IAIContainer;
 
 public interface IAIRegistry {
 	void registerAIContainerModifier(String type, String modifierName, BiConsumer<JsonElement, AIContainer> modifier);
-	void registerAIContainer(String type, BiFunction<Class<? extends EntityLiving>, JsonElement, IAIContainer<EntityLiving>> aiContainer);
+	void registerAIContainer(String type, BiFunction<Class<? extends MobEntity>, JsonElement, IAIContainer<MobEntity>> aiContainer);
 }

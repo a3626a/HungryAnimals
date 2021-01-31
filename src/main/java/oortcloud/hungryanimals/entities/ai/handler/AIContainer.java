@@ -5,10 +5,10 @@ import java.util.function.Function;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 
-public class AIContainer implements IAIContainer<EntityLiving> {
+public class AIContainer implements IAIContainer<MobEntity> {
 	
 	private AIContainerTask task;
 	private AIContainerTarget target;
@@ -27,12 +27,12 @@ public class AIContainer implements IAIContainer<EntityLiving> {
 	}
 	
 	@Override
-	public void registerAI(EntityLiving entity) {
+	public void registerAI(MobEntity entity) {
 		task.registerAI(entity);
 		target.registerAI(entity);
 	}
 	
-	public void putBefore(AIFactory factory, Class<? extends EntityAIBase> target) {
+	public void putBefore(AIFactory factory, Class<? extends Goal> target) {
 		if (factory != null) {
 			getTask().before(target).put(factory);
 		}

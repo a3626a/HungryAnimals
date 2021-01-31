@@ -25,7 +25,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -82,7 +82,7 @@ public class ModelItemSlingshot implements IBakedModel {
 		return new ItemOverrideList(ImmutableList.of()) {
 			@Override
 			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, @Nullable World world,
-					@Nullable EntityLivingBase entity) {
+					@Nullable MobEntityBase entity) {
 				EntityPlayer player = Minecraft.getMinecraft().player;
 				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();

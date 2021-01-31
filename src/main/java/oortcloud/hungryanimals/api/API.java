@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import com.google.gson.JsonElement;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.biome.Biome;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -29,7 +29,7 @@ public class API {
 	 * @param animalclass
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAnimal(Class<? extends EntityLiving> animalclass) {
+	public static boolean registerAnimal(Class<? extends MobEntity> animalclass) {
 		return HungryAnimalManager.getInstance().register(animalclass);
 	}
 	
@@ -47,11 +47,11 @@ public class API {
 	 * @param shouldRegistered
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val, boolean shouldRegistered) {
+	public static boolean registerAttribute(Class<? extends MobEntity> animalclass, String name, double val, boolean shouldRegistered) {
 		return ModAttributes.getInstance().registerAttribute(animalclass, name, val, shouldRegistered);
 	}
 	
-	public static boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val) {
+	public static boolean registerAttribute(Class<? extends MobEntity> animalclass, String name, double val) {
 		return ModAttributes.getInstance().registerAttribute(animalclass, name, val);
 	}
 	
@@ -69,21 +69,21 @@ public class API {
 	
 	/**
 	 * It registers given aifactory to the animalclass.
-	 * AIFactory is a functional interface, which takes EntityAnimal and returns EntityAIBase.
+	 * AIFactory is a functional interface, which takes EntityAnimal and returns Goal.
 	 * 
 	 * @param animalclass
 	 * @param ai
 	 * @return true if registration failed, otherwise false
 	 */
-	public static IAIContainer<EntityLiving> registerAIContainer(Class<? extends EntityLiving> animalclass, AIContainer aiContainer) {
+	public static IAIContainer<MobEntity> registerAIContainer(Class<? extends MobEntity> animalclass, AIContainer aiContainer) {
 		return AIContainers.getInstance().register(animalclass, aiContainer);
 	}
 	
-	public static boolean registerProduction(Class<? extends EntityLiving> animal, Function<EntityLiving, IProduction> factory) {
+	public static boolean registerProduction(Class<? extends MobEntity> animal, Function<MobEntity, IProduction> factory) {
 		return Productions.getInstance().registerProduction(animal, factory);
 	}
 	
-	public static void registerParser(String type, Function<JsonElement, Function<EntityLiving, IProduction>> parser) {
+	public static void registerParser(String type, Function<JsonElement, Function<MobEntity, IProduction>> parser) {
 		Productions.getInstance().registerParser(type, parser);
 	}
 	

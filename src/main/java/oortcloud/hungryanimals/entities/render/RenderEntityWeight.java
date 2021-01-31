@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
@@ -16,11 +16,11 @@ import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 
-public class RenderEntityWeight extends Render<EntityLiving> {
+public class RenderEntityWeight extends Render<MobEntity> {
 
-	protected Render<EntityLiving> originalRender;
+	protected Render<MobEntity> originalRender;
 
-	public RenderEntityWeight(Render<EntityLiving> render, RenderManager renderManager) {
+	public RenderEntityWeight(Render<MobEntity> render, RenderManager renderManager) {
 		super(renderManager);
 		this.originalRender = render;
 	}
@@ -31,15 +31,15 @@ public class RenderEntityWeight extends Render<EntityLiving> {
 	}
 
 	@Override
-	public boolean shouldRender(EntityLiving livingEntity, ICamera camera, double camX, double camY, double camZ) {
-		return originalRender.shouldRender(livingEntity, camera, camX, camY, camZ);
+	public boolean shouldRender(MobEntity MobEntity, ICamera camera, double camX, double camY, double camZ) {
+		return originalRender.shouldRender(MobEntity, camera, camX, camY, camZ);
 	}
 
 	/**
 	 * Renders the desired {@code T} type Entity.
 	 */
 	@Override
-	public void doRender(EntityLiving entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(MobEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		double ratio = getRatio(entity);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
@@ -86,7 +86,7 @@ public class RenderEntityWeight extends Render<EntityLiving> {
 	}
 
 	@Override
-	public void renderMultipass(EntityLiving entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void renderMultipass(MobEntity entity, double x, double y, double z, float yaw, float partialTicks) {
 		double ratio = getRatio(entity);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
@@ -97,15 +97,15 @@ public class RenderEntityWeight extends Render<EntityLiving> {
 
 	@Override
 	@Nullable
-	protected ResourceLocation getEntityTexture(EntityLiving entity) {
+	protected ResourceLocation getEntityTexture(MobEntity entity) {
 		return null;
 	}
 
 	public static double getRatio(Entity entity) {
-		if (!(entity instanceof EntityLiving)) {
+		if (!(entity instanceof MobEntity)) {
 			return 1;
 		}
-		EntityLiving animal = (EntityLiving) entity;
+		MobEntity animal = (MobEntity) entity;
 
 		ICapabilityHungryAnimal cap = animal.getCapability(ProviderHungryAnimal.CAP, null);
 

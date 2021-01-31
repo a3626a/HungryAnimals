@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.potion;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.core.lib.References;
@@ -25,7 +25,7 @@ public class PotionYoung extends PotionHungryAnimals {
 	}
 	
 	@Override
-	public void performEffect(EntityLivingBase entity, int amplifier) {
+	public void performEffect(MobEntityBase entity, int amplifier) {
 		ICapabilityAgeable ageable =  entity.getCapability(ProviderAgeable.CAP, null);
 		if (ageable != null) {
 			if (ageable.getAge() >= 0) {

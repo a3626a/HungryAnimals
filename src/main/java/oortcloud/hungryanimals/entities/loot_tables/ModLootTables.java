@@ -11,7 +11,7 @@ import com.google.gson.JsonElement;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -96,8 +96,8 @@ public class ModLootTables implements ILootTableRegistry {
 		);
 		Class<? extends Entity> entityClass = EntityList.getClass(entityResource);
 		if (entityClass != null) {
-			if (EntityLiving.class.isAssignableFrom(entityClass)) {
-				Class<? extends EntityLiving> livingClass = entityClass.asSubclass(EntityLiving.class);
+			if (MobEntity.class.isAssignableFrom(entityClass)) {
+				Class<? extends MobEntity> livingClass = entityClass.asSubclass(MobEntity.class);
 				if (HungryAnimalManager.getInstance().isHungry(livingClass)) {
 					shouldOverride = true;
 				}

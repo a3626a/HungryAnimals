@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityWolf;
@@ -17,13 +17,13 @@ public class EntityAIAvoidEntityWolf<T extends Entity> extends EntityAIAvoidEnti
         }
 
         /**
-         * Returns whether the EntityAIBase should begin execution.
+         * Returns whether the Goal should begin execution.
          */
         public boolean shouldExecute()
         {
-            if (super.shouldExecute() && this.closestLivingEntity instanceof EntityLlama)
+            if (super.shouldExecute() && this.closestMobEntity instanceof EntityLlama)
             {
-                return !this.wolf.isTamed() && this.avoidLlama((EntityLlama)this.closestLivingEntity);
+                return !this.wolf.isTamed() && this.avoidLlama((EntityLlama)this.closestMobEntity);
             }
             else
             {
@@ -41,7 +41,7 @@ public class EntityAIAvoidEntityWolf<T extends Entity> extends EntityAIAvoidEnti
          */
         public void startExecuting()
         {
-        	wolf.setAttackTarget((EntityLivingBase)null);
+        	wolf.setAttackTarget((MobEntityBase)null);
             super.startExecuting();
         }
 
@@ -50,7 +50,7 @@ public class EntityAIAvoidEntityWolf<T extends Entity> extends EntityAIAvoidEnti
          */
         public void updateTask()
         {
-            wolf.setAttackTarget((EntityLivingBase)null);
+            wolf.setAttackTarget((MobEntityBase)null);
             super.updateTask();
         }
 }

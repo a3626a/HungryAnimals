@@ -15,8 +15,8 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -98,7 +98,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer,
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, MobEntityBase placer,
 			EnumHand hand) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0));
 	}
@@ -245,9 +245,9 @@ public class BlockExcreta extends BlockFalling {
 				}
 			};
 
-			for (Object i : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
+			for (Object i : world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(pos.add(-diseaseRadius, -diseaseRadius, -diseaseRadius),
 					pos.add(diseaseRadius + 1, diseaseRadius + 1, diseaseRadius + 1)), hungryAnimalSelector)) {
-				((EntityLiving) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 0));
+				((MobEntity) i).addPotionEffect(new PotionEffect(ModPotions.potionDisease, 24000, 0));
 			}
 		}
 

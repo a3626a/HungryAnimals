@@ -10,8 +10,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityItem;
@@ -35,9 +35,9 @@ import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIMoveToEatItem extends EntityAIBase {
+public class EntityAIMoveToEatItem extends Goal {
 
-	private EntityLiving entity;
+	private MobEntity entity;
 	private World worldObj;
 	private double speed;
 	private EntityItem target;
@@ -72,7 +72,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 		}
 	};
 
-	public EntityAIMoveToEatItem(EntityLiving entity, double speed, boolean onlyNatural) {
+	public EntityAIMoveToEatItem(MobEntity entity, double speed, boolean onlyNatural) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 
 		this.entity = entity;
@@ -124,7 +124,7 @@ public class EntityAIMoveToEatItem extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		this.entity.getNavigator().tryMoveToEntityLiving(target, speed);
+		this.entity.getNavigator().tryMoveToMobEntity(target, speed);
 	}
 
 	@Override

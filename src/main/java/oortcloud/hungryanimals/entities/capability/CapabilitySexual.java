@@ -1,15 +1,15 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 
 public class CapabilitySexual implements ICapabilitySexual {
 
 	private Sex sex;
-	protected EntityLiving entity;
+	protected MobEntity entity;
 	
 	public CapabilitySexual() {}
 	
-	public CapabilitySexual(EntityLiving entity) {
+	public CapabilitySexual(MobEntity entity) {
 		this.entity = entity;
 		if (entity.getRNG().nextBoolean()) {
 			setSex(Sex.FEMALE);

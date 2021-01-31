@@ -8,7 +8,7 @@ import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
@@ -19,10 +19,10 @@ import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
 public class RecipeWrapperFoodPreferenceItem implements IRecipeWrapper, ITooltipCallback<ItemStack> {
 
-	protected Class<? extends EntityLiving> entityClass;
+	protected Class<? extends MobEntity> entityClass;
 	protected IJeiHelpers jeiHelpers;
 
-	public RecipeWrapperFoodPreferenceItem(IJeiHelpers jeiHelpers, Class<? extends EntityLiving> entityClass) {
+	public RecipeWrapperFoodPreferenceItem(IJeiHelpers jeiHelpers, Class<? extends MobEntity> entityClass) {
 		this.jeiHelpers = jeiHelpers;
 		this.entityClass = entityClass;
 	}

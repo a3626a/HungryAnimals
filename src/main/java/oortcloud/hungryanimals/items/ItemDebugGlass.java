@@ -2,8 +2,8 @@ package oortcloud.hungryanimals.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -34,7 +34,7 @@ public class ItemDebugGlass extends Item {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, MobEntityBase target, EnumHand hand) {
 		if (playerIn.getEntityWorld().isRemote) {
 			Entity entity = Minecraft.getMinecraft().objectMouseOver.entityHit;
 			if (entity != null) {
@@ -53,10 +53,10 @@ public class ItemDebugGlass extends Item {
 			if (tag != null && tag.hasKey("target")) {
 				Entity target = worldIn.getEntityByID(tag.getInteger("target"));
 				if (target != null) {
-					if (!(target instanceof EntityLiving))
+					if (!(target instanceof MobEntity))
 						return;
 
-					EntityLiving animal = (EntityLiving) target;
+					MobEntity animal = (MobEntity) target;
 
 					ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 					if (capHungry != null) {

@@ -11,7 +11,7 @@ import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeCategoryAnimalGlue;
 import oortcloud.hungryanimals.api.jei.animalglue.RecipeWrapperAnimalGlue;
@@ -74,7 +74,7 @@ public class PluginHungryAnimals implements IModPlugin {
 		List<RecipeWrapperProductionFluid> productionFluids = new ArrayList<>();
 		List<RecipeWrapperProductionMilk> productionMilks = new ArrayList<>();
 		List<RecipeWrapperProductionShear> productionShears = new ArrayList<>();
-		for (Class<? extends EntityLiving> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+		for (Class<? extends MobEntity> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			List<IProductionJEI> productions = Productions.getInstance().apply(i);
 			if (productions != null) {
 				for (IProductionJEI j : productions) {
@@ -97,7 +97,7 @@ public class PluginHungryAnimals implements IModPlugin {
 		
 		// Food Preference
 		List<RecipeWrapperFoodPreferenceItem> foodPreferences = new ArrayList<>();
-		for (Class<? extends EntityLiving> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
+		for (Class<? extends MobEntity> i : HungryAnimalManager.getInstance().getRegisteredAnimal()) {
 			foodPreferences.add(new RecipeWrapperFoodPreferenceItem(registry.getJeiHelpers(), i));
 			foodPreferences.add(new RecipeWrapperFoodPreferenceBlock(registry.getJeiHelpers(), i));
 		}

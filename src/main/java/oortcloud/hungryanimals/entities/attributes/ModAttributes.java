@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAttributeRegistry;
@@ -34,11 +34,11 @@ public class ModAttributes implements IAttributeRegistry {
 
 	private static ModAttributes INSTANCE;
 
-	private Map<Class<? extends EntityLiving>, List<IAttributeEntry>> REGISTRY;
+	private Map<Class<? extends MobEntity>, List<IAttributeEntry>> REGISTRY;
 	private Map<String, AttributePair> ATTRIBUTES;
 
 	private ModAttributes() {
-		REGISTRY = new HashMap<Class<? extends EntityLiving>, List<IAttributeEntry>>();
+		REGISTRY = new HashMap<Class<? extends MobEntity>, List<IAttributeEntry>>();
 		ATTRIBUTES = new HashMap<String, AttributePair>();
 	}
 
@@ -49,7 +49,7 @@ public class ModAttributes implements IAttributeRegistry {
 		return INSTANCE;
 	}
 
-	public boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val) {
+	public boolean registerAttribute(Class<? extends MobEntity> animalclass, String name, double val) {
 		if (!ATTRIBUTES.containsKey(name)) {
 			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
 			return false;
@@ -64,7 +64,7 @@ public class ModAttributes implements IAttributeRegistry {
 		return REGISTRY.get(animalclass).add(new AttributeEntry(attribute, shouldRegister, val));
 	}
 
-	public boolean registerAttribute(Class<? extends EntityLiving> animalclass, String name, double val, boolean shouldRegister) {
+	public boolean registerAttribute(Class<? extends MobEntity> animalclass, String name, double val, boolean shouldRegister) {
 		if (!ATTRIBUTES.containsKey(name)) {
 			HungryAnimals.logger.warn("[Attribute] {} doesn't have attribute {}", animalclass, name);
 			return false;
@@ -88,7 +88,7 @@ public class ModAttributes implements IAttributeRegistry {
 	 * 
 	 * @param entity
 	 */
-	public void applyAttributes(EntityLivingBase entity) {
+	public void applyAttributes(MobEntityBase entity) {
 		if (REGISTRY.containsKey(entity.getClass())) {
 			for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
 				i.apply(entity);
@@ -101,7 +101,7 @@ public class ModAttributes implements IAttributeRegistry {
 	 * It is called before applyEntityAttributes and attachCapabilities
 	 * @param entity
 	 */
-	public void registerAttributes(EntityLivingBase entity) {
+	public void registerAttributes(MobEntityBase entity) {
 		if (REGISTRY.containsKey(entity.getClass())) {
 			for (IAttributeEntry i : REGISTRY.get(entity.getClass())) {
 				i.register(entity);

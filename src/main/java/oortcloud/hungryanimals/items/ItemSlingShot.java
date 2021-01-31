@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
@@ -83,11 +83,11 @@ public class ItemSlingShot extends Item {
     }
 	
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, MobEntityBase MobEntity, int timeLeft)
     {
-        if (entityLiving instanceof EntityPlayer)
+        if (MobEntity instanceof EntityPlayer)
         {
-            EntityPlayer entityplayer = (EntityPlayer)entityLiving;
+            EntityPlayer entityplayer = (EntityPlayer)MobEntity;
             boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
             ItemStack itemstack = this.findAmmo(entityplayer);
 

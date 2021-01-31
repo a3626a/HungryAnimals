@@ -9,7 +9,7 @@ import com.google.common.base.Predicates;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,7 +56,7 @@ public class EntityBola extends Entity implements IProjectile {
 		this.setPosition(posx, posy, posz);
 	}
 
-	public EntityBola(World world, EntityLivingBase shooter) {
+	public EntityBola(World world, MobEntityBase shooter) {
 		this(world, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - 0.1, shooter.posZ);
 		this.shootingEntity = shooter;
 	}
@@ -224,19 +224,19 @@ public class EntityBola extends Entity implements IProjectile {
 			}
 
 			if (entity.attackEntityFrom(damagesource, 1.0F)) {
-				if (entity instanceof EntityLivingBase) {
-					EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
+				if (entity instanceof MobEntityBase) {
+					MobEntityBase MobEntitybase = (MobEntityBase)entity;
 					
-					if (this.shootingEntity instanceof EntityLivingBase)
+					if (this.shootingEntity instanceof MobEntityBase)
                     {
-                        EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
-                        EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase)this.shootingEntity, entitylivingbase);
+                        EnchantmentHelper.applyThornEnchantments(MobEntitybase, this.shootingEntity);
+                        EnchantmentHelper.applyArthropodEnchantments((MobEntityBase)this.shootingEntity, MobEntitybase);
                     }
 					
-					entitylivingbase.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 3));
+					MobEntitybase.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 3));
 					
 					//TODO reveal what does  SPacketChangeGameState(6, 0.0F) do
-					if (this.shootingEntity != null && entitylivingbase != this.shootingEntity && entitylivingbase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
+					if (this.shootingEntity != null && MobEntitybase != this.shootingEntity && MobEntitybase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
 	                {
 	                    ((EntityPlayerMP)this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
 	                }
