@@ -1,9 +1,9 @@
 package oortcloud.hungryanimals.api.ha;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import oortcloud.hungryanimals.api.HAPlugin;
@@ -69,10 +69,10 @@ public class PluginHungryAnimals implements IHAPlugin {
 		
 		registry.registerAIContainer("rabbit", (entityClass, jsonEle) -> {
 			AIContainer aiContainer = (AIContainer) AIContainerHerbivore.parse(entityClass, jsonEle);
-			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIPanic.class));
-			aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIAvoidEntity.class));
+			aiContainer.getTask().remove(new AIRemoverIsInstance(PanicGoal.class));
+			aiContainer.getTask().remove(new AIRemoverIsInstance(AvoidEntityGoal.class));
 			if (HungryAnimalManager.getInstance().isHungry(entityClass)) {
-				aiContainer.getTask().remove(new AIRemoverIsInstance(EntityAIMoveToBlock.class));
+				aiContainer.getTask().remove(new AIRemoverIsInstance(MoveToBlockGoal.class));
 			}
 			return aiContainer;
 		});

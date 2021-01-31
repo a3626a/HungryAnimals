@@ -9,7 +9,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +24,7 @@ import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIAvoidPlayer extends EntityAIAvoidEntity<EntityPlayer> {
+public class EntityAIAvoidPlayer extends AvoidEntityGoal<EntityPlayer> {
 	
 	@Nullable
 	private ICapabilityTamableAnimal cap;

@@ -164,7 +164,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if (state == State.IDLE) {
 
 		} else if (state == State.MOVING) {

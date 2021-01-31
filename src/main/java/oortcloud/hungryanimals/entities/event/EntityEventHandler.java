@@ -16,7 +16,7 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -446,7 +446,7 @@ public class EntityEventHandler {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
 		}
-		if (entity instanceof EntityWolf && tamingLevel != TamingLevel.TAMED) {
+		if (entity instanceof WolfEntity && tamingLevel != TamingLevel.TAMED) {
 			// For wolves, to disable feed bones before tamed
 			if (item == Items.BONE) {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
