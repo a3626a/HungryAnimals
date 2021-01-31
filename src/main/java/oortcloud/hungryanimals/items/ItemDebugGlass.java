@@ -8,7 +8,7 @@ import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -49,7 +49,7 @@ public class ItemDebugGlass extends Item {
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!worldIn.isRemote) {
-			NBTTagCompound tag = stack.getTagCompound();
+			CompoundNBT tag = stack.getTagCompound();
 			if (tag != null && tag.hasKey("target")) {
 				Entity target = worldIn.getEntityByID(tag.getInteger("target"));
 				if (target != null) {
@@ -78,7 +78,7 @@ public class ItemDebugGlass extends Item {
 					
 					int index = 0;
 					for (EntityAITaskEntry i : animal.tasks.taskEntries) {
-						NBTTagCompound iTag = new NBTTagCompound();
+						CompoundNBT iTag = new CompoundNBT();
 						String name = i.action.getClass().toString();
 						name = name.substring(name.lastIndexOf(".")+1);
 						iTag.setString("name", name);

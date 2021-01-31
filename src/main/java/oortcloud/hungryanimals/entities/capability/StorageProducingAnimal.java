@@ -2,9 +2,11 @@ package oortcloud.hungryanimals.entities.capability;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import oortcloud.hungryanimals.entities.production.IProduction;
@@ -16,22 +18,21 @@ public class StorageProducingAnimal implements IStorage<ICapabilityProducingAnim
 	
 	@Override
 	@Nullable
-	public NBTBase writeNBT(Capability<ICapabilityProducingAnimal> capability, ICapabilityProducingAnimal instance, EnumFacing side) {
-		NBTTagCompound tag = new NBTTagCompound();
+	public INBT writeNBT(Capability<ICapabilityProducingAnimal> capability, ICapabilityProducingAnimal instance, Direction side) {
+		CompoundNBT tag = new CompoundNBT();
 		for (IProduction i : instance.getProductions()) {
-			tag.setTag(i.getName(), i.writeNBT());
+			tag.put(i.getName(), i.writeNBT());
 		}
 		return tag;
 	}
 
 	@Override
-	public void readNBT(Capability<ICapabilityProducingAnimal> capability, ICapabilityProducingAnimal instance, EnumFacing side, NBTBase nbt) {
-		NBTTagCompound tag = (NBTTagCompound)nbt;
+	public void readNBT(Capability<ICapabilityProducingAnimal> capability, ICapabilityProducingAnimal instance, Direction side, INBT nbt) {
+		CompoundNBT tag = (CompoundNBT)nbt;
 		
 		for (IProduction i : instance.getProductions()) {
-			NBTBase inbt = tag.getTag(i.getName());
+			INBT inbt = tag.get(i.getName());
 			i.readNBT(inbt);
 		}
 	}
-
 }

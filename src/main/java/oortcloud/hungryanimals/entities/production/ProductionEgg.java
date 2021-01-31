@@ -11,7 +11,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -76,12 +76,12 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	}
 
 	@Override
-	public NBTBase writeNBT() {
+	public INBT writeNBT() {
 		return new NBTTagInt(cooldown);
 	}
 
 	@Override
-	public void readNBT(NBTBase nbt) {
+	public void readNBT(INBT nbt) {
 		cooldown = ((NBTTagInt) nbt).getInt();
 	}
 

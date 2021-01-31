@@ -6,7 +6,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
@@ -26,7 +26,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 			double prob = pref.getNutrient(block) / 2.0 / prefItem.getNutrient(new ItemStack(Items.WHEAT_SEEDS));
 			if (this.entity.getRNG().nextDouble() < prob) {
 				ItemStack stack = new ItemStack(Items.WHEAT_SEEDS);
-				NBTTagCompound tag = new NBTTagCompound();
+				CompoundNBT tag = new CompoundNBT();
 				tag.setBoolean("isNatural", true);
 				stack.setTagCompound(tag);
 				EntityItem entity = new EntityItem(worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, stack);

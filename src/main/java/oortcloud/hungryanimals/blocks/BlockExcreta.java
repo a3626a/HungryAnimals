@@ -24,7 +24,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -75,8 +75,8 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(BlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-		if (face == EnumFacing.DOWN) {
+	public boolean doesSideBlockRendering(BlockState state, IBlockAccess world, BlockPos pos, Direction face) {
+		if (face == Direction.DOWN) {
 			return true;
 		}
 		return super.doesSideBlockRendering(state, world, pos, face);
@@ -98,7 +98,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public BlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, MobEntityBase placer,
+	public BlockState getStateForPlacement(World world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, MobEntityBase placer,
 			EnumHand hand) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0));
 	}
@@ -267,7 +267,7 @@ public class BlockExcreta extends BlockFalling {
 			}
 		}
 		if (flag) {
-			for (EnumFacing i : EnumFacing.VALUES) {
+			for (Direction i : Direction.VALUES) {
 				if (world.getBlockState(pos.offset(i)).getBlock() == ModBlocks.excreta)
 					fermentate(world, pos.offset(i), random);
 			}
@@ -298,7 +298,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX,
+	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, Direction side, float hitX,
 			float hitY, float hitZ) {
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;

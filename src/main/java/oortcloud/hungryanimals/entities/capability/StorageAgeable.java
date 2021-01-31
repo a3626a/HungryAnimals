@@ -2,9 +2,9 @@ package oortcloud.hungryanimals.entities.capability;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
@@ -12,8 +12,8 @@ public class StorageAgeable implements IStorage<ICapabilityAgeable> {
 
 	@Override
 	@Nullable
-	public NBTBase writeNBT(Capability<ICapabilityAgeable> capability, ICapabilityAgeable instance, EnumFacing side) {
-		NBTTagCompound tag = new NBTTagCompound();
+	public INBT writeNBT(Capability<ICapabilityAgeable> capability, ICapabilityAgeable instance, Direction side) {
+		CompoundNBT tag = new CompoundNBT();
 		
 		if (instance instanceof CapabilityAgeableSub) {
 			// TODO BAD OOP
@@ -25,12 +25,12 @@ public class StorageAgeable implements IStorage<ICapabilityAgeable> {
 	}
 
 	@Override
-	public void readNBT(Capability<ICapabilityAgeable> capability, ICapabilityAgeable instance, EnumFacing side, NBTBase nbt) {
+	public void readNBT(Capability<ICapabilityAgeable> capability, ICapabilityAgeable instance, Direction side, INBT nbt) {
 		if (instance instanceof CapabilityAgeableSub) {
 			return;
 		}
 		
-		NBTTagCompound tag = (NBTTagCompound) nbt;
+		CompoundNBT tag = (CompoundNBT) nbt;
 		instance.setAge(tag.getInteger("age"));
 	}
 

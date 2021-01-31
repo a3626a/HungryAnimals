@@ -15,8 +15,8 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.JsonUtils;
@@ -68,13 +68,13 @@ public class ProductionFluid
 	}
 
 	@Override
-	public NBTBase writeNBT() {
-		return tank.writeToNBT(new NBTTagCompound());
+	public INBT writeNBT() {
+		return tank.writeToNBT(new CompoundNBT());
 	}
 
 	@Override
-	public void readNBT(NBTBase nbt) {
-		tank.readFromNBT((NBTTagCompound) nbt);
+	public void readNBT(INBT nbt) {
+		tank.readFromNBT((CompoundNBT) nbt);
 	}
 
 	@Override

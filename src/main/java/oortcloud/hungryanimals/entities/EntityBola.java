@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SPacketChangeGameState;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -288,12 +288,12 @@ public class EntityBola extends Entity implements IProjectile {
     }
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
+	protected void readEntityFromNBT(CompoundNBT p_70037_1_) {
 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
+	protected void writeEntityToNBT(CompoundNBT p_70014_1_) {
 	}
 
 	@Override

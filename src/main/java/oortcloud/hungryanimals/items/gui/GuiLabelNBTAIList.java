@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class GuiLabelNBTAIList extends GuiPlacable {
 
@@ -37,11 +37,11 @@ public class GuiLabelNBTAIList extends GuiPlacable {
 		EntityPlayer player = ((EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
 		if (player != null) {
 			// player can be null during launch / close
-			NBTTagCompound tag = player.getHeldItemMainhand().getTagCompound();
+			CompoundNBT tag = player.getHeldItemMainhand().getTagCompound();
 			if (tag != null) {
 				data = new ArrayList<>();
 				for (int i = 0; i < tag.getInteger("ais.length"); i++) {
-					NBTTagCompound iTag = tag.getCompoundTag("ais."+i);
+					CompoundNBT iTag = tag.getCompoundTag("ais."+i);
 					data.add(new AI(iTag.getString("name"), iTag.getBoolean("using")));
 				}
 			}

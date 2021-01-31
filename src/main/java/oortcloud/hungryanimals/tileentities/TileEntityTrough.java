@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -67,49 +67,49 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
 		super.writeToNBT(compound);
 		writeSyncableDataToNBT(compound);
 		return compound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void readFromNBT(CompoundNBT compound) {
 		super.readFromNBT(compound);
 		readSyncableDataFromNBT(compound);
 	}
 	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		NBTTagCompound compound = new NBTTagCompound();
+		CompoundNBT compound = new CompoundNBT();
 		writeSyncableDataToNBT(compound);
 		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), compound);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		NBTTagCompound compound = pkt.getNbtCompound();
+		CompoundNBT compound = pkt.getNbtCompound();
 		readSyncableDataFromNBT(compound);
 	}
 	
 	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound tag = super.getUpdateTag();
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
 		writeSyncableDataToNBT(tag);
 		return tag;
 	}
 	
-	private void writeSyncableDataToNBT(NBTTagCompound compound) {
+	private void writeSyncableDataToNBT(CompoundNBT compound) {
 		if (!stack.isEmpty()) {
-			NBTTagCompound tag = new NBTTagCompound();
+			CompoundNBT tag = new CompoundNBT();
 			stack.writeToNBT(tag);
 			compound.setTag("foodbox", tag);
 		}
 	}
 
-	private void readSyncableDataFromNBT(NBTTagCompound compound) {
+	private void readSyncableDataFromNBT(CompoundNBT compound) {
 		if (compound.hasKey("foodbox")) {
-			NBTTagCompound tag = (NBTTagCompound) compound.getTag("foodbox");
+			CompoundNBT tag = (CompoundNBT) compound.getTag("foodbox");
 			stack = new ItemStack(tag);
 		} else {
 			stack = ItemStack.EMPTY;

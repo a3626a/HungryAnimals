@@ -18,10 +18,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,7 +38,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 public class BlockTrough extends Block {
 
 	public static final PropertyEnum<EnumPartType> PART = PropertyEnum.create("part", EnumPartType.class);
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
 	public static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 0.5F, 1F);
 	public static final AxisAlignedBB FLOOR = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
 	public static final AxisAlignedBB EAST = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 0.125F, 0.5F, 1.0F);
@@ -100,13 +100,13 @@ public class BlockTrough extends Block {
 	@Override
 	public void onNeighborChange(IBlockAccess worldIn, BlockPos pos, BlockPos neighborBlock) {
 		BlockState state = worldIn.getBlockState(pos);
-		EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
+		Direction Direction = (Direction) state.getValue(FACING);
 
 		if (state.getValue(PART) == BlockTrough.EnumPartType.HEAD) {
-			if (worldIn.getBlockState(pos.offset(enumfacing.getOpposite())).getBlock() != this) {
+			if (worldIn.getBlockState(pos.offset(Direction.getOpposite())).getBlock() != this) {
 				((World) worldIn).setBlockToAir(pos);
 			}
-		} else if (worldIn.getBlockState(pos.offset(enumfacing)).getBlock() != this) {
+		} else if (worldIn.getBlockState(pos.offset(Direction)).getBlock() != this) {
 			((World) worldIn).setBlockToAir(pos);
 
 			if (!((World) worldIn).isRemote) {
@@ -134,7 +134,7 @@ public class BlockTrough extends Block {
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, EntityPlayer player) {
 		// to prevent item drop in creative mode
 		if (player.capabilities.isCreativeMode && state.getValue(PART) == BlockTrough.EnumPartType.HEAD) {
-			BlockPos blockpos1 = pos.offset(((EnumFacing) state.getValue(FACING)).getOpposite());
+			BlockPos blockpos1 = pos.offset(((Direction) state.getValue(FACING)).getOpposite());
 
 			if (worldIn.getBlockState(blockpos1).getBlock() == this) {
 				worldIn.setBlockToAir(blockpos1);
@@ -148,20 +148,20 @@ public class BlockTrough extends Block {
 			@Nullable Entity entityIn, boolean p_185477_7_) {
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, FLOOR);
 
-		EnumFacing rot = ((EnumFacing) state.getValue(FACING));
+		Direction rot = ((Direction) state.getValue(FACING));
 		if (state.getValue(PART) == EnumPartType.HEAD)
 			rot = rot.getOpposite();
 
-		if (rot != EnumFacing.SOUTH) {
+		if (rot != Direction.SOUTH) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH);
 		}
-		if (rot != EnumFacing.WEST) {
+		if (rot != Direction.WEST) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST);
 		}
-		if (rot != EnumFacing.NORTH) {
+		if (rot != Direction.NORTH) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH);
 		}
-		if (rot != EnumFacing.EAST) {
+		if (rot != Direction.EAST) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST);
 		}
 	}
@@ -179,7 +179,7 @@ public class BlockTrough extends Block {
 	public TileEntity getTileEntity(World world, BlockPos pos) {
 		BlockState meta = world.getBlockState(pos);
 		if (meta.getBlock() == this) {
-			return (meta.getValue(PART) == EnumPartType.HEAD ? world.getTileEntity(pos.offset(((EnumFacing) meta.getValue(FACING)).getOpposite()))
+			return (meta.getValue(PART) == EnumPartType.HEAD ? world.getTileEntity(pos.offset(((Direction) meta.getValue(FACING)).getOpposite()))
 					: world.getTileEntity(pos));
 		} else {
 			return null;
@@ -187,7 +187,7 @@ public class BlockTrough extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX,
+	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, Direction side, float hitX,
 			float hitY, float hitZ) {
 		TileEntity te = this.getTileEntity(worldIn, pos);
 
@@ -263,7 +263,7 @@ public class BlockTrough extends Block {
 					EntityItem entityitem = new EntityItem(worldIn, (double) ((float) pos.getX() + f), (double) ((float) pos.getY() + f1),
 							(double) ((float) pos.getZ() + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 
-					NBTTagCompound tag = itemstack.getTagCompound();
+					CompoundNBT tag = itemstack.getTagCompound();
 					if (tag != null) {
 						entityitem.getItem().setTagCompound(tag.copy());
 					}
@@ -281,13 +281,13 @@ public class BlockTrough extends Block {
 
 	@Override
 	public BlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getHorizontal(meta & 3);
-		return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(PART, (meta >> 2 == 1) ? EnumPartType.HEAD : EnumPartType.FOOT);
+		Direction Direction = Direction.getHorizontal(meta & 3);
+		return this.getDefaultState().withProperty(FACING, Direction).withProperty(PART, (meta >> 2 == 1) ? EnumPartType.HEAD : EnumPartType.FOOT);
 	}
 
 	@Override
 	public int getMetaFromState(BlockState state) {
-		return ((EnumFacing) state.getValue(FACING)).getHorizontalIndex() + ((state.getValue(PART) == EnumPartType.HEAD ? 1 : 0) << 2);
+		return ((Direction) state.getValue(FACING)).getHorizontalIndex() + ((state.getValue(PART) == EnumPartType.HEAD ? 1 : 0) << 2);
 	}
 
 	public static enum EnumPartType implements IStringSerializable {

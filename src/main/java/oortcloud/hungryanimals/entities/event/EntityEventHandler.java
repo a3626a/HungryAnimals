@@ -22,7 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -499,7 +499,7 @@ public class EntityEventHandler {
 		
 		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
 		if (ageable != null && ageable.getAge() < 0) {
-			NBTTagCompound tag = item.getTagCompound();
+			CompoundNBT tag = item.getTagCompound();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
@@ -507,7 +507,7 @@ public class EntityEventHandler {
 			}
 		}
 
-		NBTTagCompound tag = item.getTagCompound();
+		CompoundNBT tag = item.getTagCompound();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			if (capTaming != null) {
@@ -528,9 +528,9 @@ public class EntityEventHandler {
 
 		if (Tamings.getLevel(cap) != TamingLevel.TAMED) {
 			for (EntityItem i : event.getDrops()) {
-				NBTTagCompound tag = i.getItem().getTagCompound();
+				CompoundNBT tag = i.getItem().getTagCompound();
 				if (tag == null) {
-					tag = new NBTTagCompound();
+					tag = new CompoundNBT();
 					i.getItem().setTagCompound(tag);
 				}
 				tag.setBoolean("isNatural", true);

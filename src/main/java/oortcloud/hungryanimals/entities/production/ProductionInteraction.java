@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.entities.production;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -49,12 +49,12 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 	}
 
 	@Override
-	public NBTBase writeNBT() {
+	public INBT writeNBT() {
 		return new NBTTagInt(cooldown);
 	}
 
 	@Override
-	public void readNBT(NBTBase nbt) {
+	public void readNBT(INBT nbt) {
 		cooldown = ((NBTTagInt) nbt).getInt();
 	}
 

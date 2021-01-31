@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -27,10 +27,10 @@ public class ItemTrough extends Item {
 
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, Direction side, float hitX, float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			return EnumActionResult.SUCCESS;
-		} else if (side != EnumFacing.UP) {
+		} else if (side != Direction.UP) {
 			return EnumActionResult.FAIL;
 		} else {
 			BlockState BlockState = worldIn.getBlockState(pos);
@@ -42,19 +42,19 @@ public class ItemTrough extends Item {
 			}
 
 			int i = MathHelper.floor((double) (playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing enumfacing1 = EnumFacing.getHorizontal(i);
-			BlockPos blockpos = pos.offset(enumfacing1);
+			Direction Direction1 = Direction.getHorizontal(i);
+			BlockPos blockpos = pos.offset(Direction1);
 
 			if (playerIn.canPlayerEdit(pos, side, playerIn.getHeldItem(hand)) && playerIn.canPlayerEdit(blockpos, side, playerIn.getHeldItem(hand))) {
 				boolean flag1 = worldIn.getBlockState(blockpos).getBlock().isReplaceable(worldIn, blockpos);
 				boolean flag2 = flag || worldIn.isAirBlock(pos);
 				boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
 
-				if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)
+				if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), Direction.UP)
 						&& worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(),
-								EnumFacing.UP)) {
+								Direction.UP)) {
 					BlockState BlockState1 = ModBlocks.trough.getDefaultState()
-							.withProperty(BlockTrough.FACING, enumfacing1)
+							.withProperty(BlockTrough.FACING, Direction1)
 							.withProperty(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
 
 					// TODO what does flag 8 mean?!

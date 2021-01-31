@@ -28,7 +28,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.core.lib.References;
@@ -59,18 +59,18 @@ public class ModelItemSlingshot implements IBakedModel {
 						vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
 						vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 32),
 						vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 32)),
-				0, EnumFacing.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
+				0, Direction.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
 
 		this.rightString = new BakedQuad(
 				Ints.concat(vertexToInts(6.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
 						vertexToInts(4.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
 						vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 32),
 						vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 32)),
-				0, EnumFacing.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
+				0, Direction.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, long rand) {
 		List<BakedQuad> combinedQuadsList = new ArrayList<BakedQuad>(model_shooting.getQuads(state, side, rand));
 		combinedQuadsList.add(leftString);
 		combinedQuadsList.add(rightString);
@@ -93,14 +93,14 @@ public class ModelItemSlingshot implements IBakedModel {
 									vertexToInts(10.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
 									vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 16),
 									vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 16)),
-							0, EnumFacing.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
+							0, Direction.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
 
 					rightString = new BakedQuad(
 							Ints.concat(vertexToInts(6.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 16, 0),
 									vertexToInts(4.0F / 16.0F, 13.0F / 16.0F, 8 / 16.0F, Color.WHITE.getRGB(), 0, 0),
 									vertexToInts(7.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 0, 16),
 									vertexToInts(9.0F / 16.0F, 13.0F / 16.0F, length, Color.WHITE.getRGB(), 16, 16)),
-							0, EnumFacing.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
+							0, Direction.UP, texture, true, net.minecraft.client.renderer.vertex.DefaultVertexFormats.ITEM);
 
 					if (inuseTick == itemStack.getMaxItemUseDuration()) {
 						return model_normal;

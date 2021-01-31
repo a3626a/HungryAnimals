@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.core.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -20,9 +20,9 @@ public class HandlerServerDGSet implements IMessageHandler<PacketServerDGSet, IM
 
 			ItemStack stack = player.getHeldItemMainhand();
 			if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
-				NBTTagCompound tag = stack.getTagCompound();
+				CompoundNBT tag = stack.getTagCompound();
 				if (tag == null) {
-					tag = new NBTTagCompound();
+					tag = new CompoundNBT();
 					stack.setTagCompound(tag);
 				}
 				tag.setInteger("target", message.entity);

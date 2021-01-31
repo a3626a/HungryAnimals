@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.items.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class GuiLabelNBTDouble extends GuiPlacable {
 
@@ -23,7 +23,7 @@ public class GuiLabelNBTDouble extends GuiPlacable {
 		EntityPlayer player = ((EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
 		if (player != null) {
 			// player can be null during launch / close
-			NBTTagCompound tag = player.getHeldItemMainhand().getTagCompound();
+			CompoundNBT tag = player.getHeldItemMainhand().getTagCompound();
 			if (tag != null)
 				data = tag.getDouble(key);
 		}

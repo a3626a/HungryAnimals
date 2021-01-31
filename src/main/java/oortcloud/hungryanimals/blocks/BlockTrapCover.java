@@ -8,7 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -42,7 +42,7 @@ public class BlockTrapCover extends Block {
 		if (!worldIn.isRemote && state.getBlock() == this) {
 			worldIn.setBlockToAir(pos);
 			spawnAsEntity(worldIn, pos, new ItemStack(Items.STICK, 2 + worldIn.rand.nextInt(4)));
-			for (EnumFacing i : EnumFacing.HORIZONTALS) {
+			for (Direction i : Direction.HORIZONTALS) {
 				worldIn.scheduleUpdate(pos.offset(i), this, 3);
 			}
 		}

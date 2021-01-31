@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
@@ -31,6 +31,6 @@ public class PacketClientSyncProducingFluid extends PacketClientSyncProducing {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		super.toBytes(buf);
-		ByteBufUtils.writeTag(buf, tank.writeToNBT(new NBTTagCompound()));
+		ByteBufUtils.writeTag(buf, tank.writeToNBT(new CompoundNBT()));
 	}
 }
