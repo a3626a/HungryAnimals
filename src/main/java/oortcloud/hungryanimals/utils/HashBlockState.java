@@ -6,10 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.state.IProperty;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.HungryAnimals;
 
 public class HashBlockState {
@@ -35,8 +37,8 @@ public class HashBlockState {
 		}
 		
 		if (!ignoreProperty) {
-			for (IProperty<?> i : block.getProperties().keySet()) {
-				if (!block.getValue(i).equals(this.block.getValue(i)))
+			for (IProperty<?> i : block.getProperties()) {
+				if (!block.get(i).equals(this.block.get(i)))
 					return false;
 			}
 		}
@@ -53,8 +55,8 @@ public class HashBlockState {
 			if (block.getBlock() != ((HashBlockState) obj).block.getBlock())
 				return false;
 
-			for (IProperty<?> i : block.getProperties().keySet()) {
-				if (!block.getValue(i).equals(((HashBlockState) obj).block.getValue(i)))
+			for (IProperty<?> i : block.getProperties()) {
+				if (!block.get(i).equals(((HashBlockState) obj).block.get(i)))
 					return false;
 			}
 
@@ -88,18 +90,19 @@ public class HashBlockState {
 	
 	public static HashBlockState parse(JsonElement ele) {
 		JsonObject jsonobject = ele.getAsJsonObject();
-		String name = JsonUtils.getString(jsonobject, "name");
-		Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
+		String name = JSONUtils.getString(jsonobject, "name");
+		RegistryObject<Block> blockRegistryObject = RegistryObject.of(new ResourceLocation(name), ForgeRegistries.BLOCKS);
+		Block block = blockRegistryObject.get();
 
 		if (jsonobject.entrySet().size() == 1) {
 			return new HashBlockState(block);
 		}
 
 		BlockState state = block.getDefaultState();
-		Collection<IProperty<?>> key = state.getPropertyKeys();
+		Collection<IProperty<?>> key = state.getProperties();
 		for (IProperty<?> i : key) {
-			if (JsonUtils.hasField(jsonobject, i.getName())) {
-				String jsonValue = JsonUtils.getString(jsonobject, i.getName());
+			if (JSONUtils.hasField(jsonobject, i.getName())) {
+				String jsonValue = JSONUtils.getString(jsonobject, i.getName());
 				state = getState(state, i, jsonValue);
 			}
 		}
@@ -107,7 +110,7 @@ public class HashBlockState {
 	}
 
 	private static <T extends Comparable<T>> BlockState getState(BlockState state, IProperty<T> property, String value) {
-		return state.withProperty(property, property.parseValue(value).get());
+		return state.with(property, property.parseValue(value).get());
 	}
 
 }
