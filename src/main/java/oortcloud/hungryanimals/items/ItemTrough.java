@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.items;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -33,8 +33,8 @@ public class ItemTrough extends Item {
 		} else if (side != EnumFacing.UP) {
 			return EnumActionResult.FAIL;
 		} else {
-			IBlockState iblockstate = worldIn.getBlockState(pos);
-			Block block = iblockstate.getBlock();
+			BlockState BlockState = worldIn.getBlockState(pos);
+			Block block = BlockState.getBlock();
 			boolean flag = block.isReplaceable(worldIn, pos);
 
 			if (!flag) {
@@ -53,15 +53,15 @@ public class ItemTrough extends Item {
 				if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)
 						&& worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(),
 								EnumFacing.UP)) {
-					IBlockState iblockstate1 = ModBlocks.trough.getDefaultState()
+					BlockState BlockState1 = ModBlocks.trough.getDefaultState()
 							.withProperty(BlockTrough.FACING, enumfacing1)
 							.withProperty(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
 
 					// TODO what does flag 8 mean?!
-					if (worldIn.setBlockState(pos, iblockstate1, 11)) {
-						IBlockState iblockstate2 = iblockstate1.withProperty(BlockTrough.PART,
+					if (worldIn.setBlockState(pos, BlockState1, 11)) {
+						BlockState BlockState2 = BlockState1.withProperty(BlockTrough.PART,
 								BlockTrough.EnumPartType.HEAD);
-						worldIn.setBlockState(blockpos, iblockstate2, 11);
+						worldIn.setBlockState(blockpos, BlockState2, 11);
 					}
 					playerIn.getHeldItem(hand).shrink(1);
 					return EnumActionResult.SUCCESS;

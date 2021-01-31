@@ -8,22 +8,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.HashBlockState;
 
 public class GrassGenerator {
 
 	public ICondition condition;
-	public List<IBlockState> states;
+	public List<BlockState> states;
 	
-	public GrassGenerator(ICondition condition, IBlockState state) {
+	public GrassGenerator(ICondition condition, BlockState state) {
 		this.condition = condition;
-		this.states = new ArrayList<IBlockState>();
+		this.states = new ArrayList<BlockState>();
 		this.states.add(state);
 	}
 
-	public GrassGenerator(ICondition condition, List<IBlockState> states) {
+	public GrassGenerator(ICondition condition, List<BlockState> states) {
 		this.condition = condition;
 		this.states = states;
 	}
@@ -40,16 +40,16 @@ public class GrassGenerator {
 		JsonElement jsonGrass = jsonObj.get("grass");
 		if (jsonGrass instanceof JsonArray) {
 			JsonArray jsonStates = (JsonArray) jsonGrass;
-			List<IBlockState> states = new ArrayList<IBlockState>();
+			List<BlockState> states = new ArrayList<BlockState>();
 			for (JsonElement jsonState : jsonStates) {
 				HashBlockState grass = HashBlockState.parse(jsonState);
-				IBlockState state = grass.toBlockState();
+				BlockState state = grass.toBlockState();
 				states.add(state);
 			}
 			return new GrassGenerator(condition, states);
 		} else {
 			HashBlockState grass = HashBlockState.parse(jsonGrass);
-			IBlockState state = grass.toBlockState();
+			BlockState state = grass.toBlockState();
 			return new GrassGenerator(condition, state);
 		}
 	}

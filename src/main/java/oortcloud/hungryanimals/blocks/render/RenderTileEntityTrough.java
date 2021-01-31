@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.blocks.render;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -26,7 +26,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 
 	@Override
 	public void render(TileEntityTrough foodbox, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		IBlockState state = foodbox.getWorld().getBlockState(foodbox.getPos());
+		BlockState state = foodbox.getWorld().getBlockState(foodbox.getPos());
 		if (state.getBlock() != ModBlocks.trough)
 			return;
 		EnumFacing rot = (EnumFacing) state.getValue(BlockTrough.FACING);

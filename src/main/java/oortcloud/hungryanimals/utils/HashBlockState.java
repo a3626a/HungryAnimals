@@ -7,29 +7,29 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import oortcloud.hungryanimals.HungryAnimals;
 
 public class HashBlockState {
-	private IBlockState block;
+	private BlockState block;
 	private boolean ignoreProperty;
 
 	public HashBlockState(Block block) {
 		this(block.getDefaultState(), true);
 	}
 
-	public HashBlockState(IBlockState block) {
+	public HashBlockState(BlockState block) {
 		this(block, false);
 	}
 
-	public HashBlockState(IBlockState block, boolean ignoreProperty) {
+	public HashBlockState(BlockState block, boolean ignoreProperty) {
 		this.block = block;
 		this.ignoreProperty = ignoreProperty;
 	}
 
-	public boolean apply(IBlockState block) {
+	public boolean apply(BlockState block) {
 		if (this.block.getBlock() != block.getBlock()) {
 			return false;
 		}
@@ -77,7 +77,7 @@ public class HashBlockState {
 		return block.toString();
 	}
 
-	public IBlockState toBlockState() {
+	public BlockState toBlockState() {
 		if (ignoreProperty) {
 			HungryAnimals.logger.warn("Get block state from HashBlockState with ignoreProperty == true,");
 			HungryAnimals.logger.warn("    Block State is not well defined,");
@@ -95,7 +95,7 @@ public class HashBlockState {
 			return new HashBlockState(block);
 		}
 
-		IBlockState state = block.getDefaultState();
+		BlockState state = block.getDefaultState();
 		Collection<IProperty<?>> key = state.getPropertyKeys();
 		for (IProperty<?> i : key) {
 			if (JsonUtils.hasField(jsonobject, i.getName())) {
@@ -106,7 +106,7 @@ public class HashBlockState {
 		return new HashBlockState(state);
 	}
 
-	private static <T extends Comparable<T>> IBlockState getState(IBlockState state, IProperty<T> property, String value) {
+	private static <T extends Comparable<T>> BlockState getState(BlockState state, IProperty<T> property, String value) {
 		return state.withProperty(property, property.parseValue(value).get());
 	}
 

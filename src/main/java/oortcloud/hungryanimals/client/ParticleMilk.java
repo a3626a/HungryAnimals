@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.client;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -62,20 +62,20 @@ public class ParticleMilk extends Particle {
         }
 
         BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
-        IBlockState iblockstate = this.world.getBlockState(blockpos);
-        Material material = iblockstate.getMaterial();
+        BlockState BlockState = this.world.getBlockState(blockpos);
+        Material material = BlockState.getMaterial();
 
         if (material.isLiquid() || material.isSolid())
         {
             double d0;
 
-            if (iblockstate.getBlock() instanceof BlockLiquid)
+            if (BlockState.getBlock() instanceof BlockLiquid)
             {
-                d0 = (double)(1.0F - BlockLiquid.getLiquidHeightPercent(((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue()));
+                d0 = (double)(1.0F - BlockLiquid.getLiquidHeightPercent(((Integer)BlockState.getValue(BlockLiquid.LEVEL)).intValue()));
             }
             else
             {
-                d0 = iblockstate.getBoundingBox(this.world, blockpos).maxY;
+                d0 = BlockState.getBoundingBox(this.world, blockpos).maxY;
             }
 
             double d1 = (double)MathHelper.floor(this.posY) + d0;

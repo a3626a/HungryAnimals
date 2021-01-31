@@ -12,8 +12,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockStateContainer;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.MobEntityBase;
@@ -75,7 +75,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public boolean doesSideBlockRendering(BlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		if (face == EnumFacing.DOWN) {
 			return true;
 		}
@@ -83,49 +83,49 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man == 4;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return isFullCube(state);
 	}
 
 	@Override
-	public boolean causesSuffocation(IBlockState state) {
+	public boolean causesSuffocation(BlockState state) {
 		return state.getValue(CONTENT).exc + state.getValue(CONTENT).man >= 3;
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, MobEntityBase placer,
+	public BlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, MobEntityBase placer,
 			EnumHand hand) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.getValue(1, 0));
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		worldIn.addBlockEvent(pos, this, 0, 1);
 	}
 
 	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+	public void onBlockAdded(World worldIn, BlockPos pos, BlockState state) {
 		worldIn.addBlockEvent(pos, this, 0, 1);
 	}
 
 	@Override
-	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
 		super.updateTick(worldIn, pos, state, null);
 
 		if (!worldIn.isRemote) {
 			if (worldIn.getBlockState(pos).getBlock() == this && worldIn.getBlockState(pos.down()).getBlock() == this) {
-				IBlockState metaTop = worldIn.getBlockState(pos);
-				IBlockState metaBot = worldIn.getBlockState(pos.down());
+				BlockState metaTop = worldIn.getBlockState(pos);
+				BlockState metaBot = worldIn.getBlockState(pos.down());
 				this.stackBlock(worldIn, pos.down(), metaTop, metaBot, true);
 			}
 			if (worldIn.getBlockState(pos).getBlock() == this && worldIn.getBlockState(pos.up()).getBlock() == this) {
-				IBlockState metaTop = worldIn.getBlockState(pos.up());
-				IBlockState metaBot = worldIn.getBlockState(pos);
+				BlockState metaTop = worldIn.getBlockState(pos.up());
+				BlockState metaBot = worldIn.getBlockState(pos);
 				this.stackBlock(worldIn, pos, metaTop, metaBot, true);
 			}
 		}
@@ -134,7 +134,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, BlockState state, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;
@@ -144,7 +144,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+	public float getBlockHardness(BlockState blockState, World worldIn, BlockPos pos) {
 		if (blockState.getBlock() == this) {
 			return (((EnumType) blockState.getValue(CONTENT)).exc + ((EnumType) blockState.getValue(CONTENT)).man) * hardnessConstant;
 		}
@@ -152,17 +152,17 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
 		return new AxisAlignedBB(0, 0, 0, 1, 0.25F * (((EnumType) state.getValue(CONTENT)).exc + ((EnumType) state.getValue(CONTENT)).man), 1);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
 		if (!worldIn.isRemote) {
 			if (worldIn.getBlockState(pos).getBlock() == this)
 				fermentate(worldIn, pos, rand);
@@ -176,7 +176,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	private void dissolve(World world, BlockPos pos, Random random) {
-		IBlockState meta = world.getBlockState(pos);
+		BlockState meta = world.getBlockState(pos);
 		int man = ((EnumType) meta.getValue(CONTENT)).man;
 		int exc = ((EnumType) meta.getValue(CONTENT)).exc;
 		Block bottom = world.getBlockState(pos.down()).getBlock();
@@ -254,7 +254,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	private void fermentate(World world, BlockPos pos, Random random) {
-		IBlockState meta = world.getBlockState(pos);
+		BlockState meta = world.getBlockState(pos);
 		int exc = ((EnumType) meta.getValue(CONTENT)).exc;
 		int man = ((EnumType) meta.getValue(CONTENT)).man;
 		int firstExc = exc;
@@ -275,16 +275,16 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, BlockState state, Entity entityIn) {
 		if (!worldIn.isRemote) {
 			if (entityIn instanceof EntityFallingBlock) {
 				EntityFallingBlock entityFall = (EntityFallingBlock) entityIn;
-				IBlockState stateFall = entityFall.getBlock();
+				BlockState stateFall = entityFall.getBlock();
 				if (stateFall != null && stateFall.getBlock() == this && entityFall.fallTime > 1 && !entityIn.isDead) {
 					entityIn.setDead();
 
-					IBlockState metaBot = worldIn.getBlockState(pos);
-					IBlockState metaTop = ((EntityFallingBlock) entityIn).getBlock();
+					BlockState metaBot = worldIn.getBlockState(pos);
+					BlockState metaTop = ((EntityFallingBlock) entityIn).getBlock();
 
 					this.stackBlock(worldIn, pos, metaTop, metaBot, false);
 				}
@@ -298,7 +298,7 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX,
+	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX,
 			float hitY, float hitZ) {
 		int exc = ((EnumType) state.getValue(CONTENT)).exc;
 		int man = ((EnumType) state.getValue(CONTENT)).man;
@@ -317,7 +317,7 @@ public class BlockExcreta extends BlockFalling {
 		return false;
 	}
 
-	private void stackBlock(World world, BlockPos pos, IBlockState metaTop, IBlockState metaBot, boolean deleteTopBlock) {
+	private void stackBlock(World world, BlockPos pos, BlockState metaTop, BlockState metaBot, boolean deleteTopBlock) {
 		int botExc = ((EnumType) metaBot.getValue(CONTENT)).exc;
 		int botMan = ((EnumType) metaBot.getValue(CONTENT)).man;
 		int topExc = ((EnumType) metaTop.getValue(CONTENT)).exc;
@@ -344,12 +344,12 @@ public class BlockExcreta extends BlockFalling {
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(CONTENT, EnumType.byMetadata(meta));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return ((EnumType) state.getValue(CONTENT)).meta;
 	}
 

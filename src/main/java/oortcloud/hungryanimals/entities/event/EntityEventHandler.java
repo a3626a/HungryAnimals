@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.entities.event;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -236,7 +236,7 @@ public class EntityEventHandler {
 		if (cap.getExcretion() > 1) {
 			cap.addExcretion(-1);
 			BlockPos pos = entity.getPosition();
-			IBlockState meta = entity.getEntityWorld().getBlockState(pos);
+			BlockState meta = entity.getEntityWorld().getBlockState(pos);
 			Block block = meta.getBlock();
 
 			if (block == ModBlocks.excreta) {
@@ -266,7 +266,7 @@ public class EntityEventHandler {
 		if (ageable == null)
 			return;
 		
-		IBlockState floor = entity.getEntityWorld().getBlockState(entity.getPosition().down());
+		BlockState floor = entity.getEntityWorld().getBlockState(entity.getPosition().down());
 		if (floor.getBlock() == ModBlocks.floorcover_leaf) {
 			int j = ageable.getAge();
 			if (j < 0) {

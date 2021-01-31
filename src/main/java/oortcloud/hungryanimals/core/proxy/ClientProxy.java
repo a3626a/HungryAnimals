@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.core.proxy;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -153,7 +153,7 @@ public class ClientProxy extends CommonProxy {
 
 		ModelLoader.setCustomStateMapper((Block) fluidBlock, new StateMapperBase() {
 			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+			protected ModelResourceLocation getModelResourceLocation(BlockState state) {
 				return modelResourceLocation;
 			}
 		});
@@ -199,7 +199,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerColors() {
 		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
-			public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+			public int colorMultiplier(BlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 				return ColorizerFoliage.getFoliageColorBasic();
 			}
 		}, ModBlocks.floorcover_leaf);

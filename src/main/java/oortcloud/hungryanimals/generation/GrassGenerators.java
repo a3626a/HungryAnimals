@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -105,7 +105,7 @@ public class GrassGenerators {
 			WorldServer world = (WorldServer) event.world;
 			if (world.getWorldTime() % 200 == 0) {
 				ArrayList<BlockPos> newPoses = new ArrayList<BlockPos>();
-				ArrayList<IBlockState> newStates = new ArrayList<IBlockState>();
+				ArrayList<BlockState> newStates = new ArrayList<BlockState>();
 				if (!world.isRemote) {
 					for (Chunk chunk : ((ChunkProviderServer) world.getChunkProvider()).getLoadedChunks()) {
 						int x = chunk.x << 4;
@@ -125,7 +125,7 @@ public class GrassGenerators {
 					}
 					for (int i = 0; i < newPoses.size(); i++) {
 						BlockPos newPos = newPoses.get(i);
-						IBlockState newState = newStates.get(i);
+						BlockState newState = newStates.get(i);
 						world.setBlockState(newPos, newState, 3);
 					}
 				}

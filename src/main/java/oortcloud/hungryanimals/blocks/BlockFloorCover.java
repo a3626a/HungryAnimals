@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.References;
@@ -22,12 +22,12 @@ public class BlockFloorCover extends Block {
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(BlockState state) {
 		return false;
 	}
 	
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(BlockState state) {
 		return false;
 	}
 	

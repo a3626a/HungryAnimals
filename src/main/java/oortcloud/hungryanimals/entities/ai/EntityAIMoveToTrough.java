@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -77,7 +77,7 @@ public class EntityAIMoveToTrough extends Goal {
 			--this.delayCounter;
 			return false;
 		} else {
-			IBlockState state = world.getBlockState(pos);
+			BlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
@@ -101,7 +101,7 @@ public class EntityAIMoveToTrough extends Goal {
 	public boolean shouldContinueExecuting() {
 		float distSq = 2;
 		if (pos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distSq) {
-			IBlockState state = world.getBlockState(pos);
+			BlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
 				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {

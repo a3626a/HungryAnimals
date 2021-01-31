@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.init.Items;
@@ -33,12 +33,12 @@ public class RecipeWrapperFoodPreferenceBlock extends RecipeWrapperFoodPreferenc
 		ItemMonsterPlacer.applyEntityIdToItemStack(spawnEgg, EntityList.getKey(entityClass));
 		ingredients.setOutput(ItemStack.class, spawnEgg);
 
-		IFoodPreference<IBlockState> pref = FoodPreferences.getInstance().REGISTRY_BLOCK.get(entityClass);
+		IFoodPreference<BlockState> pref = FoodPreferences.getInstance().REGISTRY_BLOCK.get(entityClass);
 		if (pref instanceof FoodPreferenceBlockState) {
-			List<IBlockState> list = ((FoodPreferenceBlockState) pref).getKeys();
-			// TODO Convert IBlockState to ItemStack is sometime impossible.
+			List<BlockState> list = ((FoodPreferenceBlockState) pref).getKeys();
+			// TODO Convert BlockState to ItemStack is sometime impossible.
 			//      because some blocks don't have placer.
-			//      rendering IBlockState itself?
+			//      rendering BlockState itself?
 			ingredients.setInputLists(ItemStack.class, jeiHelpers.getStackHelper().expandRecipeItemStackInputs(
 					list.stream().map((entry) -> new ItemStack(ItemBlock.getItemFromBlock(entry.getBlock()), 1, entry.getBlock().getMetaFromState(entry))).collect(Collectors.toList())));
 			list.forEach((blockstate) -> {

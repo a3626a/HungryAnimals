@@ -9,7 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -47,7 +47,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 	private BlockPos bestPos;
 	private double speed;
 
-	protected IFoodPreference<IBlockState> pref;
+	protected IFoodPreference<BlockState> pref;
 	protected ICapabilityHungryAnimal capHungry;
 	private int delayCounter;
 	private int timeoutCounter;
@@ -147,7 +147,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 
 		if (state == State.MOVING) {
 			// Escape to IDLE state
-			IBlockState block = this.worldObj.getBlockState(bestPos);
+			BlockState block = this.worldObj.getBlockState(bestPos);
 			if (!this.pref.canEat(capHungry, block)) {
 				this.entity.getNavigator().clearPath();
 				state = State.IDLE;
@@ -194,7 +194,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 			eatingGrassTimer -= 1;
 			if (eatingGrassTimer == 4) {
 				// Finish eating
-				IBlockState block = worldObj.getBlockState(bestPos);
+				BlockState block = worldObj.getBlockState(bestPos);
 				if (this.worldObj.getGameRules().getBoolean("mobGriefing")) {
 					this.worldObj.destroyBlock(bestPos, false);
 				}
@@ -223,7 +223,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 	}
 
 	private double getBlockPathWeight(BlockPos pos) {
-		IBlockState state = this.worldObj.getBlockState(pos);
+		BlockState state = this.worldObj.getBlockState(pos);
 		if (state.getBlock() == ModBlocks.excreta) {
 			return -1.0;
 		} else if (pref.canEat(capHungry, state)) {
@@ -233,7 +233,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 		}
 	}
 
-	public void eatBlockBonus(IBlockState block) {
+	public void eatBlockBonus(BlockState block) {
 		if (block == null)
 			return;
 		double nutrient = pref.getNutrient(block);

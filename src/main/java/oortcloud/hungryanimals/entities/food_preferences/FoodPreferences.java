@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.entities.food_preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -14,7 +14,7 @@ public class FoodPreferences {
 	
 	private static FoodPreferences INSTANCE;
 
-	public Map<Class<? extends MobEntity>, IFoodPreference<IBlockState>> REGISTRY_BLOCK;
+	public Map<Class<? extends MobEntity>, IFoodPreference<BlockState>> REGISTRY_BLOCK;
 	public Map<Class<? extends MobEntity>, IFoodPreference<ItemStack>> REGISTRY_ITEM;
 	private Map<Class<? extends MobEntity>, IFoodPreferenceSimple<MobEntity>> REGISTRY_ENTITY;
 	private Runnable registryEntityLoader;

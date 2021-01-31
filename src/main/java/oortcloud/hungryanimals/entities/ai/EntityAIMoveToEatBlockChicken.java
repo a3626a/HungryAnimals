@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.ai;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -21,7 +21,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 	}
 
 	@Override
-	public void eatBlockBonus(IBlockState block) {
+	public void eatBlockBonus(BlockState block) {
 		if (block.getBlock() == Blocks.TALLGRASS) {
 			double prob = pref.getNutrient(block) / 2.0 / prefItem.getNutrient(new ItemStack(Items.WHEAT_SEEDS));
 			if (this.entity.getRNG().nextDouble() < prob) {

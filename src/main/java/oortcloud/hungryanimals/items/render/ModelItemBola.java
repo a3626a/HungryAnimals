@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -45,7 +45,7 @@ public class ModelItemBola implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable EnumFacing side, long rand) {
 		return model_spin.getQuads(state, side, rand);
 	}
 

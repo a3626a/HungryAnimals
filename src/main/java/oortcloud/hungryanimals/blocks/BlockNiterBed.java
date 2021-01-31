@@ -6,8 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockStateContainer;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,7 +40,7 @@ public class BlockNiterBed extends Block {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
 		int age = (Integer) state.getValue(AGE);
 		if (age < 7 && rand.nextDouble() < BlockNiterBed.ripeningProbability) {
 			worldIn.setBlockState(pos, state.withProperty(AGE, age + 1), 2);
@@ -48,22 +48,22 @@ public class BlockNiterBed extends Block {
 	}
 
 	@Override
-	public int quantityDropped(IBlockState state, int fortune, Random random) {
+	public int quantityDropped(BlockState state, int fortune, Random random) {
 		return (Integer) state.getValue(AGE) == 7 ? (3 + random.nextInt(3)) : 1;
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public Item getItemDropped(BlockState state, Random rand, int fortune) {
 		return (Integer) state.getValue(AGE) == 7 ? ModItems.saltpeter : super.getItemDropped(state, rand, fortune);
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return ((Integer) state.getValue(AGE)).intValue();
 	}
 }
