@@ -20,5 +20,10 @@ build
 # other
 eclipse
 run
+
+# Files from Forge MDK
+forge*changelog.txt
+
+# Oortcloud Added
 sheets/~$Food System Design.xlsx
 logs
