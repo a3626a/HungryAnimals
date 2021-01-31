@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import oortcloud.hungryanimals.utils.graph.Graph;
 import oortcloud.hungryanimals.utils.graph.GraphSolver;
 import oortcloud.hungryanimals.utils.graph.Vertex;
@@ -20,41 +20,44 @@ public class AIContainerTarget extends AIContainerTask {
 	@Override
 	public void registerAI(MobEntity entity) {
 		if (removeAll) {
-			entity.targetTasks.taskEntries.clear();
+			entity.targetSelector.goals.forEach(
+					prioritizedGoal -> {
+						entity.targetSelector.removeGoal(prioritizedGoal.getGoal());
+					}
+			);
 		} else {
-			LinkedList<Goal> removeEntries = new LinkedList<Goal>();
-			for (EntityAITaskEntry i : entity.targetTasks.taskEntries) {
+			LinkedList<Goal> removeEntries = new LinkedList<>();
+			for (PrioritizedGoal i : entity.targetSelector.goals) {
 				for (IAIRemover j : toRemove) {
 					if (j.matches(i)) {
-						removeEntries.add(i.action);
+						removeEntries.add(i.getGoal());
 					}
 				}
 			}
 			for (Goal i : removeEntries) {
-				entity.targetTasks.removeTask(i);
+				entity.targetSelector.removeGoal(i);
 			}
 		}
 
-		List<Goal> aibases = new ArrayList<Goal>();
+		List<Goal> aibases = new ArrayList<>();
 
 		// Construct aibases from entity's tasks
-		List<EntityAITaskEntry> aitaskentries = Lists.newArrayList(entity.targetTasks.taskEntries);
-		aitaskentries.sort(new Comparator<EntityAITaskEntry>() {
-			@Override
-			public int compare(EntityAITaskEntry o1, EntityAITaskEntry o2) {
-				return o1.priority - o2.priority;
-			}
-		});
-		for (EntityAITaskEntry i : aitaskentries) {
-			aibases.add(i.action);
+		List<PrioritizedGoal> aitaskentries = Lists.newArrayList(entity.targetSelector.goals);
+		aitaskentries.sort(Comparator.comparingInt(PrioritizedGoal::getPriority));
+		for (PrioritizedGoal i : aitaskentries) {
+			aibases.add(i.getGoal());
 		}
-		entity.targetTasks.taskEntries.clear();
+		entity.targetSelector.goals.forEach(
+				prioritizedGoal -> {
+					entity.targetSelector.removeGoal(prioritizedGoal.getGoal());
+				}
+		);
 
-		Graph<Goal> graph = new Graph<Goal>();
+		Graph<Goal> graph = new Graph<>();
 		Vertex<Goal> prev = null;
 
 		for (Goal i : aibases) {
-			Vertex<Goal> curr = new Vertex<Goal>(i);
+			Vertex<Goal> curr = new Vertex<>(i);
 			graph.vertices.add(curr);
 			if (prev != null) {
 				prev.childs.add(curr);
@@ -78,7 +81,7 @@ public class AIContainerTarget extends AIContainerTask {
 		
 		int cnt = 0;
 		for (Goal i : sortedAI) {
-			entity.targetTasks.addTask(cnt++, i);
+			entity.targetSelector.addGoal(cnt++, i);
 		}
 	}
 	

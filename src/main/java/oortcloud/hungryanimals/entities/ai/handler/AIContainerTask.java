@@ -72,12 +72,7 @@ public class AIContainerTask implements IAIContainer<MobEntity> {
 
 		// Construct aibases from entity's tasks
 		List<PrioritizedGoal> aitaskentries = Lists.newArrayList(entity.goalSelector.goals);
-		aitaskentries.sort(new Comparator<PrioritizedGoal>() {
-			@Override
-			public int compare(PrioritizedGoal o1, PrioritizedGoal o2) {
-				return o1.getPriority() - o2.getPriority();
-			}
-		});
+		aitaskentries.sort(Comparator.comparingInt(PrioritizedGoal::getPriority));
 		for (PrioritizedGoal i : aitaskentries) {
 			aibases.add(i.getGoal());
 		}
