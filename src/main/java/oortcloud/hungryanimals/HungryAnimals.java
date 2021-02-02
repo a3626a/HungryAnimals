@@ -38,7 +38,7 @@ public class HungryAnimals {
 
 	public static CreativeTabs tabHungryAnimals = new CreativeTabs("tabHungryAnimals") {
 		@Override
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public ItemStack getTabIconItem() {
 			return Items.WHEAT.getDefaultInstance();
 		}

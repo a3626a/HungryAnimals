@@ -1,0 +1,261 @@
+{
+  "comment": "This is copied from snow.json",
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "1_0"
+                  }
+                }
+              ],
+              "name": "hungryanimals:excreta"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "2_0"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": 2
+                }
+              ],
+              "name": "hungryanimals:excreta"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "3_0"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": 3
+                }
+              ],
+              "name": "hungryanimals:excreta"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "4_0"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "function": "minecraft:set_count",
+                  "count": 4
+                }
+              ],
+              "name": "hungryanimals:excreta"
+            },
+            {
+              "type": "minecraft:group",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "1_1"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "hungryanimals:excreta"
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "hungryanimals:manure"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:group",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "2_1"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 2
+                    }
+                  ],
+                  "name": "hungryanimals:excreta"
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "hungryanimals:manure"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:group",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "3_1"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 3
+                    }
+                  ],
+                  "name": "hungryanimals:excreta"
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "hungryanimals:manure"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:group",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "1_2"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "name": "hungryanimals:excreta"
+                },
+                {
+                  "type": "minecraft:item",
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 2
+                    }
+                  ],
+                  "name": "hungryanimals:manure"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:group",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "2_2"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 2
+                    }
+                  ],
+                  "name": "hungryanimals:excreta"
+                },
+                {
+                  "type": "minecraft:item",
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 2
+                    }
+                  ],
+                  "name": "hungryanimals:manure"
+                }
+              ]
+            },
+            {
+              "type": "minecraft:group",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "hungryanimals:excreta",
+                  "properties": {
+                    "content": "3_1"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "minecraft:item",
+                  "functions": [
+                    {
+                      "function": "minecraft:set_count",
+                      "count": 3
+                    }
+                  ],
+                  "name": "hungryanimals:excreta"
+                },
+                {
+                  "type": "minecraft:item",
+                  "name": "hungryanimals:manure"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:entity_properties",
+          "predicate": {},
+          "entity": "this"
+        }
+      ]
+    }
+  ]
+}

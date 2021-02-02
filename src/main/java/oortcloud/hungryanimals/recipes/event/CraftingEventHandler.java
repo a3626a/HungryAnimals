@@ -29,7 +29,7 @@ public class CraftingEventHandler {
 				if (num != 0) {
 					world.spawnEntity(new EntityItem(world, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, new ItemStack(ModItems.animalGlue, num)));
 					item.shrink(1);
-					world.setBlockState(pos, state.withProperty(BlockCauldron.LEVEL, level-1));
+					world.setBlockState(pos, state.with(BlockCauldron.LEVEL, level-1));
 				}
 			}
 		}

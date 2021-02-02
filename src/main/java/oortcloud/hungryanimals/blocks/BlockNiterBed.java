@@ -27,7 +27,7 @@ public class BlockNiterBed extends Block {
 		setHarvestLevel("shovel", 0);
 		setHardness(0.5F);
 		
-		setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
+		setDefaultState(this.blockState.getBaseState().with(AGE, 0));
 		setUnlocalizedName(References.MODID+"."+Strings.blockNiterBedName); 
 		setRegistryName(Strings.blockNiterBedName);
 		setCreativeTab(HungryAnimals.tabHungryAnimals);
@@ -43,7 +43,7 @@ public class BlockNiterBed extends Block {
 	public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
 		int age = (Integer) state.getValue(AGE);
 		if (age < 7 && rand.nextDouble() < BlockNiterBed.ripeningProbability) {
-			worldIn.setBlockState(pos, state.withProperty(AGE, age + 1), 2);
+			worldIn.setBlockState(pos, state.with(AGE, age + 1), 2);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class BlockNiterBed extends Block {
 
 	@Override
 	public BlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
+		return this.getDefaultState().with(AGE, Integer.valueOf(meta));
 	}
 
 	@Override

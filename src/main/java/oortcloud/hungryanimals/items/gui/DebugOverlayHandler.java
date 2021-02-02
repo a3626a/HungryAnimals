@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.keybindings.ModKeyBindings;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DebugOverlayHandler extends Gui {
 	private boolean isEnabled = false;
 	private Minecraft mc;

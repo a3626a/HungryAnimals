@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.potion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.potion.Potion;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 
@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
  * https://github.com/lumien231/Random-Things/blob/master/src/main/java/lumien/randomthings/potion/PotionBase.java
  */
 
-public class PotionHungryAnimals extends Potion {
+public class PotionHungryAnimals extends Effect {
 
 	public ResourceLocation texture;
 	

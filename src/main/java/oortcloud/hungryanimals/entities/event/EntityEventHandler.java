@@ -35,7 +35,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import oortcloud.hungryanimals.blocks.BlockExcreta;
+import oortcloud.hungryanimals.blocks.ExcretaBlock;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
@@ -240,18 +240,18 @@ public class EntityEventHandler {
 			Block block = meta.getBlock();
 
 			if (block == ModBlocks.excreta) {
-				int exc = ((BlockExcreta.EnumType) meta.getValue(BlockExcreta.CONTENT)).getExcreta();
-				int man = ((BlockExcreta.EnumType) meta.getValue(BlockExcreta.CONTENT)).getManure();
+				int exc = ((ExcretaBlock.EnumType) meta.getValue(ExcretaBlock.CONTENT)).getExcreta();
+				int man = ((ExcretaBlock.EnumType) meta.getValue(ExcretaBlock.CONTENT)).getManure();
 				if (exc + man < 4) {
 					entity.getEntityWorld().setBlockState(pos,
-							meta.withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(exc + 1, man)), 2);
+							meta.with(ExcretaBlock.CONTENT, ExcretaBlock.EnumType.getValue(exc + 1, man)), 2);
 				} else if (exc + man == 4) {
 
 				}
 			} else if (block.isAir(meta, entity.getEntityWorld(), pos)
 					|| block.isReplaceable(entity.getEntityWorld(), pos)) {
 				entity.getEntityWorld().setBlockState(pos, ModBlocks.excreta.getDefaultState()
-						.withProperty(BlockExcreta.CONTENT, BlockExcreta.EnumType.getValue(1, 0)), 2);
+						.with(ExcretaBlock.CONTENT, ExcretaBlock.EnumType.getValue(1, 0)), 2);
 			} else {
 				// TODO When there's no place to put block
 			}

@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.potion;
 
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -8,11 +9,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class ModPotions {
 
-	public static Potion potionDisease;
-	public static Potion potionGrowth;
-	public static Potion potionInheat;
-	public static Potion potionOvereat;
-	public static Potion potionYoung;
+	public static Effect potionDisease;
+	public static Effect potionGrowth;
+	public static Effect potionInheat;
+	public static Effect potionOvereat;
+	public static Effect potionYoung;
 	
 	@SubscribeEvent
 	public static void registerPotions(RegistryEvent.Register<Potion> event) {

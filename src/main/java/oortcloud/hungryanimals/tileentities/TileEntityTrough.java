@@ -30,7 +30,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	private static int period = 20 * 5;
 	private static double radius = 8;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float[][] random;
 
 	public TileEntityTrough() {

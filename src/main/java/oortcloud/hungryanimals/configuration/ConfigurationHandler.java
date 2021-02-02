@@ -42,7 +42,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.api.HAPlugins;
-import oortcloud.hungryanimals.blocks.BlockExcreta;
+import oortcloud.hungryanimals.blocks.ExcretaBlock;
 import oortcloud.hungryanimals.blocks.BlockNiterBed;
 import oortcloud.hungryanimals.configuration.master.*;
 import oortcloud.hungryanimals.core.lib.References;
@@ -238,11 +238,11 @@ public class ConfigurationHandler {
 		world = new ConfigurationHandlerJSON(baseFolder, "world", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
-			BlockExcreta.diseaseProbability = jsonObj.getAsJsonPrimitive("disease_probability").getAsDouble();
-			BlockExcreta.erosionProbabilityOnHay = jsonObj.getAsJsonPrimitive("erosion_probability_on_hay").getAsDouble();
-			BlockExcreta.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_probability").getAsDouble();
-			BlockExcreta.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
-			BlockExcreta.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
+			ExcretaBlock.diseaseProbability = jsonObj.getAsJsonPrimitive("disease_probability").getAsDouble();
+			ExcretaBlock.erosionProbabilityOnHay = jsonObj.getAsJsonPrimitive("erosion_probability_on_hay").getAsDouble();
+			ExcretaBlock.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_probability").getAsDouble();
+			ExcretaBlock.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
+			ExcretaBlock.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
 			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
 		cures = new ConfigurationHandlerJSON(baseFolder, "cures", (jsonElement) -> {

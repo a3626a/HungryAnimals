@@ -10,7 +10,7 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.EnumProperty;
 import net.minecraft.block.BlockStateContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -37,7 +37,7 @@ import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class BlockTrough extends Block {
 
-	public static final PropertyEnum<EnumPartType> PART = PropertyEnum.create("part", EnumPartType.class);
+	public static final EnumProperty<EnumPartType> PART = EnumProperty.create("part", EnumPartType.class);
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", Direction.Plane.HORIZONTAL);
 	public static final AxisAlignedBB BOUND_BOX = new AxisAlignedBB(0F, 0F, 0F, 1F, 0.5F, 1F);
 	public static final AxisAlignedBB FLOOR = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
@@ -67,12 +67,12 @@ public class BlockTrough extends Block {
 		return new BlockStateContainer(this, new IProperty[] { FACING, PART });
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public Item getItem(World world, int x, int y, int z) {
 		return ModItems.trough;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
@@ -282,7 +282,7 @@ public class BlockTrough extends Block {
 	@Override
 	public BlockState getStateFromMeta(int meta) {
 		Direction Direction = Direction.getHorizontal(meta & 3);
-		return this.getDefaultState().withProperty(FACING, Direction).withProperty(PART, (meta >> 2 == 1) ? EnumPartType.HEAD : EnumPartType.FOOT);
+		return this.getDefaultState().with(FACING, Direction).with(PART, (meta >> 2 == 1) ? EnumPartType.HEAD : EnumPartType.FOOT);
 	}
 
 	@Override

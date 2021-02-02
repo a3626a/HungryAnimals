@@ -54,12 +54,12 @@ public class ItemTrough extends Item {
 						&& worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(),
 								Direction.UP)) {
 					BlockState BlockState1 = ModBlocks.trough.getDefaultState()
-							.withProperty(BlockTrough.FACING, Direction1)
-							.withProperty(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
+							.with(BlockTrough.FACING, Direction1)
+							.with(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
 
 					// TODO what does flag 8 mean?!
 					if (worldIn.setBlockState(pos, BlockState1, 11)) {
-						BlockState BlockState2 = BlockState1.withProperty(BlockTrough.PART,
+						BlockState BlockState2 = BlockState1.with(BlockTrough.PART,
 								BlockTrough.EnumPartType.HEAD);
 						worldIn.setBlockState(blockpos, BlockState2, 11);
 					}

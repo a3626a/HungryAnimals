@@ -61,7 +61,7 @@ public class EntityBola extends Entity implements IProjectile {
 		this.shootingEntity = shooter;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
     public boolean isInRangeToRenderDist(double distance)
     {
@@ -118,14 +118,14 @@ public class EntityBola extends Entity implements IProjectile {
         this.prevRotationPitch = this.rotationPitch;
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport)
     {
         this.setPosition(x, y, z);
         this.setRotation(yaw, pitch);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setVelocity(double x, double y, double z)
     {
         this.motionX = x;

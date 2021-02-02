@@ -15,7 +15,7 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.EntityBola;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderEntityBola extends Render<EntityBola> {
 	public RenderEntityBola(RenderManager renderManager) {
 		super(renderManager);
