@@ -4,14 +4,12 @@ package oortcloud.hungryanimals.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.materials.ModMaterials;
 
 @Mod.EventBusSubscriber
 public class ModBlocks {
@@ -33,7 +31,7 @@ public class ModBlocks {
 		excreta = new ExcretaBlock();
 		niterBed = new BlockNiterBed();
 		trough = new BlockTrough();
-		trapcover = new BlockTrapCover();
+		trapcover = new TrapCoverBlock();
 		floorcover_leaf = new FloorCoverBlock(LEAVES.get().getDefaultState().getMaterial()).setRegistryName(Strings.blockFloorCoverLeafName);
 		floorcover_wool = new FloorCoverBlock(WOOL.get().getDefaultState().getMaterial()).setRegistryName(Strings.blockFloorCoverWoolName);
 		floorcover_hay = new FloorCoverBlock(HAY_BLOCK.get().getDefaultState().getMaterial()).setRegistryName(Strings.blockFloorCoverHayName);
