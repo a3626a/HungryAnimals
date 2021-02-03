@@ -239,7 +239,7 @@ public class EntityEventHandler {
 			BlockState meta = entity.getEntityWorld().getBlockState(pos);
 			Block block = meta.getBlock();
 
-			if (block == ModBlocks.excreta) {
+			if (block == ModBlocks.EXCRETA.get()) {
 				int exc = ((ExcretaBlock.EnumType) meta.getValue(ExcretaBlock.CONTENT)).getExcreta();
 				int man = ((ExcretaBlock.EnumType) meta.getValue(ExcretaBlock.CONTENT)).getManure();
 				if (exc + man < 4) {
@@ -250,7 +250,7 @@ public class EntityEventHandler {
 				}
 			} else if (block.isAir(meta, entity.getEntityWorld(), pos)
 					|| block.isReplaceable(entity.getEntityWorld(), pos)) {
-				entity.getEntityWorld().setBlockState(pos, ModBlocks.excreta.getDefaultState()
+				entity.getEntityWorld().setBlockState(pos, ModBlocks.EXCRETA.get().getDefaultState()
 						.with(ExcretaBlock.CONTENT, ExcretaBlock.EnumType.getValue(1, 0)), 2);
 			} else {
 				// TODO When there's no place to put block
@@ -267,22 +267,19 @@ public class EntityEventHandler {
 			return;
 		
 		BlockState floor = entity.getEntityWorld().getBlockState(entity.getPosition().down());
-		if (floor.getBlock() == ModBlocks.floorcover_leaf) {
+		if (floor.getBlock() == ModBlocks.FLOOR_COVER_LEAF.get()) {
 			int j = ageable.getAge();
 			if (j < 0) {
 				j += (int) ((entity.getRNG().nextInt(4) + 1) / 4.0);
 				ageable.setAge(j);
 			}
 		}
-		if (floor.getBlock() == ModBlocks.floorcover_wool) {
+		if (floor.getBlock() == ModBlocks.FLOOR_COVER_WOOL.get()) {
 			int j = ageable.getAge();
 			if (j > 0) {
 				j -= (int) ((entity.getRNG().nextInt(4) + 1) / 4.0);
 				ageable.setAge(j);
 			}
-		}
-		if (floor.getBlock() == ModBlocks.floorcover_ironbar) {
-			// TODO floorcover ironbar
 		}
 	}
 

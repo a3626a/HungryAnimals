@@ -184,7 +184,7 @@ public class ExcretaBlock extends FallingBlock {
 					world.setBlockState(pos.down(), GRASS.get().getDefaultState(), 3);
 				}
 			}
-		} else if (bottom == ModBlocks.floorcover_hay) {
+		} else if (bottom == ModBlocks.FLOOR_COVER_HAY.get()) {
 			if (random.nextDouble() < ExcretaBlock.erosionProbabilityOnHay) {
 				if (man > 0) {
 					man--;
@@ -249,7 +249,7 @@ public class ExcretaBlock extends FallingBlock {
 		}
 		if (flag) {
 			for (Direction i : Direction.values()) {
-				if (world.getBlockState(pos.offset(i)).getBlock() == ModBlocks.excreta)
+				if (world.getBlockState(pos.offset(i)).getBlock() == ModBlocks.EXCRETA.get())
 					ferment(world, pos.offset(i), random);
 			}
 		}

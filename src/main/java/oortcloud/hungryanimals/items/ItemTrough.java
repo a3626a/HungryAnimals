@@ -53,8 +53,8 @@ public class ItemTrough extends Item {
 				if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), Direction.UP)
 						&& worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(),
 								Direction.UP)) {
-					BlockState BlockState1 = ModBlocks.trough.getDefaultState()
-							.with(TroughBlock.FACING, Direction1)
+					BlockState BlockState1 = ModBlocks.TROUGH.get().getDefaultState()
+							.with(TroughBlock.HORIZONTAL_FACING, Direction1)
 							.with(TroughBlock.PART, TroughBlock.EnumPartType.FOOT);
 
 					// TODO what does flag 8 mean?!

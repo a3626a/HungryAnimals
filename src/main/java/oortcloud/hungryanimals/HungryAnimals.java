@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals;
 
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -49,7 +50,13 @@ public class HungryAnimals {
 	static {
 	    FluidRegistry.enableUniversalBucket();
 	}
-	
+
+	public HungryAnimals()
+	{
+		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+	}
+
+
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
@@ -57,7 +64,6 @@ public class HungryAnimals {
 		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);
 		RecipeAnimalGlue.init();
-		ModBlocks.init();
 		ModItems.init();
 		proxy.registerEntities();
 		proxy.registerEntityRendering();

@@ -78,7 +78,7 @@ public class EntityAIMoveToTrough extends Goal {
 			return false;
 		} else {
 			BlockState state = world.getBlockState(pos);
-			if (state.getBlock() == ModBlocks.trough) {
+			if (state.getBlock() == ModBlocks.TROUGH.get()) {
 				TileEntity temp = ((TroughBlock) state.getBlock()).getTileEntity(world, pos);
 				if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
@@ -102,7 +102,7 @@ public class EntityAIMoveToTrough extends Goal {
 		float distSq = 2;
 		if (pos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distSq) {
 			BlockState state = world.getBlockState(pos);
-			if (state.getBlock() == ModBlocks.trough) {
+			if (state.getBlock() == ModBlocks.TROUGH.get()) {
 				TileEntity tileEntity = ((TroughBlock) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;

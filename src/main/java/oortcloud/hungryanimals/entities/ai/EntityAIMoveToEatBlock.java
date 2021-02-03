@@ -224,7 +224,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 
 	private double getBlockPathWeight(BlockPos pos) {
 		BlockState state = this.worldObj.getBlockState(pos);
-		if (state.getBlock() == ModBlocks.excreta) {
+		if (state.getBlock() == ModBlocks.EXCRETA.get()) {
 			return -1.0;
 		} else if (pref.canEat(capHungry, state)) {
 			return pref.getNutrient(state);

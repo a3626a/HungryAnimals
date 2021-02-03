@@ -94,21 +94,21 @@ public class ClientProxy extends CommonProxy {
 	
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.floorcover_hay), 0,
-				new ModelResourceLocation(ModBlocks.floorcover_hay.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.floorcover_leaf), 0,
-				new ModelResourceLocation(ModBlocks.floorcover_leaf.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.floorcover_wool), 0,
-				new ModelResourceLocation(ModBlocks.floorcover_wool.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.FLOOR_COVER_HAY.get()), 0,
+				new ModelResourceLocation(ModBlocks.FLOOR_COVER_HAY.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.FLOOR_COVER_LEAF.get()), 0,
+				new ModelResourceLocation(ModBlocks.FLOOR_COVER_LEAF.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.FLOOR_COVER_WOOL.get()), 0,
+				new ModelResourceLocation(ModBlocks.FLOOR_COVER_WOOL.get().getRegistryName(), "inventory"));
 
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.excreta), 0,
-				new ModelResourceLocation(ModBlocks.excreta.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.niterBed), 0,
-				new ModelResourceLocation(ModBlocks.niterBed.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.trough), 0,
-				new ModelResourceLocation(ModBlocks.trough.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.trapcover), 0,
-				new ModelResourceLocation(ModBlocks.trapcover.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.EXCRETA.get()), 0,
+				new ModelResourceLocation(ModBlocks.EXCRETA.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.NITER_BED.get()), 0,
+				new ModelResourceLocation(ModBlocks.NITER_BED.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.TROUGH.get()), 0,
+				new ModelResourceLocation(ModBlocks.TROUGH.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(ModBlocks.TRAP_COVER.get()), 0,
+				new ModelResourceLocation(ModBlocks.TRAP_COVER.get().getRegistryName(), "inventory"));
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.bola, 0, ModelItemBola.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.slingshot, 0, ModelItemSlingshot.modelresourcelocation_normal);
@@ -202,13 +202,13 @@ public class ClientProxy extends CommonProxy {
 			public int colorMultiplier(BlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
 				return ColorizerFoliage.getFoliageColorBasic();
 			}
-		}, ModBlocks.floorcover_leaf);
+		}, ModBlocks.FLOOR_COVER_LEAF.get());
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 				return ColorizerFoliage.getFoliageColorBasic();
 			}
-		}, ModBlocks.floorcover_leaf);
+		}, ModBlocks.FLOOR_COVER_LEAF.get());
 	}
 
 	@Override

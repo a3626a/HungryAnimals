@@ -27,7 +27,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 	@Override
 	public void render(TileEntityTrough foodbox, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		BlockState state = foodbox.getWorld().getBlockState(foodbox.getPos());
-		if (state.getBlock() != ModBlocks.trough)
+		if (state.getBlock() != ModBlocks.TROUGH.get())
 			return;
 		Direction rot = (Direction) state.getValue(TroughBlock.FACING);
 		int rotation = rot.getHorizontalIndex();

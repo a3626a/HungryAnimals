@@ -43,12 +43,12 @@ public class ModItems {
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 	    event.getRegistry().registerAll(trough, bola, slingshot, debugGlass, manure, woodash, saltpeter, tendon, animalGlue, compositeWood);
 	    
-	    event.getRegistry().register(new ItemBlock(ModBlocks.excreta).setRegistryName(ModBlocks.excreta.getRegistryName()));
-	    event.getRegistry().register(new ItemBlock(ModBlocks.floorcover_hay).setRegistryName(ModBlocks.floorcover_hay.getRegistryName()));
-	    event.getRegistry().register(new ItemBlock(ModBlocks.floorcover_leaf).setRegistryName(ModBlocks.floorcover_leaf.getRegistryName()));
-	    event.getRegistry().register(new ItemBlock(ModBlocks.floorcover_wool).setRegistryName(ModBlocks.floorcover_wool.getRegistryName()));
-	    event.getRegistry().register(new ItemBlock(ModBlocks.niterBed).setRegistryName(ModBlocks.niterBed.getRegistryName()));
-	    event.getRegistry().register(new ItemBlock(ModBlocks.trapcover).setRegistryName(ModBlocks.trapcover.getRegistryName()));
+	    event.getRegistry().register(new ItemBlock(ModBlocks.EXCRETA.get()).setRegistryName(ModBlocks.EXCRETA.get().getRegistryName()));
+	    event.getRegistry().register(new ItemBlock(ModBlocks.FLOOR_COVER_HAY.get()).setRegistryName(ModBlocks.FLOOR_COVER_HAY.get().getRegistryName()));
+	    event.getRegistry().register(new ItemBlock(ModBlocks.FLOOR_COVER_LEAF.get()).setRegistryName(ModBlocks.FLOOR_COVER_LEAF.get().getRegistryName()));
+	    event.getRegistry().register(new ItemBlock(ModBlocks.FLOOR_COVER_WOOL.get()).setRegistryName(ModBlocks.FLOOR_COVER_WOOL.get().getRegistryName()));
+	    event.getRegistry().register(new ItemBlock(ModBlocks.NITER_BED.get()).setRegistryName(ModBlocks.NITER_BED.get().getRegistryName()));
+	    event.getRegistry().register(new ItemBlock(ModBlocks.TRAP_COVER.get()).setRegistryName(ModBlocks.TRAP_COVER.get().getRegistryName()));
 	}
 
 }
