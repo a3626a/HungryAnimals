@@ -43,7 +43,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.API;
 import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.blocks.ExcretaBlock;
-import oortcloud.hungryanimals.blocks.BlockNiterBed;
+import oortcloud.hungryanimals.blocks.NiterBedBlock;
 import oortcloud.hungryanimals.configuration.master.*;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainers;
@@ -243,7 +243,7 @@ public class ConfigurationHandler {
 			ExcretaBlock.erosionProbability = jsonObj.getAsJsonPrimitive("erosion_probability").getAsDouble();
 			ExcretaBlock.fermetationProbability = jsonObj.getAsJsonPrimitive("fermentation_probability").getAsDouble();
 			ExcretaBlock.fertilizationProbability = jsonObj.getAsJsonPrimitive("fertilization_probability").getAsDouble();
-			BlockNiterBed.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
+			NiterBedBlock.ripeningProbability = jsonObj.getAsJsonPrimitive("ripening_probability").getAsDouble();
 		});
 		cures = new ConfigurationHandlerJSON(baseFolder, "cures", (jsonElement) -> {
 			List<Ingredient> ingredients = ModJsonUtils.getIngredients(jsonElement);

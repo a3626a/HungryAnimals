@@ -29,7 +29,7 @@ public class ModBlocks {
 	public static void init()
 	{
 		excreta = new ExcretaBlock();
-		niterBed = new BlockNiterBed();
+		niterBed = new NiterBedBlock();
 		trough = new TroughBlock();
 		trapcover = new TrapCoverBlock();
 		floorcover_leaf = new FloorCoverBlock(LEAVES.get().getDefaultState().getMaterial()).setRegistryName(Strings.blockFloorCoverLeafName);
