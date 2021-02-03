@@ -52,7 +52,7 @@ public class TrapCoverBlock extends Block {
 	}
 
 	@Override
-	public void onLanded(IBlockReader worldIn, Entity entityIn) {
-		entityIn.getEntityWorld().getPendingBlockTicks().scheduleTick(new BlockPos(entityIn).down(), this, 3);
+	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
+		worldIn.getPendingBlockTicks().scheduleTick(pos, this, 3);
 	}
 }
