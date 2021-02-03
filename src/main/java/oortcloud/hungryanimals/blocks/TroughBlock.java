@@ -9,18 +9,19 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -29,7 +30,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 public class TroughBlock extends HorizontalBlock {
@@ -151,15 +151,16 @@ public class TroughBlock extends HorizontalBlock {
 		return state.get(PART) == EnumPartType.FOOT;
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createTileEntity(World world, BlockState state) {
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return (state.get(PART) == EnumPartType.FOOT) ? new TileEntityTrough() : null;
 	}
 
 	public TileEntity getTileEntity(World world, BlockPos pos) {
 		BlockState meta = world.getBlockState(pos);
 		if (meta.getBlock() == this) {
-			return (meta.get(PART) == EnumPartType.HEAD ? world.getTileEntity(pos.offset(((Direction) meta.get(FACING)).getOpposite()))
+			return (meta.get(PART) == EnumPartType.HEAD ? world.getTileEntity(pos.offset(((Direction) meta.get(HORIZONTAL_FACING)).getOpposite()))
 					: world.getTileEntity(pos));
 		} else {
 			return null;
@@ -167,22 +168,21 @@ public class TroughBlock extends HorizontalBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, BlockState state, EntityPlayer playerIn, EnumHand hand, Direction side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		TileEntity te = this.getTileEntity(worldIn, pos);
 
 		if (!(te instanceof TileEntityTrough)) {
 			return false;
 		}
 
-		TileEntityTrough foodbox = (TileEntityTrough) te;
-		ItemStack stackinfoodbox = foodbox.stack;
-		ItemStack stackinhand = playerIn.getHeldItem(hand);
+		TileEntityTrough trough = (TileEntityTrough) te;
+		ItemStack stackInTrough = trough.stack;
+		ItemStack stackInHand = playerIn.getHeldItem(hand);
 
-		if (stackinhand.isEmpty()) {
-			if (!stackinfoodbox.isEmpty()) {
-				if (playerIn.inventory.addItemStackToInventory(stackinfoodbox)) {
-					foodbox.stack = ItemStack.EMPTY;
+		if (stackInHand.isEmpty()) {
+			if (!stackInTrough.isEmpty()) {
+				if (playerIn.inventory.addItemStackToInventory(stackInTrough)) {
+					trough.stack = ItemStack.EMPTY;
 					return true;
 				} else {
 					return false;
@@ -192,19 +192,19 @@ public class TroughBlock extends HorizontalBlock {
 			}
 		}
 
-		if (stackinfoodbox.isEmpty()) {
-			if (stackinhand.getCount() > 16) {
-				foodbox.stack = stackinhand.splitStack(16);
+		if (stackInTrough.isEmpty()) {
+			if (stackInHand.getCount() > 16) {
+				trough.stack = stackInHand.split(16);
 			} else {
-				foodbox.stack = stackinhand;
+				trough.stack = stackInHand;
 				playerIn.setHeldItem(hand, ItemStack.EMPTY);
 			}
-		} else if (stackinfoodbox.getItem() == stackinhand.getItem()) {
-			if (stackinhand.getCount() + stackinfoodbox.getCount() > 16) {
-				stackinfoodbox.setCount(16);
-				stackinhand.grow(stackinfoodbox.getCount() - 16);
+		} else if (stackInTrough.getItem() == stackInHand.getItem()) {
+			if (stackInHand.getCount() + stackInTrough.getCount() > 16) {
+				stackInTrough.setCount(16);
+				stackInHand.grow(stackInTrough.getCount() - 16);
 			} else {
-				stackinfoodbox.grow(stackinhand.getCount());
+				stackInTrough.grow(stackInHand.getCount());
 				playerIn.setHeldItem(hand, ItemStack.EMPTY);
 			}
 		} else {
@@ -215,47 +215,21 @@ public class TroughBlock extends HorizontalBlock {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (state.getBlock() != newState.getBlock()) {
+			TileEntity tileentity = this.getTileEntity(worldIn, pos);
+			if (tileentity instanceof TileEntityTrough) {
+				dropStoredItems(worldIn, pos, (TileEntityTrough)tileentity);
+			}
 
-		TileEntityTrough trough = (TileEntityTrough) worldIn.getTileEntity(pos);
-		if (trough != null)
-			dropStoredItems(worldIn, pos, trough);
-
-		super.breakBlock(worldIn, pos, state);
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
+		}
 	}
 
 	private void dropStoredItems(World worldIn, BlockPos pos, TileEntityTrough trough) {
 		if (trough != null) {
 			ItemStack itemstack = trough.stack;
-			if (!itemstack.isEmpty()) {
-				float f = this.random.nextFloat() * 0.8F + 0.1F;
-				float f1 = this.random.nextFloat() * 0.8F + 0.1F;
-				float f2 = this.random.nextFloat() * 0.8F + 0.1F;
-
-				while (itemstack.getCount() > 0) {
-					int j1 = this.random.nextInt(3) + 3;
-
-					if (j1 > itemstack.getCount()) {
-						j1 = itemstack.getCount();
-					}
-
-					itemstack.shrink(j1);
-					EntityItem entityitem = new EntityItem(worldIn, (double) ((float) pos.getX() + f), (double) ((float) pos.getY() + f1),
-							(double) ((float) pos.getZ() + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
-
-					CompoundNBT tag = itemstack.getTagCompound();
-					if (tag != null) {
-						entityitem.getItem().setTagCompound(tag.copy());
-					}
-
-					float f3 = 0.05F;
-					entityitem.motionX = (double) ((float) this.random.nextGaussian() * f3);
-					entityitem.motionY = (double) ((float) this.random.nextGaussian() * f3 + 0.2F);
-					entityitem.motionZ = (double) ((float) this.random.nextGaussian() * f3);
-					worldIn.spawnEntity(entityitem);
-				}
-			}
-
+			InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemstack);
 		}
 	}
 
