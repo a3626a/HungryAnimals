@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.blocks.BlockTrough;
+import oortcloud.hungryanimals.blocks.TroughBlock;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
@@ -54,13 +54,13 @@ public class ItemTrough extends Item {
 						&& worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos.down(),
 								Direction.UP)) {
 					BlockState BlockState1 = ModBlocks.trough.getDefaultState()
-							.with(BlockTrough.FACING, Direction1)
-							.with(BlockTrough.PART, BlockTrough.EnumPartType.FOOT);
+							.with(TroughBlock.FACING, Direction1)
+							.with(TroughBlock.PART, TroughBlock.EnumPartType.FOOT);
 
 					// TODO what does flag 8 mean?!
 					if (worldIn.setBlockState(pos, BlockState1, 11)) {
-						BlockState BlockState2 = BlockState1.with(BlockTrough.PART,
-								BlockTrough.EnumPartType.HEAD);
+						BlockState BlockState2 = BlockState1.with(TroughBlock.PART,
+								TroughBlock.EnumPartType.HEAD);
 						worldIn.setBlockState(blockpos, BlockState2, 11);
 					}
 					playerIn.getHeldItem(hand).shrink(1);

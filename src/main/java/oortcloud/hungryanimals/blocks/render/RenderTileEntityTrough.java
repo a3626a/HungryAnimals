@@ -10,7 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import oortcloud.hungryanimals.blocks.BlockTrough;
+import oortcloud.hungryanimals.blocks.TroughBlock;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
@@ -29,7 +29,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 		BlockState state = foodbox.getWorld().getBlockState(foodbox.getPos());
 		if (state.getBlock() != ModBlocks.trough)
 			return;
-		Direction rot = (Direction) state.getValue(BlockTrough.FACING);
+		Direction rot = (Direction) state.getValue(TroughBlock.FACING);
 		int rotation = rot.getHorizontalIndex();
 
 		GL11.glPushMatrix();

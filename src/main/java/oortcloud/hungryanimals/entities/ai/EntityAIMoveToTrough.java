@@ -19,7 +19,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.blocks.BlockTrough;
+import oortcloud.hungryanimals.blocks.TroughBlock;
 import oortcloud.hungryanimals.blocks.ModBlocks;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -79,7 +79,7 @@ public class EntityAIMoveToTrough extends Goal {
 		} else {
 			BlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
-				TileEntity temp = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
+				TileEntity temp = ((TroughBlock) state.getBlock()).getTileEntity(world, pos);
 				if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && temp != null && temp instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) temp;
 					return !trough.stack.isEmpty() && pref.canEat(capHungry, trough.stack);
@@ -103,7 +103,7 @@ public class EntityAIMoveToTrough extends Goal {
 		if (pos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distSq) {
 			BlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.trough) {
-				TileEntity tileEntity = ((BlockTrough) state.getBlock()).getTileEntity(world, pos);
+				TileEntity tileEntity = ((TroughBlock) state.getBlock()).getTileEntity(world, pos);
 				if (tileEntity != null && tileEntity instanceof TileEntityTrough) {
 					TileEntityTrough trough = (TileEntityTrough) tileEntity;
 					while (!trough.stack.isEmpty() && pref.canEat(capHungry, trough.stack)) {
