@@ -9,6 +9,7 @@ import com.google.common.base.Predicates;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -56,7 +57,7 @@ public class EntityBola extends Entity implements IProjectile {
 		this.setPosition(posx, posy, posz);
 	}
 
-	public EntityBola(World world, MobEntityBase shooter) {
+	public EntityBola(World world, LivingEntity shooter) {
 		this(world, shooter.posX, shooter.posY + (double)shooter.getEyeHeight() - 0.1, shooter.posZ);
 		this.shootingEntity = shooter;
 	}

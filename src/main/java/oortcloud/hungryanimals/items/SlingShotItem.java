@@ -18,7 +18,10 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.enchantment.ModEnchantments;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
+import oortcloud.hungryanimals.sound_event.ModSoundEvents;
+import oortcloud.hungryanimals.stats.ModStatTypes;
 
 public class SlingShotItem extends Item {
 	public List<Ingredient> ammos;
@@ -58,7 +61,7 @@ public class SlingShotItem extends Item {
                 }
             }
 
-            return player.abilities.isCreativeMode ? new ItemStack(COBBLESTONE.get()) : ItemStack.EMPTY;
+            return player.abilities.isCreativeMode ? new ItemStack(ModItems.COBBLESTONE.get()) : ItemStack.EMPTY;
         }
     }
 
@@ -76,18 +79,13 @@ public class SlingShotItem extends Item {
 		return false;
     }
 
-
-    private static RegistryObject<Enchantment> INFINITY = RegistryObject.of(new ResourceLocation("minecraft:infinity"), ForgeRegistries.ENCHANTMENTS);
-    private static RegistryObject<Item> COBBLESTONE = RegistryObject.of(new ResourceLocation("minecraft:cobblestone"), ForgeRegistries.ITEMS);
-    private static RegistryObject<SoundEvent> ENTITY_ARROW_SHOOT = RegistryObject.of(new ResourceLocation("minecraft:entity.arrow.shoot"), ForgeRegistries.SOUND_EVENTS);
-    private static RegistryObject<StatType<Item>> ITEM_USED = RegistryObject.of(new ResourceLocation("minecraft:used"), ForgeRegistries.STAT_TYPES);
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft)
     {
         if (entityLiving instanceof PlayerEntity)
         {
             PlayerEntity playerentity = (PlayerEntity)entityLiving;
-            boolean flag = playerentity.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(INFINITY.get(), stack) > 0;
+            boolean flag = playerentity.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.INFINITY.get(), stack) > 0;
             ItemStack itemstack = this.findAmmo(playerentity);
 
             int i = this.getUseDuration(stack) - timeLeft;
@@ -97,13 +95,13 @@ public class SlingShotItem extends Item {
             {
                 if (itemstack.isEmpty())
                 {
-                    itemstack = new ItemStack(COBBLESTONE.get());
+                    itemstack = new ItemStack(ModItems.COBBLESTONE.get());
                 }
 
                 float f = getArrowVelocity(i);
                 if ((double)f >= 0.1D)
                 {
-                    boolean flag1 = playerentity.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(INFINITY.get(), stack) > 0;
+                    boolean flag1 = playerentity.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(ModEnchantments.INFINITY.get(), stack) > 0;
                     
                     if (!worldIn.isRemote)
                     {
@@ -117,7 +115,7 @@ public class SlingShotItem extends Item {
                         worldIn.addEntity(entityball);
                     }
 
-                    worldIn.playSound((PlayerEntity)null, playerentity.posX, playerentity.posY, playerentity.posZ, ENTITY_ARROW_SHOOT.get(), SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    worldIn.playSound((PlayerEntity)null, playerentity.posX, playerentity.posY, playerentity.posZ, ModSoundEvents.ENTITY_ARROW_SHOOT.get(), SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !playerentity.abilities.isCreativeMode) {
                         itemstack.shrink(1);
                         if (itemstack.isEmpty()) {
@@ -125,7 +123,7 @@ public class SlingShotItem extends Item {
                         }
                     }
 
-                    playerentity.addStat(ITEM_USED.get().get(this));
+                    playerentity.addStat(ModStatTypes.ITEM_USED.get().get(this));
                 }
             }
         }

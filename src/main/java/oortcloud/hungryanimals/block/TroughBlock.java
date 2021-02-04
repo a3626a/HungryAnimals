@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.blocks;
+package oortcloud.hungryanimals.block;
 
 import java.util.Random;
 

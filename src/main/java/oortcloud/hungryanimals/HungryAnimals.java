@@ -1,15 +1,9 @@
 package oortcloud.hungryanimals;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,7 +21,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.api.HAPlugins;
-import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.block.ModBlocks;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.proxy.CommonProxy;
@@ -46,12 +40,11 @@ public class HungryAnimals {
 
 	public static SimpleNetworkWrapper simpleChannel;
 
-	public static final RegistryObject<Item> WHEAT = RegistryObject.of(new ResourceLocation("minecraft:wheat"), ForgeRegistries.ITEMS);
 	public static ItemGroup tabHungryAnimals = new ItemGroup("tabHungryAnimals") {
 		@Override
 		@OnlyIn(Dist.CLIENT)
 		public ItemStack createIcon() {
-			return new ItemStack(WHEAT.get());
+			return new ItemStack(ModItems.WHEAT.get());
 		}
 	};
 

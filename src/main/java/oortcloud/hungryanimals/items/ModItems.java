@@ -8,11 +8,17 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.blocks.ModBlocks;
+import oortcloud.hungryanimals.block.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
 
 public class ModItems {
+	// Minecraft or other mod items
+	public static final RegistryObject<Item> WHEAT = RegistryObject.of(new ResourceLocation("minecraft:wheat"), ForgeRegistries.ITEMS);
+	public static final RegistryObject<Item> STICK = RegistryObject.of(new ResourceLocation("minecraft:stick"), ForgeRegistries.ITEMS);
+	public static final RegistryObject<Item> COBBLESTONE = RegistryObject.of(new ResourceLocation("minecraft:cobblestone"), ForgeRegistries.ITEMS);
+	// Minecraft or other mod items
+
 	public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, References.MODID);
 
 	public static RegistryObject<Item> MANURE = register(Strings.itemManureName);
@@ -34,13 +40,12 @@ public class ModItems {
 			() -> new TroughItem(ModBlocks.TROUGH.get(), new Item.Properties().group(HungryAnimals.tabHungryAnimals)).setRegistryName(ModBlocks.TROUGH.get().getRegistryName())
 	);
 	public static RegistryObject<Item> SLINGSHOT = ITEMS.register(Strings.itemSlingShotName, SlingShotItem::new);
-	public static Item bola;
+	public static RegistryObject<Item> BOLA = ITEMS.register(Strings.itemBolaName, BolaItem::new);
 	public static Item debugGlass;
 
 	public static Item herbicide;
 
 	public static void init() {
-		bola = new ItemBola();
 		debugGlass = new ItemDebugGlass();
 		//herbicide = new ItemHerbicide();
 	}

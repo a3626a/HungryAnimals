@@ -35,7 +35,7 @@ public class ModelItemBola implements IBakedModel {
 
 	public static final ModelResourceLocation modelresourcelocation_spin = new ModelResourceLocation(
 			References.RESOURCESPREFIX + Strings.itemBolaName + "_spin", "inventory");
-	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(ModItems.bola.getRegistryName(), "inventory");
+	public static final ModelResourceLocation modelresourcelocation_normal = new ModelResourceLocation(ModItems.BOLA.get().getRegistryName(), "inventory");
 
 	private static final float radiusFirst = (float) (Math.sqrt(2) * 6);
 

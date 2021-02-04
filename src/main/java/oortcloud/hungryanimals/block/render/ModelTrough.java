@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.blocks.render;
+package oortcloud.hungryanimals.block.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

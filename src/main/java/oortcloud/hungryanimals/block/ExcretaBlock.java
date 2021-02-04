@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.blocks;
+package oortcloud.hungryanimals.block;
 
 import java.util.Random;
 
@@ -29,8 +29,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.core.lib.Strings;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.materials.ModMaterials;
@@ -155,16 +153,12 @@ public class ExcretaBlock extends FallingBlock {
 		}
 	}
 
-	public static final RegistryObject<Block> DIRT = RegistryObject.of(new ResourceLocation("minecraft:dirt"), ForgeRegistries.BLOCKS);
-	public static final RegistryObject<Block> GRASS = RegistryObject.of(new ResourceLocation("minecraft:grass_block"), ForgeRegistries.BLOCKS);
-	public static final RegistryObject<Block> SAND = RegistryObject.of(new ResourceLocation("minecraft:sand"), ForgeRegistries.BLOCKS);
-
 	private void dissolve(World world, BlockPos pos, Random random) {
 		BlockState meta = world.getBlockState(pos);
 		int man = meta.get(CONTENT).man;
 		int exc = meta.get(CONTENT).exc;
 		Block bottom = world.getBlockState(pos.down()).getBlock();
-		if (bottom == DIRT.get() || bottom == GRASS.get() || bottom == SAND.get()) {
+		if (bottom == ModBlocks.DIRT.get() || bottom == ModBlocks.GRASS_BLOCK.get() || bottom == ModBlocks.SAND.get()) {
 			if (random.nextDouble() < ExcretaBlock.fertilizationProbability) {
 				if (man > 0) {
 					man--;
@@ -178,10 +172,10 @@ public class ExcretaBlock extends FallingBlock {
 					world.setBlockState(pos, meta.with(CONTENT, EnumType.getValue(exc, man)), 3);
 				}
 
-				if (bottom == SAND.get()) {
-					world.setBlockState(pos.down(), DIRT.get().getDefaultState(), 3);
-				} else if (bottom == DIRT.get()) {
-					world.setBlockState(pos.down(), GRASS.get().getDefaultState(), 3);
+				if (bottom == ModBlocks.SAND.get()) {
+					world.setBlockState(pos.down(), ModBlocks.DIRT.get().getDefaultState(), 3);
+				} else if (bottom == ModBlocks.DIRT.get()) {
+					world.setBlockState(pos.down(), ModBlocks.GRASS_BLOCK.get().getDefaultState(), 3);
 				}
 			}
 		} else if (bottom == ModBlocks.FLOOR_COVER_HAY.get()) {

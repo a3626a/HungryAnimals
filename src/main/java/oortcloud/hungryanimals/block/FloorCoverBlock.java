@@ -1,4 +1,4 @@
-package oortcloud.hungryanimals.blocks;
+package oortcloud.hungryanimals.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
