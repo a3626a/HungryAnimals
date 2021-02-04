@@ -16,7 +16,7 @@ public class Strings {
 	public static final String blockFloorCoverHayName = "floorcoverhay";
 	
 	public static final String itemManureName = "manure";
-	public static final String itemWoodashName = "woodash";
+	public static final String itemWoodAshName = "woodash";
 	public static final String itemSaltpeterName = "saltpeter";
 	public static final String itemTroughBoxName = "trough"; // Duplicated name "trough" for block and item registration. Therefore, I added "item" prefix.
 	public static final String itemBolaName = "bola";

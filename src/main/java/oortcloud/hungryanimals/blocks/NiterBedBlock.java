@@ -50,6 +50,6 @@ public class NiterBedBlock extends Block {
 //
 //	@Override
 //	public Item getItemDropped(BlockState state, Random rand, int fortune) {
-//		return (Integer) state.get(AGE) == 7 ? ModItems.saltpeter : super.getItemDropped(state, rand, fortune);
+//		return (Integer) state.get(AGE) == 7 ? ModItems.SALTPETER.get() : super.getItemDropped(state, rand, fortune);
 //	}
 }

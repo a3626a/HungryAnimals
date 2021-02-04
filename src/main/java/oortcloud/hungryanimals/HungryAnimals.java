@@ -1,6 +1,15 @@
 package oortcloud.hungryanimals;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,11 +46,12 @@ public class HungryAnimals {
 
 	public static SimpleNetworkWrapper simpleChannel;
 
-	public static CreativeTabs tabHungryAnimals = new CreativeTabs("tabHungryAnimals") {
+	public static final RegistryObject<Item> WHEAT = RegistryObject.of(new ResourceLocation("minecraft:wheat"), ForgeRegistries.ITEMS);
+	public static ItemGroup tabHungryAnimals = new ItemGroup("tabHungryAnimals") {
 		@Override
 		@OnlyIn(Dist.CLIENT)
-		public ItemStack getTabIconItem() {
-			return Items.WHEAT.getDefaultInstance();
+		public ItemStack createIcon() {
+			return new ItemStack(WHEAT.get());
 		}
 	};
 
@@ -54,6 +64,7 @@ public class HungryAnimals {
 	public HungryAnimals()
 	{
 		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 

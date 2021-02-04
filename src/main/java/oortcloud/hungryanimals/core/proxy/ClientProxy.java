@@ -114,12 +114,12 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.slingshot, 0, ModelItemSlingshot.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.debugGlass, 0, new ModelResourceLocation(ModItems.debugGlass.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.trough, 0, new ModelResourceLocation(ModItems.trough.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.manure, 0, new ModelResourceLocation(ModItems.manure.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.woodash, 0, new ModelResourceLocation(ModItems.woodash.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.saltpeter, 0, new ModelResourceLocation(ModItems.saltpeter.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.tendon, 0, new ModelResourceLocation(ModItems.tendon.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.animalGlue, 0, new ModelResourceLocation(ModItems.animalGlue.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(ModItems.compositeWood, 0, new ModelResourceLocation(ModItems.compositeWood.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.MANURE.get(), 0, new ModelResourceLocation(ModItems.MANURE.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.WOOD_ASH.get(), 0, new ModelResourceLocation(ModItems.WOOD_ASH.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.SALTPETER.get(), 0, new ModelResourceLocation(ModItems.SALTPETER.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.TENDON.get(), 0, new ModelResourceLocation(ModItems.TENDON.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.ANIMAL_GLUE.get(), 0, new ModelResourceLocation(ModItems.ANIMAL_GLUE.get().getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.COMPOSITE_WOOD.get(), 0, new ModelResourceLocation(ModItems.COMPOSITE_WOOD.get().getRegistryName(), "inventory"));
 		
 		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
 		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal,

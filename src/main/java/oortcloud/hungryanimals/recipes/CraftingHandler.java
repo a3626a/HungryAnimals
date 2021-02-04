@@ -17,11 +17,11 @@ public class CraftingHandler {
 	private static void registerRecipe() {
 		//RecipeSorter.register(References.RESOURCESPREFIX+"shapeddistinctore",     ShapedDistinctOreRecipe.class,    SHAPED,    "after:forge:shapedore before:minecraft:shapeless");
 		
-		OreDictionary.registerOre("dustSaltpeter", ModItems.saltpeter);
-		OreDictionary.registerOre("dustWoodAsh", ModItems.woodash);
+		OreDictionary.registerOre("dustSaltpeter", ModItems.SALTPETER.get());
+		OreDictionary.registerOre("dustWoodAsh", ModItems.WOOD_ASH.get());
 		
 		for (ItemStack i : OreDictionary.getOres("treeSapling")) {
-			GameRegistry.addSmelting(i, new ItemStack(ModItems.woodash), 1.0F);
+			GameRegistry.addSmelting(i, new ItemStack(ModItems.WOOD_ASH.get()), 1.0F);
 		}
 		//GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.herbicide), "aba", "aca","ada" ,'a', "paneGlass", 'b', new ItemStack(Items.spider_eye), 'c', new ItemStack(Items.rotten_flesh), 'd',new ItemStack(Items.poisonous_potato)));
 	}
