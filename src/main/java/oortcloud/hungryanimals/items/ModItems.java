@@ -33,15 +33,14 @@ public class ModItems {
 			ModBlocks.TROUGH.get().getRegistryName().getPath(),
 			() -> new TroughItem(ModBlocks.TROUGH.get(), new Item.Properties().group(HungryAnimals.tabHungryAnimals)).setRegistryName(ModBlocks.TROUGH.get().getRegistryName())
 	);
+	public static RegistryObject<Item> SLINGSHOT = ITEMS.register(Strings.itemSlingShotName, SlingShotItem::new);
 	public static Item bola;
-	public static Item slingshot;
 	public static Item debugGlass;
 
 	public static Item herbicide;
 
 	public static void init() {
 		bola = new ItemBola();
-		slingshot = new ItemSlingShot();
 		debugGlass = new ItemDebugGlass();
 		//herbicide = new ItemHerbicide();
 	}

@@ -111,7 +111,7 @@ public class ClientProxy extends CommonProxy {
 				new ModelResourceLocation(ModBlocks.TRAP_COVER.get().getRegistryName(), "inventory"));
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.bola, 0, ModelItemBola.modelresourcelocation_normal);
-		ModelLoader.setCustomModelResourceLocation(ModItems.slingshot, 0, ModelItemSlingshot.modelresourcelocation_normal);
+		ModelLoader.setCustomModelResourceLocation(ModItems.SLINGSHOT.get(), 0, ModelItemSlingshot.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.debugGlass, 0, new ModelResourceLocation(ModItems.debugGlass.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.TROUGH.get(), 0, new ModelResourceLocation(ModItems.TROUGH.get().getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.MANURE.get(), 0, new ModelResourceLocation(ModItems.MANURE.get().getRegistryName(), "inventory"));
@@ -122,7 +122,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.COMPOSITE_WOOD.get(), 0, new ModelResourceLocation(ModItems.COMPOSITE_WOOD.get().getRegistryName(), "inventory"));
 		
 		ModelBakery.registerItemVariants(ModItems.bola, ModelItemBola.modelresourcelocation_normal, ModelItemBola.modelresourcelocation_spin);
-		ModelBakery.registerItemVariants(ModItems.slingshot, ModelItemSlingshot.modelresourcelocation_normal,
+		ModelBakery.registerItemVariants(ModItems.SLINGSHOT.get(), ModelItemSlingshot.modelresourcelocation_normal,
 				ModelItemSlingshot.modelresourcelocation_shooting);
 		
 		registerFluidModels();

@@ -63,7 +63,7 @@ import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.Productions;
 import oortcloud.hungryanimals.generation.GrassGenerator;
 import oortcloud.hungryanimals.generation.GrassGenerators;
-import oortcloud.hungryanimals.items.ItemSlingShot;
+import oortcloud.hungryanimals.items.SlingShotItem;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.potion.PotionDisease;
 import oortcloud.hungryanimals.potion.PotionOvereat;
@@ -367,9 +367,9 @@ public class ConfigurationHandler {
 			JsonElement ammos = jsonObj.get("ammos");
 			List<Ingredient> ingredients = ModJsonUtils.getIngredients(ammos);
 			for (Ingredient i : ingredients)
-				((ItemSlingShot) ModItems.slingshot).ammos.add(i);
+				((SlingShotItem) ModItems.SLINGSHOT.get()).ammos.add(i);
 
-			((ItemSlingShot) ModItems.slingshot).damage = JsonUtils.getFloat(jsonObj, "damage");
+			((SlingShotItem) ModItems.SLINGSHOT.get()).damage = JsonUtils.getFloat(jsonObj, "damage");
 		});
 
 		ModLootTables.init(baseFolder);
