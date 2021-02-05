@@ -41,7 +41,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<EntityPlayer> {
 				return true;
 			for (int i = 0; i < 9; i++) {
 				ItemStack itemStack = player.inventory.mainInventory.get(i);
-				if (itemStack != ItemStack.EMPTY && itemStack.getItem() == ModItems.debugGlass)
+				if (itemStack != ItemStack.EMPTY && itemStack.getItem() == ModItems.DEBUG_GLASS.get())
 					return false;
 			}
 			return true;

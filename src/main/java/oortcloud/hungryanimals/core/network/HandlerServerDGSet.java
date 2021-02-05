@@ -19,7 +19,7 @@ public class HandlerServerDGSet implements IMessageHandler<PacketServerDGSet, IM
 				return;
 
 			ItemStack stack = player.getHeldItemMainhand();
-			if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
+			if (!stack.isEmpty() && stack.getItem() == ModItems.DEBUG_GLASS.get()) {
 				CompoundNBT tag = stack.getTagCompound();
 				if (tag == null) {
 					tag = new CompoundNBT();

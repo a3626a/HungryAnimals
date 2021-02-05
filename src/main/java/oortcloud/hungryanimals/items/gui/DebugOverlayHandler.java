@@ -156,11 +156,11 @@ public class DebugOverlayHandler extends Gui {
 
 	private ItemStack getDebugGlass(MobEntityBase player) {
 		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
+		if (stack != null && stack.getItem() == ModItems.DEBUG_GLASS.get() && stack.getTagCompound() != null) {
 			return stack;
 		}
 		stack = player.getHeldItem(EnumHand.OFF_HAND);
-		if (stack != null && stack.getItem() == ModItems.debugGlass && stack.getTagCompound() != null) {
+		if (stack != null && stack.getItem() == ModItems.DEBUG_GLASS.get() && stack.getTagCompound() != null) {
 			return stack;
 		}
 		return ItemStack.EMPTY;

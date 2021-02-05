@@ -4,6 +4,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,8 +18,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.api.HAPlugins;
@@ -38,7 +38,7 @@ public class HungryAnimals {
 	@SidedProxy(clientSide = References.CLIENTPROXYLOCATION, serverSide = References.COMMONPROXYLOCATION)
 	public static CommonProxy proxy;
 
-	public static SimpleNetworkWrapper simpleChannel;
+	public static SimpleChannel simpleChannel;
 
 	public static ItemGroup tabHungryAnimals = new ItemGroup("tabHungryAnimals") {
 		@Override
@@ -63,12 +63,11 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-		simpleChannel = NetworkRegistry.INSTANCE.newSimpleChannel(References.MODNAME);
+		simpleChannel = NetworkRegistry.newSimpleChannel(References.MODNAME);
 		logger = event.getModLog();
 		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);
 		RecipeAnimalGlue.init();
-		ModItems.init();
 		proxy.registerEntities();
 		proxy.registerEntityRendering();
 		proxy.registerTileEntities();

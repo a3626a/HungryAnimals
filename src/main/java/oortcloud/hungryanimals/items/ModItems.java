@@ -41,14 +41,7 @@ public class ModItems {
 	);
 	public static RegistryObject<Item> SLINGSHOT = ITEMS.register(Strings.itemSlingShotName, SlingShotItem::new);
 	public static RegistryObject<Item> BOLA = ITEMS.register(Strings.itemBolaName, BolaItem::new);
-	public static Item debugGlass;
-
-	public static Item herbicide;
-
-	public static void init() {
-		debugGlass = new ItemDebugGlass();
-		//herbicide = new ItemHerbicide();
-	}
+	public static RegistryObject<Item> DEBUG_GLASS = ITEMS.register(Strings.itemDebugGlassName, DebugGlassItem::new);
 
 	private static RegistryObject<Item> register(String name) {
 		return ITEMS.register(

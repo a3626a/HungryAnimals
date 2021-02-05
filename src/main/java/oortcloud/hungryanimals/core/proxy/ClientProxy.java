@@ -112,7 +112,7 @@ public class ClientProxy extends CommonProxy {
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.BOLA.get(), 0, ModelItemBola.modelresourcelocation_normal);
 		ModelLoader.setCustomModelResourceLocation(ModItems.SLINGSHOT.get(), 0, ModelItemSlingshot.modelresourcelocation_normal);
-		ModelLoader.setCustomModelResourceLocation(ModItems.debugGlass, 0, new ModelResourceLocation(ModItems.debugGlass.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ModItems.DEBUG_GLASS.get(), 0, new ModelResourceLocation(ModItems.DEBUG_GLASS.get().getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.TROUGH.get(), 0, new ModelResourceLocation(ModItems.TROUGH.get().getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.MANURE.get(), 0, new ModelResourceLocation(ModItems.MANURE.get().getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.WOOD_ASH.get(), 0, new ModelResourceLocation(ModItems.WOOD_ASH.get().getRegistryName(), "inventory"));

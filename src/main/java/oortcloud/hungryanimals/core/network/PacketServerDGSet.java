@@ -3,6 +3,7 @@ package oortcloud.hungryanimals.core.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
@@ -15,7 +16,7 @@ public class PacketServerDGSet implements IMessage {
 		this(null, null);
 	}
 	
-	public PacketServerDGSet(EntityPlayer player, Entity entity) {
+	public PacketServerDGSet(PlayerEntity player, Entity entity) {
 		if (entity != null) {
 			this.entity = entity.getEntityId();
 		} else {

@@ -99,7 +99,7 @@ public class ClientRenderEventHandler {
 		
 		MobEntityBase animal = event.getEntity();
 		ItemStack stack = player.getHeldItemMainhand();
-		if (!stack.isEmpty() && stack.getItem() == ModItems.debugGlass) {
+		if (!stack.isEmpty() && stack.getItem() == ModItems.DEBUG_GLASS.get()) {
 			CompoundNBT tag = stack.getTagCompound();
 			if (tag != null) {
 				if (tag.hasKey("target") && tag.getInteger("target") == animal.getEntityId()) {
