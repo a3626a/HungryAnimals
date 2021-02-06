@@ -9,11 +9,9 @@ import com.google.gson.JsonSerializationContext;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.LootFunction;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 
 public class SetCountBaseOnWeight extends LootFunction {

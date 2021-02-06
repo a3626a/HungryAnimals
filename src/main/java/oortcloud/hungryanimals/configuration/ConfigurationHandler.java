@@ -200,9 +200,6 @@ public class ConfigurationHandler {
 			}
 		});
 
-		lootTables = new ConfigurationHandlerJSONAnimal(baseFolder, "loot_tables", (jsonElement, animal) -> {
-			ModLootTables.register(EntityList.getKey(animal), jsonElement);
-		});
 		ais = new ConfigurationHandlerJSONAnimal(baseFolder, "ais", (jsonElement, animal) -> {
 			IAIContainer<MobEntity> aiContainer = AIContainers.getInstance().parse(animal, jsonElement);
 			AIContainers.getInstance().register(animal, aiContainer);
@@ -371,8 +368,6 @@ public class ConfigurationHandler {
 
 			((SlingShotItem) ModItems.SLINGSHOT.get()).damage = JsonUtils.getFloat(jsonObj, "damage");
 		});
-
-		ModLootTables.init(baseFolder);
 	}
 
 	public static void syncPre() {

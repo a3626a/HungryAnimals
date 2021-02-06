@@ -82,7 +82,6 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ConfigurationEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		MinecraftForge.EVENT_BUS.register(new CraftingEventHandler());
-		MinecraftForge.EVENT_BUS.register(new ModLootTables());
 	}
 
 	public void registerKeyBindings() {

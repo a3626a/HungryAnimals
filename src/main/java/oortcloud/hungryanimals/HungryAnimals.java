@@ -3,6 +3,7 @@ package oortcloud.hungryanimals;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -58,8 +59,8 @@ public class HungryAnimals {
 	{
 		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::addReloadListenersLowest);
 	}
-
 
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {

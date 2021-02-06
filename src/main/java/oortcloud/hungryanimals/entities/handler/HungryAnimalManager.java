@@ -3,6 +3,8 @@ package oortcloud.hungryanimals.entities.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 
 public class HungryAnimalManager {
@@ -87,7 +89,7 @@ public class HungryAnimalManager {
 		return false;
 	}
 
-	public boolean isHungry(Class<? extends MobEntity> animal) {
+	public boolean isHungry(EntityType<?> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isHungry;
 		}
