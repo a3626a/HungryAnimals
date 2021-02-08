@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAIRegistry;
 
@@ -63,7 +63,7 @@ public class AIContainers implements IAIRegistry {
 		}
 		JsonObject jsonObj = (JsonObject) jsonEle;
 
-		String aiType = JsonUtils.getString(jsonObj, "type");
+		String aiType = JSONUtils.getString(jsonObj, "type");
 		jsonObj.remove("type");
 
 		IAIContainer<MobEntity> aiContainer = AICONTAINERS.get(aiType).apply(entityClass, jsonObj);

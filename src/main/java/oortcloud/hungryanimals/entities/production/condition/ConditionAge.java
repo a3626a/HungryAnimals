@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
@@ -41,7 +41,7 @@ public class ConditionAge implements Predicate<MobEntity> {
 
 	public static Predicate<MobEntity> parse(JsonElement jsonEle) {
 		try {
-			String age = JsonUtils.getString(jsonEle, "age");
+			String age = JSONUtils.getString(jsonEle, "age");
 			if (age.equals("baby")) {
 				return new ConditionAge(false);
 			} else if (age.equals("adult")) {

@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -160,7 +160,7 @@ public class EntityAIMoveToTrough extends Goal {
 
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
-		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		float speed = JSONUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
 		aiContainer.getTask().after(EntityAISwimming.class)

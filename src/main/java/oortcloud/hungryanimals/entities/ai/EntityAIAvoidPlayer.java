@@ -14,7 +14,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -66,9 +66,9 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		
 		JsonObject jsonObject = (JsonObject)jsonEle ;
 		
-		float radius = JsonUtils.getFloat(jsonObject, "radius");
-		double farspeed = JsonUtils.getFloat(jsonObject, "farspeed");
-		double nearspeed = JsonUtils.getFloat(jsonObject, "nearspeed");
+		float radius = JSONUtils.getFloat(jsonObject, "radius");
+		double farspeed = JSONUtils.getFloat(jsonObject, "farspeed");
+		double nearspeed = JSONUtils.getFloat(jsonObject, "nearspeed");
 		
 		AIFactory factory =  (entity) -> {
 			if (entity instanceof EntityCreature) {

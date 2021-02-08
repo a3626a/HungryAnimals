@@ -12,7 +12,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
@@ -170,9 +170,9 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
-		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		Fluid fluid = FluidRegistry.getFluid(JsonUtils.getString(jsonObject, "fluid"));
-		int amount = JsonUtils.getInt(jsonObject, "amount");
+		float speed = JSONUtils.getFloat(jsonObject, "speed");
+		Fluid fluid = FluidRegistry.getFluid(JSONUtils.getString(jsonObject, "fluid"));
+		int amount = JSONUtils.getInt(jsonObject, "amount");
 		
 		AIFactory factory = (entity) -> new EntityAIDrinkMilk(entity, speed, new FluidStack(fluid, amount));
 		aiContainer.getTask().after(EntityAISwimming.class)

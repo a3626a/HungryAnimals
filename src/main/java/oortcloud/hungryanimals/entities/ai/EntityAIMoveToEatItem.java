@@ -18,7 +18,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -206,8 +206,8 @@ public class EntityAIMoveToEatItem extends Goal {
 
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
-		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		boolean onlyNatural = JsonUtils.getBoolean(jsonObject, "only_natural", false);
+		float speed = JSONUtils.getFloat(jsonObject, "speed");
+		boolean onlyNatural = JSONUtils.getBoolean(jsonObject, "only_natural", false);
 		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed, onlyNatural);
 		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToEatBlock.class)
 				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);

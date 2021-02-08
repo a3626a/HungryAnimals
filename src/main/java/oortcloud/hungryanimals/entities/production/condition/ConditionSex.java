@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.capability.ICapabilitySexual;
 import oortcloud.hungryanimals.entities.capability.ICapabilitySexual.Sex;
@@ -41,7 +41,7 @@ public class ConditionSex implements Predicate<MobEntity> {
 	
 	public static Predicate<MobEntity> parse(JsonElement jsonEle) {
 		try {
-			String sex = JsonUtils.getString(jsonEle, "sex");
+			String sex = JSONUtils.getString(jsonEle, "sex");
 			if (sex.equals("female")) {
 				return new ConditionSex(true);
 			} else if (sex.equals("male")) {

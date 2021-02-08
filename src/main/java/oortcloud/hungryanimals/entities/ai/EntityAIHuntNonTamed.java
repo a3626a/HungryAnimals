@@ -6,7 +6,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -37,10 +37,10 @@ public class EntityAIHuntNonTamed extends EntityAIHunt {
 		
 		JsonObject jsonObject = (JsonObject)jsonEle ;
 		
-		int chance = JsonUtils.getInt(jsonObject, "chance");
-		boolean checkSight = JsonUtils.getBoolean(jsonObject, "check_sight");
-		boolean onlyNearby = JsonUtils.getBoolean(jsonObject, "only_nearby");
-		boolean herding = JsonUtils.getBoolean(jsonObject, "herding");
+		int chance = JSONUtils.getInt(jsonObject, "chance");
+		boolean checkSight = JSONUtils.getBoolean(jsonObject, "check_sight");
+		boolean onlyNearby = JSONUtils.getBoolean(jsonObject, "only_nearby");
+		boolean herding = JSONUtils.getBoolean(jsonObject, "herding");
 		
 		AIFactory factory = (entity) -> {
 			if (entity instanceof EntityTameable) {

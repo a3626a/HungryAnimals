@@ -34,7 +34,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -128,8 +128,8 @@ public class ConfigurationHandler {
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
 				HashBlockState state = HashBlockState.parse(jsonObj.getAsJsonObject("block"));
-				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
-				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
+				double nutrient = JSONUtils.getFloat(jsonObj, "nutrient");
+				double stomach = JSONUtils.getFloat(jsonObj, "stomach");
 				map.put(state, new Pair<Double, Double>(nutrient, stomach));
 			}
 			FoodPreferences.getInstance().REGISTRY_BLOCK.put(animal, new FoodPreferenceBlockState(map));
@@ -141,8 +141,8 @@ public class ConfigurationHandler {
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
 				Ingredient ing = ModJsonUtils.getIngredient(jsonObj.get("item"));
-				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
-				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
+				double nutrient = JSONUtils.getFloat(jsonObj, "nutrient");
+				double stomach = JSONUtils.getFloat(jsonObj, "stomach");
 
 				if (ing != null) {
 					list.add(new FoodPreferenceIngredientEntry(ing, nutrient, stomach));
@@ -175,9 +175,9 @@ public class ConfigurationHandler {
 			Map<String, Pair<Double, Double>> map = new HashMap<String, Pair<Double, Double>>();
 			for (JsonElement i : jsonArr) {
 				JsonObject jsonObj = i.getAsJsonObject();
-				String fluid = JsonUtils.getString(jsonObj, "fluid");
-				double nutrient = JsonUtils.getFloat(jsonObj, "nutrient");
-				double stomach = JsonUtils.getFloat(jsonObj, "stomach");
+				String fluid = JSONUtils.getString(jsonObj, "fluid");
+				double nutrient = JSONUtils.getFloat(jsonObj, "nutrient");
+				double stomach = JSONUtils.getFloat(jsonObj, "stomach");
 				map.put(fluid, new Pair<Double, Double>(nutrient, stomach));
 			}
 			FoodPreferences.getInstance().REGISTRY_FLUID.put(animal, new FoodPreferenceFluid(map));
@@ -189,8 +189,8 @@ public class ConfigurationHandler {
 				if (i.getValue().isJsonObject()) {
 					// Custom shouldRegister
 					JsonObject jsonAttribute = i.getValue().getAsJsonObject();
-					boolean shouldRegister = JsonUtils.getBoolean(jsonAttribute, "should_register");
-					double value = JsonUtils.getFloat(jsonAttribute, "value");
+					boolean shouldRegister = JSONUtils.getBoolean(jsonAttribute, "should_register");
+					double value = JSONUtils.getFloat(jsonAttribute, "value");
 					API.registerAttribute(animal, i.getKey(), value, shouldRegister);
 				} else {
 					// Default shouldRegister
@@ -253,7 +253,7 @@ public class ConfigurationHandler {
 			for (JsonElement i : jsonArr) {
 				JsonObject obj = i.getAsJsonObject();
 				Ingredient ing = ModJsonUtils.getIngredient(obj.get("item"));
-				int inheatDuration = JsonUtils.getInt(obj, "duration");
+				int inheatDuration = JSONUtils.getInt(obj, "duration");
 
 				if (ing != null) {
 					InHeats.getInstance().register(ing, inheatDuration);
@@ -270,7 +270,7 @@ public class ConfigurationHandler {
 				JsonElement generator = jsonObj.get("generator");
 				Biome biome = null;
 				if (jsonObj.has("biome")) {
-					String biomeName = JsonUtils.getString(jsonObj, "biome");
+					String biomeName = JSONUtils.getString(jsonObj, "biome");
 					biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(biomeName));
 					if (biome == null) {
 						throw new JsonSyntaxException(biomeName);
@@ -304,24 +304,24 @@ public class ConfigurationHandler {
 				HungryAnimalEntry entry = new HungryAnimalEntry();
 				if (jsonEle.isJsonObject()) {
 					JsonObject jsonObj = jsonEle.getAsJsonObject();
-					name = JsonUtils.getString(jsonObj, "name");
+					name = JSONUtils.getString(jsonObj, "name");
 					if (jsonObj.has("disable_taming")) {
 						// Backward compatibility
-						entry.isTamable = !JsonUtils.getBoolean(jsonObj, "disable_taming");
+						entry.isTamable = !JSONUtils.getBoolean(jsonObj, "disable_taming");
 					} else if (jsonObj.has("tamable")) {
-						entry.isTamable = JsonUtils.getBoolean(jsonObj, "tamable");
+						entry.isTamable = JSONUtils.getBoolean(jsonObj, "tamable");
 					}
 					if (jsonObj.has("model_growing")) {
-						entry.isModelGrowing = JsonUtils.getBoolean(jsonObj, "model_growing");
+						entry.isModelGrowing = JSONUtils.getBoolean(jsonObj, "model_growing");
 					}
 					if (jsonObj.has("sexual")) {
-						entry.isSexual = JsonUtils.getBoolean(jsonObj, "sexual");
+						entry.isSexual = JSONUtils.getBoolean(jsonObj, "sexual");
 					}
 					if (jsonObj.has("ageable")) {
-						entry.isAgeable = JsonUtils.getBoolean(jsonObj, "ageable");
+						entry.isAgeable = JSONUtils.getBoolean(jsonObj, "ageable");
 					}
 					if (jsonObj.has("hungry")) {
-						entry.isHungry = JsonUtils.getBoolean(jsonObj, "hungry");
+						entry.isHungry = JSONUtils.getBoolean(jsonObj, "hungry");
 					}
 				} else {
 					name = jsonEle.getAsString();
@@ -349,13 +349,13 @@ public class ConfigurationHandler {
 		disease = new ConfigurationHandlerJSON(baseFolder, "disease", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
-			PotionDisease.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
-			PotionDisease.multiplyWeightBMR = JsonUtils.getFloat(jsonObj, "multiply_weight_bmr");
+			PotionDisease.multiplyMovementSpeed = JSONUtils.getFloat(jsonObj, "multiply_movement_speed");
+			PotionDisease.multiplyWeightBMR = JSONUtils.getFloat(jsonObj, "multiply_weight_bmr");
 		});
 		overeat = new ConfigurationHandlerJSON(baseFolder, "overeat", (jsonElement) -> {
 			JsonObject jsonObj = (JsonObject) jsonElement;
 
-			PotionOvereat.multiplyMovementSpeed = JsonUtils.getFloat(jsonObj, "multiply_movement_speed");
+			PotionOvereat.multiplyMovementSpeed = JSONUtils.getFloat(jsonObj, "multiply_movement_speed");
 		});
 
 		slingshot = new ConfigurationHandlerJSON(baseFolder, "slingshot", (jsonElement) -> {
@@ -366,7 +366,7 @@ public class ConfigurationHandler {
 			for (Ingredient i : ingredients)
 				((SlingShotItem) ModItems.SLINGSHOT.get()).ammos.add(i);
 
-			((SlingShotItem) ModItems.SLINGSHOT.get()).damage = JsonUtils.getFloat(jsonObj, "damage");
+			((SlingShotItem) ModItems.SLINGSHOT.get()).damage = JSONUtils.getFloat(jsonObj, "damage");
 		});
 	}
 
@@ -424,19 +424,19 @@ public class ConfigurationHandler {
 		public ItemStack deserialize(JsonElement ele, Type type, JsonDeserializationContext context) throws JsonParseException {
 			JsonObject jsonobject = ele.getAsJsonObject();
 
-			String name = JsonUtils.getString(jsonobject, "name");
+			String name = JSONUtils.getString(jsonobject, "name");
 			Item item = Item.REGISTRY.getObject(new ResourceLocation(name));
 
 			if (item == null) {
 				throw new JsonParseException(String.format("{} has wrong name. It cannot find item {}", ele, name));
 			}
 
-			if (JsonUtils.hasField(jsonobject, "damage") && JsonUtils.hasField(jsonobject, "count")) {
-				return new ItemStack(item, JsonUtils.getInt(jsonobject, "count"), JsonUtils.getInt(jsonobject, "damage"));
-			} else if (JsonUtils.hasField(jsonobject, "damage")) {
-				return new ItemStack(item, 1, JsonUtils.getInt(jsonobject, "damage"));
-			} else if (JsonUtils.hasField(jsonobject, "count")) {
-				return new ItemStack(item, JsonUtils.getInt(jsonobject, "count"));
+			if (JSONUtils.hasField(jsonobject, "damage") && JSONUtils.hasField(jsonobject, "count")) {
+				return new ItemStack(item, JSONUtils.getInt(jsonobject, "count"), JSONUtils.getInt(jsonobject, "damage"));
+			} else if (JSONUtils.hasField(jsonobject, "damage")) {
+				return new ItemStack(item, 1, JSONUtils.getInt(jsonobject, "damage"));
+			} else if (JSONUtils.hasField(jsonobject, "count")) {
+				return new ItemStack(item, JSONUtils.getInt(jsonobject, "count"));
 			} else {
 				return new ItemStack(item);
 			}

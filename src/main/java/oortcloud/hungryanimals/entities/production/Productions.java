@@ -13,7 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.entities.production.condition.Conditions;
 
@@ -85,7 +85,7 @@ public class Productions implements IProductionRegistry {
 	public Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 		
-		String type = JsonUtils.getString(jsonObj, "type");
+		String type = JSONUtils.getString(jsonObj, "type");
 		if (!PARSER.containsKey(type)) {
 			return null;
 		} else {

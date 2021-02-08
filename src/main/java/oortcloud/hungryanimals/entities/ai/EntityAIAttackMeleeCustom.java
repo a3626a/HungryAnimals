@@ -14,7 +14,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -53,8 +53,8 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
-		double speed = JsonUtils.getFloat(jsonObject, "speed");
-		boolean useLongMemory = JsonUtils.getBoolean(jsonObject, "use_long_memory");
+		double speed = JSONUtils.getFloat(jsonObject, "speed");
+		boolean useLongMemory = JSONUtils.getBoolean(jsonObject, "use_long_memory");
 
 		AIFactory factory = (entity) -> {
 			if (entity instanceof EntityCreature) {

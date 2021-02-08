@@ -13,7 +13,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionEgg;
@@ -109,21 +109,21 @@ public class ProductionEgg implements IProductionTickable, IProductionTOP {
 	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
-		String name = JsonUtils.getString(jsonObj, "name");
+		String name = JSONUtils.getString(jsonObj, "name");
 		IRange delay;
 		JsonElement jsonDelay = jsonObj.get("delay");
 		if (jsonDelay.isJsonObject()) {
 			JsonObject jsonObjDelay = jsonDelay.getAsJsonObject();
-			int min = JsonUtils.getInt(jsonObjDelay, "min");
-			int max = JsonUtils.getInt(jsonObjDelay, "max");
+			int min = JSONUtils.getInt(jsonObjDelay, "min");
+			int max = JSONUtils.getInt(jsonObjDelay, "max");
 			delay = new RangeRandom(min, max);
 		} else {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
-		ItemStack stack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"),
+		ItemStack stack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(jsonObj, "output"),
 				new JsonContext(References.MODID));
-		Predicate<MobEntity> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
-		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
+		Predicate<MobEntity> condition = Conditions.parse(JSONUtils.getJsonObject(jsonObj, "condition"));
+		boolean disableSound = JSONUtils.getBoolean(jsonObj, "disable_sound");
 
 		return new ProductionFactory() {
 			@Override

@@ -16,7 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.utils.Pair;
 import oortcloud.hungryanimals.utils.R;
@@ -40,8 +40,8 @@ public class Master {
 			JsonElement master = map.get(R.get("master", "master.json"));
 			if (master.isJsonObject()) {
 				JsonObject jsonObj = (JsonObject) master;
-				JsonElement difficulty = map.get(R.get("master", "difficulty", JsonUtils.getString(jsonObj, "difficulty") + ".json"));
-				JsonElement tempo = map.get(R.get("master", "tempo", JsonUtils.getString(jsonObj, "tempo") + ".json"));
+				JsonElement difficulty = map.get(R.get("master", "difficulty", JSONUtils.getString(jsonObj, "difficulty") + ".json"));
+				JsonElement tempo = map.get(R.get("master", "tempo", JSONUtils.getString(jsonObj, "tempo") + ".json"));
 				JsonElement custom = jsonObj.get("custom");
 				ret.addAll(parse(difficulty, domain));
 				ret.addAll(parse(tempo, domain));
@@ -65,8 +65,8 @@ public class Master {
 			for (JsonElement i : jsonArray) {
 				if (i.isJsonObject()) {
 					JsonObject iObj = (JsonObject) i;
-					if (domain.equals("all") || domain.equals(JsonUtils.getString(iObj, "domain"))) {
-						list.add(new Pair<Predicate<R>, UnaryOperator<JsonElement>>(parsePattern(JsonUtils.getString(iObj, "pattern")),
+					if (domain.equals("all") || domain.equals(JSONUtils.getString(iObj, "domain"))) {
+						list.add(new Pair<Predicate<R>, UnaryOperator<JsonElement>>(parsePattern(JSONUtils.getString(iObj, "pattern")),
 								parseModifier(iObj.get("modifier"))));
 					} else {
 						continue;
@@ -127,9 +127,9 @@ public class Master {
 
 	public static JsonElement operate(JsonElement modifier, JsonElement modifiee) {
 		JsonObject jsonObj = (JsonObject) modifier;
-		String operation = JsonUtils.getString(jsonObj, "operation");
+		String operation = JSONUtils.getString(jsonObj, "operation");
 
-		float value = JsonUtils.getFloat(jsonObj, "value");
+		float value = JSONUtils.getFloat(jsonObj, "value");
 		if (operation.equals("+")) {
 			return new JsonPrimitive(modifiee.getAsFloat() + value);
 		} else if (operation.equals("*")) {

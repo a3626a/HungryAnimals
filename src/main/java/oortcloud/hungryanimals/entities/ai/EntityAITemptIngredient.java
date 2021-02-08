@@ -15,7 +15,7 @@ import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -59,8 +59,8 @@ public class EntityAITemptIngredient extends EntityAITempt {
 		
 		JsonObject jsonObject = (JsonObject)jsonEle ;
 		
-		float speed = JsonUtils.getFloat(jsonObject, "speed");
-		boolean scaredBy = JsonUtils.getBoolean(jsonObject, "scared_by");
+		float speed = JSONUtils.getFloat(jsonObject, "speed");
+		boolean scaredBy = JSONUtils.getBoolean(jsonObject, "scared_by");
 		List<Ingredient> items = ModJsonUtils.getIngredients(jsonObject.get("items"));
 
 		if (items.isEmpty()) {

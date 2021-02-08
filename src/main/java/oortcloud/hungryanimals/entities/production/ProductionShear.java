@@ -16,7 +16,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
@@ -75,23 +75,23 @@ public class ProductionShear extends ProductionInteraction {
 	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
-		String name = JsonUtils.getString(jsonObj, "name");
+		String name = JSONUtils.getString(jsonObj, "name");
 		IRange delay;
 		JsonElement jsonDelay = jsonObj.get("delay");
 		if (jsonDelay.isJsonObject()) {
 			JsonObject jsonObjDelay = jsonDelay.getAsJsonObject();
-			int min = JsonUtils.getInt(jsonObjDelay, "min");
-			int max = JsonUtils.getInt(jsonObjDelay, "max");
+			int min = JSONUtils.getInt(jsonObjDelay, "min");
+			int max = JSONUtils.getInt(jsonObjDelay, "max");
 			delay = new RangeRandom(min, max);
 		} else {
 			delay = new RangeConstant(jsonDelay.getAsInt());
 		}
-		int damage = JsonUtils.getInt(jsonObj, "damage");
-		Predicate<MobEntity> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
-		boolean disableSound = JsonUtils.getBoolean(jsonObj, "disable_sound");
-		ItemStack input = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "input"),
+		int damage = JSONUtils.getInt(jsonObj, "damage");
+		Predicate<MobEntity> condition = Conditions.parse(JSONUtils.getJsonObject(jsonObj, "condition"));
+		boolean disableSound = JSONUtils.getBoolean(jsonObj, "disable_sound");
+		ItemStack input = CraftingHelper.getItemStack(JSONUtils.getJsonObject(jsonObj, "input"),
 				new JsonContext(References.MODID));
-		ItemStack output = CraftingHelper.getItemStack(JsonUtils.getJsonObject(jsonObj, "output"),
+		ItemStack output = CraftingHelper.getItemStack(JSONUtils.getJsonObject(jsonObj, "output"),
 				new JsonContext(References.MODID));
 		return new ProductionFactory() {
 			@Override

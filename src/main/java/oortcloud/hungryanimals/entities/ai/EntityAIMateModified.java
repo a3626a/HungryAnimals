@@ -24,7 +24,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -251,7 +251,7 @@ public class EntityAIMateModified extends Goal {
 
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
-		float speed = JsonUtils.getFloat(jsonObject, "speed");
+		float speed = JSONUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> {
 			if (entity instanceof EntityCreature) {

@@ -19,7 +19,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fluids.Fluid;
@@ -171,12 +171,12 @@ public class ProductionFluid
 	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {
 		JsonObject jsonObj = jsonEle.getAsJsonObject();
 
-		String name = JsonUtils.getString(jsonObj, "name");
-		Predicate<MobEntity> condition = Conditions.parse(JsonUtils.getJsonObject(jsonObj, "condition"));
-		Fluid fluid = FluidRegistry.getFluid(JsonUtils.getString(jsonObj, "fluid"));
-		int capacity = JsonUtils.getInt(jsonObj, "capacity");
-		double amount = JsonUtils.getFloat(jsonObj, "amount");
-		double weight = JsonUtils.getFloat(jsonObj, "weight");
+		String name = JSONUtils.getString(jsonObj, "name");
+		Predicate<MobEntity> condition = Conditions.parse(JSONUtils.getJsonObject(jsonObj, "condition"));
+		Fluid fluid = FluidRegistry.getFluid(JSONUtils.getString(jsonObj, "fluid"));
+		int capacity = JSONUtils.getInt(jsonObj, "capacity");
+		double amount = JSONUtils.getFloat(jsonObj, "amount");
+		double weight = JSONUtils.getFloat(jsonObj, "weight");
 
 		return new ProductionFactory() {
 			@Override

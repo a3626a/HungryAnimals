@@ -41,7 +41,7 @@ public class SetCountBaseOnWeight extends LootFunction {
 		}
 
 		public SetCountBaseOnWeight deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootCondition[] conditionsIn) {
-			return new SetCountBaseOnWeight(conditionsIn, new WeightValueRange(JsonUtils.getFloat(object, "weight_per_meat")));
+			return new SetCountBaseOnWeight(conditionsIn, new WeightValueRange(JSONUtils.getFloat(object, "weight_per_meat")));
 		}
 	}
 

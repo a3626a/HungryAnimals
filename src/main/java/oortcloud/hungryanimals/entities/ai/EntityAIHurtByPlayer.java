@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -32,7 +32,7 @@ public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
 		
 		JsonObject jsonObject = (JsonObject)jsonEle ;
 		
-		boolean callHelp = JsonUtils.getBoolean(jsonObject, "call_help");
+		boolean callHelp = JSONUtils.getBoolean(jsonObject, "call_help");
 		
 		AIFactory factory = (entity) -> {
 			if (entity instanceof EntityCreature) {
