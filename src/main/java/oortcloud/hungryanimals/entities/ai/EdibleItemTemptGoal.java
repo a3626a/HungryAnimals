@@ -7,11 +7,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -26,7 +24,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAITemptEdibleItem extends TemptGoal {
+public class EdibleItemTemptGoal extends TemptGoal {
 	/** The entity using this AI that is tempted by the player. */
 	private final CreatureEntity temptedEntity;
 	private IFoodPreference<ItemStack> pref;
@@ -35,13 +33,13 @@ public class EntityAITemptEdibleItem extends TemptGoal {
 	@Nullable
 	private ICapabilityTamableAnimal capTaming;
 	
-	public EntityAITemptEdibleItem(CreatureEntity temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn) {
+	public EdibleItemTemptGoal(CreatureEntity temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn) {
 		super(temptedEntityIn, speedIn, scaredByPlayerMovementIn, null);
 		
 		temptedEntity = temptedEntityIn;
 		pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(this.temptedEntity.getClass());
-		capHungry = temptedEntityIn.getCapability(ProviderHungryAnimal.CAP, null);
-		capTaming = temptedEntityIn.getCapability(ProviderTamableAnimal.CAP, null);
+		capHungry = temptedEntityIn.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		capTaming = temptedEntityIn.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 	}
 
 	@Override
@@ -70,17 +68,17 @@ public class EntityAITemptEdibleItem extends TemptGoal {
 		
 		AIFactory factory = (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAITemptEdibleItem((CreatureEntity) entity, speed, scaredBy);
+				return new EdibleItemTemptGoal((CreatureEntity) entity, speed, scaredBy);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Tempt Item must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Tempt Item must extend CreatureEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};
-		aiContainer.getTask().after(EntityAISwimming.class)
+		aiContainer.getTask().after(SwimGoal.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
-		                     .before(EntityAIWanderAvoidWater.class)
+		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}
 }

@@ -165,7 +165,7 @@ public class EntityAIMoveToTrough extends Goal {
 		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
 		aiContainer.getTask().after(EntityAISwimming.class)
 		                     .before(IngredientTemptGoal.class)
-		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EdibleItemTemptGoal.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)

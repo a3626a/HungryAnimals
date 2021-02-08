@@ -262,7 +262,7 @@ public class EntityAIMateModified extends Goal {
 			}
 		};
 		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(IngredientTemptGoal.class)
-				.before(EntityAITemptEdibleItem.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
+				.before(EdibleItemTemptGoal.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
 				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);
 	}
 }

@@ -82,7 +82,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		                     .before(EntityAIMateModified.class)
 		                     .before(EntityAIMoveToTrough.class)
 		                     .before(IngredientTemptGoal.class)
-		                     .before(EntityAITemptEdibleItem.class)
+		                     .before(EdibleItemTemptGoal.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
