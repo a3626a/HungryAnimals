@@ -33,19 +33,10 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.block.ModBlocks;
-import oortcloud.hungryanimals.block.render.RenderTileEntityTrough;
+import oortcloud.hungryanimals.block.render.TroughTileEntityRenderer;
 import oortcloud.hungryanimals.client.ClientRenderEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
-import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
-import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
-import oortcloud.hungryanimals.core.network.PacketClientSyncProducingInteraction;
-import oortcloud.hungryanimals.core.network.PacketClientSyncTamable;
-import oortcloud.hungryanimals.core.network.PacketServerDGEditDouble;
-import oortcloud.hungryanimals.core.network.PacketServerDGEditInt;
-import oortcloud.hungryanimals.core.network.PacketServerDGSet;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
@@ -81,7 +72,7 @@ public class ClientProxy extends CommonProxy {
 	}
 	
 	public void registerTileEntityRendering() {
-		ClientRegistry.<TileEntityTrough>bindTileEntitySpecialRenderer(TileEntityTrough.class, new RenderTileEntityTrough());
+		ClientRegistry.<TileEntityTrough>bindTileEntitySpecialRenderer(TileEntityTrough.class, new TroughTileEntityRenderer());
 	}
 	
     @SubscribeEvent

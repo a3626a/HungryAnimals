@@ -3,7 +3,6 @@ package oortcloud.hungryanimals.block.render;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -19,13 +18,13 @@ import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderTileEntityTrough extends TileEntityRenderer<TileEntityTrough> {
+public class TroughTileEntityRenderer extends TileEntityRenderer<TileEntityTrough> {
 
 	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/modeltrough.png");
-	private ModelTrough model;
+	private TroughModel model;
 
-	public RenderTileEntityTrough() {
-		model = new ModelTrough();
+	public TroughTileEntityRenderer() {
+		model = new TroughModel();
 	}
 
 	@Override

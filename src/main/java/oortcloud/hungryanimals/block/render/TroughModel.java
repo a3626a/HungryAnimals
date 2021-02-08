@@ -6,14 +6,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelTrough extends Model {
+public class TroughModel extends Model {
 	RendererModel bottom;
 	RendererModel long1;
 	RendererModel long2;
 	RendererModel short1;
 	RendererModel short2;
 
-	public ModelTrough() {
+	public TroughModel() {
 		textureWidth = 256;
 		textureHeight = 128;
 
