@@ -1,15 +1,10 @@
 package oortcloud.hungryanimals.configuration.master;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import net.minecraftforge.fml.common.Loader;
 import oortcloud.hungryanimals.utils.R;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class NodeArrayMerger extends Node {
 

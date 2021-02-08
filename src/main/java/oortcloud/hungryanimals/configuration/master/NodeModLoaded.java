@@ -1,15 +1,9 @@
 package oortcloud.hungryanimals.configuration.master;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonElement;
-import net.minecraftforge.fml.common.Loader;
-import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.utils.R;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.*;
 
 public class NodeModLoaded extends Node {
