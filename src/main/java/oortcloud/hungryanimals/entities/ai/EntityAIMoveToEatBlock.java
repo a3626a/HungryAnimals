@@ -14,7 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.BlockPos;
@@ -260,7 +260,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 		AIFactory factory = (entity) -> new EntityAIMoveToEatBlock(entity, speed);
 		aiContainer.getTask().after(SwimGoal.class)
 					         .before(EntityAIFollowParent.class)
-				 	         .before(EntityAIWanderAvoidWater.class)
+				 	         .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}
 }

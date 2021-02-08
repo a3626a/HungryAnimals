@@ -13,7 +13,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -210,6 +210,6 @@ public class EntityAIMoveToEatItem extends Goal {
 		boolean onlyNatural = JSONUtils.getBoolean(jsonObject, "only_natural", false);
 		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed, onlyNatural);
 		aiContainer.getTask().after(SwimGoal.class).before(EntityAIMoveToEatBlock.class)
-				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);
+				.before(EntityAIFollowParent.class).before(WaterAvoidingRandomWalkingGoal.class).put(factory);
 	}
 }

@@ -11,7 +11,7 @@ import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.JSONUtils;
@@ -67,7 +67,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 		aiContainer.getTask().after(SwimGoal.class).before(EntityAIAvoidPlayer.class).before(EntityAIMateModified.class)
 				.before(EntityAIMoveToTrough.class).before(IngredientTemptGoal.class).before(EdibleItemTemptGoal.class)
 				.before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class).before(EntityAIFollowParent.class)
-				.before(EntityAIWanderAvoidWater.class).put(factory);
+				.before(WaterAvoidingRandomWalkingGoal.class).put(factory);
 	}
 
 }

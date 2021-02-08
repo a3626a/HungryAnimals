@@ -9,7 +9,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.JSONUtils;
@@ -178,7 +178,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		aiContainer.getTask().after(SwimGoal.class)
 	                         .after(EntityAIAvoidPlayer.class)
 	                         .after(EntityAIMateModified.class)
-		                     .before(EntityAIWanderAvoidWater.class)
+		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToTrough.class)

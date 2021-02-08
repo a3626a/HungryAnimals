@@ -11,7 +11,7 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
@@ -86,7 +86,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
-		                     .before(EntityAIWanderAvoidWater.class)
+		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}
 	

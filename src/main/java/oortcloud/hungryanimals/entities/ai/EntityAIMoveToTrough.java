@@ -10,7 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
@@ -169,7 +169,7 @@ public class EntityAIMoveToTrough extends Goal {
 		                     .before(EntityAIMoveToEatItem.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
-		                     .before(EntityAIWanderAvoidWater.class)
+		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}
 
