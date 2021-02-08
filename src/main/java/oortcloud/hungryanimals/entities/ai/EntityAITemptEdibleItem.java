@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
@@ -28,14 +28,14 @@ import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAITemptEdibleItem extends TemptGoal {
 	/** The entity using this AI that is tempted by the player. */
-	private final EntityCreature temptedEntity;
+	private final CreatureEntity temptedEntity;
 	private IFoodPreference<ItemStack> pref;
 
 	private ICapabilityHungryAnimal capHungry;
 	@Nullable
 	private ICapabilityTamableAnimal capTaming;
 	
-	public EntityAITemptEdibleItem(EntityCreature temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn) {
+	public EntityAITemptEdibleItem(CreatureEntity temptedEntityIn, double speedIn, boolean scaredByPlayerMovementIn) {
 		super(temptedEntityIn, speedIn, scaredByPlayerMovementIn, null);
 		
 		temptedEntity = temptedEntityIn;
@@ -69,10 +69,10 @@ public class EntityAITemptEdibleItem extends TemptGoal {
 		boolean scaredBy = JSONUtils.getBoolean(jsonObject, "scared_by");
 		
 		AIFactory factory = (entity) -> {
-			if (entity instanceof EntityCreature) {
-				return new EntityAITemptEdibleItem((EntityCreature) entity, speed, scaredBy);
+			if (entity instanceof CreatureEntity) {
+				return new EntityAITemptEdibleItem((CreatureEntity) entity, speed, scaredBy);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Tempt Item must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Tempt Item must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
 				return null;
 			}
 		};

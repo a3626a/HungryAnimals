@@ -74,7 +74,7 @@ public class IngredientTemptGoal extends TemptGoal {
 			if (entity instanceof CreatureEntity) {
 				return new IngredientTemptGoal((CreatureEntity) entity, speed, scaredBy, items);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Tempt Ingredient must extend EntityCreature. {} don't.", entity.getType().getRegistryName());
+				HungryAnimals.logger.error("Animals which uses AI Tempt Ingredient must extend CreatureEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};

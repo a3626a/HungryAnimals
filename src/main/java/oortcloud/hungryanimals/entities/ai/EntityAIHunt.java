@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.MobEntityBase;
@@ -32,7 +32,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 	private boolean herding;
     private int delay;
 	
-	public EntityAIHunt(EntityCreature creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
+	public EntityAIHunt(CreatureEntity creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(creature, MobEntity.class, chance, checkSight, onlyNearby, new Predicate<MobEntity>() {
 			@Override
 			public boolean apply(@Nullable MobEntity input) {
@@ -90,7 +90,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 	protected void alertOthers() {
 		double d0 = this.getTargetDistance();
 
-		for (EntityCreature entitycreature : this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(),
+		for (CreatureEntity entitycreature : this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(),
 				(new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D,
 						this.taskOwner.posZ + 1.0D)).grow(d0, 10.0D, d0))) {
 			boolean isItself = this.taskOwner == entitycreature;
@@ -104,7 +104,7 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 		}
 	}
 
-	protected void setEntityAttackTarget(EntityCreature creatureIn, MobEntityBase MobEntityBaseIn) {
+	protected void setEntityAttackTarget(CreatureEntity creatureIn, MobEntityBase MobEntityBaseIn) {
 		creatureIn.setAttackTarget(MobEntityBaseIn);
 	}
 
@@ -122,10 +122,10 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 		boolean herding = JSONUtils.getBoolean(jsonObject, "herding");
 		
 		AIFactory factory = (entity) -> {
-			if (entity instanceof EntityCreature) {
-				return new EntityAIHunt((EntityCreature) entity, chance, checkSight, onlyNearby, herding);
+			if (entity instanceof CreatureEntity) {
+				return new EntityAIHunt((CreatureEntity) entity, chance, checkSight, onlyNearby, herding);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Hunt must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Hunt must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
 				return null;
 			}
 		};

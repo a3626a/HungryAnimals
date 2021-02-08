@@ -14,7 +14,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -254,7 +254,7 @@ public class EntityAIMateModified extends Goal {
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
 
 		AIFactory factory = (entity) -> {
-			if (entity instanceof EntityCreature) {
+			if (entity instanceof CreatureEntity) {
 				return new EntityAIMateModified((EntityAnimal) entity, speed);
 			} else {
 				HungryAnimals.logger.error("Animals which uses AI Mate must extend EntityAnimal. {} don't.", EntityList.getKey(entity));

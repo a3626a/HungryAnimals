@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -48,7 +48,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		}
 	};
 	
-	public EntityAIAvoidPlayer(EntityCreature entity, float radius, double farspeed, double nearspeed) {
+	public EntityAIAvoidPlayer(CreatureEntity entity, float radius, double farspeed, double nearspeed) {
 		super(entity, PlayerEntity.class, predicate, radius, farspeed, nearspeed);
 		cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 	}
@@ -71,10 +71,10 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		double nearspeed = JSONUtils.getFloat(jsonObject, "nearspeed");
 		
 		AIFactory factory =  (entity) -> {
-			if (entity instanceof EntityCreature) {
-				return new EntityAIAvoidPlayer((EntityCreature) entity, radius, farspeed, nearspeed);
+			if (entity instanceof CreatureEntity) {
+				return new EntityAIAvoidPlayer((CreatureEntity) entity, radius, farspeed, nearspeed);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Avoid Player must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Avoid Player must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
 				return null;
 			}
 		};

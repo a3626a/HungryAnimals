@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,7 +21,7 @@ import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
 public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 
-	public EntityAIAttackMeleeCustom(EntityCreature creature, double speedIn, boolean useLongMemory) {
+	public EntityAIAttackMeleeCustom(CreatureEntity creature, double speedIn, boolean useLongMemory) {
 		super(creature, speedIn, useLongMemory);
 	}
 
@@ -57,10 +57,10 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 		boolean useLongMemory = JSONUtils.getBoolean(jsonObject, "use_long_memory");
 
 		AIFactory factory = (entity) -> {
-			if (entity instanceof EntityCreature) {
-				return new EntityAIAttackMeleeCustom((EntityCreature) entity, speed, useLongMemory);
+			if (entity instanceof CreatureEntity) {
+				return new EntityAIAttackMeleeCustom((CreatureEntity) entity, speed, useLongMemory);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Attack Melee must extend EntityCreature. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Attack Melee must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
 				return null;
 			}
 		};
