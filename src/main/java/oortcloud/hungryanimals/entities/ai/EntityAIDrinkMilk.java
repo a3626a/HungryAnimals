@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.SwimGoal;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -175,7 +175,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		int amount = JSONUtils.getInt(jsonObject, "amount");
 		
 		AIFactory factory = (entity) -> new EntityAIDrinkMilk(entity, speed, new FluidStack(fluid, amount));
-		aiContainer.getTask().after(EntityAISwimming.class)
+		aiContainer.getTask().after(SwimGoal.class)
 	                         .after(EntityAIAvoidPlayer.class)
 	                         .after(EntityAIMateModified.class)
 		                     .before(EntityAIWanderAvoidWater.class)

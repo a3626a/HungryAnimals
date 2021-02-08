@@ -10,7 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.SwimGoal;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -78,7 +78,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 				return null;
 			}
 		};
-		aiContainer.getTask().after(EntityAISwimming.class)
+		aiContainer.getTask().after(SwimGoal.class)
 		                     .before(EntityAIMateModified.class)
 		                     .before(EntityAIMoveToTrough.class)
 		                     .before(IngredientTemptGoal.class)

@@ -17,7 +17,7 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.SwimGoal;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -261,7 +261,7 @@ public class EntityAIMateModified extends Goal {
 				return null;
 			}
 		};
-		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIMoveToTrough.class).before(IngredientTemptGoal.class)
+		aiContainer.getTask().after(SwimGoal.class).before(EntityAIMoveToTrough.class).before(IngredientTemptGoal.class)
 				.before(EdibleItemTemptGoal.class).before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class)
 				.before(EntityAIFollowParent.class).before(EntityAIWanderAvoidWater.class).put(factory);
 	}
