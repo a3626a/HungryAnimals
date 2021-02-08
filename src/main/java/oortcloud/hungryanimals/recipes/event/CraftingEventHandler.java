@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.recipes.event;
 
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +27,7 @@ public class CraftingEventHandler {
 			if (!item.isEmpty() && state.getBlock() == Blocks.CAULDRON && (level = (Integer)state.getValue(BlockCauldron.LEVEL)) > 0) {
 				int num = RecipeAnimalGlue.getRecipe(item);
 				if (num != 0) {
-					world.spawnEntity(new EntityItem(world, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, new ItemStack(ModItems.ANIMAL_GLUE.get(), num)));
+					world.spawnEntity(new ItemEntity(world, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, new ItemStack(ModItems.ANIMAL_GLUE.get(), num)));
 					item.shrink(1);
 					world.setBlockState(pos, state.with(BlockCauldron.LEVEL, level-1));
 				}

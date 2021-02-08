@@ -14,7 +14,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
@@ -40,7 +40,7 @@ public class EntityAIMoveToEatItem extends Goal {
 	private MobEntity entity;
 	private World worldObj;
 	private double speed;
-	private EntityItem target;
+	private ItemEntity target;
 	private boolean onlyNatural;
 
 	private IFoodPreference<ItemStack> pref;
@@ -52,15 +52,15 @@ public class EntityAIMoveToEatItem extends Goal {
 	private int delayCounter;
 	private static int delay = 100;
 
-	private Predicate<EntityItem> EAT_EDIBLE = new Predicate<EntityItem>() {
-		public boolean apply(@Nullable EntityItem entityIn) {
+	private Predicate<ItemEntity> EAT_EDIBLE = new Predicate<ItemEntity>() {
+		public boolean apply(@Nullable ItemEntity entityIn) {
 			if (entityIn == null)
 				return false;
 			return pref.canEat(capHungry, entityIn.getItem());
 		}
 	};
-	private Predicate<EntityItem> EAT_NATURAL = new Predicate<EntityItem>() {
-		public boolean apply(@Nullable EntityItem entityIn) {
+	private Predicate<ItemEntity> EAT_NATURAL = new Predicate<ItemEntity>() {
+		public boolean apply(@Nullable ItemEntity entityIn) {
 			if (entityIn == null)
 				return false;
 			ItemStack item = entityIn.getItem();
@@ -100,7 +100,7 @@ public class EntityAIMoveToEatItem extends Goal {
 		} else {
 			float radius = 16.0F;
 
-			ArrayList<EntityItem> list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
+			ArrayList<ItemEntity> list = (ArrayList<ItemEntity>) worldObj.getEntitiesWithinAABB(ItemEntity.class,
 					entity.getEntityBoundingBox().grow(radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
@@ -109,7 +109,7 @@ public class EntityAIMoveToEatItem extends Goal {
 
 			if (!onlyNatural) {
 				if (entity.getRNG().nextInt(executeProbability()) == 0) {
-					list = (ArrayList<EntityItem>) worldObj.getEntitiesWithinAABB(EntityItem.class,
+					list = (ArrayList<ItemEntity>) worldObj.getEntitiesWithinAABB(ItemEntity.class,
 							entity.getEntityBoundingBox().grow(radius), EAT_EDIBLE);
 					if (!list.isEmpty()) {
 						this.target = list.get(0);

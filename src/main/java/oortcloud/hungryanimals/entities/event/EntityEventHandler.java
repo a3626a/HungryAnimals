@@ -7,7 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
@@ -524,7 +524,7 @@ public class EntityEventHandler {
 		ICapabilityTamableAnimal cap = attacker.getCapability(ProviderTamableAnimal.CAP, null);
 
 		if (Tamings.getLevel(cap) != TamingLevel.TAMED) {
-			for (EntityItem i : event.getDrops()) {
+			for (ItemEntity i : event.getDrops()) {
 				CompoundNBT tag = i.getItem().getTagCompound();
 				if (tag == null) {
 					tag = new CompoundNBT();

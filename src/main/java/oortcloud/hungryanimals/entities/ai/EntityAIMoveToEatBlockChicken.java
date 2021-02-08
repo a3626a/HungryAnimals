@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.entities.ai;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class EntityAIMoveToEatBlockChicken extends EntityAIMoveToEatBlock {
 				CompoundNBT tag = new CompoundNBT();
 				tag.setBoolean("isNatural", true);
 				stack.setTagCompound(tag);
-				EntityItem entity = new EntityItem(worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, stack);
+				ItemEntity entity = new ItemEntity(worldObj, this.entity.posX, this.entity.posY, this.entity.posZ, stack);
 				entity.motionY = 0.2;
 				worldObj.spawnEntity(entity);
 			}

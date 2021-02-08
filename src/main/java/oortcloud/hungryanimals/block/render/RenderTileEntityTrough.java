@@ -1,12 +1,15 @@
 package oortcloud.hungryanimals.block.render;
 
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.tileentity.BannerTileEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +18,8 @@ import oortcloud.hungryanimals.block.ModBlocks;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
-public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntityTrough> {
+@OnlyIn(Dist.CLIENT)
+public class RenderTileEntityTrough extends TileEntityRenderer<TileEntityTrough> {
 
 	public static final ResourceLocation texture = new ResourceLocation(References.MODID, "textures/blocks/modeltrough.png");
 	private ModelTrough model;
@@ -25,11 +29,11 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 	}
 
 	@Override
-	public void render(TileEntityTrough foodbox, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityTrough foodbox, double x, double y, double z, float partialTicks, int destroyStage) {
 		BlockState state = foodbox.getWorld().getBlockState(foodbox.getPos());
 		if (state.getBlock() != ModBlocks.TROUGH.get())
 			return;
-		Direction rot = (Direction) state.getValue(TroughBlock.FACING);
+		Direction rot = state.get(TroughBlock.HORIZONTAL_FACING);
 		int rotation = rot.getHorizontalIndex();
 
 		GL11.glPushMatrix();
@@ -41,7 +45,7 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 		GL11.glPushMatrix();
 
 		this.bindTexture(texture);
-		this.model.renderModel(0.0625F);
+		this.model.renderModel();
 
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
@@ -50,12 +54,12 @@ public class RenderTileEntityTrough extends TileEntitySpecialRenderer<TileEntity
 			ItemStack stack = foodbox.stack.copy();
 			int num = stack.getCount();
 			stack.setCount(1);
-			EntityItem item = new EntityItem(foodbox.getWorld(), 0, 0, 0, stack);
+			ItemEntity item = new ItemEntity(foodbox.getWorld(), 0, 0, 0, stack);
 			item.hoverStart = (float) (rotation * Math.PI / 2);
 
 			float interval = (float) ((2 - 2 * 0.25) / 16.0F);
 
-			RenderManager render = Minecraft.getMinecraft().getRenderManager();
+			EntityRendererManager render = Minecraft.getInstance().getRenderManager();
 
 			switch (rotation) {
 			case 0:
