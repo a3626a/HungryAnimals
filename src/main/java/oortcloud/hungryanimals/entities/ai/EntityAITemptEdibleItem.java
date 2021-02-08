@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
+import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -25,7 +26,7 @@ import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAITemptEdibleItem extends EntityAITempt {
+public class EntityAITemptEdibleItem extends TemptGoal {
 	/** The entity using this AI that is tempted by the player. */
 	private final EntityCreature temptedEntity;
 	private IFoodPreference<ItemStack> pref;

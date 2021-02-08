@@ -65,7 +65,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 			}
 		};
 		aiContainer.getTask().after(EntityAISwimming.class).before(EntityAIAvoidPlayer.class).before(EntityAIMateModified.class)
-				.before(EntityAIMoveToTrough.class).before(EntityAITemptIngredient.class).before(EntityAITemptEdibleItem.class)
+				.before(EntityAIMoveToTrough.class).before(IngredientTemptGoal.class).before(EntityAITemptEdibleItem.class)
 				.before(EntityAIMoveToEatItem.class).before(EntityAIMoveToEatBlock.class).before(EntityAIFollowParent.class)
 				.before(EntityAIWanderAvoidWater.class).put(factory);
 	}
