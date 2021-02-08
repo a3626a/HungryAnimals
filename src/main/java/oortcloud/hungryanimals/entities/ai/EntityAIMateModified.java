@@ -21,7 +21,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.JsonUtils;
@@ -174,7 +174,7 @@ public class EntityAIMateModified extends Goal {
 				childTamable.setTaming(childTaming);
 			}
 
-			EntityPlayerMP entityplayermp = this.animal.getLoveCause();
+			ServerPlayerEntity entityplayermp = this.animal.getLoveCause();
 
 			if (entityplayermp == null && this.targetMate.getLoveCause() != null) {
 				entityplayermp = this.targetMate.getLoveCause();

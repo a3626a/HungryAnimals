@@ -1,33 +1,35 @@
 package oortcloud.hungryanimals.client;
 
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntityBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.items.ModItems;
+import com.mojang.blaze3d.platform.GLX;
 
 @OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(Dist.CLIENT)
 public class ClientRenderEventHandler {
-	
 	/*
 	@SubscribeEvent
 	public void renderHerbicideGrass(RenderWorldLastEvent event) {
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer render = tessellator.getWorldRenderer();
 		float partialTickTime = event.partialTicks;
-		EntityPlayer player = (EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity();
+		PlayerEntity player = (PlayerEntity) Minecraft.getMinecraft().getRenderViewEntity();
 
 		if (player == null) {
 			return;
@@ -79,41 +81,39 @@ public class ClientRenderEventHandler {
 		GL11.glPopMatrix();
 	}
 	*/
-	
+
 	@SubscribeEvent
-	public void renderDebugGlassEntity(RenderLivingEvent.Post<EntityPlayer> event) {
-		// TODO RenderLivingEvent.Post<EntityPlayer> is called to draw Player, or by Player?
-		
+	public static void renderDebugGlassEntity(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
 		float radius = 0.5F;
 		float height = 0.7F;
 		 
-		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity entity = Minecraft.getInstance().getRenderViewEntity();
 		if (entity == null)
 			return;
 		
-		if (!(entity instanceof EntityPlayer)) {
+		if (!(entity instanceof PlayerEntity)) {
 			return;
 		}
 		
-		EntityPlayer player = (EntityPlayer)entity;
+		PlayerEntity player = (PlayerEntity)entity;
 		
-		MobEntityBase animal = event.getEntity();
+		LivingEntity animal = event.getEntity();
 		ItemStack stack = player.getHeldItemMainhand();
 		if (!stack.isEmpty() && stack.getItem() == ModItems.DEBUG_GLASS.get()) {
-			CompoundNBT tag = stack.getTagCompound();
+			CompoundNBT tag = stack.getTag();
 			if (tag != null) {
-				if (tag.hasKey("target") && tag.getInteger("target") == animal.getEntityId()) {
+				if (tag.contains("target") && tag.getInt("target") == animal.getEntityId()) {
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder renderer = tessellator.getBuffer();
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
 					GL11.glColor4f(1, 0, 0, 1);
-					OpenGlHelper.glBlendFunc(770, 771, 1, 0);	
-					float h = animal.height + height + 0.5F;
-					float f = animal.height + 0.5F;
+					GLX.glBlendFuncSeparate(770, 771, 1, 0);
+					float h = animal.getHeight() + height + 0.5F;
+					float f = animal.getHeight() + 0.5F;
 					GL11.glPushMatrix();
 					GL11.glTranslated(event.getX(), event.getY(), event.getZ());
-					GL11.glRotatef(4 * event.getEntity().getEntityWorld().getWorldTime(), 0, 1, 0);
+					GL11.glRotatef(4 * event.getEntity().getEntityWorld().getGameTime(), 0, 1, 0);
 					renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					renderer.pos(+radius, +h, +radius).endVertex();
 					renderer.pos(+radius, +h, -radius).endVertex();

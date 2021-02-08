@@ -7,7 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -21,7 +21,7 @@ public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
 
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && this.taskOwner.getRevengeTarget() instanceof EntityPlayer ;
+		return super.shouldExecute() && this.taskOwner.getRevengeTarget() instanceof PlayerEntity ;
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {

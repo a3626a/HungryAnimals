@@ -12,7 +12,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -24,17 +24,17 @@ import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIAvoidPlayer extends AvoidEntityGoal<EntityPlayer> {
+public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 	
 	@Nullable
 	private ICapabilityTamableAnimal cap;
 	
-	private static final Predicate<EntityPlayer> predicate = new Predicate<EntityPlayer>() {
+	private static final Predicate<PlayerEntity> predicate = new Predicate<PlayerEntity>() {
 		/**
 		 * Select players
 		 * Players who has "debug glass" in creative mode are ignored.
 		 */
-		public boolean apply(@Nullable EntityPlayer player) {
+		public boolean apply(@Nullable PlayerEntity player) {
 			if (player == null)
 				return false;
 			if (!player.capabilities.isCreativeMode)
@@ -49,7 +49,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<EntityPlayer> {
 	};
 	
 	public EntityAIAvoidPlayer(EntityCreature entity, float radius, double farspeed, double nearspeed) {
-		super(entity, EntityPlayer.class, predicate, radius, farspeed, nearspeed);
+		super(entity, PlayerEntity.class, predicate, radius, farspeed, nearspeed);
 		cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
 	}
 	

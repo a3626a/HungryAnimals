@@ -10,8 +10,8 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -140,7 +140,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 						childHungry.addStomach(pref.getStomach(drain));
 						
 						WorldServer world = (WorldServer) childAnimal.getEntityWorld();
-						for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
+						for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
 							AxisAlignedBB boxMilking = childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox());
 							Vec3d pointMilking = new Vec3d(
 									(boxMilking.maxX + boxMilking.minX) * 0.5D,
@@ -148,7 +148,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 									(boxMilking.maxZ + boxMilking.minZ) * 0.5D
 							);
 							PacketClientSpawnParticle packet = new PacketClientSpawnParticle(pointMilking);
-							HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
+							HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
 						}
 					}
 					

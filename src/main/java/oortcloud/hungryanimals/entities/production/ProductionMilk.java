@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -45,7 +45,7 @@ public class ProductionMilk extends ProductionInteraction {
 
 	@Override
 	public EnumActionResult interact(EntityInteract event, EnumHand hand, @Nonnull ItemStack itemstack) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayerEntity();
 		if (canProduce()) {
 			if (condition.apply(animal)) {
 				if (itemstack.isItemEqual(emptyBucket)) {

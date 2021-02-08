@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -67,7 +67,7 @@ public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 		return productions;
 	}
 
-	public void syncTo(EntityPlayerMP target) {
+	public void syncTo(ServerPlayerEntity target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			for (IProduction i : productions) {
 				if (i instanceof ISyncable) {

@@ -13,8 +13,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.CompoundNBT;
@@ -166,11 +166,11 @@ public class EntityBola extends Entity implements IProjectile {
             raytraceresult = new RayTraceResult(entity);
         }
 		
-        if (raytraceresult != null && raytraceresult.entityHit != null && raytraceresult.entityHit instanceof EntityPlayer)
+        if (raytraceresult != null && raytraceresult.entityHit != null && raytraceresult.entityHit instanceof PlayerEntity)
         {
-            EntityPlayer entityplayer = (EntityPlayer)raytraceresult.entityHit;
+            PlayerEntity entityplayer = (PlayerEntity)raytraceresult.entityHit;
 
-            if (this.shootingEntity instanceof EntityPlayer && !((EntityPlayer)this.shootingEntity).canAttackPlayer(entityplayer))
+            if (this.shootingEntity instanceof PlayerEntity && !((PlayerEntity)this.shootingEntity).canAttackPlayer(entityplayer))
             {
                 raytraceresult = null;
             }
@@ -237,9 +237,9 @@ public class EntityBola extends Entity implements IProjectile {
 					MobEntitybase.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 3));
 					
 					//TODO reveal what does  SPacketChangeGameState(6, 0.0F) do
-					if (this.shootingEntity != null && MobEntitybase != this.shootingEntity && MobEntitybase instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP)
+					if (this.shootingEntity != null && MobEntitybase != this.shootingEntity && MobEntitybase instanceof PlayerEntity && this.shootingEntity instanceof ServerPlayerEntity)
 	                {
-	                    ((EntityPlayerMP)this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
+	                    ((ServerPlayerEntity)this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
 	                }
 				}
 

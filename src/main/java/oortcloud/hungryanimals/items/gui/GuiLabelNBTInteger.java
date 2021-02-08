@@ -2,7 +2,7 @@ package oortcloud.hungryanimals.items.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class GuiLabelNBTInteger extends GuiPlacable {
@@ -20,7 +20,7 @@ public class GuiLabelNBTInteger extends GuiPlacable {
 	}
 
 	public void update() {
-		EntityPlayer player = ((EntityPlayer) Minecraft.getMinecraft().getRenderViewEntity());
+		PlayerEntity player = ((PlayerEntity) Minecraft.getMinecraft().getRenderViewEntity());
 		if (player != null) {
 			// player can be null during launch / close
 			CompoundNBT tag = player.getHeldItemMainhand().getTagCompound();

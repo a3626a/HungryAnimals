@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -68,13 +68,13 @@ public class CapabilityHandler {
 		Entity target = event.getTarget();
 		CapabilityTamableAnimal capTamable = (CapabilityTamableAnimal) target.getCapability(ProviderTamableAnimal.CAP, null);
 		if (capTamable != null)
-			capTamable.syncTo((EntityPlayerMP) event.getEntityPlayer());
+			capTamable.syncTo((ServerPlayerEntity) event.getPlayerEntity());
 		CapabilityHungryAnimal capHungry = (CapabilityHungryAnimal) target.getCapability(ProviderHungryAnimal.CAP, null);
 		if (capHungry != null)
-			capHungry.syncTo((EntityPlayerMP) event.getEntityPlayer());
+			capHungry.syncTo((ServerPlayerEntity) event.getPlayerEntity());
 		CapabilityProducingAnimal capProducing = (CapabilityProducingAnimal) target.getCapability(ProviderProducingAnimal.CAP, null);
 		if (capProducing != null)
-			capProducing.syncTo((EntityPlayerMP) event.getEntityPlayer());
+			capProducing.syncTo((ServerPlayerEntity) event.getPlayerEntity());
 	}
 
 }

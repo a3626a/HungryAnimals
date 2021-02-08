@@ -12,8 +12,8 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
@@ -94,14 +94,14 @@ public class ProductionFluid
 	public void sync() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) animal.getEntityWorld();
-			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(animal)) {
+			for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(animal)) {
 				PacketClientSyncProducingFluid packet = new PacketClientSyncProducingFluid(animal, getName(), tank);
-				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
+				HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
 			}
 		}
 	}
 
-	public void syncTo(EntityPlayerMP target) {
+	public void syncTo(ServerPlayerEntity target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			PacketClientSyncProducingFluid packet = new PacketClientSyncProducingFluid(animal, getName(), tank);
 			HungryAnimals.simpleChannel.sendTo(packet, target);
@@ -146,7 +146,7 @@ public class ProductionFluid
 
 	@Override
 	public EnumActionResult interact(EntityInteract event, EnumHand hand, @Nonnull ItemStack itemstack) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayerEntity();
 
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!heldItem.isEmpty()) {

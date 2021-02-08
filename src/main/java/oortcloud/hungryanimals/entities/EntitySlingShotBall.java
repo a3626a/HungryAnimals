@@ -13,8 +13,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SPacketChangeGameState;
@@ -153,10 +153,10 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 			raytraceresult = new RayTraceResult(entity);
 		}
 
-		if (raytraceresult != null && raytraceresult.entityHit instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) raytraceresult.entityHit;
+		if (raytraceresult != null && raytraceresult.entityHit instanceof PlayerEntity) {
+			PlayerEntity entityplayer = (PlayerEntity) raytraceresult.entityHit;
 
-			if (this.shootingEntity instanceof EntityPlayer && !((EntityPlayer) this.shootingEntity).canAttackPlayer(entityplayer)) {
+			if (this.shootingEntity instanceof PlayerEntity && !((PlayerEntity) this.shootingEntity).canAttackPlayer(entityplayer)) {
 				raytraceresult = null;
 			}
 		}
@@ -215,9 +215,9 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 					}
 
 					// TODO reveal what does SPacketChangeGameState(6, 0.0F) do
-					if (this.shootingEntity != null && MobEntitybase != this.shootingEntity && MobEntitybase instanceof EntityPlayer
-							&& this.shootingEntity instanceof EntityPlayerMP) {
-						((EntityPlayerMP) this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
+					if (this.shootingEntity != null && MobEntitybase != this.shootingEntity && MobEntitybase instanceof PlayerEntity
+							&& this.shootingEntity instanceof ServerPlayerEntity) {
+						((ServerPlayerEntity) this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
 					}
 				}
 

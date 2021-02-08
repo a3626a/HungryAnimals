@@ -1,8 +1,8 @@
 package oortcloud.hungryanimals.entities.production;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.world.WorldServer;
@@ -66,14 +66,14 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 	public void sync() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			WorldServer world = (WorldServer) animal.getEntityWorld();
-			for (EntityPlayer i : world.getEntityTracker().getTrackingPlayers(animal)) {
+			for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(animal)) {
 				PacketClientSyncProducingInteraction packet = new PacketClientSyncProducingInteraction(animal, getName(), cooldown);
-				HungryAnimals.simpleChannel.sendTo(packet, (EntityPlayerMP) i);
+				HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
 			}
 		}
 	}
 
-	public void syncTo(EntityPlayerMP target) {
+	public void syncTo(ServerPlayerEntity target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			PacketClientSyncProducingInteraction packet = new PacketClientSyncProducingInteraction(animal, getName(), cooldown);
 			HungryAnimals.simpleChannel.sendTo(packet, target);

@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.MobEntityBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
@@ -54,7 +54,7 @@ public class ModelItemBola implements IBakedModel {
 		return new ItemOverrideList(ImmutableList.of()) {
 			@Override
 			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack itemStack, @Nullable World world, @Nullable MobEntityBase entity) {
-				EntityPlayer player = Minecraft.getMinecraft().player;
+				PlayerEntity player = Minecraft.getMinecraft().player;
 				if (player.getActiveItemStack() == itemStack) {
 					int inuseTick = itemStack.getMaxItemUseDuration() - player.getItemInUseCount();
 					angleMainhand = 0.3f * inuseTick * inuseTick + 10 * inuseTick;

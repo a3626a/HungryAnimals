@@ -17,7 +17,7 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -292,7 +292,7 @@ public class EntityEventHandler {
 			if (cap == null)
 				return;
 
-			List<EntityPlayer> players = entity.getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class,
+			List<PlayerEntity> players = entity.getEntityWorld().getEntitiesWithinAABB(PlayerEntity.class,
 					entity.getEntityBoundingBox().grow(radius));
 			double tamingFactorWild = entity.getEntityAttribute(ModAttributes.taming_factor_near_wild)
 					.getAttributeValue();
@@ -342,7 +342,7 @@ public class EntityEventHandler {
 
 		DamageSource source = event.getSource();
 		if (!entity.isEntityInvulnerable(source)) {
-			if (source.getTrueSource() instanceof EntityPlayer) {
+			if (source.getTrueSource() instanceof PlayerEntity) {
 				cap.addTaming(-4 / entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue()
 						* event.getAmount());
 			}

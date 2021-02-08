@@ -35,7 +35,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.block.ModBlocks;
 import oortcloud.hungryanimals.block.render.TroughTileEntityRenderer;
-import oortcloud.hungryanimals.client.ClientRenderEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
@@ -169,7 +168,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerEventHandler() {
 		super.registerEventHandler();
-		MinecraftForge.EVENT_BUS.register(new ClientRenderEventHandler());
 		DebugOverlayHandler debugOverlay = new DebugOverlayHandler(Minecraft.getMinecraft());
 		MinecraftForge.EVENT_BUS.register(debugOverlay);
 	}
