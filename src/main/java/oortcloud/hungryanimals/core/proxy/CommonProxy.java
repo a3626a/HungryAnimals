@@ -12,9 +12,6 @@ import oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility;
 import oortcloud.hungryanimals.configuration.ConfigurationEventHandler;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.core.network.HandlerServerDGEditDouble;
-import oortcloud.hungryanimals.core.network.HandlerServerDGEditInt;
-import oortcloud.hungryanimals.core.network.HandlerServerDGSet;
 import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
 import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
@@ -41,7 +38,6 @@ import oortcloud.hungryanimals.entities.capability.StorageProducingAnimal;
 import oortcloud.hungryanimals.entities.capability.StorageSexual;
 import oortcloud.hungryanimals.entities.capability.StorageTamableAnimal;
 import oortcloud.hungryanimals.entities.event.EntityEventHandler;
-import oortcloud.hungryanimals.entities.loot_tables.ModLootTables;
 import oortcloud.hungryanimals.recipes.event.CraftingEventHandler;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 
@@ -112,14 +108,63 @@ public class CommonProxy {
 	}
 
 	public void registerPacketHandler() {
-		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGEditInt.class, PacketServerDGEditInt.class, 0, Side.SERVER);
-		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGEditDouble.class, PacketServerDGEditDouble.class, 1, Side.SERVER);
-		HungryAnimals.simpleChannel.registerMessage(HandlerServerDGSet.class, PacketServerDGSet.class, 2, Side.SERVER);
-		HungryAnimals.simpleChannel.registerMessage((message, ctx)->{return null;}, PacketClientSpawnParticle.class, 3, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage((message, ctx)->{return null;}, PacketClientSyncTamable.class, 4, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage((message, ctx)->{return null;}, PacketClientSyncHungry.class, 5, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage((message, ctx)->{return null;}, PacketClientSyncProducingFluid.class, 6, Side.CLIENT);
-		HungryAnimals.simpleChannel.registerMessage((message, ctx)->{return null;}, PacketClientSyncProducingInteraction.class, 7, Side.CLIENT);
+		int index = 0;
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketServerDGEditInt.class,
+				PacketServerDGEditInt::toBytes,
+				PacketServerDGEditInt::new,
+				PacketServerDGEditInt::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketServerDGEditDouble.class,
+				PacketServerDGEditDouble::toBytes,
+				PacketServerDGEditDouble::new,
+				PacketServerDGEditDouble::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketServerDGSet.class,
+				PacketServerDGSet::toBytes,
+				PacketServerDGSet::new,
+				PacketServerDGSet::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketClientSpawnParticle.class,
+				PacketClientSpawnParticle::toBytes,
+				PacketClientSpawnParticle::new,
+				PacketClientSpawnParticle::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketClientSyncTamable.class,
+				PacketClientSyncTamable::toBytes,
+				PacketClientSyncTamable::new,
+				PacketClientSyncTamable::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketClientSyncHungry.class,
+				PacketClientSyncHungry::toBytes,
+				PacketClientSyncHungry::new,
+				PacketClientSyncHungry::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketClientSyncProducingFluid.class,
+				PacketClientSyncProducingFluid::toBytes,
+				PacketClientSyncProducingFluid::new,
+				PacketClientSyncProducingFluid::onMessage
+		);
+		HungryAnimals.simpleChannel.registerMessage(
+				index++,
+				PacketClientSyncProducingInteraction.class,
+				PacketClientSyncProducingInteraction::toBytes,
+				PacketClientSyncProducingInteraction::new,
+				PacketClientSyncProducingInteraction::onMessage
+		);
 	}
 
 }

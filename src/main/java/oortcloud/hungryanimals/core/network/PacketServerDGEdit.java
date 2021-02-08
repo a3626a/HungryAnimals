@@ -1,38 +1,22 @@
 package oortcloud.hungryanimals.core.network;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 
-public class PacketServerDGEdit implements IMessage {
-
-	public int id;
+public class PacketServerDGEdit {
+	public int entityId;
 	public String target;
 	
-	public PacketServerDGEdit() {
-		this(null, "");
-	}
-	
-	public PacketServerDGEdit(Entity entity, String target) {
-		if (entity != null) {
-			this.id = entity.getEntityId();
-		} else {
-			this.id = -1;
-		}
+	public PacketServerDGEdit(int entityId, String target) {
+		this.entityId = entityId;
 		this.target = target;
 	}
-	
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		id = buf.readInt();
-		target = ByteBufUtils.readUTF8String(buf);
+
+	public PacketServerDGEdit(PacketBuffer buf) {
+		this(buf.readInt(), buf.readString());
 	}
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(id);
-		ByteBufUtils.writeUTF8String(buf, target);
+	public void toBytes(PacketBuffer buf) {
+		buf.writeInt(entityId);
+		buf.writeString(target);
 	}
-
 }
