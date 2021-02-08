@@ -13,7 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import oortcloud.hungryanimals.entities.ai.EntityAIMoveToTrough;
+import oortcloud.hungryanimals.entities.ai.MoveToTroughGoal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityHungryAnimal;
 import oortcloud.hungryanimals.entities.capability.ICapabilityTamableAnimal;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -54,8 +54,8 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 					IFoodPreference<ItemStack> pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(i.getClass());
 					if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && pref.canEat(capHungry, this.stack)) {
 						i.tasks.taskEntries.forEach(entry -> {
-							if (entry.action instanceof EntityAIMoveToTrough) {
-								((EntityAIMoveToTrough)entry.action).pos = this.pos;
+							if (entry.action instanceof MoveToTroughGoal) {
+								((MoveToTroughGoal)entry.action).pos = this.pos;
 							}
 						});
 					}

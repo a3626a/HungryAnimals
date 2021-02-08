@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +37,9 @@ import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.tileentities.TileEntityTrough;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIMoveToTrough extends Goal {
+import java.util.EnumSet;
+
+public class MoveToTroughGoal extends Goal {
 
 	private MobEntity entity;
 	private double speed;
@@ -52,17 +54,17 @@ public class EntityAIMoveToTrough extends Goal {
 	private ICapabilityAgeable capAgeable;
 	private IFoodPreference<ItemStack> pref;
 
-	public EntityAIMoveToTrough(MobEntity entity, double speed) {
+	public MoveToTroughGoal(MobEntity entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
-		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
-		this.capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
+		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
+		this.capAgeable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		this.entity = entity;
 		this.world = this.entity.getEntityWorld();
 		this.speed = speed;
-		this.setMutexBits(1);
+		this.setMutexFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override
@@ -100,7 +102,7 @@ public class EntityAIMoveToTrough extends Goal {
 	@Override
 	public boolean shouldContinueExecuting() {
 		float distSq = 2;
-		if (pos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distSq) {
+		if (pos.distanceSq(entity.posX, entity.posY, entity.posZ, true) <= distSq) {
 			BlockState state = world.getBlockState(pos);
 			if (state.getBlock() == ModBlocks.TROUGH.get()) {
 				TileEntity tileEntity = ((TroughBlock) state.getBlock()).getTileEntity(world, pos);
@@ -131,17 +133,17 @@ public class EntityAIMoveToTrough extends Goal {
 		capHungry.addStomach(stomach);
 
 		if (capAgeable != null && capAgeable.getAge() < 0) {
-			CompoundNBT tag = item.getTagCompound();
-			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (nutrient / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
-				this.entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
+			CompoundNBT tag = item.getTag();
+			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
+				int duration = (int) (nutrient / entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue());
+				this.entity.addPotionEffect(new EffectInstance(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
-		CompoundNBT tag = item.getTagCompound();
-		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+		CompoundNBT tag = item.getTag();
+		if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 			if (this.capTaming != null) {
-				this.capTaming.addTaming(0.0002 / entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+				this.capTaming.addTaming(0.0002 / entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue() * nutrient);
 			}
 		}
 
@@ -162,7 +164,7 @@ public class EntityAIMoveToTrough extends Goal {
 
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
 
-		AIFactory factory = (entity) -> new EntityAIMoveToTrough(entity, speed);
+		AIFactory factory = (entity) -> new MoveToTroughGoal(entity, speed);
 		aiContainer.getTask().after(SwimGoal.class)
 		                     .before(IngredientTemptGoal.class)
 		                     .before(EdibleItemTemptGoal.class)

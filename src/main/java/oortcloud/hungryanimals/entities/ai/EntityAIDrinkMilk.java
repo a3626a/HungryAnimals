@@ -181,7 +181,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIMoveToEatItem.class)
-		                     .before(EntityAIMoveToTrough.class)
+		                     .before(MoveToTroughGoal.class)
 		                     .put(factory);
 	}
 
