@@ -190,7 +190,7 @@ public class EntityAIMateModified extends Goal {
 			this.targetMate.resetInLove();
 			entityageable.setGrowingAge(-childGrowingLength);
 			entityageable.setLocationAndAngles(this.animal.posX, this.animal.posY, this.animal.posZ, 0.0F, 0.0F);
-			this.theWorld.spawnEntity(entityageable);
+			this.theWorld.addEntity(entityageable);
 			Random random = this.animal.getRNG();
 
 			for (int i = 0; i < 7; ++i) {
@@ -205,7 +205,7 @@ public class EntityAIMateModified extends Goal {
 			}
 
 			if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
-				this.theWorld.spawnEntity(new EntityXPOrb(this.theWorld, this.animal.posX, this.animal.posY, this.animal.posZ, random.nextInt(7) + 1));
+				this.theWorld.addEntity(new EntityXPOrb(this.theWorld, this.animal.posX, this.animal.posY, this.animal.posZ, random.nextInt(7) + 1));
 			}
 		} else {
 			this.animal.resetInLove();
