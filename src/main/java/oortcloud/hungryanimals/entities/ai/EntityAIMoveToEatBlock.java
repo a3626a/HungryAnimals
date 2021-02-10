@@ -15,7 +15,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -172,7 +172,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 				if (bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
 					state = State.EATING;
 					eatingGrassTimer = 40;
-					if (entity instanceof EntitySheep) {
+					if (entity instanceof SheepEntity) {
 						worldObj.setEntityState(entity, (byte)10);
 					}
 					entity.getNavigator().clearPath();
@@ -242,7 +242,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 		double stomach = pref.getStomach(block);
 		capHungry.addStomach(stomach);
 
-		if (entity instanceof EntitySheep) {
+		if (entity instanceof SheepEntity) {
 			entity.eatGrassBonus();
 		}
 	}

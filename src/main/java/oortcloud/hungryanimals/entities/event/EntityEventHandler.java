@@ -14,7 +14,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -465,7 +465,7 @@ public class EntityEventHandler {
 				}
 			}
 		}
-		if (entity instanceof EntitySheep) {
+		if (entity instanceof SheepEntity) {
 			/*
 			 * if (item == Items.SHEARS) { // TODO How to disable all 'shearing' items...!
 			 * return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS); }

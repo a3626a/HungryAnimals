@@ -9,7 +9,7 @@ import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAIMate;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.SheepEntity;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class AIContainerHerbivore extends AIContainer {
