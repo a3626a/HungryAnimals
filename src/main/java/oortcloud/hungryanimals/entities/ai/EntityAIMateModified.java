@@ -161,7 +161,7 @@ public class EntityAIMateModified extends Goal {
 			ICapabilityTamableAnimal childTamable = entityageable.getCapability(ProviderTamableAnimal.CAP, null);
 
 			// Pay Hunger
-			double weight_child = entityageable.getEntityAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
+			double weight_child = entityageable.getAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
 			if (targetMateCapHungry != null) {
 				targetMateCapHungry.addWeight(-weight_child / 2);
 			}
@@ -185,9 +185,9 @@ public class EntityAIMateModified extends Goal {
 				CriteriaTriggers.BRED_ANIMALS.trigger(entityplayermp, this.animal, this.targetMate, entityageable);
 			}
 
-			int animalDelay = (int) animal.getEntityAttribute(ModAttributes.child_delay).getAttributeValue();
-			int targetMateDelay = (int) targetMate.getEntityAttribute(ModAttributes.child_delay).getAttributeValue();
-			int childGrowingLength = (int) entityageable.getEntityAttribute(ModAttributes.child_growing_length).getAttributeValue();
+			int animalDelay = (int) animal.getAttribute(ModAttributes.child_delay).getAttributeValue();
+			int targetMateDelay = (int) targetMate.getAttribute(ModAttributes.child_delay).getAttributeValue();
+			int childGrowingLength = (int) entityageable.getAttribute(ModAttributes.child_growing_length).getAttributeValue();
 			this.animal.setGrowingAge(animalDelay);
 			this.targetMate.setGrowingAge(targetMateDelay);
 			this.animal.resetInLove();
