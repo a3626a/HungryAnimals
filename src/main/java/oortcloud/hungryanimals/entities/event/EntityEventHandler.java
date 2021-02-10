@@ -496,7 +496,7 @@ public class EntityEventHandler {
 		
 		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
 		if (ageable != null && ageable.getAge() < 0) {
-			CompoundNBT tag = item.getTagCompound();
+			CompoundNBT tag = item.getTag();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
@@ -504,7 +504,7 @@ public class EntityEventHandler {
 			}
 		}
 
-		CompoundNBT tag = item.getTagCompound();
+		CompoundNBT tag = item.getTag();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			if (capTaming != null) {
@@ -525,7 +525,7 @@ public class EntityEventHandler {
 
 		if (Tamings.getLevel(cap) != TamingLevel.TAMED) {
 			for (ItemEntity i : event.getDrops()) {
-				CompoundNBT tag = i.getItem().getTagCompound();
+				CompoundNBT tag = i.getItem().getTag();
 				if (tag == null) {
 					tag = new CompoundNBT();
 					i.getItem().setTagCompound(tag);
