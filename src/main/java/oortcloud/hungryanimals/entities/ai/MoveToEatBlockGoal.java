@@ -261,7 +261,7 @@ public class MoveToEatBlockGoal extends Goal {
 
 		AIFactory factory = (entity) -> new MoveToEatBlockGoal(entity, speed);
 		aiContainer.getTask().after(SwimGoal.class)
-					         .before(EntityAIFollowParent.class)
+					         .before(FollowParentGoal.class)
 				 	         .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}

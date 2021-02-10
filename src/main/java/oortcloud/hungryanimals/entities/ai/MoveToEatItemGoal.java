@@ -211,6 +211,6 @@ public class MoveToEatItemGoal extends Goal {
 		boolean onlyNatural = JSONUtils.getBoolean(jsonObject, "only_natural", false);
 		AIFactory factory = (entity) -> new MoveToEatItemGoal(entity, speed, onlyNatural);
 		aiContainer.getTask().after(SwimGoal.class).before(MoveToEatBlockGoal.class)
-				.before(EntityAIFollowParent.class).before(WaterAvoidingRandomWalkingGoal.class).put(factory);
+				.before(FollowParentGoal.class).before(WaterAvoidingRandomWalkingGoal.class).put(factory);
 	}
 }

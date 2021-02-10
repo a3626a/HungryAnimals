@@ -82,7 +82,7 @@ public class IngredientTemptGoal extends TemptGoal {
 		                     .before(EdibleItemTemptGoal.class)
 		                     .before(MoveToEatItemGoal.class)
 		                     .before(MoveToEatBlockGoal.class)
-		                     .before(EntityAIFollowParent.class)
+		                     .before(FollowParentGoal.class)
 		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}

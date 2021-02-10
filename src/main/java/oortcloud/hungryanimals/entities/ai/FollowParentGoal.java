@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gson.JsonElement;
@@ -17,8 +18,7 @@ import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 import oortcloud.hungryanimals.entities.capability.ICapabilityAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 
-public class EntityAIFollowParent extends Goal {
-	/** The child that is following its parent. */
+public class FollowParentGoal extends Goal {
 	protected MobEntity childAnimal;
 	protected MobEntity parentAnimal;
 	double moveSpeed;
@@ -26,12 +26,11 @@ public class EntityAIFollowParent extends Goal {
 
 	protected ICapabilityAgeable ageable;
 	
-	public EntityAIFollowParent(MobEntity animal, double speed) {
+	public FollowParentGoal(MobEntity animal, double speed) {
 		this.childAnimal = animal;
-		this.ageable = childAnimal.getCapability(ProviderAgeable.CAP, null);
+		this.ageable = childAnimal.getCapability(ProviderAgeable.CAP).orElse(null);
 		this.moveSpeed = speed;
-
-		setMutexBits(3);
+		this.setMutexFlags(EnumSet.of(Flag.MOVE,Flag.JUMP));
 	}
 
 	/**
@@ -43,7 +42,7 @@ public class EntityAIFollowParent extends Goal {
 		} else if (ageable.getAge() >= 0) {
 			return false;
 		} else {
-			List<MobEntity> list = this.childAnimal.world.<MobEntity>getEntitiesWithinAABB(this.childAnimal.getClass(),
+			List<MobEntity> list = this.childAnimal.world.getEntitiesWithinAABB(this.childAnimal.getClass(),
 					this.childAnimal.getBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
 			MobEntity entityanimal = null;
 			double d0 = Double.MAX_VALUE;
@@ -69,7 +68,7 @@ public class EntityAIFollowParent extends Goal {
 	}
 
 	protected boolean isParent(MobEntity parent) {
-		ICapabilityAgeable age = parent.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityAgeable age = parent.getCapability(ProviderAgeable.CAP).orElse(null);
 		return age == null || age.getAge() >= 0;
 	}
 
@@ -121,7 +120,7 @@ public class EntityAIFollowParent extends Goal {
 
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
 
-		AIFactory factory = (entity) -> new EntityAIFollowParent(entity, speed);
+		AIFactory factory = (entity) -> new FollowParentGoal(entity, speed);
 		aiContainer.getTask().after(SwimGoal.class).before(WaterAvoidingRandomWalkingGoal.class).put(factory);
 	}
 }

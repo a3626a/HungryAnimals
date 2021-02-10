@@ -35,7 +35,7 @@ import oortcloud.hungryanimals.entities.production.ProductionFluid;
 
 import javax.annotation.Nullable;
 
-public class EntityAIDrinkMilk extends EntityAIFollowParent {
+public class DrinkMilkGoal extends FollowParentGoal {
 
 	@Nullable
 	private ICapabilityHungryAnimal childHungry;
@@ -51,7 +51,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 
 	private FluidStack fluid;
 	
-	public EntityAIDrinkMilk(MobEntity animal, double speed, FluidStack fluid) {
+	public DrinkMilkGoal(MobEntity animal, double speed, FluidStack fluid) {
 		super(animal, speed);
 		this.fluid = fluid;
 		childHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
@@ -174,7 +174,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		Fluid fluid = FluidRegistry.getFluid(JSONUtils.getString(jsonObject, "fluid"));
 		int amount = JSONUtils.getInt(jsonObject, "amount");
 		
-		AIFactory factory = (entity) -> new EntityAIDrinkMilk(entity, speed, new FluidStack(fluid, amount));
+		AIFactory factory = (entity) -> new DrinkMilkGoal(entity, speed, new FluidStack(fluid, amount));
 		aiContainer.getTask().after(SwimGoal.class)
 	                         .after(AvoidPlayerGoal.class)
 	                         .after(MateModifiedGoal.class)

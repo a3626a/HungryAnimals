@@ -90,7 +90,7 @@ public class AvoidPlayerGoal extends AvoidEntityGoal<PlayerEntity> {
 		                     .before(EdibleItemTemptGoal.class)
 		                     .before(MoveToEatItemGoal.class)
 		                     .before(MoveToEatBlockGoal.class)
-		                     .before(EntityAIFollowParent.class)
+		                     .before(FollowParentGoal.class)
 		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);
 	}
