@@ -17,7 +17,6 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -64,7 +63,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			if (entityIn == null)
 				return false;
 			ItemStack item = entityIn.getItem();
-			CompoundNBT tag = item.getTagCompound();
+			CompoundNBT tag = item.getTag();
 			if (tag != null) {
 				return tag.hasKey("isNatural") && tag.getBoolean("isNatural");
 			}
@@ -180,7 +179,7 @@ public class EntityAIMoveToEatItem extends Goal {
 		capHungry.addStomach(stomach);
 
 		if (capAgeable != null && capAgeable.getAge() < 0) {
-			CompoundNBT tag = item.getTagCompound();
+			CompoundNBT tag = item.getTag();
 			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
@@ -188,7 +187,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			}
 		}
 
-		CompoundNBT tag = item.getTagCompound();
+		CompoundNBT tag = item.getTag();
 		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			if (capTaming != null) {

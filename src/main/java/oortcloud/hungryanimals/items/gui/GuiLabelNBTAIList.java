@@ -37,7 +37,7 @@ public class GuiLabelNBTAIList extends GuiPlacable {
 		PlayerEntity player = ((PlayerEntity) Minecraft.getMinecraft().getRenderViewEntity());
 		if (player != null) {
 			// player can be null during launch / close
-			CompoundNBT tag = player.getHeldItemMainhand().getTagCompound();
+			CompoundNBT tag = player.getHeldItemMainhand().getTag();
 			if (tag != null) {
 				data = new ArrayList<>();
 				for (int i = 0; i < tag.getInteger("ais.length"); i++) {

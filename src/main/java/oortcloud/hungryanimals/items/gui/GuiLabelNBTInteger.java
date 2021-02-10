@@ -23,7 +23,7 @@ public class GuiLabelNBTInteger extends GuiPlacable {
 		PlayerEntity player = ((PlayerEntity) Minecraft.getMinecraft().getRenderViewEntity());
 		if (player != null) {
 			// player can be null during launch / close
-			CompoundNBT tag = player.getHeldItemMainhand().getTagCompound();
+			CompoundNBT tag = player.getHeldItemMainhand().getTag();
 			if (tag != null)
 				data = tag.getInteger(key);
 		}
