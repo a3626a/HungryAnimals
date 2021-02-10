@@ -65,7 +65,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			ItemStack item = entityIn.getItem();
 			CompoundNBT tag = item.getTag();
 			if (tag != null) {
-				return tag.hasKey("isNatural") && tag.getBoolean("isNatural");
+				return tag.contains("isNatural") && tag.getBoolean("isNatural");
 			}
 			return false;
 		}
@@ -180,7 +180,7 @@ public class EntityAIMoveToEatItem extends Goal {
 
 		if (capAgeable != null && capAgeable.getAge() < 0) {
 			CompoundNBT tag = item.getTag();
-			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
@@ -188,7 +188,7 @@ public class EntityAIMoveToEatItem extends Goal {
 		}
 
 		CompoundNBT tag = item.getTag();
-		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+		if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			if (capTaming != null) {
 				capTaming.addTaming(taming_factor

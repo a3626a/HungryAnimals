@@ -81,7 +81,7 @@ public class EntityEventHandler {
 			chicken.timeUntilNextEgg = Integer.MAX_VALUE;
 		}
 
-		if (!entity.getEntityData().hasKey(References.MODID + ".isInitialized")) {
+		if (!entity.getEntityData().contains(References.MODID + ".isInitialized")) {
 			// This is called only once for each animal
 			// Should be used as "After Constructor Code Block"
 			entity.setHealth(entity.getMaxHealth());
@@ -497,7 +497,7 @@ public class EntityEventHandler {
 		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
 		if (ageable != null && ageable.getAge() < 0) {
 			CompoundNBT tag = item.getTag();
-			if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getEntityAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
@@ -505,7 +505,7 @@ public class EntityEventHandler {
 		}
 
 		CompoundNBT tag = item.getTag();
-		if (tag == null || !tag.hasKey("isNatural") || !tag.getBoolean("isNatural")) {
+		if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 			double taming_factor = entity.getEntityAttribute(ModAttributes.taming_factor_food).getAttributeValue();
 			if (capTaming != null) {
 				capTaming.addTaming(taming_factor

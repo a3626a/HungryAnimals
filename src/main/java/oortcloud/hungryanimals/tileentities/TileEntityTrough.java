@@ -108,7 +108,7 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 	}
 
 	private void readSyncableDataFromNBT(CompoundNBT compound) {
-		if (compound.hasKey("foodbox")) {
+		if (compound.contains("foodbox")) {
 			CompoundNBT tag = (CompoundNBT) compound.getTag("foodbox");
 			stack = new ItemStack(tag);
 		} else {

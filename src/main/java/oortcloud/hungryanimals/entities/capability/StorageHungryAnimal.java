@@ -23,7 +23,7 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 		CompoundNBT tag = (CompoundNBT) nbt;
 		instance.setNutrient(tag.getDouble("nutrient"));
 		instance.setStomach(tag.getDouble("stomach"));
-		if (tag.hasKey("weight"))
+		if (tag.contains("weight"))
 			instance.setWeight(tag.getDouble("weight"));
 		instance.setExcretion(tag.getDouble("excretion"));
 	}
