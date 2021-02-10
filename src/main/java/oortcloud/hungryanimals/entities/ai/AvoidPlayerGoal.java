@@ -2,13 +2,12 @@ package oortcloud.hungryanimals.entities.ai;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
@@ -24,20 +23,26 @@ import oortcloud.hungryanimals.entities.capability.TamingLevel;
 import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
+import java.util.function.Predicate;
+
+public class AvoidPlayerGoal extends AvoidEntityGoal<PlayerEntity> {
 	
 	@Nullable
 	private ICapabilityTamableAnimal cap;
 	
-	private static final Predicate<PlayerEntity> predicate = new Predicate<PlayerEntity>() {
+	private static final Predicate<LivingEntity> predicate = new Predicate<LivingEntity>() {
 		/**
 		 * Select players
 		 * Players who has "debug glass" in creative mode are ignored.
 		 */
-		public boolean apply(@Nullable PlayerEntity player) {
-			if (player == null)
+		public boolean test(@Nullable LivingEntity livingEntity) {
+			if (livingEntity == null)
 				return false;
-			if (!player.capabilities.isCreativeMode)
+			if (!(livingEntity instanceof PlayerEntity))
+				return false;
+
+			PlayerEntity player = (PlayerEntity)livingEntity;
+			if (!player.abilities.isCreativeMode)
 				return true;
 			for (int i = 0; i < 9; i++) {
 				ItemStack itemStack = player.inventory.mainInventory.get(i);
@@ -48,9 +53,9 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		}
 	};
 	
-	public EntityAIAvoidPlayer(CreatureEntity entity, float radius, double farspeed, double nearspeed) {
-		super(entity, PlayerEntity.class, predicate, radius, farspeed, nearspeed);
-		cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
+	public AvoidPlayerGoal(CreatureEntity entity, float radius, double farspeed, double nearspeed) {
+		super(entity, PlayerEntity.class, radius, farspeed, nearspeed, predicate);
+		cap = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 	}
 	
 	@Override
@@ -72,9 +77,9 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 		
 		AIFactory factory =  (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAIAvoidPlayer((CreatureEntity) entity, radius, farspeed, nearspeed);
+				return new AvoidPlayerGoal((CreatureEntity) entity, radius, farspeed, nearspeed);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Avoid Player must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Avoid Player must extend CreatureEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};
