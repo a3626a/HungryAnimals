@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -13,13 +13,13 @@ import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
 public class EntityAIHuntNonTamed extends EntityAIHunt {
 
-	private EntityTameable tameable;
+	private TameableEntity tameable;
 
-	public EntityAIHuntNonTamed(EntityTameable tameable, boolean checkSight, boolean herding) {
+	public EntityAIHuntNonTamed(TameableEntity tameable, boolean checkSight, boolean herding) {
 		this(tameable, 10, checkSight, false, herding);
 	}
 
-	public EntityAIHuntNonTamed(EntityTameable tameable, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
+	public EntityAIHuntNonTamed(TameableEntity tameable, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(tameable, chance, checkSight, onlyNearby, herding);
 		this.tameable = tameable;
 	}
@@ -43,8 +43,8 @@ public class EntityAIHuntNonTamed extends EntityAIHunt {
 		boolean herding = JSONUtils.getBoolean(jsonObject, "herding");
 		
 		AIFactory factory = (entity) -> {
-			if (entity instanceof EntityTameable) {
-				return new EntityAIHuntNonTamed((EntityTameable) entity, chance, checkSight, onlyNearby, herding);
+			if (entity instanceof TameableEntity) {
+				return new EntityAIHuntNonTamed((TameableEntity) entity, chance, checkSight, onlyNearby, herding);
 			} else {
 				HungryAnimals.logger.error("Animals which uses AI Hunt Non Tamed must extend EntityTamable. {} don't.", EntityList.getKey(entity));
 				return null;

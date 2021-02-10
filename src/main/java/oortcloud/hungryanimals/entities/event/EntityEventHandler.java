@@ -15,7 +15,7 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
@@ -455,7 +455,7 @@ public class EntityEventHandler {
 					// For ocelots, to disable feed fish before tamed
 					return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 				} else {
-					if (!((EntityTameable) entity).isTamed()) {
+					if (!((TameableEntity) entity).isTamed()) {
 						// Can feed wild(Vanilla) animal fish
 						return new Pair<Boolean, EnumActionResult>(false, null);
 					} else {

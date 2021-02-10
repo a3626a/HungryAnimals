@@ -12,7 +12,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -95,8 +95,8 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 						this.taskOwner.posZ + 1.0D)).grow(d0, 10.0D, d0))) {
 			boolean isItself = this.taskOwner == entitycreature;
 			boolean isBusy = entitycreature.getAttackTarget() == null;
-			boolean isAlly = (this.taskOwner instanceof EntityTameable)
-					&& ((EntityTameable) this.taskOwner).getOwner() == ((EntityTameable) entitycreature).getOwner();
+			boolean isAlly = (this.taskOwner instanceof TameableEntity)
+					&& ((TameableEntity) this.taskOwner).getOwner() == ((TameableEntity) entitycreature).getOwner();
 			boolean isTeam = entitycreature.isOnSameTeam(this.taskOwner.getAttackTarget());
 			if (!isItself && !isBusy && !isAlly && !isTeam) {
 				this.setEntityAttackTarget(entitycreature, this.taskOwner.getAttackTarget());
