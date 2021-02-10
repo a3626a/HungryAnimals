@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
@@ -145,7 +145,7 @@ public class ProductionFluid
 	}
 
 	@Override
-	public EnumActionResult interact(EntityInteract event, EnumHand hand, @Nonnull ItemStack itemstack) {
+	public EnumActionResult interact(EntityInteract event, Hand hand, @Nonnull ItemStack itemstack) {
 		PlayerEntity player = event.getPlayerEntity();
 
 		ItemStack heldItem = player.getHeldItem(hand);

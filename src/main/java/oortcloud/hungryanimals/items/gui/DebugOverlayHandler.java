@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -155,11 +155,11 @@ public class DebugOverlayHandler extends Gui {
 	}
 
 	private ItemStack getDebugGlass(MobEntityBase player) {
-		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+		ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
 		if (stack != null && stack.getItem() == ModItems.DEBUG_GLASS.get() && stack.getTag() != null) {
 			return stack;
 		}
-		stack = player.getHeldItem(EnumHand.OFF_HAND);
+		stack = player.getHeldItem(Hand.OFF_HAND);
 		if (stack != null && stack.getItem() == ModItems.DEBUG_GLASS.get() && stack.getTag() != null) {
 			return stack;
 		}

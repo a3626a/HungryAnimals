@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -31,7 +31,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 
 		if (distance <= d0 && this.attackTick <= 0) {
 			this.attackTick = 20;
-			this.attacker.swingArm(EnumHand.MAIN_HAND);
+			this.attacker.swingArm(Hand.MAIN_HAND);
 			attackEntityAsMob(target);
 		}
 	}

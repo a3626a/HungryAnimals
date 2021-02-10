@@ -9,7 +9,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +52,7 @@ public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 	}
 
 	@Override
-	public EnumActionResult interact(EntityInteract event, EnumHand hand, @Nonnull ItemStack itemstack) {
+	public EnumActionResult interact(EntityInteract event, Hand hand, @Nonnull ItemStack itemstack) {
 		for (IProductionInteraction i : interactions) {
 			EnumActionResult result = i.interact(event, hand, itemstack);
 			if (result != EnumActionResult.PASS) {
