@@ -68,7 +68,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		double oldStomach = getStomach();
 		setStomach(getStomach() + stomach);
 		if (stomach < 0) {
-			addExcretion(-stomach * entity.getAttribute(ModAttributes.excretion_factor).getAttributeValue());
+			addExcretion(-stomach * entity.getAttribute(ModAttributes.excretion_factor).getValue());
 		}
 		return oldStomach;
 	}
@@ -96,7 +96,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	@Override
 	public double getMaxStomach() {
-		return entity.getAttribute(ModAttributes.hunger_stomach_max).getAttributeValue();
+		return entity.getAttribute(ModAttributes.hunger_stomach_max).getValue();
 	}
 	
 	@Override
@@ -149,12 +149,12 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 				age = capAgeable.getAge();
 			}
 		}
-		double hungerWeightNormal = entity.getAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
+		double hungerWeightNormal = entity.getAttribute(ModAttributes.hunger_weight_normal).getValue();
 		if (age < 0) {
 			age = -age;
-			double growingLength = entity.getAttribute(ModAttributes.child_growing_length).getAttributeValue();
+			double growingLength = entity.getAttribute(ModAttributes.child_growing_length).getValue();
 			double a = age/growingLength;
-			double hungerWeightNormalChild = entity.getAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue();
+			double hungerWeightNormalChild = entity.getAttribute(ModAttributes.hunger_weight_normal_child).getValue();
 			return a*hungerWeightNormalChild+(1-a)*hungerWeightNormal;
 		} else {
 			return hungerWeightNormal;

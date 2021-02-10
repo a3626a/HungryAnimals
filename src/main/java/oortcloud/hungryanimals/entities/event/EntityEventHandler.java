@@ -168,7 +168,7 @@ public class EntityEventHandler {
 
 		double nutrient = cap.getNutrient();
 		double stomach = cap.getStomach();
-		double digest = entity.getAttribute(ModAttributes.hunger_stomach_digest).getAttributeValue();
+		double digest = entity.getAttribute(ModAttributes.hunger_stomach_digest).getValue();
 
 		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
 		
@@ -192,8 +192,8 @@ public class EntityEventHandler {
 			cap.addStomach(-digest);
 		}
 
-		double default_bmr = entity.getAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue();
-		double default_weight = entity.getAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
+		double default_bmr = entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue();
+		double default_weight = entity.getAttribute(ModAttributes.hunger_weight_normal).getValue();
 		double bmr = default_bmr * Math.pow(cap.getWeight() / default_weight, 3.0 / 4.0);
 
 		cap.addWeight(-bmr);
@@ -212,10 +212,10 @@ public class EntityEventHandler {
 			return;
 
 		double courtship_stomach_condition = animal.getAttribute(ModAttributes.courtship_stomach_condition)
-				.getAttributeValue();
+				.getValue();
 		double courtship_probability = animal.getAttribute(ModAttributes.courtship_probability)
-				.getAttributeValue();
-		double child_weight = animal.getAttribute(ModAttributes.hunger_weight_normal_child).getAttributeValue()
+				.getValue();
+		double child_weight = animal.getAttribute(ModAttributes.hunger_weight_normal_child).getValue()
 				/ 2.0;
 
 		if (ageable.getAge() == 0 && !animal.isInLove()
@@ -223,7 +223,7 @@ public class EntityEventHandler {
 				&& hungry.getWeight() - child_weight > hungry.getStarvinglWeight()
 				&& animal.getRNG().nextDouble() < courtship_probability) {
 			animal.setInLove(null);
-			hungry.addWeight(-entity.getAttribute(ModAttributes.courtship_weight).getAttributeValue());
+			hungry.addWeight(-entity.getAttribute(ModAttributes.courtship_weight).getValue());
 		}
 	}
 
@@ -295,9 +295,9 @@ public class EntityEventHandler {
 			List<PlayerEntity> players = entity.getEntityWorld().getEntitiesWithinAABB(PlayerEntity.class,
 					entity.getBoundingBox().grow(radius));
 			double tamingFactorWild = entity.getAttribute(ModAttributes.taming_factor_near_wild)
-					.getAttributeValue();
+					.getValue();
 			double tamingFactorTamed = entity.getAttribute(ModAttributes.taming_factor_near_tamed)
-					.getAttributeValue();
+					.getValue();
 
 			if (players.isEmpty()) {
 				if (cap.getTaming() > 0) {
@@ -343,7 +343,7 @@ public class EntityEventHandler {
 		DamageSource source = event.getSource();
 		if (!entity.isEntityInvulnerable(source)) {
 			if (source.getTrueSource() instanceof PlayerEntity) {
-				cap.addTaming(-4 / entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue()
+				cap.addTaming(-4 / entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue()
 						* event.getAmount());
 			}
 		}
@@ -499,17 +499,17 @@ public class EntityEventHandler {
 			CompoundNBT tag = item.getTag();
 			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
-						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue());
+						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue());
 				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		CompoundNBT tag = item.getTag();
 		if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
-			double taming_factor = entity.getAttribute(ModAttributes.taming_factor_food).getAttributeValue();
+			double taming_factor = entity.getAttribute(ModAttributes.taming_factor_food).getValue();
 			if (capTaming != null) {
 				capTaming.addTaming(taming_factor
-						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getAttributeValue() * nutrient);
+						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue() * nutrient);
 			}
 		}
 	}

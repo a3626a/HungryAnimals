@@ -118,14 +118,14 @@ public class ProductionFluid
 		if (condition.apply(animal)) {
 			IAttributeInstance fluid_amount = animal.getAttribute(ModAttributes.fluid_amount);
 			if (fluid_amount != null) {
-				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getAttributeValue() * amount)),
+				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getValue() * amount)),
 						true);
 
 				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 				if (capHungry != null) {
 					IAttributeInstance fluid_weight = animal.getAttribute(ModAttributes.fluid_weight);
 					if (fluid_weight != null) {
-						capHungry.addWeight(-inserted * fluid_weight.getAttributeValue() * weight / 1000.0);
+						capHungry.addWeight(-inserted * fluid_weight.getValue() * weight / 1000.0);
 					} else {
 						HungryAnimals.logger.warn("{} doesn't have attribute {}. Weight consumption is skipped", animal,
 								ModAttributes.fluid_weight);
