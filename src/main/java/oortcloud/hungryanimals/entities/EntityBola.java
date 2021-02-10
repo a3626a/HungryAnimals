@@ -66,7 +66,7 @@ public class EntityBola extends Entity implements IProjectile {
 	@Override
     public boolean isInRangeToRenderDist(double distance)
     {
-        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+        double d0 = this.getBoundingBox().getAverageEdgeLength() * 10.0D;
 
         if (Double.isNaN(d0))
         {
@@ -260,7 +260,7 @@ public class EntityBola extends Entity implements IProjectile {
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity entity = null;
-        List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), BOLA_TARGETS);
+        List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this, this.getBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), BOLA_TARGETS);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)
@@ -269,7 +269,7 @@ public class EntityBola extends Entity implements IProjectile {
 
             if (entity1 != this.shootingEntity || this.ticksInAir >= 5)
             {
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.3);
+                AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(0.3);
                 RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 
                 if (raytraceresult != null)

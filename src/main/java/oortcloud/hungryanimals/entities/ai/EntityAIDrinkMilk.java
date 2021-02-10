@@ -84,7 +84,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 
 	protected MobEntity findMother() {
 		List<MobEntity> list = this.childAnimal.world.<MobEntity>getEntitiesWithinAABB(this.childAnimal.getClass(),
-				this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
+				this.childAnimal.getBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
 
 		Collections.shuffle(list);
 
@@ -132,7 +132,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	public void updateTask() {
 		super.updateTask();
 		if (--drinkCounter <= 0) {
-			if (childAnimal.getEntityBoundingBox().grow(0.5).intersects(parentAnimal.getEntityBoundingBox())) {
+			if (childAnimal.getBoundingBox().grow(0.5).intersects(parentAnimal.getBoundingBox())) {
 				if (childHungry.getStomach() < childHungry.getMaxStomach()) {
 					FluidStack drain = tank.drain(fluid, true);
 					if (drain != null && drain.amount > 0) {
@@ -141,7 +141,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 						
 						WorldServer world = (WorldServer) childAnimal.getEntityWorld();
 						for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
-							AxisAlignedBB boxMilking = childAnimal.getEntityBoundingBox().grow(0.5).intersect(parentAnimal.getEntityBoundingBox());
+							AxisAlignedBB boxMilking = childAnimal.getBoundingBox().grow(0.5).intersect(parentAnimal.getBoundingBox());
 							Vec3d pointMilking = new Vec3d(
 									(boxMilking.maxX + boxMilking.minX) * 0.5D,
 									(boxMilking.maxY + boxMilking.minY) * 0.5D,

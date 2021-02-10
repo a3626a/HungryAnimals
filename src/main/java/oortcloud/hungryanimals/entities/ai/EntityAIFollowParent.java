@@ -44,7 +44,7 @@ public class EntityAIFollowParent extends Goal {
 			return false;
 		} else {
 			List<MobEntity> list = this.childAnimal.world.<MobEntity>getEntitiesWithinAABB(this.childAnimal.getClass(),
-					this.childAnimal.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
+					this.childAnimal.getBoundingBox().grow(8.0D, 4.0D, 8.0D), this::isParent);
 			MobEntity entityanimal = null;
 			double d0 = Double.MAX_VALUE;
 

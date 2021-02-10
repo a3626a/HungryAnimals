@@ -100,7 +100,7 @@ public class EntityAIMateModified extends Goal {
 	}
 
 	private EntityAnimal getNearbyMate() {
-		List<EntityAnimal> list = this.theWorld.<EntityAnimal>getEntitiesWithinAABB(this.animal.getClass(), this.animal.getEntityBoundingBox().grow(8.0D));
+		List<EntityAnimal> list = this.theWorld.<EntityAnimal>getEntitiesWithinAABB(this.animal.getClass(), this.animal.getBoundingBox().grow(8.0D));
 		double d0 = Double.MAX_VALUE;
 		EntityAnimal entityanimal = null;
 

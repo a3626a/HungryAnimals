@@ -93,7 +93,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 		BlockPos closestPos = null;
 		double minimumDistanceSq = Double.MAX_VALUE;
 
-		ArrayList<Entity> list = (ArrayList<Entity>) this.worldObj.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().grow(herdRadius),
+		ArrayList<Entity> list = (ArrayList<Entity>) this.worldObj.getEntitiesInAABBexcluding(entity, entity.getBoundingBox().grow(herdRadius),
 				predicate);
 		for (Entity e : list) {
 			centralPos = centralPos.add(e.getPosition());

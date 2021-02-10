@@ -100,7 +100,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			float radius = 16.0F;
 
 			ArrayList<ItemEntity> list = (ArrayList<ItemEntity>) worldObj.getEntitiesWithinAABB(ItemEntity.class,
-					entity.getEntityBoundingBox().grow(radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
+					entity.getBoundingBox().grow(radius), Predicates.and(EAT_EDIBLE, EAT_NATURAL));
 			if (!list.isEmpty()) {
 				this.target = list.get(0);
 				return true;
@@ -109,7 +109,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			if (!onlyNatural) {
 				if (entity.getRNG().nextInt(executeProbability()) == 0) {
 					list = (ArrayList<ItemEntity>) worldObj.getEntitiesWithinAABB(ItemEntity.class,
-							entity.getEntityBoundingBox().grow(radius), EAT_EDIBLE);
+							entity.getBoundingBox().grow(radius), EAT_EDIBLE);
 					if (!list.isEmpty()) {
 						this.target = list.get(0);
 						return true;
@@ -133,7 +133,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			return false;
 		}
 		if (entity.getNavigator().noPath()) {
-			if (entity.getEntityBoundingBox().grow(0.5).intersects(target.getEntityBoundingBox())) {
+			if (entity.getBoundingBox().grow(0.5).intersects(target.getBoundingBox())) {
 				ItemStack foodStack = target.getItem();
 				while (!foodStack.isEmpty() && pref.canEat(capHungry, foodStack)) {
 					// This Code Run At Most 64

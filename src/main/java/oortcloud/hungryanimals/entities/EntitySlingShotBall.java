@@ -61,7 +61,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean isInRangeToRenderDist(double distance) {
-		double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+		double d0 = this.getBoundingBox().getAverageEdgeLength() * 10.0D;
 
 		if (Double.isNaN(d0)) {
 			d0 = 1.0D;
@@ -237,14 +237,14 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 	protected Entity findEntityOnPath(Vec3d start, Vec3d end) {
 		Entity entity = null;
 		List<Entity> list = this.getEntityWorld().getEntitiesInAABBexcluding(this,
-				this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), SLING_TARGETS);
+				this.getBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), SLING_TARGETS);
 		double d0 = 0.0D;
 
 		for (int i = 0; i < list.size(); ++i) {
 			Entity entity1 = list.get(i);
 
 			if (entity1 != this.shootingEntity || this.ticksInAir >= 5) {
-				AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.3);
+				AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(0.3);
 				RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 
 				if (raytraceresult != null) {

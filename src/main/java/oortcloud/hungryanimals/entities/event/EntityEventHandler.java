@@ -293,7 +293,7 @@ public class EntityEventHandler {
 				return;
 
 			List<PlayerEntity> players = entity.getEntityWorld().getEntitiesWithinAABB(PlayerEntity.class,
-					entity.getEntityBoundingBox().grow(radius));
+					entity.getBoundingBox().grow(radius));
 			double tamingFactorWild = entity.getEntityAttribute(ModAttributes.taming_factor_near_wild)
 					.getAttributeValue();
 			double tamingFactorTamed = entity.getEntityAttribute(ModAttributes.taming_factor_near_tamed)
