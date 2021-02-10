@@ -200,7 +200,7 @@ public class EntityAIMateModified extends Goal {
 				double d3 = random.nextDouble() * (double) this.animal.width * 2.0D - (double) this.animal.width;
 				double d4 = 0.5D + random.nextDouble() * (double) this.animal.height;
 				double d5 = random.nextDouble() * (double) this.animal.width * 2.0D - (double) this.animal.width;
-				this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.animal.posX + d3, this.animal.posY + d4, this.animal.posZ + d5, d0, d1, d2,
+				this.theWorld.addParticle(EnumParticleTypes.HEART, this.animal.posX + d3, this.animal.posY + d4, this.animal.posZ + d5, d0, d1, d2,
 						new int[0]);
 			}
 

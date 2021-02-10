@@ -75,7 +75,7 @@ public class ItemHerbicide extends Item {
 				} else {
 
 					this.sendBlockChange(world, x, y, z);
-					world.spawnParticle("happyVillager", x, y + 1.2, z, 0, 0, 0);
+					world.addParticle("happyVillager", x, y + 1.2, z, 0, 0, 0);
 					player.stopUsingItem();
 				}
 			} else {
@@ -112,7 +112,7 @@ public class ItemHerbicide extends Item {
 					}
 				}
 				this.sendBlockChange(world, tx, ty, tz);
-				world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, tx, ty + 1.2, tz, 0, 0, 0);
+				world.addParticle(EnumParticleTypes.VILLAGER_HAPPY, tx, ty + 1.2, tz, 0, 0, 0);
 			}
 		}
 

@@ -174,7 +174,7 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 
 		if (this.isInWater()) {
 			for (int i = 0; i < 4; ++i) {
-				this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D,
+				this.getEntityWorld().addParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D,
 						this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
 			}
 
