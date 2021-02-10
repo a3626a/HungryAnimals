@@ -19,7 +19,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.stats.StatList;
@@ -205,7 +205,7 @@ public class EntityAIMateModified extends Goal {
 			}
 
 			if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
-				this.theWorld.addEntity(new EntityXPOrb(this.theWorld, this.animal.posX, this.animal.posY, this.animal.posZ, random.nextInt(7) + 1));
+				this.theWorld.addEntity(new ExperienceOrbEntity(this.theWorld, this.animal.posX, this.animal.posY, this.animal.posZ, random.nextInt(7) + 1));
 			}
 		} else {
 			this.animal.resetInLove();
