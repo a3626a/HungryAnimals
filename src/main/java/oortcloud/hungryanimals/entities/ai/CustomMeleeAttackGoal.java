@@ -6,10 +6,9 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.MobEntityBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.util.DamageSource;
@@ -19,14 +18,14 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
-public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
+public class CustomMeleeAttackGoal extends MeleeAttackGoal {
 
-	public EntityAIAttackMeleeCustom(CreatureEntity creature, double speedIn, boolean useLongMemory) {
+	public CustomMeleeAttackGoal(CreatureEntity creature, double speedIn, boolean useLongMemory) {
 		super(creature, speedIn, useLongMemory);
 	}
 
 	@Override
-	protected void checkAndPerformAttack(MobEntityBase target, double distance) {
+	protected void checkAndPerformAttack(LivingEntity target, double distance) {
 		double d0 = this.getAttackReachSqr(target);
 
 		if (distance <= d0 && this.attackTick <= 0) {
@@ -58,9 +57,9 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 
 		AIFactory factory = (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAIAttackMeleeCustom((CreatureEntity) entity, speed, useLongMemory);
+				return new CustomMeleeAttackGoal((CreatureEntity) entity, speed, useLongMemory);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Attack Melee must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Attack Melee must extend CreatureEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};

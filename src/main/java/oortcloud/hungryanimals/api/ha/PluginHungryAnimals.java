@@ -14,7 +14,7 @@ import oortcloud.hungryanimals.api.IHAPlugin;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
 import oortcloud.hungryanimals.api.IProductionRegistry;
 import oortcloud.hungryanimals.core.lib.References;
-import oortcloud.hungryanimals.entities.ai.EntityAIAttackMeleeCustom;
+import oortcloud.hungryanimals.entities.ai.CustomMeleeAttackGoal;
 import oortcloud.hungryanimals.entities.ai.AvoidPlayerGoal;
 import oortcloud.hungryanimals.entities.ai.DrinkMilkGoal;
 import oortcloud.hungryanimals.entities.ai.FollowParentGoal;
@@ -55,7 +55,7 @@ public class PluginHungryAnimals implements IHAPlugin {
 	@Override
 	public void registerAIs(IAIRegistry registry) {
 		registry.registerAIContainer("herbivore", AIContainerHerbivore::parse);
-		registry.registerAIContainerModifier("herbivore", "attack_melee", EntityAIAttackMeleeCustom::parse);
+		registry.registerAIContainerModifier("herbivore", "attack_melee", CustomMeleeAttackGoal::parse);
 		registry.registerAIContainerModifier("herbivore", "avoid_player", AvoidPlayerGoal::parse);
 		registry.registerAIContainerModifier("herbivore", "mate", MateModifiedGoal::parse);
 		registry.registerAIContainerModifier("herbivore", "drink_milk", DrinkMilkGoal::parse);
@@ -76,7 +76,7 @@ public class PluginHungryAnimals implements IHAPlugin {
 			}
 			return aiContainer;
 		});
-		registry.registerAIContainerModifier("rabbit", "attack_melee", EntityAIAttackMeleeCustom::parse);
+		registry.registerAIContainerModifier("rabbit", "attack_melee", CustomMeleeAttackGoal::parse);
 		registry.registerAIContainerModifier("rabbit", "avoid_player", AvoidPlayerGoal::parse);
 		registry.registerAIContainerModifier("rabbit", "mate", MateModifiedGoal::parse);
 		registry.registerAIContainerModifier("rabbit", "drink_milk", DrinkMilkGoal::parse);
