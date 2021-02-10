@@ -18,8 +18,8 @@ import oortcloud.hungryanimals.entities.ai.CustomMeleeAttackGoal;
 import oortcloud.hungryanimals.entities.ai.AvoidPlayerGoal;
 import oortcloud.hungryanimals.entities.ai.DrinkMilkGoal;
 import oortcloud.hungryanimals.entities.ai.FollowParentGoal;
-import oortcloud.hungryanimals.entities.ai.EntityAIHunt;
-import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
+import oortcloud.hungryanimals.entities.ai.HuntGoal;
+import oortcloud.hungryanimals.entities.ai.HuntGoalNonTamed;
 import oortcloud.hungryanimals.entities.ai.EntityAIHurtByPlayer;
 import oortcloud.hungryanimals.entities.ai.MateModifiedGoal;
 import oortcloud.hungryanimals.entities.ai.MoveToEatBlockGoal;
@@ -97,8 +97,8 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("wolf", "eat_item", MoveToEatItemGoal::parse);
 		registry.registerAIContainerModifier("wolf", "eat_block", MoveToEatBlockGoal::parse);
 		registry.registerAIContainerModifier("wolf", "follow_parent", FollowParentGoal::parse);
-		registry.registerAIContainerModifier("wolf", "hunt", EntityAIHunt::parse);
-		registry.registerAIContainerModifier("wolf", "hunt_non_tamed", EntityAIHuntNonTamed::parse);
+		registry.registerAIContainerModifier("wolf", "hunt", HuntGoal::parse);
+		registry.registerAIContainerModifier("wolf", "hunt_non_tamed", HuntGoalNonTamed::parse);
 	}
 
 	@Override

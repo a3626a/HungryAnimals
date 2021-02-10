@@ -11,15 +11,15 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
-public class EntityAIHuntNonTamed extends EntityAIHunt {
+public class HuntGoalNonTamed extends HuntGoal {
 
 	private TameableEntity tameable;
 
-	public EntityAIHuntNonTamed(TameableEntity tameable, boolean checkSight, boolean herding) {
+	public HuntGoalNonTamed(TameableEntity tameable, boolean checkSight, boolean herding) {
 		this(tameable, 10, checkSight, false, herding);
 	}
 
-	public EntityAIHuntNonTamed(TameableEntity tameable, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
+	public HuntGoalNonTamed(TameableEntity tameable, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
 		super(tameable, chance, checkSight, onlyNearby, herding);
 		this.tameable = tameable;
 	}
@@ -44,7 +44,7 @@ public class EntityAIHuntNonTamed extends EntityAIHunt {
 		
 		AIFactory factory = (entity) -> {
 			if (entity instanceof TameableEntity) {
-				return new EntityAIHuntNonTamed((TameableEntity) entity, chance, checkSight, onlyNearby, herding);
+				return new HuntGoalNonTamed((TameableEntity) entity, chance, checkSight, onlyNearby, herding);
 			} else {
 				HungryAnimals.logger.error("Animals which uses AI Hunt Non Tamed must extend EntityTamable. {} don't.", EntityList.getKey(entity));
 				return null;

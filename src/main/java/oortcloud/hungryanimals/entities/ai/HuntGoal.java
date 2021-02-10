@@ -1,18 +1,14 @@
 package oortcloud.hungryanimals.entities.ai;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MobEntityBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -25,36 +21,35 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreferenceSimple;
 
-public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
+public class HuntGoal extends NearestAttackableTargetGoal<MobEntity> {
 
 	private ICapabilityHungryAnimal cap;
 	private IFoodPreferenceSimple<MobEntity> pref;
 	private boolean herding;
     private int delay;
 	
-	public EntityAIHunt(CreatureEntity creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
-		super(creature, MobEntity.class, chance, checkSight, onlyNearby, new Predicate<MobEntity>() {
-			@Override
-			public boolean apply(@Nullable MobEntity input) {
-				ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
-				IFoodPreferenceSimple<MobEntity> pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
+	public HuntGoal(CreatureEntity creature, int chance, boolean checkSight, boolean onlyNearby, boolean herding) {
+		super(creature, MobEntity.class, chance, checkSight, onlyNearby, livingEntity -> {
+			if (!(livingEntity instanceof MobEntity))
+				return false;
 
-				if (input == null)
+			MobEntity mobEntity = (MobEntity)livingEntity;
+
+			ICapabilityHungryAnimal cap = creature.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+			IFoodPreferenceSimple<MobEntity> pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
+
+			// DON'T EAT BABY
+			ICapabilityAgeable ageable = mobEntity.getCapability(ProviderAgeable.CAP).orElse(null);
+			if (ageable != null) {
+				int age = ageable.getAge();
+				if (age < 0)
 					return false;
-				
-				// DON'T EAT BABY
-				ICapabilityAgeable ageable = input.getCapability(ProviderAgeable.CAP, null);
-				if (ageable != null) {
-					int age = ageable.getAge();
-					if (age < 0)
-						return false;
-				}
-
-				return pref.canEat(cap, input);
 			}
+
+			return pref.canEat(cap, mobEntity);
 		});
 		pref = FoodPreferences.getInstance().getRegistryEntity().get(creature.getClass());
-		cap = creature.getCapability(ProviderHungryAnimal.CAP, null);
+		cap = creature.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 		this.herding = herding;
 	}
 
@@ -90,21 +85,21 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 	protected void alertOthers() {
 		double d0 = this.getTargetDistance();
 
-		for (CreatureEntity entitycreature : this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(),
-				(new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D,
-						this.taskOwner.posZ + 1.0D)).grow(d0, 10.0D, d0))) {
-			boolean isItself = this.taskOwner == entitycreature;
+		for (MobEntity entitycreature : this.goalOwner.world.getEntitiesWithinAABB(this.goalOwner.getClass(),
+				(new AxisAlignedBB(this.goalOwner.posX, this.goalOwner.posY, this.goalOwner.posZ, this.goalOwner.posX + 1.0D, this.goalOwner.posY + 1.0D,
+						this.goalOwner.posZ + 1.0D)).grow(d0, 10.0D, d0))) {
+			boolean isItself = this.goalOwner == entitycreature;
 			boolean isBusy = entitycreature.getAttackTarget() == null;
-			boolean isAlly = (this.taskOwner instanceof TameableEntity)
-					&& ((TameableEntity) this.taskOwner).getOwner() == ((TameableEntity) entitycreature).getOwner();
-			boolean isTeam = entitycreature.isOnSameTeam(this.taskOwner.getAttackTarget());
+			boolean isAlly = (this.goalOwner instanceof TameableEntity)
+					&& ((TameableEntity) this.goalOwner).getOwner() == ((TameableEntity) entitycreature).getOwner();
+			boolean isTeam = entitycreature.isOnSameTeam(this.goalOwner.getAttackTarget());
 			if (!isItself && !isBusy && !isAlly && !isTeam) {
-				this.setEntityAttackTarget(entitycreature, this.taskOwner.getAttackTarget());
+				this.setEntityAttackTarget(entitycreature, this.goalOwner.getAttackTarget());
 			}
 		}
 	}
 
-	protected void setEntityAttackTarget(CreatureEntity creatureIn, MobEntityBase MobEntityBaseIn) {
+	protected void setEntityAttackTarget(MobEntity creatureIn, LivingEntity MobEntityBaseIn) {
 		creatureIn.setAttackTarget(MobEntityBaseIn);
 	}
 
@@ -123,9 +118,9 @@ public class EntityAIHunt extends EntityAINearestAttackableTarget<MobEntity> {
 		
 		AIFactory factory = (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAIHunt((CreatureEntity) entity, chance, checkSight, onlyNearby, herding);
+				return new HuntGoal((CreatureEntity) entity, chance, checkSight, onlyNearby, herding);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Hunt must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Hunt must extend CreatureEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};
