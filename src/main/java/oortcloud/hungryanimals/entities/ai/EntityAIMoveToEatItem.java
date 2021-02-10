@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
@@ -183,7 +184,7 @@ public class EntityAIMoveToEatItem extends Goal {
 			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue());
-				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
+				entity.addPotionEffect(new EffectInstance(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 

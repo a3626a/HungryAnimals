@@ -150,7 +150,7 @@ public class EntityEventHandler {
 					// TODO I HATE THIS BUSY LOOP. IS THERE ANY BETTER SOLUTION?
 					if (!animal.isPotionActive(ModPotions.potionYoung)) {
 						animal.addPotionEffect(
-								new PotionEffect(ModPotions.potionYoung, Integer.MAX_VALUE, 0, false, false));
+								new EffectInstance(ModPotions.potionYoung, Integer.MAX_VALUE, 0, false, false));
 						if (animal.getHealth() > animal.getMaxHealth()) {
 							animal.setHealth(animal.getMaxHealth());
 						}
@@ -401,7 +401,7 @@ public class EntityEventHandler {
 			entity.removePotionEffect(ModPotions.potionDisease);
 		}
 		if (heat > 0) {
-			entity.addPotionEffect(new PotionEffect(ModPotions.potionInheat, heat, 1));
+			entity.addPotionEffect(new EffectInstance(ModPotions.potionInheat, heat, 1));
 		}
 		if (flagEat || flagCure || heat > 0) {
 			itemstack.shrink(1);
@@ -500,7 +500,7 @@ public class EntityEventHandler {
 			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
 						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue());
-				entity.addPotionEffect(new PotionEffect(ModPotions.potionGrowth, duration, 1));
+				entity.addPotionEffect(new EffectInstance(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 

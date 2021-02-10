@@ -234,7 +234,7 @@ public class EntityBola extends Entity implements IProjectile {
                         EnchantmentHelper.applyArthropodEnchantments((MobEntityBase)this.shootingEntity, MobEntitybase);
                     }
 					
-					MobEntitybase.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 3));
+					MobEntitybase.addPotionEffect(new EffectInstance(MobEffects.SLOWNESS, 1200, 3));
 					
 					//TODO reveal what does  SPacketChangeGameState(6, 0.0F) do
 					if (this.shootingEntity != null && MobEntitybase != this.shootingEntity && MobEntitybase instanceof PlayerEntity && this.shootingEntity instanceof ServerPlayerEntity)

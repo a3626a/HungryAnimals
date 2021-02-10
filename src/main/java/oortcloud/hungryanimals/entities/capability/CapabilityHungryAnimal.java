@@ -86,7 +86,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		if (currIsFull != prevIsFull) {
 			sync();
 			if (currIsFull && !entity.isPotionActive(ModPotions.potionOvereat)) {
-				entity.addPotionEffect(new PotionEffect(ModPotions.potionOvereat, Integer.MAX_VALUE, 0, false, false));
+				entity.addPotionEffect(new EffectInstance(ModPotions.potionOvereat, Integer.MAX_VALUE, 0, false, false));
 			}
 		}
 		prevIsFull = currIsFull;
