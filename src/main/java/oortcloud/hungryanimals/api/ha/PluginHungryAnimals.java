@@ -23,7 +23,7 @@ import oortcloud.hungryanimals.entities.ai.EntityAIHuntNonTamed;
 import oortcloud.hungryanimals.entities.ai.EntityAIHurtByPlayer;
 import oortcloud.hungryanimals.entities.ai.EntityAIMateModified;
 import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatBlock;
-import oortcloud.hungryanimals.entities.ai.EntityAIMoveToEatItem;
+import oortcloud.hungryanimals.entities.ai.MoveToEatItemGoal;
 import oortcloud.hungryanimals.entities.ai.MoveToTroughGoal;
 import oortcloud.hungryanimals.entities.ai.EdibleItemTemptGoal;
 import oortcloud.hungryanimals.entities.ai.IngredientTemptGoal;
@@ -62,7 +62,7 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("herbivore", "trough", MoveToTroughGoal::parse);
 		registry.registerAIContainerModifier("herbivore", "tempt", IngredientTemptGoal::parse);
 		registry.registerAIContainerModifier("herbivore", "tempt_edible", EdibleItemTemptGoal::parse);
-		registry.registerAIContainerModifier("herbivore", "eat_item", EntityAIMoveToEatItem::parse);
+		registry.registerAIContainerModifier("herbivore", "eat_item", MoveToEatItemGoal::parse);
 		registry.registerAIContainerModifier("herbivore", "eat_block", EntityAIMoveToEatBlock::parse);
 		registry.registerAIContainerModifier("herbivore", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("herbivore", "hurt_by_player", EntityAIHurtByPlayer::parse);
@@ -83,7 +83,7 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("rabbit", "trough", MoveToTroughGoal::parse);
 		registry.registerAIContainerModifier("rabbit", "tempt", IngredientTemptGoal::parse);
 		registry.registerAIContainerModifier("rabbit", "tempt_edible", EdibleItemTemptGoal::parse);
-		registry.registerAIContainerModifier("rabbit", "eat_item", EntityAIMoveToEatItem::parse);
+		registry.registerAIContainerModifier("rabbit", "eat_item", MoveToEatItemGoal::parse);
 		registry.registerAIContainerModifier("rabbit", "eat_block", EntityAIMoveToEatBlock::parse);
 		registry.registerAIContainerModifier("rabbit", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("rabbit", "hurt_by_player", EntityAIHurtByPlayer::parse);
@@ -94,7 +94,7 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("wolf", "trough", MoveToTroughGoal::parse);
 		registry.registerAIContainerModifier("wolf", "tempt", IngredientTemptGoal::parse);
 		registry.registerAIContainerModifier("wolf", "tempt_edible", EdibleItemTemptGoal::parse);
-		registry.registerAIContainerModifier("wolf", "eat_item", EntityAIMoveToEatItem::parse);
+		registry.registerAIContainerModifier("wolf", "eat_item", MoveToEatItemGoal::parse);
 		registry.registerAIContainerModifier("wolf", "eat_block", EntityAIMoveToEatBlock::parse);
 		registry.registerAIContainerModifier("wolf", "follow_parent", EntityAIFollowParent::parse);
 		registry.registerAIContainerModifier("wolf", "hunt", EntityAIHunt::parse);

@@ -168,7 +168,7 @@ public class MoveToTroughGoal extends Goal {
 		aiContainer.getTask().after(SwimGoal.class)
 		                     .before(IngredientTemptGoal.class)
 		                     .before(EdibleItemTemptGoal.class)
-		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(MoveToEatItemGoal.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
 		                     .before(WaterAvoidingRandomWalkingGoal.class)

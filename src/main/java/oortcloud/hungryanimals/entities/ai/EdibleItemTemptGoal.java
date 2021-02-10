@@ -75,7 +75,7 @@ public class EdibleItemTemptGoal extends TemptGoal {
 			}
 		};
 		aiContainer.getTask().after(SwimGoal.class)
-		                     .before(EntityAIMoveToEatItem.class)
+		                     .before(MoveToEatItemGoal.class)
 		                     .before(EntityAIMoveToEatBlock.class)
 		                     .before(EntityAIFollowParent.class)
 		                     .before(WaterAvoidingRandomWalkingGoal.class)
