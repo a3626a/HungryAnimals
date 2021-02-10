@@ -1,6 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +36,7 @@ import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 import oortcloud.hungryanimals.potion.ModPotions;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIMoveToEatItem extends Goal {
+public class MoveToEatItemGoal extends Goal {
 
 	private MobEntity entity;
 	private World worldObj;
@@ -72,7 +73,7 @@ public class EntityAIMoveToEatItem extends Goal {
 		}
 	};
 
-	public EntityAIMoveToEatItem(MobEntity entity, double speed, boolean onlyNatural) {
+	public MoveToEatItemGoal(MobEntity entity, double speed, boolean onlyNatural) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 
 		this.entity = entity;
@@ -80,10 +81,10 @@ public class EntityAIMoveToEatItem extends Goal {
 		this.speed = speed;
 		this.onlyNatural = onlyNatural;
 		this.pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
-		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
-		this.capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
-		this.setMutexBits(1);
+		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
+		this.capAgeable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
+		this.setMutexFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override
@@ -129,7 +130,7 @@ public class EntityAIMoveToEatItem extends Goal {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (target.isDead) {
+		if (!target.isAlive()) {
 			this.entity.getNavigator().clearPath();
 			return false;
 		}
@@ -208,7 +209,7 @@ public class EntityAIMoveToEatItem extends Goal {
 
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
 		boolean onlyNatural = JSONUtils.getBoolean(jsonObject, "only_natural", false);
-		AIFactory factory = (entity) -> new EntityAIMoveToEatItem(entity, speed, onlyNatural);
+		AIFactory factory = (entity) -> new MoveToEatItemGoal(entity, speed, onlyNatural);
 		aiContainer.getTask().after(SwimGoal.class).before(EntityAIMoveToEatBlock.class)
 				.before(EntityAIFollowParent.class).before(WaterAvoidingRandomWalkingGoal.class).put(factory);
 	}
