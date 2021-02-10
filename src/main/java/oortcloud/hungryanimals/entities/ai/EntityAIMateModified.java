@@ -79,19 +79,15 @@ public class EntityAIMateModified extends Goal {
 		return this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
 	}
 
-	/**
-	 * Resets the task
-	 */
+	@Override
 	public void resetTask() {
 		this.targetMate = null;
 		this.spawnBabyDelay = 0;
 	}
 
-	/**
-	 * Updates the task
-	 */
-	public void updateTask() {
-		this.animal.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.animal.getVerticalFaceSpeed());
+	@Override
+	public void tick() {
+		this.animal.getLookController().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.animal.getVerticalFaceSpeed());
 		this.animal.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
 		++this.spawnBabyDelay;
 		if (this.spawnBabyDelay >= 60 && this.animal.getDistanceSq(this.targetMate) < 9.0D) {
@@ -100,7 +96,7 @@ public class EntityAIMateModified extends Goal {
 	}
 
 	private AnimalEntity getNearbyMate() {
-		List<AnimalEntity> list = this.theWorld.<AnimalEntity>getEntitiesWithinAABB(this.animal.getClass(), this.animal.getBoundingBox().grow(8.0D));
+		List<AnimalEntity> list = this.theWorld.getEntitiesWithinAABB(this.animal.getClass(), this.animal.getBoundingBox().grow(8.0D));
 		double d0 = Double.MAX_VALUE;
 		AnimalEntity entityanimal = null;
 
