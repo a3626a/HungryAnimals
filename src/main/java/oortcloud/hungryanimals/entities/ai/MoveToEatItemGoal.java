@@ -84,7 +84,7 @@ public class MoveToEatItemGoal extends Goal {
 		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 		this.capTaming = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 		this.capAgeable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setMutexFlags(EnumSet.of(Flag.MOVE,Flag.JUMP));
 	}
 
 	@Override
@@ -210,7 +210,7 @@ public class MoveToEatItemGoal extends Goal {
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
 		boolean onlyNatural = JSONUtils.getBoolean(jsonObject, "only_natural", false);
 		AIFactory factory = (entity) -> new MoveToEatItemGoal(entity, speed, onlyNatural);
-		aiContainer.getTask().after(SwimGoal.class).before(EntityAIMoveToEatBlock.class)
+		aiContainer.getTask().after(SwimGoal.class).before(MoveToEatBlockGoal.class)
 				.before(EntityAIFollowParent.class).before(WaterAvoidingRandomWalkingGoal.class).put(factory);
 	}
 }

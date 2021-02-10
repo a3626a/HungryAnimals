@@ -64,7 +64,7 @@ public class MoveToTroughGoal extends Goal {
 		this.entity = entity;
 		this.world = this.entity.getEntityWorld();
 		this.speed = speed;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.setMutexFlags(EnumSet.of(Flag.MOVE,Flag.JUMP));
 	}
 
 	@Override
@@ -169,7 +169,7 @@ public class MoveToTroughGoal extends Goal {
 		                     .before(IngredientTemptGoal.class)
 		                     .before(EdibleItemTemptGoal.class)
 		                     .before(MoveToEatItemGoal.class)
-		                     .before(EntityAIMoveToEatBlock.class)
+		                     .before(MoveToEatBlockGoal.class)
 		                     .before(EntityAIFollowParent.class)
 		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .put(factory);

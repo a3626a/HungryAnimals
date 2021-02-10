@@ -1,6 +1,7 @@
 package oortcloud.hungryanimals.entities.ai;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import javax.annotation.Nullable;
 
@@ -18,6 +19,7 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.block.ModBlocks;
@@ -28,7 +30,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
 import oortcloud.hungryanimals.entities.food_preferences.FoodPreferences;
 import oortcloud.hungryanimals.entities.food_preferences.IFoodPreference;
 
-public class EntityAIMoveToEatBlock extends Goal {
+public class MoveToEatBlockGoal extends Goal {
 
 	enum State {
 		IDLE, MOVING, EATING
@@ -56,14 +58,14 @@ public class EntityAIMoveToEatBlock extends Goal {
 	private State state = State.IDLE;
 	int eatingGrassTimer;
 
-	public EntityAIMoveToEatBlock(MobEntity entity, double speed) {
+	public MoveToEatBlockGoal(MobEntity entity, double speed) {
 		this.delayCounter = entity.getRNG().nextInt(delay);
 		this.entity = entity;
 		this.worldObj = this.entity.getEntityWorld();
 		this.speed = speed;
 		this.pref = FoodPreferences.getInstance().REGISTRY_BLOCK.get(this.entity.getClass());
-		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		this.setMutexBits(7);
+		this.capHungry = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		this.setMutexFlags(EnumSet.of(Flag.MOVE,Flag.JUMP));
 	}
 	
 	@Override
@@ -169,7 +171,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 
 		} else if (state == State.MOVING) {
 				float distanceSq = 1;
-				if (bestPos.distanceSqToCenter(entity.posX, entity.posY, entity.posZ) <= distanceSq) {
+				if (bestPos.distanceSq(entity.posX, entity.posY, entity.posZ, true) <= distanceSq) {
 					state = State.EATING;
 					eatingGrassTimer = 40;
 					if (entity instanceof SheepEntity) {
@@ -195,7 +197,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 			if (eatingGrassTimer == 4) {
 				// Finish eating
 				BlockState block = worldObj.getBlockState(bestPos);
-				if (this.worldObj.getGameRules().getBoolean("mobGriefing")) {
+				if (this.worldObj.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 					this.worldObj.destroyBlock(bestPos, false);
 				}
 				eatBlockBonus(block);
@@ -257,7 +259,7 @@ public class EntityAIMoveToEatBlock extends Goal {
 
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
 
-		AIFactory factory = (entity) -> new EntityAIMoveToEatBlock(entity, speed);
+		AIFactory factory = (entity) -> new MoveToEatBlockGoal(entity, speed);
 		aiContainer.getTask().after(SwimGoal.class)
 					         .before(EntityAIFollowParent.class)
 				 	         .before(WaterAvoidingRandomWalkingGoal.class)
