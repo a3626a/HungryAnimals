@@ -92,7 +92,7 @@ public class EntityAIMateModified extends Goal {
 	 */
 	public void updateTask() {
 		this.animal.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.animal.getVerticalFaceSpeed());
-		this.animal.getNavigator().tryMoveToMobEntity(this.targetMate, this.moveSpeed);
+		this.animal.getNavigator().tryMoveToEntityLiving(this.targetMate, this.moveSpeed);
 		++this.spawnBabyDelay;
 		if (this.spawnBabyDelay >= 60 && this.animal.getDistanceSq(this.targetMate) < 9.0D) {
 			this.spawnBaby();

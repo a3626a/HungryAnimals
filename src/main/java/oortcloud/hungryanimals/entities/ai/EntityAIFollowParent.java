@@ -107,7 +107,7 @@ public class EntityAIFollowParent extends Goal {
 	public void updateTask() {
 		if (--this.delayCounter <= 0) {
 			this.delayCounter = 10;
-			this.childAnimal.getNavigator().tryMoveToMobEntity(this.parentAnimal, this.moveSpeed);
+			this.childAnimal.getNavigator().tryMoveToEntityLiving(this.parentAnimal, this.moveSpeed);
 		}
 	}
 

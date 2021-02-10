@@ -124,7 +124,7 @@ public class EntityAIMoveToEatItem extends Goal {
 
 	@Override
 	public void startExecuting() {
-		this.entity.getNavigator().tryMoveToMobEntity(target, speed);
+		this.entity.getNavigator().tryMoveToEntityLiving(target, speed);
 	}
 
 	@Override
