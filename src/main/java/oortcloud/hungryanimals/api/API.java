@@ -69,7 +69,7 @@ public class API {
 	
 	/**
 	 * It registers given aifactory to the animalclass.
-	 * AIFactory is a functional interface, which takes EntityAnimal and returns Goal.
+	 * AIFactory is a functional interface, which takes AnimalEntity and returns Goal.
 	 * 
 	 * @param animalclass
 	 * @param ai

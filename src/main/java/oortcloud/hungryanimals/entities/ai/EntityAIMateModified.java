@@ -20,7 +20,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
@@ -39,19 +39,19 @@ import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.utils.Tamings;
 
 public class EntityAIMateModified extends Goal {
-	private EntityAnimal animal;
+	private AnimalEntity animal;
 	@Nullable
 	private ICapabilityHungryAnimal theAnimalCapHungry;
 	@Nullable
 	private ICapabilityTamableAnimal theAnimalCapTamable;
 	World theWorld;
-	private EntityAnimal targetMate;
+	private AnimalEntity targetMate;
 	/** Delay preventing a baby from spawning immediately when two mate-able animals find each other. */
 	int spawnBabyDelay;
 	/** The speed the creature moves at during mating behavior. */
 	double moveSpeed;
 
-	public EntityAIMateModified(EntityAnimal animal, double speed) {
+	public EntityAIMateModified(AnimalEntity animal, double speed) {
 		this.animal = animal;
 		this.theWorld = animal.getEntityWorld();
 		this.moveSpeed = speed;
@@ -99,15 +99,15 @@ public class EntityAIMateModified extends Goal {
 		}
 	}
 
-	private EntityAnimal getNearbyMate() {
-		List<EntityAnimal> list = this.theWorld.<EntityAnimal>getEntitiesWithinAABB(this.animal.getClass(), this.animal.getBoundingBox().grow(8.0D));
+	private AnimalEntity getNearbyMate() {
+		List<AnimalEntity> list = this.theWorld.<AnimalEntity>getEntitiesWithinAABB(this.animal.getClass(), this.animal.getBoundingBox().grow(8.0D));
 		double d0 = Double.MAX_VALUE;
-		EntityAnimal entityanimal = null;
+		AnimalEntity entityanimal = null;
 
 		ICapabilitySexual sexual = animal.getCapability(ProviderSexual.CAP, null);
 
 		if (sexual != null) {
-			for (EntityAnimal entityanimal1 : list) {
+			for (AnimalEntity entityanimal1 : list) {
 				if (this.animal.canMateWith(entityanimal1)) {
 					ICapabilitySexual sexual1 = entityanimal1.getCapability(ProviderSexual.CAP, null);
 					if (sexual1 != null && sexual.getSex() != sexual1.getSex() && this.animal.getDistanceSq(entityanimal1) < d0) {
@@ -117,7 +117,7 @@ public class EntityAIMateModified extends Goal {
 				}
 			}
 		} else {
-			for (EntityAnimal entityanimal1 : list) {
+			for (AnimalEntity entityanimal1 : list) {
 				if (this.animal.canMateWith(entityanimal1) && !entityanimal1.hasCapability(ProviderSexual.CAP, null)
 						&& this.animal.getDistanceSq(entityanimal1) < d0) {
 					entityanimal = entityanimal1;
@@ -217,13 +217,13 @@ public class EntityAIMateModified extends Goal {
 		}
 	}
 
-	public EntityAnimal createChild() {
-		Constructor<? extends EntityAnimal> constructor;
+	public AnimalEntity createChild() {
+		Constructor<? extends AnimalEntity> constructor;
 		try {
 			constructor = animal.getClass().getConstructor(World.class);
-			EntityAnimal baby;
+			AnimalEntity baby;
 			try {
-				baby = (EntityAnimal) constructor.newInstance(theWorld);
+				baby = (AnimalEntity) constructor.newInstance(theWorld);
 				return baby;
 			} catch (InstantiationException e) {
 				e.printStackTrace();
@@ -255,9 +255,9 @@ public class EntityAIMateModified extends Goal {
 
 		AIFactory factory = (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAIMateModified((EntityAnimal) entity, speed);
+				return new EntityAIMateModified((AnimalEntity) entity, speed);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Mate must extend EntityAnimal. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Mate must extend AnimalEntity. {} don't.", EntityList.getKey(entity));
 				return null;
 			}
 		};

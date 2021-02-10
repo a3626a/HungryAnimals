@@ -9,7 +9,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
@@ -200,10 +200,10 @@ public class EntityEventHandler {
 	}
 
 	private void updateCourtship(MobEntity entity) {
-		if (!(entity instanceof EntityAnimal))
+		if (!(entity instanceof AnimalEntity))
 			return;
 		
-		EntityAnimal animal = (EntityAnimal)entity;
+		AnimalEntity animal = (AnimalEntity)entity;
 		
 		ICapabilityHungryAnimal hungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 		ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP, null);
@@ -472,8 +472,8 @@ public class EntityEventHandler {
 			 */
 		}
 		// Skipping Event to Entity
-		if (capHungry != null && entity instanceof EntityAnimal) {
-			if (((EntityAnimal)entity).isBreedingItem(itemstack)) {
+		if (capHungry != null && entity instanceof AnimalEntity) {
+			if (((AnimalEntity)entity).isBreedingItem(itemstack)) {
 				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
 			}
 		}
