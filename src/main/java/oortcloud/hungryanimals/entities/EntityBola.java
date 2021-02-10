@@ -247,12 +247,12 @@ public class EntityBola extends Entity implements IProjectile {
 
                 if (!(entity instanceof EntityEnderman))
                 {
-                    this.setDead();
+                    this.remove();
                 }
 			}
 		} else {
 			// Hit the ground
-			this.setDead();
+			this.remove();
 		}
     }
 	

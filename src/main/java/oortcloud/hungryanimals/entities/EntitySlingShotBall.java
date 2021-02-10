@@ -224,12 +224,12 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 				this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 
 				if (!(entity instanceof EntityEnderman)) {
-					this.setDead();
+					this.remove();
 				}
 			}
 		} else {
 			// Hit the ground
-			this.setDead();
+			this.remove();
 		}
 	}
 

@@ -141,7 +141,7 @@ public class EntityAIMoveToEatItem extends Goal {
 					foodStack.shrink(1);
 				}
 				if (foodStack.isEmpty()) {
-					target.setDead();
+					target.remove();
 				}
 			}
 			return false;
