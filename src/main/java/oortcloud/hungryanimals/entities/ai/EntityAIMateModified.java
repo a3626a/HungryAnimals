@@ -76,7 +76,7 @@ public class EntityAIMateModified extends Goal {
 	 * Returns whether an in-progress Goal should continue executing
 	 */
 	public boolean continueExecuting() {
-		return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
+		return this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
 	}
 
 	/**

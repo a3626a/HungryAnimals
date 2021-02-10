@@ -112,7 +112,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 	public boolean shouldContinueExecuting() {
 		if (ageable.getAge() >= 0) {
 			return false;
-		} else if (!this.parentAnimal.isEntityAlive()) {
+		} else if (!this.parentAnimal.isAlive()) {
 			return false;
 		} else if (childHungry.getStomach() >= childHungry.getMaxStomach()) {
 			return false;
