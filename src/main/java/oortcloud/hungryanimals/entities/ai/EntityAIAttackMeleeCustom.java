@@ -41,7 +41,7 @@ public class EntityAIAttackMeleeCustom extends EntityAIAttackMelee {
 		if (this.attacker.attackEntityAsMob(target)) {
 			return true;
 		}
-		float damage = (float) this.attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+		float damage = (float) this.attacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 		return target.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
 	}
 

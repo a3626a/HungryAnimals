@@ -116,14 +116,14 @@ public class ProductionFluid
 	@Override
 	public void update() {
 		if (condition.apply(animal)) {
-			IAttributeInstance fluid_amount = animal.getEntityAttribute(ModAttributes.fluid_amount);
+			IAttributeInstance fluid_amount = animal.getAttribute(ModAttributes.fluid_amount);
 			if (fluid_amount != null) {
 				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getAttributeValue() * amount)),
 						true);
 
 				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
 				if (capHungry != null) {
-					IAttributeInstance fluid_weight = animal.getEntityAttribute(ModAttributes.fluid_weight);
+					IAttributeInstance fluid_weight = animal.getAttribute(ModAttributes.fluid_weight);
 					if (fluid_weight != null) {
 						capHungry.addWeight(-inserted * fluid_weight.getAttributeValue() * weight / 1000.0);
 					} else {

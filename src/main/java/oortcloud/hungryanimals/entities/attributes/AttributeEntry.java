@@ -18,15 +18,15 @@ public class AttributeEntry implements IAttributeEntry {
 	
 	@Override
 	public void apply(MobEntityBase entity) {
-		entity.getEntityAttribute(attribute).setBaseValue(value);
+		entity.getAttribute(attribute).setBaseValue(value);
 	}
 
 	@Override
 	public void register(MobEntityBase entity) {
-		IAttributeInstance attributeInstance = entity.getEntityAttribute(attribute);
+		IAttributeInstance attributeInstance = entity.getAttribute(attribute);
 		if (attributeInstance == null && shouldRegister) {
 			entity.getAttributeMap().registerAttribute(attribute);
-			entity.getEntityAttribute(attribute).setBaseValue(value);
+			entity.getAttribute(attribute).setBaseValue(value);
 		}
 	}
 

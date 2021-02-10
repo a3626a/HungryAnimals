@@ -122,7 +122,7 @@ public class RenderEntityWeight extends Render<MobEntity> {
 				}
 			}
 
-			double standardWeight = animal.getEntityAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
+			double standardWeight = animal.getAttribute(ModAttributes.hunger_weight_normal).getAttributeValue();
 			if (age < 0) {
 				return Math.pow(cap.getWeight() / (standardWeight / 4.0), 1 / 3.0);
 			} else {
