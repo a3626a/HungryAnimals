@@ -3,7 +3,7 @@ package oortcloud.hungryanimals.entities.capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
@@ -22,7 +22,7 @@ public class ProviderAgeable implements ICapabilitySerializable<INBT> {
 		instance = new CapabilityAgeable(entity);
 	}
 	
-	public ProviderAgeable(EntityAgeable entity) {
+	public ProviderAgeable(AgeableEntity entity) {
 		instance = new CapabilityAgeableSub(entity);
 	}
 	

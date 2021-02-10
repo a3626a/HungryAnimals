@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.Goal;
@@ -137,12 +137,12 @@ public class EntityAIMateModified extends Goal {
 		ICapabilityTamableAnimal targetMateCapTamable = this.targetMate.getCapability(ProviderTamableAnimal.CAP, null);
 
 		// Create Child 1
-		EntityAgeable entityageable = this.animal.createChild(this.targetMate);
+		AgeableEntity entityageable = this.animal.createChild(this.targetMate);
 
 		// Check Validity
 		boolean createChildDeclared = false;
 		try {
-			Method createChild = animal.getClass().getDeclaredMethod("createChild", EntityAgeable.class);
+			Method createChild = animal.getClass().getDeclaredMethod("createChild", AgeableEntity.class);
 			if (createChild != null)
 				createChildDeclared = true;
 		} catch (NoSuchMethodException | SecurityException ignored) {

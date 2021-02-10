@@ -1,7 +1,7 @@
 package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -54,8 +54,8 @@ public class CapabilityHandler {
 			
 			boolean isAgeable = HungryAnimalManager.getInstance().isAgeable(animal.getClass());
 			if (isAgeable) {
-				if (animal instanceof EntityAgeable) {
-					event.addCapability(CAP_AGEABLE, new ProviderAgeable((EntityAgeable)animal));
+				if (animal instanceof AgeableEntity) {
+					event.addCapability(CAP_AGEABLE, new ProviderAgeable((AgeableEntity)animal));
 				} else {
 					event.addCapability(CAP_AGEABLE, new ProviderAgeable(animal));
 				}

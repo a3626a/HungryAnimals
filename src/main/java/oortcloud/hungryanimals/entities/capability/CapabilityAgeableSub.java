@@ -1,15 +1,15 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.AgeableEntity;
 
 public class CapabilityAgeableSub implements ICapabilityAgeable {
 
-	private EntityAgeable entity;
+	private AgeableEntity entity;
 	
 	public CapabilityAgeableSub() {
 	}
 	
-	public CapabilityAgeableSub(EntityAgeable entity) {
+	public CapabilityAgeableSub(AgeableEntity entity) {
 		this.entity = entity;
 	}
 	
