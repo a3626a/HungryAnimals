@@ -3,8 +3,8 @@ package oortcloud.hungryanimals.entities.ai;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -15,16 +15,15 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.stats.StatList;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -38,7 +37,7 @@ import oortcloud.hungryanimals.entities.capability.ProviderSexual;
 import oortcloud.hungryanimals.entities.capability.ProviderTamableAnimal;
 import oortcloud.hungryanimals.utils.Tamings;
 
-public class EntityAIMateModified extends Goal {
+public class MateModifiedGoal extends Goal {
 	private AnimalEntity animal;
 	@Nullable
 	private ICapabilityHungryAnimal theAnimalCapHungry;
@@ -51,18 +50,16 @@ public class EntityAIMateModified extends Goal {
 	/** The speed the creature moves at during mating behavior. */
 	double moveSpeed;
 
-	public EntityAIMateModified(AnimalEntity animal, double speed) {
+	public MateModifiedGoal(AnimalEntity animal, double speed) {
 		this.animal = animal;
 		this.theWorld = animal.getEntityWorld();
 		this.moveSpeed = speed;
-		this.theAnimalCapHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
-		this.theAnimalCapTamable = animal.getCapability(ProviderTamableAnimal.CAP, null);
-		this.setMutexBits(3);
+		this.theAnimalCapHungry = animal.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		this.theAnimalCapTamable = animal.getCapability(ProviderTamableAnimal.CAP).orElse(null);
+		this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 	}
 
-	/**
-	 * Returns whether the Goal should begin execution.
-	 */
+	@Override
 	public boolean shouldExecute() {
 		if (!this.animal.isInLove()) {
 			return false;
@@ -72,10 +69,8 @@ public class EntityAIMateModified extends Goal {
 		}
 	}
 
-	/**
-	 * Returns whether an in-progress Goal should continue executing
-	 */
-	public boolean continueExecuting() {
+	@Override
+	public boolean shouldContinueExecuting() {
 		return this.targetMate.isAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
 	}
 
@@ -100,12 +95,12 @@ public class EntityAIMateModified extends Goal {
 		double d0 = Double.MAX_VALUE;
 		AnimalEntity entityanimal = null;
 
-		ICapabilitySexual sexual = animal.getCapability(ProviderSexual.CAP, null);
+		ICapabilitySexual sexual = animal.getCapability(ProviderSexual.CAP).orElse(null);
 
 		if (sexual != null) {
 			for (AnimalEntity entityanimal1 : list) {
 				if (this.animal.canMateWith(entityanimal1)) {
-					ICapabilitySexual sexual1 = entityanimal1.getCapability(ProviderSexual.CAP, null);
+					ICapabilitySexual sexual1 = entityanimal1.getCapability(ProviderSexual.CAP).orElse(null);
 					if (sexual1 != null && sexual.getSex() != sexual1.getSex() && this.animal.getDistanceSq(entityanimal1) < d0) {
 						entityanimal = entityanimal1;
 						d0 = this.animal.getDistanceSq(entityanimal1);
@@ -114,7 +109,7 @@ public class EntityAIMateModified extends Goal {
 			}
 		} else {
 			for (AnimalEntity entityanimal1 : list) {
-				if (this.animal.canMateWith(entityanimal1) && !entityanimal1.hasCapability(ProviderSexual.CAP, null)
+				if (this.animal.canMateWith(entityanimal1) && !entityanimal1.getCapability(ProviderSexual.CAP).isPresent()
 						&& this.animal.getDistanceSq(entityanimal1) < d0) {
 					entityanimal = entityanimal1;
 					d0 = this.animal.getDistanceSq(entityanimal1);
@@ -133,8 +128,8 @@ public class EntityAIMateModified extends Goal {
 	 */
 	private void spawnBaby() {
 		// Get Capability
-		ICapabilityHungryAnimal targetMateCapHungry = this.targetMate.getCapability(ProviderHungryAnimal.CAP, null);
-		ICapabilityTamableAnimal targetMateCapTamable = this.targetMate.getCapability(ProviderTamableAnimal.CAP, null);
+		ICapabilityHungryAnimal targetMateCapHungry = this.targetMate.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		ICapabilityTamableAnimal targetMateCapTamable = this.targetMate.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 
 		// Create Child 1
 		AgeableEntity entityageable = this.animal.createChild(this.targetMate);
@@ -154,7 +149,7 @@ public class EntityAIMateModified extends Goal {
 		}
 
 		if (entityageable != null) {
-			ICapabilityTamableAnimal childTamable = entityageable.getCapability(ProviderTamableAnimal.CAP, null);
+			ICapabilityTamableAnimal childTamable = entityageable.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 
 			// Pay Hunger
 			double weight_child = entityageable.getAttribute(ModAttributes.hunger_weight_normal_child).getValue();
@@ -177,7 +172,7 @@ public class EntityAIMateModified extends Goal {
 			}
 
 			if (entityplayermp != null) {
-				entityplayermp.addStat(StatList.ANIMALS_BRED);
+				entityplayermp.addStat(Stats.ANIMALS_BRED);
 				CriteriaTriggers.BRED_ANIMALS.trigger(entityplayermp, this.animal, this.targetMate, entityageable);
 			}
 
@@ -191,21 +186,9 @@ public class EntityAIMateModified extends Goal {
 			entityageable.setGrowingAge(-childGrowingLength);
 			entityageable.setLocationAndAngles(this.animal.posX, this.animal.posY, this.animal.posZ, 0.0F, 0.0F);
 			this.theWorld.addEntity(entityageable);
-			Random random = this.animal.getRNG();
-
-			for (int i = 0; i < 7; ++i) {
-				double d0 = random.nextGaussian() * 0.02D;
-				double d1 = random.nextGaussian() * 0.02D;
-				double d2 = random.nextGaussian() * 0.02D;
-				double d3 = random.nextDouble() * (double) this.animal.width * 2.0D - (double) this.animal.width;
-				double d4 = 0.5D + random.nextDouble() * (double) this.animal.height;
-				double d5 = random.nextDouble() * (double) this.animal.width * 2.0D - (double) this.animal.width;
-				this.theWorld.addParticle(EnumParticleTypes.HEART, this.animal.posX + d3, this.animal.posY + d4, this.animal.posZ + d5, d0, d1, d2,
-						new int[0]);
-			}
-
-			if (this.theWorld.getGameRules().getBoolean("doMobLoot")) {
-				this.theWorld.addEntity(new ExperienceOrbEntity(this.theWorld, this.animal.posX, this.animal.posY, this.animal.posZ, random.nextInt(7) + 1));
+			this.theWorld.setEntityState(this.animal, (byte)18);
+			if (this.theWorld.getGameRules().getBoolean(GameRules.DO_MOB_LOOT)) {
+				this.theWorld.addEntity(new ExperienceOrbEntity(this.theWorld, this.animal.posX, this.animal.posY, this.animal.posZ, this.animal.getRNG().nextInt(7) + 1));
 			}
 		} else {
 			this.animal.resetInLove();
@@ -251,9 +234,9 @@ public class EntityAIMateModified extends Goal {
 
 		AIFactory factory = (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAIMateModified((AnimalEntity) entity, speed);
+				return new MateModifiedGoal((AnimalEntity) entity, speed);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Mate must extend AnimalEntity. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Mate must extend AnimalEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};

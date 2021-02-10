@@ -79,7 +79,7 @@ public class EntityAIAvoidPlayer extends AvoidEntityGoal<PlayerEntity> {
 			}
 		};
 		aiContainer.getTask().after(SwimGoal.class)
-		                     .before(EntityAIMateModified.class)
+		                     .before(MateModifiedGoal.class)
 		                     .before(MoveToTroughGoal.class)
 		                     .before(IngredientTemptGoal.class)
 		                     .before(EdibleItemTemptGoal.class)

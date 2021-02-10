@@ -177,7 +177,7 @@ public class EntityAIDrinkMilk extends EntityAIFollowParent {
 		AIFactory factory = (entity) -> new EntityAIDrinkMilk(entity, speed, new FluidStack(fluid, amount));
 		aiContainer.getTask().after(SwimGoal.class)
 	                         .after(EntityAIAvoidPlayer.class)
-	                         .after(EntityAIMateModified.class)
+	                         .after(MateModifiedGoal.class)
 		                     .before(WaterAvoidingRandomWalkingGoal.class)
 		                     .before(MoveToEatBlockGoal.class)
 		                     .before(MoveToEatItemGoal.class)
