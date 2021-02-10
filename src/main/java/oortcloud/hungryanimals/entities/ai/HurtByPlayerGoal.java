@@ -5,23 +5,25 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
 
-public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
+public class HurtByPlayerGoal extends HurtByTargetGoal {
 
-	public EntityAIHurtByPlayer(CreatureEntity creatureIn, boolean entityCallsForHelpIn) {
-		super(creatureIn, entityCallsForHelpIn);
+	public HurtByPlayerGoal(CreatureEntity creatureIn, boolean entityCallsForHelpIn) {
+		super(creatureIn);
+		if (entityCallsForHelpIn) {
+			setCallsForHelp();
+		}
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		return super.shouldExecute() && this.taskOwner.getRevengeTarget() instanceof PlayerEntity ;
+		return super.shouldExecute() && this.goalOwner.getRevengeTarget() instanceof PlayerEntity ;
 	}
 
 	public static void parse(JsonElement jsonEle, AIContainer aiContainer) {
@@ -36,9 +38,9 @@ public class EntityAIHurtByPlayer extends EntityAIHurtByTarget {
 		
 		AIFactory factory = (entity) -> {
 			if (entity instanceof CreatureEntity) {
-				return new EntityAIHurtByPlayer((CreatureEntity) entity, callHelp);
+				return new HurtByPlayerGoal((CreatureEntity) entity, callHelp);
 			} else {
-				HungryAnimals.logger.error("Animals which uses AI Hunt By Player must extend CreatureEntity. {} don't.", EntityList.getKey(entity));
+				HungryAnimals.logger.error("Animals which uses AI Hunt By Player must extend CreatureEntity. {} don't.", entity.getType().getRegistryName());
 				return null;
 			}
 		};
