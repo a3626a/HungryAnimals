@@ -1,5 +1,6 @@
 package oortcloud.hungryanimals.entities.ai;
 
+import java.rmi.registry.Registry;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,14 +13,17 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
@@ -36,7 +40,6 @@ import oortcloud.hungryanimals.entities.production.ProductionFluid;
 import javax.annotation.Nullable;
 
 public class DrinkMilkGoal extends FollowParentGoal {
-
 	@Nullable
 	private ICapabilityHungryAnimal childHungry;
 	private IFluidHandler tank;
@@ -54,7 +57,7 @@ public class DrinkMilkGoal extends FollowParentGoal {
 	public DrinkMilkGoal(MobEntity animal, double speed, FluidStack fluid) {
 		super(animal, speed);
 		this.fluid = fluid;
-		childHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+		childHungry = animal.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 		pref = FoodPreferences.getInstance().REGISTRY_FLUID.get(animal.getClass());
 	}
 
@@ -89,15 +92,16 @@ public class DrinkMilkGoal extends FollowParentGoal {
 		Collections.shuffle(list);
 
 		for (MobEntity entityanimal1 : list) {
-			ICapabilityProducingAnimal capProducing = entityanimal1.getCapability(ProviderProducingAnimal.CAP, null);
+			ICapabilityProducingAnimal capProducing = entityanimal1.getCapability(ProviderProducingAnimal.CAP).orElse(null);
 
 			if (capProducing != null) {
 				for (IProduction i : capProducing.getProductions()) {
 					if (i instanceof ProductionFluid) {
 						ProductionFluid iFluid = (ProductionFluid) i;
 						IFluidHandler fluidHandler = iFluid.getFluidHandler();
-						FluidStack drain = fluidHandler.drain(fluid, false);
-						if (drain != null && drain.amount == fluid.amount) {
+
+						FluidStack drain = fluidHandler.drain(fluid, IFluidHandler.FluidAction.SIMULATE);
+						if (drain != null && drain.getAmount() == fluid.getAmount()) {
 							tank = fluidHandler;
 							return entityanimal1;
 						}
@@ -134,25 +138,25 @@ public class DrinkMilkGoal extends FollowParentGoal {
 		if (--drinkCounter <= 0) {
 			if (childAnimal.getBoundingBox().grow(0.5).intersects(parentAnimal.getBoundingBox())) {
 				if (childHungry.getStomach() < childHungry.getMaxStomach()) {
-					FluidStack drain = tank.drain(fluid, true);
-					if (drain != null && drain.amount > 0) {
+					FluidStack drain = tank.drain(fluid, IFluidHandler.FluidAction.EXECUTE);
+					if (drain != null && drain.getAmount() > 0) {
 						childHungry.addNutrient(pref.getNutrient(drain));
 						childHungry.addStomach(pref.getStomach(drain));
-						
-						WorldServer world = (WorldServer) childAnimal.getEntityWorld();
-						for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(childAnimal)) {
-							AxisAlignedBB boxMilking = childAnimal.getBoundingBox().grow(0.5).intersect(parentAnimal.getBoundingBox());
-							Vec3d pointMilking = new Vec3d(
-									(boxMilking.maxX + boxMilking.minX) * 0.5D,
-									(boxMilking.maxY + boxMilking.minY) * 0.5D,
-									(boxMilking.maxZ + boxMilking.minZ) * 0.5D
-							);
-							PacketClientSpawnParticle packet = new PacketClientSpawnParticle(pointMilking);
-							HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
-						}
+
+						ServerWorld world = (ServerWorld) childAnimal.getEntityWorld();
+
+						AxisAlignedBB boxMilking = childAnimal.getBoundingBox().grow(0.5).intersect(parentAnimal.getBoundingBox());
+						Vec3d pointMilking = new Vec3d(
+								(boxMilking.maxX + boxMilking.minX) * 0.5D,
+								(boxMilking.maxY + boxMilking.minY) * 0.5D,
+								(boxMilking.maxZ + boxMilking.minZ) * 0.5D
+						);
+						PacketClientSpawnParticle packet = new PacketClientSpawnParticle(pointMilking);
+
+						HungryAnimals.simpleChannel.send(PacketDistributor.TRACKING_ENTITY.with(() ->childAnimal), packet);
 					}
 					
-					if (drain == null || drain.amount < fluid.amount) {
+					if (drain == null || drain.getAmount() < fluid.getAmount()) {
 						noMilk = true;
 					}
 				}
@@ -171,7 +175,7 @@ public class DrinkMilkGoal extends FollowParentGoal {
 		JsonObject jsonObject = (JsonObject) jsonEle;
 
 		float speed = JSONUtils.getFloat(jsonObject, "speed");
-		Fluid fluid = FluidRegistry.getFluid(JSONUtils.getString(jsonObject, "fluid"));
+		Fluid fluid = RegistryObject.of(new ResourceLocation(JSONUtils.getString(jsonObject, "fluid")), ForgeRegistries.FLUIDS).get();
 		int amount = JSONUtils.getInt(jsonObject, "amount");
 		
 		AIFactory factory = (entity) -> new DrinkMilkGoal(entity, speed, new FluidStack(fluid, amount));
