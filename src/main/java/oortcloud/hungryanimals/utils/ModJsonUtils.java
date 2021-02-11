@@ -10,9 +10,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.JsonContext;
 import oortcloud.hungryanimals.HungryAnimals;
-import oortcloud.hungryanimals.core.lib.References;
 
 import javax.annotation.Nullable;
 
@@ -50,7 +48,7 @@ public class ModJsonUtils {
 		JsonObject jsonObj = (JsonObject) jsonEle;
 		Ingredient ing = null;
 		try {
-			ing = CraftingHelper.getIngredient(jsonObj, new JsonContext(References.MODID));
+			ing = CraftingHelper.getIngredient(jsonObj);
 		} catch (JsonSyntaxException e) {
 			HungryAnimals.logger.error("Failed to read ingredient while parsing {}", jsonObj);
 		}
