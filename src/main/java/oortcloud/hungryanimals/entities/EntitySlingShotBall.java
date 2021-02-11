@@ -9,6 +9,7 @@ import com.google.common.base.Predicates;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntityBase;
 import net.minecraft.entity.IProjectile;
@@ -43,13 +44,12 @@ public class EntitySlingShotBall extends Entity implements IProjectile {
 	private Entity shootingEntity;
 	private int ticksInAir;
 
-	public EntitySlingShotBall(World world) {
-		super(world);
-		this.setSize(0.25F, 0.25F);
+	public EntitySlingShotBall(EntityType<?> entityTypeIn, World world) {
+		super(entityTypeIn, world);
 	}
 
 	public EntitySlingShotBall(World world, double posx, double posy, double posz) {
-		this(world);
+		this(ModEntities.SLING_SHOT_BALL.get(), world);
 		this.setPosition(posx, posy, posz);
 	}
 

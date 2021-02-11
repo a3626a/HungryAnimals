@@ -7,6 +7,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import oortcloud.hungryanimals.core.proxy.ClientProxy;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,13 +32,14 @@ import oortcloud.hungryanimals.items.ModItems;
 import oortcloud.hungryanimals.recipes.CraftingHandler;
 import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
-@Mod(modid = References.MODID, name = References.MODNAME, version = References.VERSION)
+@Mod(References.MODID)
 public class HungryAnimals {
 	@Mod.Instance
 	public static HungryAnimals instance;
 
 	@SidedProxy(clientSide = References.CLIENTPROXYLOCATION, serverSide = References.COMMONPROXYLOCATION)
 	public static CommonProxy proxy;
+	public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new)
 
 	public static SimpleChannel simpleChannel;
 
@@ -69,7 +71,6 @@ public class HungryAnimals {
 		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);
 		RecipeAnimalGlue.init();
-		proxy.registerEntities();
 		proxy.registerEntityRendering();
 		proxy.registerTileEntities();
 		proxy.registerTileEntityRendering();
