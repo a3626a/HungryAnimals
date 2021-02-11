@@ -11,8 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.PacketDistributor;
+import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
 import oortcloud.hungryanimals.entities.production.IProduction;
 import oortcloud.hungryanimals.entities.production.IProductionInteraction;
@@ -68,7 +69,7 @@ public class CapabilityProducingAnimal implements ICapabilityProducingAnimal {
 	}
 
 	public void syncTo(ServerPlayerEntity target) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+		if (!entity.getEntityWorld().isRemote) {
 			for (IProduction i : productions) {
 				if (i instanceof ISyncable) {
 					((ISyncable) i).syncTo(target);
