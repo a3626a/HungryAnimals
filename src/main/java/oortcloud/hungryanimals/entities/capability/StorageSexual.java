@@ -15,7 +15,7 @@ public class StorageSexual implements IStorage<ICapabilitySexual> {
 	@Nullable
 	public INBT writeNBT(Capability<ICapabilitySexual> capability, ICapabilitySexual instance, Direction side) {
 		CompoundNBT tag = new CompoundNBT();
-		tag.setString("sex", instance.getSex().name());
+		tag.putString("sex", instance.getSex().name());
 		return tag;
 	}
 

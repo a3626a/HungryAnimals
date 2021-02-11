@@ -20,7 +20,7 @@ public class StorageAgeable implements IStorage<ICapabilityAgeable> {
 			return tag;
 		}
 		
-		tag.setInteger("age", instance.getAge());
+		tag.putInt("age", instance.getAge());
 		return tag;
 	}
 
@@ -31,7 +31,7 @@ public class StorageAgeable implements IStorage<ICapabilityAgeable> {
 		}
 		
 		CompoundNBT tag = (CompoundNBT) nbt;
-		instance.setAge(tag.getInteger("age"));
+		instance.setAge(tag.getInt("age"));
 	}
 
 }

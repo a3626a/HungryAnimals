@@ -11,10 +11,10 @@ public class StorageHungryAnimal implements IStorage<ICapabilityHungryAnimal> {
 	@Override
 	public INBT writeNBT(Capability<ICapabilityHungryAnimal> capability, ICapabilityHungryAnimal instance, Direction side) {
 		CompoundNBT tag = new CompoundNBT();
-		tag.setDouble("nutrient", instance.getNutrient());
-		tag.setDouble("stomach", instance.getStomach());
-		tag.setDouble("weight", instance.getWeight());
-		tag.setDouble("excretion", instance.getExcretion());
+		tag.putDouble("nutrient", instance.getNutrient());
+		tag.putDouble("stomach", instance.getStomach());
+		tag.putDouble("weight", instance.getWeight());
+		tag.putDouble("excretion", instance.getExcretion());
 		return tag;
 	}
 
