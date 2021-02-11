@@ -9,6 +9,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import oortcloud.hungryanimals.core.proxy.ClientProxy;
+import oortcloud.hungryanimals.entities.ModEntities;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -57,6 +58,7 @@ public class HungryAnimals {
 	{
 		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		ModEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::addReloadListenersLowest);
 	}
 
