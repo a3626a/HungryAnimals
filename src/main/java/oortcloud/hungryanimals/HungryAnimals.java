@@ -4,6 +4,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -34,12 +35,7 @@ import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 
 @Mod(References.MODID)
 public class HungryAnimals {
-	@Mod.Instance
-	public static HungryAnimals instance;
-
-	@SidedProxy(clientSide = References.CLIENTPROXYLOCATION, serverSide = References.COMMONPROXYLOCATION)
-	public static CommonProxy proxy;
-	public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new)
+	public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
 	public static SimpleChannel simpleChannel;
 
