@@ -9,6 +9,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class ProviderSexual implements ICapabilitySerializable<INBT> {
 
@@ -21,15 +22,10 @@ public class ProviderSexual implements ICapabilitySerializable<INBT> {
 		instance = new CapabilitySexual(entity);
 	}
 	
+	@Nonnull
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
-		return capability == CAP;
-	}
-
-	@Override
-	@Nullable
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-		return capability == CAP ? CAP.<T> cast(this.instance) : null;
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+		return capability == CAP ? LazyOptional.of(()->this.instance).cast() : LazyOptional.empty();
 	}
 
 	@Override

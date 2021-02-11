@@ -10,13 +10,14 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class ProviderTamableAnimal implements ICapabilitySerializable<INBT> {
 
 	@CapabilityInject(ICapabilityTamableAnimal.class)
 	public static final Capability<ICapabilityTamableAnimal> CAP = null;
 
-	// Allocating Defuault Instance Here, is it important?
+	// Allocating Default Instance Here, is it important?
 	protected ICapabilityTamableAnimal instance;
 
 	public ProviderTamableAnimal(MobEntity entity) {
@@ -27,14 +28,10 @@ public class ProviderTamableAnimal implements ICapabilitySerializable<INBT> {
 		instance = new CapabilityTamableHorse(entity);
 	}
 
+	@Nonnull
 	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
-		return capability == CAP;
-	}
-
-	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-		return capability == CAP ? CAP.<T>cast(this.instance) : null;
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+		return capability == CAP ? LazyOptional.of(()->this.instance).cast() : LazyOptional.empty();
 	}
 
 	@Override

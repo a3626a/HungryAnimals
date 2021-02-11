@@ -9,6 +9,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 import oortcloud.hungryanimals.entities.production.Productions;
 
 public class ProviderProducingAnimal implements ICapabilitySerializable<INBT> {
@@ -21,16 +22,11 @@ public class ProviderProducingAnimal implements ICapabilitySerializable<INBT> {
 	public ProviderProducingAnimal(MobEntity entity) {
 		instance = new CapabilityProducingAnimal(entity, Productions.getInstance().apply(entity));
 	}
-	
-	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing) {
-		return capability == CAP;
-	}
 
+	@Nonnull
 	@Override
-	@Nullable
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-		return capability == CAP ? CAP.<T> cast(this.instance) : null;
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
+		return capability == CAP ? LazyOptional.of(()->this.instance).cast() : LazyOptional.empty();
 	}
 
 	@Override
