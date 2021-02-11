@@ -35,6 +35,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.jei.production.RecipeCategoryProductionFluid;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
@@ -96,7 +97,7 @@ public class ProductionFluid
 			WorldServer world = (WorldServer) animal.getEntityWorld();
 			for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(animal)) {
 				PacketClientSyncProducingFluid packet = new PacketClientSyncProducingFluid(animal, getName(), tank);
-				HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
+				ModPacketHandler.INSTANCE.sendTo(packet, (ServerPlayerEntity) i);
 			}
 		}
 	}
@@ -104,7 +105,7 @@ public class ProductionFluid
 	public void syncTo(ServerPlayerEntity target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			PacketClientSyncProducingFluid packet = new PacketClientSyncProducingFluid(animal, getName(), tank);
-			HungryAnimals.simpleChannel.sendTo(packet, target);
+			ModPacketHandler.INSTANCE.sendTo(packet, target);
 		}
 	}
 

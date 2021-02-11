@@ -4,6 +4,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.PacketDistributor;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketClientSyncTamable;
 
 public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
@@ -55,7 +56,7 @@ public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 
 	public void sync() {
 		if (!entity.getEntityWorld().isRemote) {
-			HungryAnimals.simpleChannel.send(
+			ModPacketHandler.INSTANCE.send(
 					PacketDistributor.TRACKING_ENTITY.with(() -> entity),
 					new PacketClientSyncTamable(entity.getEntityId(), getTaming())
 			);
@@ -64,7 +65,7 @@ public class CapabilityTamableAnimal implements ICapabilityTamableAnimal {
 
 	public void syncTo(ServerPlayerEntity target) {
 		if (!entity.getEntityWorld().isRemote) {
-			HungryAnimals.simpleChannel.send(
+			ModPacketHandler.INSTANCE.send(
 					PacketDistributor.PLAYER.with(()->target),
 					new PacketClientSyncTamable(entity.getEntityId(), getTaming())
 			);

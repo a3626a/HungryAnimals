@@ -49,7 +49,7 @@ public class ItemHerbicide extends Item {
 		msg.setInt(x);
 		msg.setInt(y);
 		msg.setInt(z);
-		HungryAnimals.simpleChannel.sendToServer(msg);
+		ModPacketHandler.INSTANCE.sendToServer(msg);
 	}
 
 	@Override

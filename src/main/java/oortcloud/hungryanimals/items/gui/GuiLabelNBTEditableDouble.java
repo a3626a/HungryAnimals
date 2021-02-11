@@ -2,6 +2,7 @@ package oortcloud.hungryanimals.items.gui;
 
 import net.minecraft.client.gui.FontRenderer;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketServerDGEditDouble;
 
 public class GuiLabelNBTEditableDouble extends GuiLabelNBTDouble implements IEditable {
@@ -17,12 +18,12 @@ public class GuiLabelNBTEditableDouble extends GuiLabelNBTDouble implements IEdi
 
 	public void increase() {
 		PacketServerDGEditDouble msg = new PacketServerDGEditDouble(target.data, key, data + unit);
-		HungryAnimals.simpleChannel.sendToServer(msg);
+		ModPacketHandler.INSTANCE.sendToServer(msg);
 	}
 
 	public void decrease() {
 		PacketServerDGEditDouble msg = new PacketServerDGEditDouble(target.data, key, data - unit);
-		HungryAnimals.simpleChannel.sendToServer(msg);
+		ModPacketHandler.INSTANCE.sendToServer(msg);
 	}
 
 }

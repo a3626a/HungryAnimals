@@ -25,6 +25,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
 import oortcloud.hungryanimals.entities.ai.handler.AIContainer;
 import oortcloud.hungryanimals.entities.ai.handler.AIFactory;
@@ -153,7 +154,7 @@ public class DrinkMilkGoal extends FollowParentGoal {
 						);
 						PacketClientSpawnParticle packet = new PacketClientSpawnParticle(pointMilking);
 
-						HungryAnimals.simpleChannel.send(PacketDistributor.TRACKING_ENTITY.with(() ->childAnimal), packet);
+						ModPacketHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() ->childAnimal), packet);
 					}
 					
 					if (drain == null || drain.getAmount() < fluid.getAmount()) {

@@ -11,14 +11,7 @@ import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.theoneprobe.TOPCompatibility;
 import oortcloud.hungryanimals.core.lib.References;
 import oortcloud.hungryanimals.core.lib.Strings;
-import oortcloud.hungryanimals.core.network.PacketClientSpawnParticle;
-import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
-import oortcloud.hungryanimals.core.network.PacketClientSyncProducingFluid;
-import oortcloud.hungryanimals.core.network.PacketClientSyncProducingInteraction;
-import oortcloud.hungryanimals.core.network.PacketClientSyncTamable;
-import oortcloud.hungryanimals.core.network.PacketServerDGEditDouble;
-import oortcloud.hungryanimals.core.network.PacketServerDGEditInt;
-import oortcloud.hungryanimals.core.network.PacketServerDGSet;
+import oortcloud.hungryanimals.core.network.*;
 import oortcloud.hungryanimals.entities.EntityBola;
 import oortcloud.hungryanimals.entities.EntitySlingShotBall;
 import oortcloud.hungryanimals.entities.capability.CapabilityAgeable;
@@ -101,56 +94,56 @@ public class CommonProxy {
 
 	public void registerPacketHandler() {
 		int index = 0;
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketServerDGEditInt.class,
 				PacketServerDGEditInt::toBytes,
 				PacketServerDGEditInt::new,
 				PacketServerDGEditInt::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketServerDGEditDouble.class,
 				PacketServerDGEditDouble::toBytes,
 				PacketServerDGEditDouble::new,
 				PacketServerDGEditDouble::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketServerDGSet.class,
 				PacketServerDGSet::toBytes,
 				PacketServerDGSet::new,
 				PacketServerDGSet::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketClientSpawnParticle.class,
 				PacketClientSpawnParticle::toBytes,
 				PacketClientSpawnParticle::new,
 				PacketClientSpawnParticle::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketClientSyncTamable.class,
 				PacketClientSyncTamable::toBytes,
 				PacketClientSyncTamable::new,
 				PacketClientSyncTamable::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketClientSyncHungry.class,
 				PacketClientSyncHungry::toBytes,
 				PacketClientSyncHungry::new,
 				PacketClientSyncHungry::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketClientSyncProducingFluid.class,
 				PacketClientSyncProducingFluid::toBytes,
 				PacketClientSyncProducingFluid::new,
 				PacketClientSyncProducingFluid::onMessage
 		);
-		HungryAnimals.simpleChannel.registerMessage(
+		ModPacketHandler.INSTANCE.registerMessage(
 				index++,
 				PacketClientSyncProducingInteraction.class,
 				PacketClientSyncProducingInteraction::toBytes,

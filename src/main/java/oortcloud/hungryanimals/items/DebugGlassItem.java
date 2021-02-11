@@ -15,6 +15,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.lib.Strings;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketServerDGSet;
 import oortcloud.hungryanimals.entities.capability.ProviderAgeable;
 import oortcloud.hungryanimals.entities.capability.ProviderHungryAnimal;
@@ -38,7 +39,7 @@ public class DebugGlassItem extends Item {
 				Entity entity = ((EntityRayTraceResult)Minecraft.getInstance().objectMouseOver).getEntity();
 				if (entity != null) {
 					PacketServerDGSet msg = new PacketServerDGSet(playerIn, entity);
-					HungryAnimals.simpleChannel.sendToServer(msg);
+					ModPacketHandler.INSTANCE.sendToServer(msg);
 					return true;
 				}
 			}

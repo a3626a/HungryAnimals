@@ -12,18 +12,8 @@ import oortcloud.hungryanimals.core.proxy.ClientProxy;
 import oortcloud.hungryanimals.entities.ModEntities;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import oortcloud.hungryanimals.api.HAPlugins;
 import oortcloud.hungryanimals.block.ModBlocks;
 import oortcloud.hungryanimals.configuration.ConfigurationHandler;
@@ -37,8 +27,6 @@ import oortcloud.hungryanimals.recipes.RecipeAnimalGlue;
 @Mod(References.MODID)
 public class HungryAnimals {
 	public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-
-	public static SimpleChannel simpleChannel;
 
 	public static ItemGroup tabHungryAnimals = new ItemGroup("tabHungryAnimals") {
 		@Override
@@ -59,12 +47,10 @@ public class HungryAnimals {
 		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, this::addReloadListenersLowest);
 	}
 
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-		simpleChannel = NetworkRegistry.newSimpleChannel(References.MODNAME);
 		logger = event.getModLog();
 		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);

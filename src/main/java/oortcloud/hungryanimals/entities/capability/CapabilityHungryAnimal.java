@@ -5,6 +5,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraftforge.fml.network.PacketDistributor;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 import oortcloud.hungryanimals.potion.ModPotions;
@@ -182,7 +183,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	public void sync() {
 		if (!entity.getEntityWorld().isRemote) {
-			HungryAnimals.simpleChannel.send(
+			ModPacketHandler.INSTANCE.send(
 					PacketDistributor.TRACKING_ENTITY.with(() -> entity),
 					new PacketClientSyncHungry(entity.getEntityId(), getStomach(), getWeight())
 			);
@@ -191,7 +192,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 
 	public void syncTo(ServerPlayerEntity target) {
 		if (!entity.getEntityWorld().isRemote) {
-			HungryAnimals.simpleChannel.send(
+			ModPacketHandler.INSTANCE.send(
 					PacketDistributor.PLAYER.with(()->target),
 					new PacketClientSyncHungry(entity.getEntityId(), getStomach(), getWeight())
 			);

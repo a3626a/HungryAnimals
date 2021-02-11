@@ -9,6 +9,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import oortcloud.hungryanimals.HungryAnimals;
+import oortcloud.hungryanimals.core.network.ModPacketHandler;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducing;
 import oortcloud.hungryanimals.core.network.PacketClientSyncProducingInteraction;
 import oortcloud.hungryanimals.entities.production.utils.IRange;
@@ -68,7 +69,7 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 			WorldServer world = (WorldServer) animal.getEntityWorld();
 			for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(animal)) {
 				PacketClientSyncProducingInteraction packet = new PacketClientSyncProducingInteraction(animal, getName(), cooldown);
-				HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
+				ModPacketHandler.INSTANCE.sendTo(packet, (ServerPlayerEntity) i);
 			}
 		}
 	}
@@ -76,7 +77,7 @@ abstract public class ProductionInteraction implements IProductionInteraction, I
 	public void syncTo(ServerPlayerEntity target) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			PacketClientSyncProducingInteraction packet = new PacketClientSyncProducingInteraction(animal, getName(), cooldown);
-			HungryAnimals.simpleChannel.sendTo(packet, target);
+			ModPacketHandler.INSTANCE.sendTo(packet, target);
 		}
 	}
 
