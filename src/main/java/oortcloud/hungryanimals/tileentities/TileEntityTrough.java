@@ -48,9 +48,9 @@ public class TileEntityTrough extends TileEntity implements ITickable {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && this.getWorld().getWorldTime() % TileEntityTrough.period == 0 && !this.stack.isEmpty()) {
 			ArrayList<MobEntity> list = (ArrayList<MobEntity>) this.getWorld().getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(this.pos.add(-radius, -radius, -radius), this.pos.add(radius + 1, radius + 1, radius + 1)));
 			for (MobEntity i : list) {
-				if (i.hasCapability(ProviderHungryAnimal.CAP, null)) {
-					ICapabilityHungryAnimal capHungry = i.getCapability(ProviderHungryAnimal.CAP, null);
-					ICapabilityTamableAnimal capTaming = i.getCapability(ProviderTamableAnimal.CAP, null);
+				if (i.hasCapability(ProviderHungryAnimal.CAP).orElse(null)) {
+					ICapabilityHungryAnimal capHungry = i.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+					ICapabilityTamableAnimal capTaming = i.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 					IFoodPreference<ItemStack> pref = FoodPreferences.getInstance().REGISTRY_ITEM.get(i.getClass());
 					if (Tamings.getLevel(capTaming) == TamingLevel.TAMED && pref.canEat(capHungry, this.stack)) {
 						i.tasks.taskEntries.forEach(entry -> {

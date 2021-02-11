@@ -59,7 +59,7 @@ public class DebugGlassItem extends Item {
 
 					MobEntity animal = (MobEntity) target;
 
-					animal.getCapability(ProviderHungryAnimal.CAP, null).ifPresent(
+					animal.getCapability(ProviderHungryAnimal.CAP).orElse(null).ifPresent(
 							(capHungry) -> {
 								tag.putDouble("weight", capHungry.getWeight());
 								tag.putDouble("nutrient", capHungry.getNutrient());
@@ -67,12 +67,12 @@ public class DebugGlassItem extends Item {
 								tag.putDouble("excretion", capHungry.getExcretion());
 							}
 					);
-					animal.getCapability(ProviderTamableAnimal.CAP, null).ifPresent(
+					animal.getCapability(ProviderTamableAnimal.CAP).orElse(null).ifPresent(
 							(capTaming) -> {
 								tag.putDouble("taming", capTaming.getTaming());
 							}
 					);
-					animal.getCapability(ProviderAgeable.CAP, null).ifPresent(
+					animal.getCapability(ProviderAgeable.CAP).orElse(null).ifPresent(
 							(capAgeable) -> {
 								tag.putInt("age", capAgeable.getAge());
 							}

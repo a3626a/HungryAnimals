@@ -17,7 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.world.WorldServer;
@@ -121,7 +121,7 @@ public class ProductionFluid
 				int inserted = tank.fill(new FluidStack(fluid, (int) (fluid_amount.getValue() * amount)),
 						true);
 
-				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 				if (capHungry != null) {
 					IAttributeInstance fluid_weight = animal.getAttribute(ModAttributes.fluid_weight);
 					if (fluid_weight != null) {
@@ -145,7 +145,7 @@ public class ProductionFluid
 	}
 
 	@Override
-	public EnumActionResult interact(EntityInteract event, Hand hand, @Nonnull ItemStack itemstack) {
+	public ActionResultType interact(EntityInteract event, Hand hand, @Nonnull ItemStack itemstack) {
 		PlayerEntity player = event.getPlayerEntity();
 
 		ItemStack heldItem = player.getHeldItem(hand);
@@ -156,11 +156,11 @@ public class ProductionFluid
 						Integer.MAX_VALUE, player, true);
 				if (fluidActionResult.isSuccess()) {
 					player.setHeldItem(hand, fluidActionResult.getResult());
-					return EnumActionResult.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			}
 		}
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 
 	}
 

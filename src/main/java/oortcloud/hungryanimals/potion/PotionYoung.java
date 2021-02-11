@@ -26,7 +26,7 @@ public class PotionYoung extends PotionHungryAnimals {
 	
 	@Override
 	public void performEffect(MobEntityBase entity, int amplifier) {
-		ICapabilityAgeable ageable =  entity.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityAgeable ageable =  entity.getCapability(ProviderAgeable.CAP).orElse(null);
 		if (ageable != null) {
 			if (ageable.getAge() >= 0) {
 				entity.removePotionEffect(this);

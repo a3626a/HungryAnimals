@@ -26,7 +26,7 @@ public class ConditionAge implements Predicate<MobEntity> {
 		if (input == null) {
 			return false;
 		}
-		ICapabilityAgeable ageable = input.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityAgeable ageable = input.getCapability(ProviderAgeable.CAP).orElse(null);
 		
 		if (ageable == null) {
 			return adult_only;

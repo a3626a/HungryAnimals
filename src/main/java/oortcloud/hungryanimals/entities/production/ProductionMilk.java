@@ -14,7 +14,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.JSONUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -44,7 +44,7 @@ public class ProductionMilk extends ProductionInteraction {
 	}
 
 	@Override
-	public EnumActionResult interact(EntityInteract event, Hand hand, @Nonnull ItemStack itemstack) {
+	public ActionResultType interact(EntityInteract event, Hand hand, @Nonnull ItemStack itemstack) {
 		PlayerEntity player = event.getPlayerEntity();
 		if (canProduce()) {
 			if (condition.apply(animal)) {
@@ -62,11 +62,11 @@ public class ProductionMilk extends ProductionInteraction {
 						}
 					}
 					resetCooldown();
-					return EnumActionResult.SUCCESS;
+					return ActionResultType.SUCCESS;
 				}
 			}
 		}
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 	}
 
 	public static Function<MobEntity, IProduction> parse(JsonElement jsonEle) {

@@ -27,7 +27,7 @@ public class ConditionSex implements Predicate<MobEntity> {
 		if (input == null)
 			return false;
 		
-		ICapabilitySexual sexual = input.getCapability(ProviderSexual.CAP, null);
+		ICapabilitySexual sexual = input.getCapability(ProviderSexual.CAP).orElse(null);
 		if (sexual != null) {
 			if (femaleOnly) {
 				return sexual.getSex() == Sex.FEMALE;

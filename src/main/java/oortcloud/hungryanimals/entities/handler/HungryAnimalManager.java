@@ -3,15 +3,13 @@ package oortcloud.hungryanimals.entities.handler;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
 
 public class HungryAnimalManager {
 
 	private static HungryAnimalManager INSTANCE;
 
-	private Map<Class<? extends MobEntity>, HungryAnimalEntry> REGISTRY;
+	private Map<EntityType<?>, HungryAnimalEntry> REGISTRY;
 	
 	public static class HungryAnimalEntry {
 		public boolean isTamable;
@@ -41,11 +39,11 @@ public class HungryAnimalManager {
 		REGISTRY = new HashMap<>();
 	}
 
-	public boolean register(Class<? extends MobEntity> animal) {
+	public boolean register(EntityType<?> animal) {
 		return register(animal, new HungryAnimalEntry());
 	}
 
-	public boolean register(Class<? extends MobEntity> animal, HungryAnimalEntry entry) {
+	public boolean register(EntityType<?> animal, HungryAnimalEntry entry) {
 		if (!REGISTRY.containsKey(animal)) {
 			REGISTRY.put(animal, entry);
 			return true;
@@ -53,36 +51,36 @@ public class HungryAnimalManager {
 		return false;
 	}
 	
-	public Iterable<Class<? extends MobEntity>> getRegisteredAnimal() {
+	public Iterable<EntityType<?>> getRegisteredAnimal() {
 		return REGISTRY.keySet();
 	}
 
-	public boolean isRegistered(Class<? extends MobEntity> animal) {
+	public boolean isRegistered(EntityType<?> animal) {
 		return REGISTRY.containsKey(animal);
 	}
 
-	public boolean isTamable(Class<? extends MobEntity> animal) {
+	public boolean isTamable(EntityType<?> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isTamable;
 		}
 		return false;
 	}
 	
-	public boolean isModelGrowing(Class<? extends MobEntity> animal) {
+	public boolean isModelGrowing(EntityType<?> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isModelGrowing;
 		}
 		return false;
 	}
 	
-	public boolean isSexual(Class<? extends MobEntity> animal) {
+	public boolean isSexual(EntityType<?> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isSexual;
 		}
 		return false;
 	}
 	
-	public boolean isAgeable(Class<? extends MobEntity> animal) {
+	public boolean isAgeable(EntityType<?> animal) {
 		if (REGISTRY.containsKey(animal)) {
 			return REGISTRY.get(animal).isAgeable;
 		}

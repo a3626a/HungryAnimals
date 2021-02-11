@@ -1,12 +1,9 @@
 package oortcloud.hungryanimals.entities.capability;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.potion.EffectInstance;
+import net.minecraftforge.fml.network.PacketDistributor;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.core.network.PacketClientSyncHungry;
 import oortcloud.hungryanimals.entities.attributes.ModAttributes;
@@ -142,7 +139,7 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 		if (entity.getEntityWorld() == null) {
 			age = 0;
 		} else {
-			ICapabilityAgeable capAgeable = entity.getCapability(ProviderAgeable.CAP, null);
+			ICapabilityAgeable capAgeable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 			if (capAgeable == null) {
 				age = 0;
 			} else {
@@ -184,20 +181,20 @@ public class CapabilityHungryAnimal implements ICapabilityHungryAnimal {
 	}
 
 	public void sync() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			WorldServer world = (WorldServer) entity.getEntityWorld();
-			for (PlayerEntity i : world.getEntityTracker().getTrackingPlayers(entity)) {
-				PacketClientSyncHungry packet = new PacketClientSyncHungry(entity, getStomach(), getWeight());
-				HungryAnimals.simpleChannel.sendTo(packet, (ServerPlayerEntity) i);
-			}
+		if (!entity.getEntityWorld().isRemote) {
+			HungryAnimals.simpleChannel.send(
+					PacketDistributor.TRACKING_ENTITY.with(() -> entity),
+					new PacketClientSyncHungry(entity.getEntityId(), getStomach(), getWeight())
+			);
 		}
 	}
 
 	public void syncTo(ServerPlayerEntity target) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			PacketClientSyncHungry packet = new PacketClientSyncHungry(entity, getStomach(), getWeight());
-			HungryAnimals.simpleChannel.sendTo(packet, target);
+		if (!entity.getEntityWorld().isRemote) {
+			HungryAnimals.simpleChannel.send(
+					PacketDistributor.PLAYER.with(()->target),
+					new PacketClientSyncHungry(entity.getEntityId(), getStomach(), getWeight())
+			);
 		}
 	}
-	
 }

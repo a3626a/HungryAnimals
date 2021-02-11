@@ -1,15 +1,15 @@
 package oortcloud.hungryanimals.entities.capability;
 
-import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 
 public class CapabilityTamableHorse extends CapabilityTamableAnimal {
 
 	private static final double interval_start = 0.0;
 	private static final double interval_end = 2.0;
 
-	protected AbstractHorse entity;
+	protected AbstractHorseEntity entity;
 
-	public CapabilityTamableHorse(AbstractHorse entity) {
+	public CapabilityTamableHorse(AbstractHorseEntity entity) {
 		super(entity);
 	}
 

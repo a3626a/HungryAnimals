@@ -107,14 +107,14 @@ public class RenderEntityWeight extends Render<MobEntity> {
 		}
 		MobEntity animal = (MobEntity) entity;
 
-		ICapabilityHungryAnimal cap = animal.getCapability(ProviderHungryAnimal.CAP, null);
+		ICapabilityHungryAnimal cap = animal.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 
 		if (cap != null) {
 			int age;
 			if (animal.getEntityWorld() == null) {
 				age = 0;
 			} else {
-				ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP, null);
+				ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP).orElse(null);
 				if (ageable != null) {
 					age = ageable.getAge();
 				} else {

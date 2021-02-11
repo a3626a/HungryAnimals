@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -23,7 +23,7 @@ public class ProviderTamableAnimal implements ICapabilitySerializable<INBT> {
 		instance = new CapabilityTamableAnimal(entity);
 	}
 
-	public ProviderTamableAnimal(AbstractHorse entity) {
+	public ProviderTamableAnimal(AbstractHorseEntity entity) {
 		instance = new CapabilityTamableHorse(entity);
 	}
 

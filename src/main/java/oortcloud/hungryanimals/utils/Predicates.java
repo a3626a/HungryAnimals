@@ -15,7 +15,7 @@ public class Predicates {
 		public boolean apply(@Nullable Entity input) {
 			if (input == null)
 				return false;
-			return input.hasCapability(ProviderHungryAnimal.CAP, null);
+			return input.hasCapability(ProviderHungryAnimal.CAP).orElse(null);
 		}
 	};
 	public static Predicate<Entity> IS_TAMABLE_ANIMAL = new Predicate<Entity>() {
@@ -23,7 +23,7 @@ public class Predicates {
 		public boolean apply(@Nullable Entity input) {
 			if (input == null)
 				return false;
-			return input.hasCapability(ProviderTamableAnimal.CAP, null);
+			return input.hasCapability(ProviderTamableAnimal.CAP).orElse(null);
 		}
 	};
 }

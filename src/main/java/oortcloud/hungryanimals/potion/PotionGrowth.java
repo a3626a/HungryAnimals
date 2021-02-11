@@ -20,7 +20,7 @@ public class PotionGrowth extends PotionHungryAnimals {
 	@Override
 	public void performEffect(MobEntityBase entity, int level) {
 		if (!entity.getEntityWorld().isRemote) {
-			ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
+			ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 			if (ageable != null) {
 				int j = ageable.getAge();
 				if (j < 0) {

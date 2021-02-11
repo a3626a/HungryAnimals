@@ -12,6 +12,7 @@ import com.google.common.base.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.JSONUtils;
 import oortcloud.hungryanimals.api.IProductionRegistry;
@@ -47,12 +48,12 @@ public class Productions implements IProductionRegistry {
 		PARSER.put(type, parser);
 	}
 	
-	public boolean hasProduction(Class<? extends MobEntity> animal) {
+	public boolean hasProduction(EntityType<?> animal) {
 		return REGISTRY.containsKey(animal);
 	}
 	
 	public boolean hasProduction(MobEntity animal) {
-		return hasProduction(animal.getClass());
+		return hasProduction(animal.getType());
 	}
 	
 	@Nullable

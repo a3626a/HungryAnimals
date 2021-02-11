@@ -28,7 +28,7 @@ public class PotionOvereat extends PotionHungryAnimals {
 	
 	@Override
 	public void performEffect(MobEntityBase entity, int amplifier) {
-		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 		if (cap == null)
 			return;
 		

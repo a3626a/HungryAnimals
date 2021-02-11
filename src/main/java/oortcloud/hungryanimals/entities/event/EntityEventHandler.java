@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -86,9 +86,9 @@ public class EntityEventHandler {
 			// Should be used as "After Constructor Code Block"
 			entity.setHealth(entity.getMaxHealth());
 
-			ICapabilityHungryAnimal hungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
+			ICapabilityHungryAnimal hungry = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 			if (hungry != null) {
-			ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
+			ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 			if (ageable != null && ageable.getAge() < 0) {
 				// Baby created
 				hungry.setWeight(hungry.getNormalWeight());
@@ -134,18 +134,18 @@ public class EntityEventHandler {
 				updateEnvironmentalEffet(animal);
 				updateRecovery(animal);
 
-				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
+				ICapabilityHungryAnimal capHungry = animal.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 				if (capHungry != null)
 					if (capHungry.getWeight() < capHungry.getStarvinglWeight()) {
 						onStarve(animal);
 					}
 
-				ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP, null);
+				ICapabilityProducingAnimal capProducing = animal.getCapability(ProviderProducingAnimal.CAP).orElse(null);
 				if (capProducing != null) {
 					capProducing.update();
 				}
 
-				ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP, null);
+				ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP).orElse(null);
 				if (ageable != null && ageable.getAge() < 0) {
 					// TODO I HATE THIS BUSY LOOP. IS THERE ANY BETTER SOLUTION?
 					if (!animal.isPotionActive(ModPotions.potionYoung)) {
@@ -161,7 +161,7 @@ public class EntityEventHandler {
 	}
 
 	private void updateHunger(MobEntity entity) {
-		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 
 		if (cap == null)
 			return;
@@ -170,7 +170,7 @@ public class EntityEventHandler {
 		double stomach = cap.getStomach();
 		double digest = entity.getAttribute(ModAttributes.hunger_stomach_digest).getValue();
 
-		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 		
 		if (ageable != null && ageable.getAge() < 0) {
 			// Child
@@ -205,8 +205,8 @@ public class EntityEventHandler {
 		
 		AnimalEntity animal = (AnimalEntity)entity;
 		
-		ICapabilityHungryAnimal hungry = animal.getCapability(ProviderHungryAnimal.CAP, null);
-		ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityHungryAnimal hungry = animal.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		ICapabilityAgeable ageable = animal.getCapability(ProviderAgeable.CAP).orElse(null);
 		
 		if (hungry == null || ageable == null)
 			return;
@@ -228,7 +228,7 @@ public class EntityEventHandler {
 	}
 
 	private void updateExcretion(MobEntity entity) {
-		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 
 		if (cap == null)
 			return;
@@ -262,7 +262,7 @@ public class EntityEventHandler {
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
 
-		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 		if (ageable == null)
 			return;
 		
@@ -287,7 +287,7 @@ public class EntityEventHandler {
 		double radius = 16;
 
 		if (entity.getEntityWorld().getTotalWorldTime() % 200 == 0) {
-			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
+			ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 
 			if (cap == null)
 				return;
@@ -312,7 +312,7 @@ public class EntityEventHandler {
 	}
 
 	private void updateRecovery(MobEntity entity) {
-		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP, null);
+		ICapabilityHungryAnimal cap = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
 
 		if (cap == null)
 			return;
@@ -335,7 +335,7 @@ public class EntityEventHandler {
 
 		MobEntity entity = (MobEntity) event.getEntity();
 
-		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP, null);
+		ICapabilityTamableAnimal cap = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 
 		if (cap == null)
 			return;
@@ -362,21 +362,21 @@ public class EntityEventHandler {
 		MobEntity entity = (MobEntity) event.getTarget();
 		if (!HungryAnimalManager.getInstance().isRegistered(entity.getClass()))
 			return;
-		Pair<Boolean, EnumActionResult> result = interact(event, entity);
+		Pair<Boolean, ActionResultType> result = interact(event, entity);
 		event.setCanceled(result.left);
 		event.setCancellationResult(result.right);
 	}
 
-	private Pair<Boolean, EnumActionResult> interact(EntityInteract event, MobEntity entity) {
+	private Pair<Boolean, ActionResultType> interact(EntityInteract event, MobEntity entity) {
 		if (event.getItemStack().isEmpty())
-			return new Pair<Boolean, EnumActionResult>(false, null);
+			return new Pair<Boolean, ActionResultType>(false, null);
 		return interact(event, event.getHand(), event.getItemStack(), entity);
 	}
 
-	private Pair<Boolean, EnumActionResult> interact(EntityInteract event, Hand hand, ItemStack itemstack,
+	private Pair<Boolean, ActionResultType> interact(EntityInteract event, Hand hand, ItemStack itemstack,
 			MobEntity entity) {
-		ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP, null);
-		ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP, null);
+		ICapabilityHungryAnimal capHungry = entity.getCapability(ProviderHungryAnimal.CAP).orElse(null);
+		ICapabilityTamableAnimal capTaming = entity.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 		IFoodPreference<ItemStack> prefItem = FoodPreferences.getInstance().REGISTRY_ITEM.get(entity.getClass());
 
 		boolean flagEat = false;
@@ -406,61 +406,61 @@ public class EntityEventHandler {
 		if (flagEat || flagCure || heat > 0) {
 			itemstack.shrink(1);
 			// Play Animation
-			return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.SUCCESS);
+			return new Pair<Boolean, ActionResultType>(true, ActionResultType.SUCCESS);
 		}
 
-		ICapabilityProducingAnimal capProducing = entity.getCapability(ProviderProducingAnimal.CAP, null);
+		ICapabilityProducingAnimal capProducing = entity.getCapability(ProviderProducingAnimal.CAP).orElse(null);
 		if (capProducing != null) {
-			EnumActionResult action = capProducing.interact(event, hand, itemstack);
-			if (action != EnumActionResult.PASS) {
-				return new Pair<Boolean, EnumActionResult>(true, action);
+			ActionResultType action = capProducing.interact(event, hand, itemstack);
+			if (action != ActionResultType.PASS) {
+				return new Pair<Boolean, ActionResultType>(true, action);
 			}
 		}
 
 		return cancelEvent(item, itemstack, entity, capHungry, tamingLevel);
 	}
 
-	private Pair<Boolean, EnumActionResult> cancelEvent(Item item, ItemStack itemstack, MobEntity entity,
+	private Pair<Boolean, ActionResultType> cancelEvent(Item item, ItemStack itemstack, MobEntity entity,
 			ICapabilityHungryAnimal capHungry, TamingLevel tamingLevel) {
 		// Skip Event. TODO Too Dirty Here.
 		// For horses, they do not implement isBreedingItem properly
 		if (entity.getClass() == EntityCow.class) {
 			if (item == Items.BUCKET) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 			}
 		}
 		if (entity.getClass() == EntityMooshroom.class) {
 			if (item == Items.BOWL) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 			}
 			if (item == Items.BUCKET) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 			}
 		}
 		if (entity instanceof AbstractHorse) {
 			if (item == Items.WHEAT || item == Items.SUGAR || item == Item.getItemFromBlock(Blocks.HAY_BLOCK)
 					|| item == Items.APPLE || item == Items.GOLDEN_CARROT || item == Items.GOLDEN_APPLE) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 			}
 		}
 		if (entity instanceof WolfEntity && tamingLevel != TamingLevel.TAMED) {
 			// For wolves, to disable feed bones before tamed
 			if (item == Items.BONE) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 			}
 		}
 		if (entity instanceof EntityOcelot) {
 			if (item == Items.FISH) {
 				if (tamingLevel != TamingLevel.TAMED) {
 					// For ocelots, to disable feed fish before tamed
-					return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+					return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 				} else {
 					if (!((TameableEntity) entity).isTamed()) {
 						// Can feed wild(Vanilla) animal fish
-						return new Pair<Boolean, EnumActionResult>(false, null);
+						return new Pair<Boolean, ActionResultType>(false, null);
 					} else {
 						// Can not feed tamed(Vanilla) animal fish
-						return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+						return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 					}
 				}
 			}
@@ -468,16 +468,16 @@ public class EntityEventHandler {
 		if (entity instanceof SheepEntity) {
 			/*
 			 * if (item == Items.SHEARS) { // TODO How to disable all 'shearing' items...!
-			 * return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS); }
+			 * return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS); }
 			 */
 		}
 		// Skipping Event to Entity
 		if (capHungry != null && entity instanceof AnimalEntity) {
 			if (((AnimalEntity)entity).isBreedingItem(itemstack)) {
-				return new Pair<Boolean, EnumActionResult>(true, EnumActionResult.PASS);
+				return new Pair<Boolean, ActionResultType>(true, ActionResultType.PASS);
 			}
 		}
-		return new Pair<Boolean, EnumActionResult>(false, null);
+		return new Pair<Boolean, ActionResultType>(false, null);
 	}
 
 	private void eatFoodBonus(MobEntity entity, ICapabilityHungryAnimal capHungry,
@@ -494,7 +494,7 @@ public class EntityEventHandler {
 		double stomach = pref.getStomach(item);
 		capHungry.addStomach(stomach);
 		
-		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP, null);
+		ICapabilityAgeable ageable = entity.getCapability(ProviderAgeable.CAP).orElse(null);
 		if (ageable != null && ageable.getAge() < 0) {
 			CompoundNBT tag = item.getTag();
 			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
@@ -521,7 +521,7 @@ public class EntityEventHandler {
 		if (attacker == null)
 			return;
 
-		ICapabilityTamableAnimal cap = attacker.getCapability(ProviderTamableAnimal.CAP, null);
+		ICapabilityTamableAnimal cap = attacker.getCapability(ProviderTamableAnimal.CAP).orElse(null);
 
 		if (Tamings.getLevel(cap) != TamingLevel.TAMED) {
 			for (ItemEntity i : event.getDrops()) {

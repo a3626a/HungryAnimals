@@ -26,7 +26,7 @@ public class SetCountBaseOnWeight extends LootFunction {
 	public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
 		Entity looted = context.getLootedEntity();
 		if (looted != null) {
-			stack.setCount(this.countRange.generateInt(looted.getCapability(ProviderHungryAnimal.CAP, null), rand));
+			stack.setCount(this.countRange.generateInt(looted.getCapability(ProviderHungryAnimal.CAP).orElse(null), rand));
 		}
 		return stack;
 	}
