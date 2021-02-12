@@ -68,30 +68,6 @@ public class CommonProxy {
 	public void registerKeyBindings() {
 	}
 
-	public void initCompt() {
-		if (Loader.isModLoaded("theoneprobe"))
-			initTOP();
-
-		if (Loader.isModLoaded("animania"))
-			initAnimania();
-	}
-
-	public void initNEI() {
-	}
-
-	public void initWAILA() {
-		// FMLInterModComms.sendMessage("Waila", "register",
-		// "oortcloud.hungryanimals.api.waila.HUDHandlerHungryAnimals.callbackRegister");
-	}
-	
-	private void initTOP() {
-		 TOPCompatibility.register();
-	}
-
-	private void initAnimania() {
-
-	}
-
 	public void registerPacketHandler() {
 		int index = 0;
 		ModPacketHandler.INSTANCE.registerMessage(

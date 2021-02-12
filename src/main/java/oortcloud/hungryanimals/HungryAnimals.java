@@ -5,6 +5,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -48,10 +49,11 @@ public class HungryAnimals {
 		ModBlocks.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		ModEntities.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 	}
 
-	@Mod.EventHandler
-	public static void preInit(FMLPreInitializationEvent event) {
+	private void commonSetup(FMLCommonSetupEvent event) {
 		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);
 		RecipeAnimalGlue.init();
@@ -65,8 +67,6 @@ public class HungryAnimals {
 		HungryAnimalManager.getInstance().init();
 
 		ConfigurationHandler.syncPre();
-
-		proxy.initCompt();
 	}
 
 	@Mod.EventHandler
