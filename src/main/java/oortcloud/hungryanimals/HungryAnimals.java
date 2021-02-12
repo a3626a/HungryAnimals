@@ -10,6 +10,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import oortcloud.hungryanimals.core.proxy.ClientProxy;
 import oortcloud.hungryanimals.entities.ModEntities;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.item.ItemStack;
@@ -36,7 +37,7 @@ public class HungryAnimals {
 		}
 	};
 
-	public static Logger logger;
+	public static final Logger logger = LogManager.getLogger(References.MODID);
 
 	static {
 	    FluidRegistry.enableUniversalBucket();
@@ -51,7 +52,6 @@ public class HungryAnimals {
 
 	@Mod.EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-		logger = event.getModLog();
 		HAPlugins.getInstance().init(event);
 		ConfigurationHandler.init(event);
 		RecipeAnimalGlue.init();
