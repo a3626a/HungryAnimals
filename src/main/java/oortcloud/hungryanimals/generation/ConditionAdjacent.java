@@ -8,7 +8,6 @@ import com.google.gson.JsonElement;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkProviderServer;
 import oortcloud.hungryanimals.utils.HashBlockState;
 
 public class ConditionAdjacent implements ICondition {
@@ -42,20 +41,21 @@ public class ConditionAdjacent implements ICondition {
 		}
 		return true;
 	}
-	
-	public static ConditionAdjacent parse(JsonElement jsonEle) {
-		if (jsonEle instanceof JsonArray) {
-			JsonArray jsonArr = (JsonArray) jsonEle;
-			List<HashBlockState> states = new ArrayList<HashBlockState>();
-			for (JsonElement jsonState : jsonArr) {
-				HashBlockState state = HashBlockState.parse(jsonState);
-				states.add(state);
+
+	public static class Serializer extends ICondition.Serializer {
+		public ICondition deserialize(JsonElement jsonEle) {
+			if (jsonEle instanceof JsonArray) {
+				JsonArray jsonArr = (JsonArray) jsonEle;
+				List<HashBlockState> states = new ArrayList<HashBlockState>();
+				for (JsonElement jsonState : jsonArr) {
+					HashBlockState state = HashBlockState.parse(jsonState);
+					states.add(state);
+				}
+				return new ConditionAdjacent(states);
+			} else {
+				HashBlockState state = HashBlockState.parse(jsonEle);
+				return new ConditionAdjacent(state);
 			}
-			return new ConditionAdjacent(states);
-		} else {
-			HashBlockState state = HashBlockState.parse(jsonEle);
-			return new ConditionAdjacent(state);
 		}
 	}
-
 }

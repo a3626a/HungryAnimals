@@ -69,7 +69,6 @@ public class HAPlugins {
 		for (IHAPlugin i : plugins) {
 			i.registerAIs(AIContainers.getInstance());
 			i.registerAttributes(ModAttributes.getInstance());
-			i.registerGrassGenerators(Conditions.getInstance());
 			// TODO Singleton Mod Loot Tables
 			i.registerLootTables(ModLootTables::register);
 			i.registerProductions(Productions.getInstance());

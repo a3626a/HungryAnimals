@@ -9,7 +9,6 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import oortcloud.hungryanimals.api.HAPlugin;
 import oortcloud.hungryanimals.api.IAIRegistry;
 import oortcloud.hungryanimals.api.IAttributeRegistry;
-import oortcloud.hungryanimals.api.IGrassGeneratorRegistry;
 import oortcloud.hungryanimals.api.IHAPlugin;
 import oortcloud.hungryanimals.api.ILootTableRegistry;
 import oortcloud.hungryanimals.api.IProductionRegistry;
@@ -40,9 +39,6 @@ import oortcloud.hungryanimals.entities.production.ProductionMilk;
 import oortcloud.hungryanimals.entities.production.ProductionShear;
 import oortcloud.hungryanimals.entities.production.condition.ConditionAge;
 import oortcloud.hungryanimals.entities.production.condition.ConditionSex;
-import oortcloud.hungryanimals.generation.ConditionAdjacent;
-import oortcloud.hungryanimals.generation.ConditionBelow;
-import oortcloud.hungryanimals.generation.ConditionChance;
 
 @HAPlugin
 public class PluginHungryAnimals implements IHAPlugin {
@@ -99,13 +95,6 @@ public class PluginHungryAnimals implements IHAPlugin {
 		registry.registerAIContainerModifier("wolf", "follow_parent", FollowParentGoal::parse);
 		registry.registerAIContainerModifier("wolf", "hunt", HuntGoal::parse);
 		registry.registerAIContainerModifier("wolf", "hunt_non_tamed", NonTamedHuntGoal::parse);
-	}
-
-	@Override
-	public void registerGrassGenerators(IGrassGeneratorRegistry registry) {
-		registry.registerCondition("below", ConditionBelow::parse);
-		registry.registerCondition("chance", ConditionChance::parse);
-		registry.registerCondition("not_adjacent", ConditionAdjacent::parse);
 	}
 
 	@Override

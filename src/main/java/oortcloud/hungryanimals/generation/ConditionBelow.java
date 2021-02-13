@@ -19,7 +19,7 @@ public class ConditionBelow implements ICondition {
 	}
 	
 	public ConditionBelow(HashBlockState state) {
-		this.states = new ArrayList<HashBlockState>();
+		this.states = new ArrayList<>();
 		this.states.add(state);
 	}
 	
@@ -33,19 +33,20 @@ public class ConditionBelow implements ICondition {
 		return false;
 	}
 
-	public static ConditionBelow parse(JsonElement jsonEle) {
-		if (jsonEle instanceof JsonArray) {
-			JsonArray jsonArr = (JsonArray) jsonEle;
-			List<HashBlockState> states = new ArrayList<HashBlockState>();
-			for (JsonElement jsonState : jsonArr) {
-				HashBlockState state = HashBlockState.parse(jsonState);
-				states.add(state);
+	public static class Serializer extends ICondition.Serializer {
+		public ICondition deserialize(JsonElement jsonEle) {
+			if (jsonEle instanceof JsonArray) {
+				JsonArray jsonArr = (JsonArray) jsonEle;
+				List<HashBlockState> states = new ArrayList<HashBlockState>();
+				for (JsonElement jsonState : jsonArr) {
+					HashBlockState state = HashBlockState.parse(jsonState);
+					states.add(state);
+				}
+				return new ConditionBelow(states);
+			} else {
+				HashBlockState state = HashBlockState.parse(jsonEle);
+				return new ConditionBelow(state);
 			}
-			return new ConditionBelow(states);
-		} else {
-			HashBlockState state = HashBlockState.parse(jsonEle);
-			return new ConditionBelow(state);
 		}
 	}
-	
 }

@@ -18,9 +18,10 @@ public class ConditionChance implements ICondition {
 		return world.rand.nextDouble() < chance;
 	}
 	
-	public static ConditionChance parse(JsonElement jsonEle) {
-		double chance = jsonEle.getAsDouble();
-		return new ConditionChance(chance);
+	public static class Serializer extends ICondition.Serializer {
+		public ICondition deserialize(JsonElement jsonEle) {
+			double chance = jsonEle.getAsDouble();
+			return new ConditionChance(chance);
+		}
 	}
-
 }
