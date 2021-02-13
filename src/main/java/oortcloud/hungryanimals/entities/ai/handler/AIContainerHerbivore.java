@@ -2,31 +2,24 @@ package oortcloud.hungryanimals.entities.ai.handler;
 
 import com.google.gson.JsonElement;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.EntityAIEatGrass;
-import net.minecraft.entity.ai.EntityAIFollowParent;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.goal.PanicGoal;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.ai.goal.*;
 import oortcloud.hungryanimals.entities.handler.HungryAnimalManager;
 
 public class AIContainerHerbivore extends AIContainer {
-
-	public AIContainerHerbivore(Class<? extends MobEntity> entityClass) {
+	public AIContainerHerbivore(EntityType<?> entityType) {
 		getTask().remove(PanicGoal.class);
-		getTask().remove(EntityAIMate.class);
-		getTask().remove(EntityAIFollowParent.class);
+		getTask().remove(BreedGoal.class);
+		getTask().remove(FollowParentGoal.class);
 
-		if (HungryAnimalManager.getInstance().isHungry(entityClass)) {
-			getTask().remove(EntityAIEatGrass.class); // For Sheep
-			getTask().remove(EntityAITempt.class);
+		if (HungryAnimalManager.getInstance().isHungry(entityType)) {
+			getTask().remove(EatGrassGoal.class); // For Sheep
+			getTask().remove(TemptGoal.class);
 		}
 	}
 	
-	public static IAIContainer<MobEntity> parse(Class<? extends MobEntity> entityClass, JsonElement jsonEle) {
-		return new AIContainerHerbivore(entityClass);
+	public static IAIContainer<MobEntity> parse(EntityType<?> entityType, JsonElement jsonEle) {
+		return new AIContainerHerbivore(entityType);
 	}
-	
 }

@@ -46,4 +46,6 @@ public class AIContainer implements IAIContainer<MobEntity> {
 		return parser.apply(jsonEle);
 	}
 
+	public static class
+
 }

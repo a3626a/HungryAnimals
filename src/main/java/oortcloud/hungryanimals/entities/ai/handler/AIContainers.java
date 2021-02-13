@@ -13,8 +13,12 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.JSONUtils;
+import net.minecraftforge.registries.DeferredRegister;
 import oortcloud.hungryanimals.HungryAnimals;
 import oortcloud.hungryanimals.api.IAIRegistry;
+import oortcloud.hungryanimals.core.lib.LazyForgeRegistry;
+import oortcloud.hungryanimals.core.lib.References;
+import oortcloud.hungryanimals.entities.attributes.ModAttributes;
 
 public class AIContainers implements IAIRegistry {
 
@@ -23,6 +27,9 @@ public class AIContainers implements IAIRegistry {
 	private Map<Class<? extends MobEntity>, IAIContainer<MobEntity>> REGISTRY;
 	private Map<String, BiFunction<Class<? extends MobEntity>, JsonElement, IAIContainer<MobEntity>>> AICONTAINERS;
 	private Map<String, Map<String, BiConsumer<JsonElement, AIContainer>>> MODIFIERS;
+
+	public static final DeferredRegister<ModAttributes.AttributePair> AI_CONTAINERS = new DeferredRegister<>(LazyForgeRegistry.of(ModAttributes.AttributePair.class), References.MODID);
+
 
 	private AIContainers() {
 		REGISTRY = new HashMap<>();
