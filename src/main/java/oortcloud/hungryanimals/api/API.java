@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.google.gson.JsonElement;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.biome.Biome;
@@ -41,18 +42,18 @@ public class API {
 	 * For example, max health and move speed.
 	 * This val may be ignored and a value from configuration could be used.
 	 * 
-	 * @param animalclass
+	 * @param entityType
 	 * @param attribute
 	 * @param val
 	 * @param shouldRegistered
 	 * @return true if registration failed, otherwise false
 	 */
-	public static boolean registerAttribute(Class<? extends MobEntity> animalclass, String name, double val, boolean shouldRegistered) {
-		return ModAttributes.getInstance().registerAttribute(animalclass, name, val, shouldRegistered);
+	public static boolean registerAttribute(EntityType<?> entityType, String name, double val, boolean shouldRegistered) {
+		return ModAttributes.getInstance().registerAttribute(entityType, name, val, shouldRegistered);
 	}
 	
-	public static boolean registerAttribute(Class<? extends MobEntity> animalclass, String name, double val) {
-		return ModAttributes.getInstance().registerAttribute(animalclass, name, val);
+	public static boolean registerAttribute(EntityType<?> entityType, String name, double val) {
+		return ModAttributes.getInstance().registerAttribute(entityType, name, val);
 	}
 	
 	public static boolean registerCure(Ingredient cure) {

@@ -1,6 +1,6 @@
 package oortcloud.hungryanimals.entities.attributes;
 
-import net.minecraft.entity.MobEntityBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 
@@ -17,15 +17,15 @@ public class AttributeEntry implements IAttributeEntry {
 	}
 	
 	@Override
-	public void apply(MobEntityBase entity) {
+	public void apply(LivingEntity entity) {
 		entity.getAttribute(attribute).setBaseValue(value);
 	}
 
 	@Override
-	public void register(MobEntityBase entity) {
+	public void register(LivingEntity entity) {
 		IAttributeInstance attributeInstance = entity.getAttribute(attribute);
 		if (attributeInstance == null && shouldRegister) {
-			entity.getAttributeMap().registerAttribute(attribute);
+			entity.getAttributes().registerAttribute(attribute);
 			entity.getAttribute(attribute).setBaseValue(value);
 		}
 	}

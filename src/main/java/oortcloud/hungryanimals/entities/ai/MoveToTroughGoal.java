@@ -135,7 +135,7 @@ public class MoveToTroughGoal extends Goal {
 		if (capAgeable != null && capAgeable.getAge() < 0) {
 			CompoundNBT tag = item.getTag();
 			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
-				int duration = (int) (nutrient / entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue());
+				int duration = (int) (nutrient / entity.getAttribute(ModAttributes.HUNGER_WEIGHT_BMR.get().attribute).getValue());
 				this.entity.addPotionEffect(new EffectInstance(ModPotions.potionGrowth, duration, 1));
 			}
 		}
@@ -143,7 +143,7 @@ public class MoveToTroughGoal extends Goal {
 		CompoundNBT tag = item.getTag();
 		if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 			if (this.capTaming != null) {
-				this.capTaming.addTaming(0.0002 / entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue() * nutrient);
+				this.capTaming.addTaming(0.0002 / entity.getAttribute(ModAttributes.HUNGER_WEIGHT_BMR.get().attribute).getValue() * nutrient);
 			}
 		}
 

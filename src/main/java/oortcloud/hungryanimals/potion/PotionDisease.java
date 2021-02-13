@@ -18,7 +18,7 @@ public class PotionDisease extends PotionHungryAnimals {
 		setRegistryName(References.MODID, Strings.potionDiseaseName);
 		setPotionName(Strings.potionDiseaseUnlocalizedName);
 		registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F16089D", multiplyMovementSpeed, 1);
-		registerPotionAttributeModifier(ModAttributes.hunger_weight_bmr, "7107DE5E-7CE8-4030-940E-514C1F16089E", multiplyWeightBMR, 1);
+		registerPotionAttributeModifier(ModAttributes.HUNGER_WEIGHT_BMR.get().attribute, "7107DE5E-7CE8-4030-940E-514C1F16089E", multiplyWeightBMR, 1);
 	}
 
 	@Override

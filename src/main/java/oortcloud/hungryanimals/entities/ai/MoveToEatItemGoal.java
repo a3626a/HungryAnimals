@@ -184,17 +184,17 @@ public class MoveToEatItemGoal extends Goal {
 			CompoundNBT tag = item.getTag();
 			if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
 				int duration = (int) (nutrient
-						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue());
+						/ entity.getAttribute(ModAttributes.HUNGER_WEIGHT_BMR.get().attribute).getValue());
 				entity.addPotionEffect(new EffectInstance(ModPotions.potionGrowth, duration, 1));
 			}
 		}
 
 		CompoundNBT tag = item.getTag();
 		if (tag == null || !tag.contains("isNatural") || !tag.getBoolean("isNatural")) {
-			double taming_factor = entity.getAttribute(ModAttributes.taming_factor_food).getValue();
+			double taming_factor = entity.getAttribute(ModAttributes.TAMING_FACTOR_FOOD.get().attribute).getValue();
 			if (capTaming != null) {
 				capTaming.addTaming(taming_factor
-						/ entity.getAttribute(ModAttributes.hunger_weight_bmr).getValue() * nutrient);
+						/ entity.getAttribute(ModAttributes.HUNGER_WEIGHT_BMR.get().attribute).getValue() * nutrient);
 			}
 		}
 	}

@@ -12,7 +12,7 @@ public class PotionInheat extends PotionHungryAnimals {
 		super(textureLocation, false, color);
 		setRegistryName(References.MODID, Strings.potionInheatName);
 		setPotionName(Strings.potionInheatUnlocalizedName);
-		registerPotionAttributeModifier(ModAttributes.courtship_probability, "e703c0b2-e5f0-11e7-80c1-9a214cf093ae", +0.0025, 0);
+		registerPotionAttributeModifier(ModAttributes.COURTSHIP_PROBABILIT.get().attribute, "e703c0b2-e5f0-11e7-80c1-9a214cf093ae", +0.0025, 0);
 	}
 
 	@Override
